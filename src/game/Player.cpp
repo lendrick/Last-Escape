@@ -43,6 +43,17 @@ Player::Player() {
 		printf("failed to load images/xeon.png\n");
 	sprite.SetImage(image);
 	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+
+	// Set Animations
+	Animation* walkAnimation = new Animation(this->sprite);
+	walkAnimation->toDefaultXeonWalkAnimation();
+	this->animations["walk"] = walkAnimation;
+	
+	Animation* jumpAnimation = new Animation(this->sprite);
+	jumpAnimation->toDefaultXeonJumpAnimation();
+	this->animations["jump"] = jumpAnimation;
+
+	this->setCurrentAnimation("jump");
 }
 	
 Player::~Player() {
@@ -78,6 +89,7 @@ void Player::shoot() {
 }
 
 void Player::update(float dt) {
+	AnimatedActor::update(dt);
 	const sf::Input& input = App->GetInput();
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
@@ -124,32 +136,23 @@ void Player::update(float dt) {
 
 	// Compute animations:
 
-	anim_time += dt;
-
-	int sprite_tile_col = 0, sprite_tile_row = 0;
 	if (anim_time < last_shoot_time + SPRITE_SHOOT_COUNT/SPRITE_SHOOT_SPEED)
 	{
-		sprite_tile_row = SPRITE_SHOOT_ROW;
-		sprite_tile_col = int((anim_time-last_shoot_time) * SPRITE_SHOOT_SPEED);
+		this->setCurrentAnimation("shoot"); //TODO add this animation
 	}
 	else if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y < 0)
 	{
-		sprite_tile_row = SPRITE_JUMP_ROW;
+		this->setCurrentAnimation("jump");
 	}
 	else if (speed_x != 0)
 	{
-		sprite_tile_row = SPRITE_WALK_ROW;
-		sprite_tile_col = int(anim_time*SPRITE_WALK_SPEED) % SPRITE_WALK_COUNT;
+		this->setCurrentAnimation("walk");
 	}
 	else
 	{
-		sprite_tile_row = SPRITE_IDLE_ROW;
-		sprite_tile_col = 0;
+		this->setCurrentAnimation("idle"); //TODO add animation
 	}
 
-	sprite.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
-		(sprite_tile_col+1)*SPRITE_TILE_W, (sprite_tile_row+1)*SPRITE_TILE_H));
-	
 	if (speed_x > 0)
 	{
 		facing_rightwards = true;

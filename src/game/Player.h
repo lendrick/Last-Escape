@@ -3,9 +3,10 @@
 
 #include "Map.h"
 #include "Actor.h"
+#include "AnimatedActor.h"
 #include "globals.h"
 
-class Player : public Actor {
+class Player : public AnimatedActor {
 public:
 	Player();
 	~Player();
