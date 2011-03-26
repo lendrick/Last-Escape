@@ -16,29 +16,29 @@ using namespace std;
 ////////////////////////////////////////////////////////////
 int main()
 {
-    // Create main window
-    sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
+	// Create main window
+	sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
 	App.UseVerticalSync(true);
+
 	const sf::Input& input = App.GetInput();
 
 	// Create game objects
 	Map m(App);
 
-    // Start game loop
-    while (App.IsOpened())
-    {
-        // Process events
-        sf::Event Event;
-        while (App.GetEvent(Event))
-        {
-            // Close window : exit
-            if (Event.Type == sf::Event::Closed)
-                App.Close();
-        }
+	// Start game loop
+	while (App.IsOpened())
+	{
+		// Process events
+		sf::Event Event;
+		while (App.GetEvent(Event))
+		{
+			// Close window : exit
+			if (Event.Type == sf::Event::Closed)
+				App.Close();
+		}
 
-
-        // Clear screen
-        App.Clear();
+		// Clear screen
+		App.Clear();
 
 		// TEMP: scrolling camera
 		if (input.IsKeyDown(sf::Key::Left))  m.cam_x--;
@@ -50,9 +50,9 @@ int main()
 		// Draw Map
 		m.render();
 
-        // Finally, display the rendered frame on screen
-        App.Display();
-    }
+		// Finally, display the rendered frame on screen
+		App.Display();
+	}
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
