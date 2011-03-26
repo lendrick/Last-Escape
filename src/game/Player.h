@@ -13,8 +13,12 @@ public:
 	
 	void logic(float dt);
 	void render();
-	
+
+	void jump();
+	void shoot();
+
 	float anim_time;
+	float last_shoot_time;
 	float pos_x;
 	float pos_y;
 	int width;

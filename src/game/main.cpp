@@ -75,6 +75,15 @@ int main()
 			// Close window : exit
 			if (Event.Type == sf::Event::Closed)
 				App->Close();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
+				App->Close();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Up)
+				p1.jump();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Space)
+				p1.shoot();
 		}
 
 		float ElapsedTime = Clock.GetElapsedTime();
