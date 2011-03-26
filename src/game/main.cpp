@@ -18,6 +18,7 @@ int main()
 {
     // Create main window
     sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
+	const sf::Input& input = App.GetInput();
 
 	// Create game objects
 	Map m(App);
@@ -39,8 +40,11 @@ int main()
         App.Clear();
 
 		// TEMP: scrolling camera
-		if (m.cam_x < 32000) m.cam_x += 2;
-		if (m.cam_y < 7000) m.cam_y += 1;
+		if (input.IsKeyDown(sf::Key::Left))  m.cam_x--;
+		if (input.IsKeyDown(sf::Key::Right)) m.cam_x++;
+		if (input.IsKeyDown(sf::Key::Up))    m.cam_y--;
+		if (input.IsKeyDown(sf::Key::Down))  m.cam_y++;
+
 		
 		// Draw Map
 		m.render();

@@ -68,8 +68,15 @@ void Map::render() {
 			sprites_bg[i][j].SetPosition(i*32 - cam_off_x, j*32 - cam_off_y);
 			
 			// and which sprite should we display?
-			this_tile = map_bg[cam_tile_x + i][cam_tile_y + j];
-			sprites_bg[i][j].SetSubRect(tile_rects[this_tile]);
+			// outside the map
+			if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X ||
+					cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) {
+				sprites_bg[i][j].SetSubRect(tile_rects[0]);
+			}
+			else { // inside the map
+				this_tile = map_bg[cam_tile_x + i][cam_tile_y + j];
+				sprites_bg[i][j].SetSubRect(tile_rects[this_tile]);
+			}
 		}
 	}
 
