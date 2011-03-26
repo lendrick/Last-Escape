@@ -19,6 +19,9 @@ public:
 	void updateFrame(); //set's the sprite's subRect to the current Frame
 	bool getIsFinished();
 	void setIsFinished(bool);
+	void setFrameSize(int fw, int fh);
+	void addFrame(int num, float duration);
+	void setLoop(bool loop);
 
 	/// Added for testing purposes.
 	/// TODO read animations from a config file.
@@ -35,4 +38,5 @@ private:
 	unsigned int frameIterator;	///< id to the current Frame.
 	bool doLoop; 				///< true if the Animation shall be repeated.
 	bool isFinished;			///< is true if the AnimationCycle finished.
+	int frame_w, frame_h;
 };

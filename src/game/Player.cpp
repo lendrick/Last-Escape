@@ -82,7 +82,7 @@ void Player::init() {
 	height = 48;
 	xOrigin = width/2;
 	yOrigin = height;
-	setDrawOffset(32, 64);
+	setDrawOffset(64, 104);
 	speed_x = 0.0f;
 	speed_y = 0.0f;
 
@@ -205,12 +205,12 @@ void Player::update(float dt) {
 	if (facing_direction == FACING_RIGHT)
 	{
 		sprite.FlipX(false);
-		sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
+		//sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
 	}
 	else if (facing_direction == FACING_LEFT)
 	{
 		sprite.FlipX(true);
-		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
+		//sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
 	}
 
 	if (speed_y == terminal_velocity)
