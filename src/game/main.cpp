@@ -13,6 +13,10 @@ using namespace std;
 list<Actor *> actors;
 Map * map;
 
+/// This function cleans up deleted actors.
+void cleanup() {
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -49,6 +53,7 @@ int main()
 		if (input.IsKeyDown(sf::Key::Up))    map->cam_y--;
 		if (input.IsKeyDown(sf::Key::Down))  map->cam_y++;
 
+		cleanup();
 		
 		// Draw Map
 		map->render();
