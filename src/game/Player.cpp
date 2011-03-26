@@ -88,16 +88,20 @@ void Player::update(float dt) {
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+	
+	int move_direction = FACING_NONE; 
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
 	
 	// left/right move
 	if (input.IsKeyDown(sf::Key::Left)) {
+		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
 	}
 	else if (input.IsKeyDown(sf::Key::Right)) {
+		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
 	}
@@ -106,6 +110,8 @@ void Player::update(float dt) {
 		else if (speed_x < -speed_delta_decel*dt) speed_x += speed_delta_decel*dt;
 		else speed_x = 0.0;
 	}
+	
+	facing_direction = move_direction;
 	
 	// various actions (main() already handles KeyPressed so it doesn't miss
 	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
@@ -154,19 +160,14 @@ void Player::update(float dt) {
 
 	sprite.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
 		(sprite_tile_col+1)*SPRITE_TILE_W, (sprite_tile_row+1)*SPRITE_TILE_H));
-	
-	/* TODO: Player's direction should depend on what arrow is being pressed, not player speed.
-	 * Right now you can't turn around and fire quickly, which makes the controls feel klunky. */
-	
-	if (speed_x > 0)
+		
+	if (facing_direction == FACING_RIGHT)
 	{
-		facing_direction = FACING_RIGHT;
 		sprite.FlipX(false);
 		sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
-	else if (speed_x < 0)
+	else if (facing_direction == FACING_LEFT)
 	{
-		facing_direction = FACING_LEFT;
 		sprite.FlipX(true);
 		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}

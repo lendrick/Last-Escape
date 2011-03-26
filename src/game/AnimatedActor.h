@@ -8,6 +8,7 @@ class AnimatedActor : public Actor
 {
 public:
 	enum Facing {
+		FACING_NONE,
 		FACING_UP,
 		FACING_DOWN,
 		FACING_LEFT,
