@@ -19,6 +19,10 @@ public:
 
 	float anim_time;
 	float last_shoot_time;
+
+	float energy;
+	float energy_max;
+
 	float pos_x;
 	float pos_y;
 	int width;

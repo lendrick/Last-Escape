@@ -18,9 +18,16 @@ const int SPRITE_SHOOT_ROW = 2;
 const int SPRITE_SHOOT_COUNT = 3;
 const float SPRITE_SHOOT_SPEED = 16.f;
 
+const float energy_cost_jump = 10.f;
+const float energy_cost_shoot = 5.f;
+const float energy_recharge_rate = 5.f; // units per second
+
 Player::Player() {
 	anim_time = 0.0f;
 	last_shoot_time = -100.f;
+
+	energy = energy_max = 100.f;
+
 	pos_x = 64.0f;
 	pos_y = 0.0f;
 	width = 24;
@@ -41,15 +48,25 @@ Player::~Player() {
 void Player::jump() {
 	const int jump_speed = 380;
 
-	if (game_map->isGrounded(pos_x, pos_y, width))
+	if (energy < energy_cost_jump)
+		return;
+
+	if (speed_y == 0 && game_map->isGrounded(pos_x, pos_y, width))
+	{
 		speed_y = -jump_speed;
+		energy -= energy_cost_jump;
+	}
 }
 
 void Player::shoot() {
 	const float shoot_reload_timer = 0.5f;
 
+	if (energy < energy_cost_shoot)
+		return;
+
 	if (anim_time - last_shoot_time > shoot_reload_timer) {
 		last_shoot_time = anim_time;
+		energy -= energy_cost_shoot;
 		// TODO: emit bullets
 	}
 }
@@ -60,6 +77,9 @@ void Player::logic(float dt) {
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+
+	// recharge energy
+	energy = std::min(energy + energy_recharge_rate*dt, energy_max);
 
 	// left/right move
 	if (input.IsKeyDown(sf::Key::Left)) {
