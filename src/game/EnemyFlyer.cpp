@@ -32,11 +32,15 @@ void EnemyFlyer::update(float dt) {
 		patrolCountdown = patrolLength;
 	}
 	
+	float mx, my;
 	if(facing_direction == FACING_LEFT) {
-		move(-1, 0);
+		mx = -1;
+		my = 0;
 	} else if(facing_direction == FACING_RIGHT) {
-		move(1, 0);
+		mx = 1;
+		my = 0;
 	}
+	move(mx, my);
 	
 	checkCollisions();
 }
