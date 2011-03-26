@@ -10,8 +10,15 @@
 #include "Actor.h"
 #include "globals.h"
 
-std::list<Actor *> actors;
+list<Actor *> actors;
 Map * game_map;
+
+/// This function calls update() on all the actors, including (eventually) the player
+void update() {
+	foreach(Actor * actor, actors) {
+		actor->update();
+	}
+}
 
 /// This function cleans up deleted actors.
 void cleanup() {
@@ -44,7 +51,6 @@ int main()
 {
 	// Create main window
 	sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
-	App.UseVerticalSync(true);
 	const sf::Input& input = App.GetInput();
 
 	// Create game objects
@@ -71,6 +77,8 @@ int main()
 		if (input.IsKeyDown(sf::Key::Up))    game_map->cam_y--;
 		if (input.IsKeyDown(sf::Key::Down))  game_map->cam_y++;
 
+		update();
+		
 		cleanup();
 		
 		// Draw Map
