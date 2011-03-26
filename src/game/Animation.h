@@ -34,6 +34,9 @@ public:
 	void setFrameSize(int fw, int fh);
 	void addFrame(int num, float duration);
 	void reset();
+	
+	int getFrame();
+	std::string getName(); 
 private:
 	vector<Frame> frames;		///< Contains the frames for the Animation.
 	std::string name;

@@ -16,7 +16,7 @@ EnemyWalker::EnemyWalker()
 	height = 20;
 	xOrigin = width/2;
 	yOrigin = height;
-	setDrawOffset(16, 32);
+	setDrawOffset(16, 30);
 	setFrameSize(32, 32);
 	
 	Animation * tmp;
@@ -63,3 +63,7 @@ void EnemyWalker::update(float dt) {
 	checkCollisions();
 }
 
+void EnemyWalker::draw() {
+	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
+	AnimatedActor::draw();
+}
