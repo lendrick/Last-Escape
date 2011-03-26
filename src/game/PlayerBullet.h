@@ -1,16 +1,17 @@
 #ifndef PLAYERBULLET_H
 #define PLAYERBULLET_H
 
-#include "Actor.h"
+#include "AnimatedActor.h"
 
-class PlayerBullet  : public Actor
+class PlayerBullet  : public AnimatedActor
 {
 public:
-	PlayerBullet(bool rightwards);
+	PlayerBullet(int facing, float angleVariation);
 	virtual void collide(Actor& otherActor);
 	virtual void update(float dt);
 private:
-	float bullet_speed;
+	float speed_x;
+	float speed_y;
 };
 
 #endif

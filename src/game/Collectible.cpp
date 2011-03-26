@@ -14,6 +14,21 @@ void CollectiblePill::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
 		destroy();
-		((Player&)otherActor).energy += 1.f;
+		((Player&)otherActor).energy += 5.f;
 	}
 }
+
+
+CollectibleWeaponUpgrade::CollectibleWeaponUpgrade() {
+	setPlaceholder(sf::Color(0, 255, 255), 16, 16);
+}
+
+void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
+	if (otherActor.isPlayer())
+	{
+		destroy();
+		((Player&)otherActor).current_weapon += 1;
+	}
+}
+
+

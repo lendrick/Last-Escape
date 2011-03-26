@@ -18,4 +18,11 @@ public:
 	virtual void collide(Actor& otherActor);
 };
 
+class CollectibleWeaponUpgrade : public Collectible
+{
+public:
+	CollectibleWeaponUpgrade();
+	virtual void collide(Actor& otherActor);
+};
+
 #endif

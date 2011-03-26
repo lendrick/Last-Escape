@@ -1,48 +1,90 @@
- #include "AnimatedActor.h"
+#include "AnimatedActor.h"
 
 AnimatedActor::AnimatedActor(sf::Image& image)
+:Actor()
 {
-	//testing values
-	this->setOrigin(64.0f, 400.0f);
-	this->setSize(24, 48);
-	this->sprite.SetImage(image);
-//	this->sprite.Resize(24, 48);
+	init();
+	setImage(image);
+}
 
-	// Set walk-animation TODO read animations from config file
-	Animation* walkAnimation = new Animation(this->sprite);
-	walkAnimation->toDefaultXeonWalkAnimation();
-	this->animations["walk"] = walkAnimation;
-	
-	Animation* jumpAnimation = new Animation(this->sprite);
-	jumpAnimation->toDefaultXeonJumpAnimation();
-	this->animations["jump"] = jumpAnimation;
-
-	this->setCurrentAnimation("jump");
-
-//	this->animationQueue.push(new Animation(&this->sprite));
-//	this->animationQueue.front()->toDefaultAnimation();
+AnimatedActor::AnimatedActor()
+:Actor()
+{
+	init();
 }
 
 AnimatedActor::~AnimatedActor()
 {
 }
 
-void AnimatedActor::update(float dt)
+void AnimatedActor::init() {
+	facing_direction = FACING_RIGHT;
+	this->currentAnimation = NULL;
+}
+
+void AnimatedActor::setImage(sf::Image & image) 
 {
-	Actor::update(dt);
-	if(currentAnimation->getIsFinished())
- 	{
-		//TODO jump to next Animation in queue or idle Animation
-		this->currentAnimation->setIsFinished(false);
+	setFrameSize(0, 0);
+	this->sprite.SetImage(image);
+	this->currentAnimation = NULL;
+}
+
+Animation * AnimatedActor::addAnimation(std::string name) {
+	if(frame_w == 0 || frame_h == 0) {
+		cout << "ERROR: Must set frame size before adding animation.\n";
 	}
-	else
+	Animation* a = new Animation(this->sprite);
+	this->animations[name] = a;
+	a->setFrameSize(frame_w, frame_h);
+}
+
+void AnimatedActor::setFrameSize(int fw, int fh) {
+	frame_w = fw;
+	frame_h = fh;
+}
+
+void AnimatedActor::draw()
+{
+	if(currentAnimation != NULL)
 	{
-		this->currentAnimation->update(dt);
+		if(currentAnimation->getIsFinished())
+	 	{
+			//TODO jump to next Animation in queue or idle Animation
+			this->currentAnimation->setIsFinished(false);
+		}
+		else
+		{
+			this->currentAnimation->update();
+		}
+	}
+	Actor::draw();
+}
+
+void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
+{
+	if(this->currentAnimation != this->animations[name])
+	{
+		this->currentAnimation = this->animations[name];
+		this->currentAnimation->updateFrame();
+		if(reset)
+			this->currentAnimation->reset();
+		
+		cout << name << endl;
 	}
 }
 
-void AnimatedActor::setCurrentAnimation(std::string name)
-{
-	if(this->currentAnimation != this->animations[name])
-	this->currentAnimation = this->animations[name];
+void AnimatedActor::resetCurrentAnimation() {
+	this->currentAnimation->reset();
+}
+
+void AnimatedActor::flipDirection() {
+	if(facing_direction == FACING_LEFT) {
+		facing_direction = FACING_RIGHT;
+	} else if(facing_direction == FACING_RIGHT) {
+		facing_direction = FACING_LEFT;
+	} else if(facing_direction == FACING_UP) {
+		facing_direction = FACING_DOWN;
+	} else if(facing_direction == FACING_DOWN) {
+		facing_direction = FACING_UP;
+	}
 }

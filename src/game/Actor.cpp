@@ -7,6 +7,7 @@ Actor::Actor() {
 	setPos(0, 0);
 	destroyed = false;
 	actors.push_back(this);
+	setDrawOffset(0, 0);
 }
 
 Actor::~Actor() {
@@ -27,9 +28,15 @@ void Actor::setPos(float px, float py) {
 	pos_y = py;
 }
 
-void Actor::move(float mx, float my) {
-	pos_x += mx;
-	pos_y += my;
+void Actor::setDrawOffset(int ox, int oy) {
+	xDrawOffset = ox;
+	yDrawOffset = oy;
+	sprite.SetCenter(ox, oy);
+}
+
+// returns true if the actor collided with a map tile
+bool Actor::move(float &mx, float &my) {
+  return game_map->move(*this, mx, my);
 }
 
 void Actor::getPos(float &px, float &py) {
@@ -81,9 +88,28 @@ void Actor::draw() {
 }
 
 void Actor::destroy() {
+	onDestroy();
+	game_map->actorDestroyed(this);
 	destroyed = true;
+}
+
+bool Actor::isGrounded() {
+	return game_map->isGrounded(*this);
 }
 
 bool Actor::isDestroyed() {
 	return destroyed;
+}
+
+void Actor::checkCollisions() {
+	list<Actor*>::iterator it2 = actors.begin();
+	
+	for (; it2 != actors.end(); ++it2)
+	{
+		// Don't collide with self. :)
+		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && isColliding(*it2))
+		{
+			collide(**it2);
+		}
+	}
 }

@@ -4,8 +4,13 @@
  
 #include "Map.h"
 
+#include "tinyxml/tinyxml.h"
+
 #include "Collectible.h"
 #include "Enemy.h"
+#include "EnemyWalker.h"
+#include "EnemyFlyer.h"
+#include "Particles.h"
 
 Map::Map() {
 	
@@ -29,22 +34,9 @@ Map::Map() {
 	
 	cam_x = 0;
 	cam_y = 0;
+	cameraFollow = NULL;
 	
-	loadMap("subwaymap.txt");
-
-	// TODO: load these from a data file
-	(new EnemyWalker())->setPos(384, 256);
-
-	(new CollectiblePill())->setPos(128, 256);
-	(new CollectiblePill())->setPos(128+32, 256-32);
-	(new CollectiblePill())->setPos(128+64, 256-64);
-	(new CollectiblePill())->setPos(128+96, 256-96);
-	(new CollectiblePill())->setPos(800, 300);
-	(new CollectiblePill())->setPos(820, 425);
-
-	for (float y = 270; y < 360; y += 16)
-		for (float x = 256; x < 768; x += 16)
-			(new CollectiblePill())->setPos(x, y);
+	loadMap("subwaymap.tmx");
 }
 
 void Map::loadTileset(string filename) {
@@ -78,54 +70,116 @@ void Map::loadMap(string filename) {
 		}
 	}
 	
-	infile.open(("maps/" + filename).c_str(), ios::in);
+	TiXmlDocument doc;
+	if (!doc.LoadFile(("maps/" + filename).c_str()))
+	{
+		printf("failed to open map\n");
+		return;
+	}
 
-	if (infile.is_open()) {
-		while (!infile.eof()) {
+	TiXmlElement* root = doc.RootElement();
+	root->QueryIntAttribute("width", &width);
+	root->QueryIntAttribute("height", &height);
 
-			getline(infile, line);
-			line = trim(line, '\r');
+	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
+	{
+		std::string childName = child->Value();
+		if (childName == "layer")
+		{
+			typedef int tiles_t[MAP_TILES_X][MAP_TILES_Y];
+			tiles_t* tiles;
 
-			if (line.length() == 0) continue;
-			starts_with = line.at(0);
-			if (starts_with == "#") continue;
-			else if (starts_with == "[") {
-				section = trim(parse_section_title(line), ' ');
-				
-				// read in tile layers
-				if (section == "background" || section == "fringe" || section == "foreground" || section == "collision") {
-					for (int j=0; j<height; j++) {
-						getline(infile, line);
-						line = trim(line, '\r');
-						line = line + ",";
-						
-						for (int i=0; i<width; i++) {
-							comma = line.find_first_of(',');
-							if (section == "background")
-								background[i][j] = atoi(line.substr(0, comma).c_str());
-							else if (section == "fringe")
-								fringe[i][j] = atoi(line.substr(0, comma).c_str());
-							else if (section == "foreground")
-								foreground[i][j] = atoi(line.substr(0, comma).c_str());
-							else if (section == "collision")
-								collision[i][j] = atoi(line.substr(0, comma).c_str());
+			std::string layerName = ((TiXmlElement*)child)->Attribute("name");
+			if (layerName == "background")
+				tiles = &background;
+			else if (layerName == "fringe")
+				tiles = &fringe;
+			else if (layerName == "foreground")
+				tiles = &foreground;
+			else if (layerName == "collision")
+				tiles = &collision;
+			else
+				continue;
 
-							line = line.substr(comma+1, line.length());
-						}
-					}
+			const char* text = ((TiXmlElement*)child->FirstChild())->GetText();
+			if (!text)
+				continue;
+
+			const char* start = text;
+			for (int j = 0; j < height; j++) {
+				for (int i = 0; i < width; i++) {
+					const char* end = strchr(start, ',');
+					if (!end)
+						end = start + strlen(start);
+					(*tiles)[i][j] = atoi(std::string(start, end).c_str());
+					start = end+1;
 				}
 			}
-			else { // this is data.  treatment depends on section type
-				parse_key_pair(line, key, val);          
-				key = trim(key, ' ');
-				val = trim(val, ' ');
-				
-				if (key == "width") width = atoi(val.c_str());
-				else if (key == "height") height = atoi(val.c_str());
+		}
+		else if (childName == "objectgroup")
+		{
+			const char* defaultType;
+
+			// Look for a 'type' property as default for the whole group
+			TiXmlElement* prop = TiXmlHandle(child).FirstChild("properties").FirstChild("property").ToElement();
+			if (prop && strcmp(prop->Attribute("name"), "type") == 0)
+				defaultType = prop->Attribute("value");
+
+			for (TiXmlNode* object = child->FirstChild(); object; object = object->NextSibling())
+			{
+				// Skip everything except <object>
+				if (strcmp(object->Value(), "object") != 0)
+					continue;
+
+				std::string type;
+				if (((TiXmlElement*)object)->Attribute("type"))
+				{
+					type = ((TiXmlElement*)object)->Attribute("type");
+				}
+				else
+				{
+					if (defaultType)
+						type = defaultType;
+					else
+						continue;
+				}
+
+				Actor* actor;
+				if (type == "pill")
+					actor = new CollectiblePill();
+				else if (type == "weaponupgrade")
+					actor = new CollectibleWeaponUpgrade();
+				else if (type == "smoke")
+					actor = new ParticleEmitter();
+				else if (type == "walker")
+					actor = new EnemyWalker();
+				else if (type == "flyer")
+					actor = new EnemyFlyer();
+				else
+				{
+					printf("unrecognised object type %s\n", type.c_str());
+					continue;
+				}
+				int x = 0, y = 0;
+				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
+				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
+				actor->setPos(x, y);
+			}
+		}
+		else if(childName == "properties")
+		{
+			for (TiXmlNode* prop = child->FirstChild(); prop; prop = prop->NextSibling())
+			{
+				std::string propname = ((TiXmlElement*)prop)->Attribute("name");
+				std::string propval = ((TiXmlElement*)prop)->Attribute("value");
+				if(propname == "landscape") {
+					landscapeImg.LoadFromFile("images/landscapes/" + propval);
+					landscapeImg.SetSmooth(false);
+					landscape.SetImage(landscapeImg);
+				}
 			}
 		}
 	}
-
 }
 
 /**
@@ -160,17 +214,23 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 	return true;
 }
 
+
+bool Map::move(Actor &actor, float &move_x, float &move_y) {
+	return move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
+}
+
 /**
  * Attempt to move object at pos(x,y), of size(x,y), desired delta (x,y)
  * Assumes maximum move is tile size!
  * If unable to do so, move as much as possible and set the new pos(x,y)
  */
-void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
+bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
 	float orig_x = pos_x;
 	float orig_y = pos_y;
 	int current_tile;
 	float check_x;
 	float check_y;
+	bool impact = false;
 	
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
@@ -191,6 +251,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = ((int)check_x >> TILE_SHIFT) * TILE_SIZE - size_x/2 - 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -217,6 +278,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = (((int)check_x >> TILE_SHIFT)+1) * TILE_SIZE + size_x/2 + 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -244,6 +306,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = ((int)check_y >> TILE_SHIFT) * TILE_SIZE -1;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
@@ -269,17 +332,24 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = (((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE +1 + size_y;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
 		else { // didn't cross into a new tile, so simply move
 			pos_y = check_y + size_y; 
 		}
-	}
-
-	game_map->cam_x = (int)pos_x - 320;
-	game_map->cam_y = (int)pos_y - 240;
+	}	
 	
+	return impact;
+}
+
+void Map::setCameraFollow(Actor * actor) {
+	cameraFollow = actor;
+}
+
+bool Map::isGrounded(Actor & actor) {
+	return isGrounded(actor.pos_x, actor.pos_y, actor.width);
 }
 
 // if there is collision directly underfoot, return true
@@ -288,6 +358,10 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 }
 
 void Map::renderBackground() {
+	if(cameraFollow != NULL) {
+		game_map->cam_x = (int)cameraFollow->pos_x - 320;
+		game_map->cam_y = (int)cameraFollow->pos_y - 240;
+	}
 	
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
@@ -314,6 +388,12 @@ void Map::renderBackground() {
 		}
 	}
 
+}
+
+void Map::actorDestroyed(Actor * actor) {
+	if(actor == cameraFollow) {
+		cameraFollow = NULL;
+	}
 }
 
 // and fringe
@@ -353,6 +433,19 @@ void Map::renderForeground() {
 			App->Draw(tile_sprites[i][j]);
 		}
 	}
+}
+
+void Map::renderLandscape() {
+	// Draw it four times, aka repeating in X and Y
+	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
+	landscape.SetPosition(topleft);
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y);
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x, topleft.y + landscapeImg.GetHeight());
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y + landscapeImg.GetHeight());
+	App->Draw(landscape);
 }
 
 Map::~Map() {

@@ -1,15 +1,14 @@
 #pragma once
 #include "Enemy.h"
 
-class EnemyFlyer : public Enemy
+class EnemyWalker : public Enemy
 {
 public:
-	EnemyFlyer();
-	~EnemyFlyer();
+	EnemyWalker();
+	~EnemyWalker();
 	virtual void update(float dt);
 private:
-	int patrolCountdown, patrolLength;
-	float fly_speed;
+	float walk_speed;
 	float speed_x;
 	float speed_y;
 }; 

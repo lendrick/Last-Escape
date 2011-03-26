@@ -2,9 +2,16 @@
 
 #include "Enemy.h"
 
-PlayerBullet::PlayerBullet(bool rightwards) {
+PlayerBullet::PlayerBullet(int facing, float angleVariation):
+AnimatedActor()
+{
+	facing_direction = facing;
 
-	bullet_speed = (rightwards ? +1 : -1) * 480.f;
+	float speed = 480.f;
+
+	float angle = ((facing_direction == FACING_RIGHT) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
+	speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
+	speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
 	setPlaceholder(sf::Color(0, 255, 0), 8, 8);
 }
 
@@ -17,7 +24,10 @@ void PlayerBullet::collide(Actor& otherActor) {
 }
 
 void PlayerBullet::update(float dt) {
-	move(bullet_speed*dt, 0);
+	float mx = speed_x*dt;
+	float my = speed_y*dt;
+	bool impact = move(mx, my);
 
-	// TODO: should delete bullets eventually
+	checkCollisions();
+	if(impact) destroy();
 }

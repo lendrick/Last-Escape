@@ -26,12 +26,16 @@ class Map {
 private:
 	sf::RenderWindow *target;
 	sf::Image tileset;
+	sf::Image landscapeImg;
+	sf::Sprite landscape;
 	sf::IntRect tile_rects[1024];
 	
 	// map layers
 	int background[MAP_TILES_X][MAP_TILES_Y];
 	int fringe[MAP_TILES_X][MAP_TILES_Y];
 	int foreground[MAP_TILES_X][MAP_TILES_Y];
+	
+	Actor * cameraFollow;
 	
 public:
 	Map();
@@ -41,10 +45,16 @@ public:
 	void loadTileset(string filename);
 	bool checkHorizontalLine(int x1, int x2, int y);
 	bool checkVerticalLine(int x, int y1, int y2);
-	void move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
+	void setCameraFollow(Actor * actor);
+	bool move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
+	bool move(Actor &actor, float &move_x, float &move_y);
+	bool isGrounded(Actor &actor);
 	bool isGrounded(float &pos_x, float &pos_y, int size_x);
+	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
+	
+	void actorDestroyed(Actor * actor);
 
 	// collision layer
 	int collision[MAP_TILES_X][MAP_TILES_Y];
