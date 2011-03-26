@@ -57,6 +57,7 @@ Player::~Player() {
 }
 
 void Player::init() {
+	time = 0.f;
 	last_shoot_time = -100.f;
 	
 	energy = energy_max = 100.f;
@@ -115,7 +116,8 @@ void Player::shoot() {
 	if (energy < weapons[current_weapon].energy_cost)
 		return;
 
-	if (last_shoot_time > weapons[current_weapon].reload_time) {
+	if (time - last_shoot_time > weapons[current_weapon].reload_time) {
+		last_shoot_time = time;
 		fireSound->playSound();
 		energy -= weapons[current_weapon].energy_cost;
 
@@ -130,6 +132,8 @@ void Player::update(float dt) {
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
 	
+	time += dt;
+
 	if(isGrounded()) {
 		speed_y = 0;
 	}

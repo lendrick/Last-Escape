@@ -23,7 +23,7 @@ public:
 
 	int current_weapon;
 
-	float anim_time;
+	float time;
 	float last_shoot_time;
 
 	float energy;
