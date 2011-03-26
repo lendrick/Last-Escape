@@ -15,7 +15,7 @@ class CollectiblePill : public Collectible
 {
 public:
 	CollectiblePill();
-	virtual void collidePlayer(Player& player);
+	virtual void collide(Actor& otherActor);
 };
 
 #endif

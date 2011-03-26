@@ -70,12 +70,9 @@ bool Actor::isColliding(Actor * otherActor) {
 	getBoundingBox(x1, y1, x2, y2);
 	otherActor->getBoundingBox(ox1, oy1, ox2, oy2);
 	
-	if( ( (x1 < ox1 && ox1 < x2) || (x1 < ox2 && ox2 < x2) ) &&
-		( (y1 < oy1 && oy1 < y2) || (y1 < oy2 && oy2 < y2) ) ) {
-		return true;
-	}
-	
-	return false;
+	if (x2 < ox1 || ox2 < x1 || y2 < oy1 || oy2 < y1)
+		return false;
+	return true;
 }
 
 void Actor::draw() {

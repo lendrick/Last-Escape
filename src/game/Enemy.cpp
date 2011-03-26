@@ -2,14 +2,15 @@
 
 #include "Player.h"
 
-void Enemy::collidePlayer(Player& player) {
-	// TODO: kill the player
-	player.spr.FlipY(true);
-}
-
 void Enemy::collide(Actor& otherActor) {
 	if (otherActor.isCollectible())
 		otherActor.destroy();
+	
+	if (otherActor.isPlayer())
+	{
+		// TODO: kill the player
+		otherActor.sprite.FlipY(true);
+	}
 }
 
 EnemyWalker::EnemyWalker() {

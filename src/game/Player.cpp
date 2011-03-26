@@ -35,24 +35,18 @@ Player::Player() {
 	facing_rightwards = true;
 	width = 24;
 	height = 48;
+	xOrigin = width/2;
+	yOrigin = height;
 	speed_x = 0.0f;
 	speed_y = 0.0f;
-	int state = 0;
-	if (!img.LoadFromFile("images/xeon.png"))
+	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
-	spr.SetImage(img);
-	spr.SetCenter(SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
+	sprite.SetImage(image);
+	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 }
 	
 Player::~Player() {
 
-}
-
-void Player::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
-	x1 = pos_x - width/2;
-	x2 = pos_x + width/2;
-	y1 = pos_y - height;
-	y2 = pos_y;
 }
 
 void Player::jump() {
@@ -83,7 +77,7 @@ void Player::shoot() {
 	}
 }
 
-void Player::logic(float dt) {
+void Player::update(float dt) {
 	const sf::Input& input = App->GetInput();
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
@@ -153,34 +147,34 @@ void Player::logic(float dt) {
 		sprite_tile_col = 0;
 	}
 
-	spr.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
+	sprite.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
 		(sprite_tile_col+1)*SPRITE_TILE_W, (sprite_tile_row+1)*SPRITE_TILE_H));
 	
 	if (speed_x > 0)
 	{
 		facing_rightwards = true;
-		spr.FlipX(false);
-		spr.SetCenter(SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
+		sprite.FlipX(false);
+		sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
 	else if (speed_x < 0)
 	{
 		facing_rightwards = false;
-		spr.FlipX(true);
-		spr.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
+		sprite.FlipX(true);
+		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
 
 	if (speed_y == terminal_velocity)
-		spr.Rotate(360.f*dt);
+		sprite.Rotate(360.f*dt);
 	else
-		spr.SetRotation(0);
+		sprite.SetRotation(0);
 }
 
-void Player::render() {
+void Player::draw() {
 
-	spr.SetPosition(
+	sprite.SetPosition(
 		0.5f + (int)(pos_x - game_map->cam_x - width/2),
 		0.5f + (int)(pos_y - game_map->cam_y - height));
-	App->Draw(spr);
+	App->Draw(sprite);
 }
 
 
