@@ -7,6 +7,8 @@ class Collectible : public Actor
 {
 public:
 	Collectible();
+
+	virtual bool isCollectible() { return true; }
 };
 
 class CollectiblePill : public Collectible

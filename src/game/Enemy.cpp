@@ -7,6 +7,11 @@ void Enemy::collidePlayer(Player& player) {
 	player.spr.FlipY(true);
 }
 
+void Enemy::collide(Actor& otherActor) {
+	if (otherActor.isCollectible())
+		otherActor.destroy();
+}
+
 EnemyWalker::EnemyWalker() {
 
 	walk_speed = 120.f;

@@ -53,14 +53,6 @@ B) Building the game:
 
 	make
 
-6. Change to 'game' directory:
-
-	cd game
-
-7. Move  the 'xeonergy' executable to your repositories main directory:
-
-	mv xeonergy ../..
-
 8. Change to the main directory:
 
 	cd ../..

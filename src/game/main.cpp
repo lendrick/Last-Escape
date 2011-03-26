@@ -36,6 +36,22 @@ void update(Player& player, float dt) {
 			continue;
 		(*it)->collidePlayer(player);
 	}
+
+	// Check for inter-actor collisions (inefficiently)
+	for (list<Actor*>::iterator it1 = actors.begin(); it1 != actors.end(); ++it1)
+	{
+		list<Actor*>::iterator it2 = it1;
+		++it2;
+
+		for (; it2 != actors.end(); ++it2)
+		{
+			if ((*it1)->isColliding(*it2))
+			{
+				(*it1)->collide(**it2);
+				(*it2)->collide(**it1);
+			}
+		}
+	}
 }
 
 void renderActors() {
