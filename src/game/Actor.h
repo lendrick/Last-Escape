@@ -24,7 +24,7 @@ public:
 	bool isColliding(Actor * otherActor);
 	
 	virtual void collide(Actor& otherActor) { }
-	virtual void update(float dt) { }
+	virtual void update(float dt) { };
 	virtual void draw();
 	
 	void destroy();
@@ -43,4 +43,6 @@ public:
 	int height, width;
 	float pos_x, pos_y;
 	bool destroyed;
+protected:
+	void checkCollisions();
 };
