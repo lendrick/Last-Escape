@@ -1,5 +1,10 @@
 #pragma once
+
+#include <fstream>
+#include <sstream>
+
 #include "globals.h"
+#include "tinyxml/tinyxml.h"
 #include "Animation.h"
 #include "Actor.h"
 // This class is for all actors with animations (or even still actors).  It inherits Actor.
@@ -14,8 +19,11 @@ public:
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
 	void draw();	///< update Animation
+	void loadAnimationsFromFile(std::string filepath);
+	
 	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
 	void resetCurrentAnimation();
+	
 	Animation * addAnimation(std::string name);
 	void setFrameSize(int fw, int fh);
 	void updateSpriteFacing();

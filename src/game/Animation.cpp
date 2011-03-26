@@ -43,10 +43,6 @@ void Animation::addFrame(int num, float duration) {
 	frames.push_back(frame);	
 }
 
-void Animation::setLoop(bool loop) {
-	doLoop = loop;
-}
-
 void Animation::reset() {
 	frameIterator = 0;
 	updateFrame();
@@ -60,6 +56,14 @@ bool Animation::getIsFinished()
 void Animation::setIsFinished(bool value)
 {
 	this->isFinished = value;
+}
+void Animation::setDoLoop(bool value)
+{
+	this->doLoop = value;
+}
+void Animation::addFrame(Frame frame)
+{
+	this->frames.push_back(frame);
 }
 
 void Animation::update()
