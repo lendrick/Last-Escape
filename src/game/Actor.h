@@ -19,7 +19,7 @@ public:
 	
 	bool isColliding(Actor * otherActor);
 	
-	virtual void collide(Actor * otherActor);
+	virtual void collide(Actor * otherActor) = 0;
 	virtual void update() = 0;
 	virtual void draw() = 0;
 	
