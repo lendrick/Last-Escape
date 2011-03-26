@@ -174,6 +174,7 @@ void Map::loadMap(string filename) {
 				std::string propval = ((TiXmlElement*)prop)->Attribute("value");
 				if(propname == "landscape") {
 					landscapeImg.LoadFromFile("images/landscapes/" + propval);
+					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
 				}
 			}
@@ -436,7 +437,7 @@ void Map::renderForeground() {
 
 void Map::renderLandscape() {
 	// Draw it four times, aka repeating in X and Y
-	sf::Vector2f topleft(-(float)(cam_x % landscapeImg.GetWidth()), -(float)(cam_y % landscapeImg.GetHeight()));
+	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);
 	App->Draw(landscape);
 	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y);
