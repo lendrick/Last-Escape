@@ -10,7 +10,10 @@ public:
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
 	void setPos(float px, float py);
-	void move(float mx, float my);
+	
+	// returns true if the actor collided with a map tile
+	bool move(float mx, float my);
+	
 	void getPos(float &px, float &py);
 	
 	void setSize(int w, int h);

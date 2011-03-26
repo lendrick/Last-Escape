@@ -24,7 +24,8 @@ void PlayerBullet::collide(Actor& otherActor) {
 }
 
 void PlayerBullet::update(float dt) {
-	move(speed_x*dt, speed_y*dt);
+	bool impact = move(speed_x*dt, speed_y*dt);
 
 	checkCollisions();
+	if(impact) destroy();
 }

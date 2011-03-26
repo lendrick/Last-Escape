@@ -202,8 +202,8 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 }
 
 
-void Map::move(Actor &actor, float &move_x, float &move_y) {
-	move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
+bool Map::move(Actor &actor, float &move_x, float &move_y) {
+	return move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
 }
 
 /**
@@ -211,12 +211,13 @@ void Map::move(Actor &actor, float &move_x, float &move_y) {
  * Assumes maximum move is tile size!
  * If unable to do so, move as much as possible and set the new pos(x,y)
  */
-void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
+bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
 	float orig_x = pos_x;
 	float orig_y = pos_y;
 	int current_tile;
 	float check_x;
 	float check_y;
+	bool impact = false;
 	
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
@@ -237,6 +238,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = ((int)check_x >> TILE_SHIFT) * TILE_SIZE - size_x/2 - 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -263,6 +265,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = (((int)check_x >> TILE_SHIFT)+1) * TILE_SIZE + size_x/2 + 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -290,6 +293,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = ((int)check_y >> TILE_SHIFT) * TILE_SIZE -1;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
@@ -315,6 +319,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = (((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE +1 + size_y;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
@@ -322,6 +327,8 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			pos_y = check_y + size_y; 
 		}
 	}	
+	
+	return impact;
 }
 
 void Map::setCameraFollow(Actor * actor) {

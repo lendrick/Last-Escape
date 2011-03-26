@@ -27,8 +27,9 @@ void Actor::setPos(float px, float py) {
 	pos_y = py;
 }
 
-void Actor::move(float mx, float my) {
-  game_map->move(*this, mx, my);
+// returns true if the actor collided with a map tile
+bool Actor::move(float mx, float my) {
+  return game_map->move(*this, mx, my);
 }
 
 void Actor::getPos(float &px, float &py) {
