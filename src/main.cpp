@@ -39,6 +39,7 @@ int main()
         App.Clear();
 
 		// Draw Map
+		if (m.cam_x < 32000) m.cam_x++;
 		m.render();
 
         // Finally, display the rendered frame on screen
