@@ -25,18 +25,6 @@ void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 		(*it)->update(dt);
 
-	// Check for collisions with the player
-	float px1, py1, px2, py2;
-	player.getBoundingBox(px1, py1, px2, py2);
-	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-	{
-		float x1, y1, x2, y2;
-		(*it)->getBoundingBox(x1, y1, x2, y2);
-		if (px2 < x1 || x2 < px1 || py2 < y1 || y2 < py1)
-			continue;
-		(*it)->collidePlayer(player);
-	}
-
 	// Check for inter-actor collisions (inefficiently)
 	for (list<Actor*>::iterator it1 = actors.begin(); it1 != actors.end(); ++it1)
 	{
@@ -148,10 +136,7 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
-		p1.logic(ElapsedTime);
-
 		game_map->renderBackground();
-		p1.render();
 		renderActors();
 		game_map->renderForeground();
 

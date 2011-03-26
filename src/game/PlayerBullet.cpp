@@ -10,9 +10,14 @@ PlayerBullet::PlayerBullet(bool rightwards) {
 
 void PlayerBullet::collide(Actor& otherActor) {
 	if (otherActor.isEnemy())
+	{
 		otherActor.destroy();
+		destroy();
+	}
 }
 
 void PlayerBullet::update(float dt) {
 	move(bullet_speed*dt, 0);
+
+	// TODO: should delete bullets eventually
 }
