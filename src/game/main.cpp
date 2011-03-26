@@ -102,6 +102,7 @@ int main()
 	game_map = new Map();
 	Player p1;
 	g_player = &p1;
+	game_map->setCameraFollow(g_player);
 
 	sf::Clock Clock;
 

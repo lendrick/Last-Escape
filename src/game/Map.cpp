@@ -9,6 +9,7 @@
 #include "Collectible.h"
 #include "Enemy.h"
 #include "EnemyWalker.h"
+#include "EnemyFlyer.h"
 #include "Particles.h"
 
 Map::Map() {
@@ -33,6 +34,7 @@ Map::Map() {
 	
 	cam_x = 0;
 	cam_y = 0;
+	cameraFollow = NULL;
 	
 	loadMap("subwaymap.tmx");
 }
@@ -149,6 +151,8 @@ void Map::loadMap(string filename) {
 					actor = new ParticleEmitter();
 				else if (type == "walker")
 					actor = new EnemyWalker();
+				else if (type == "flyer")
+					actor = new EnemyFlyer();
 				else
 				{
 					printf("unrecognised object type %s\n", type.c_str());
@@ -193,6 +197,11 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 		if (collision[check_x][check_y]) return false; // solid tile
 	}
 	return true;
+}
+
+
+void Map::move(Actor &actor, float &move_x, float &move_y) {
+	move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
 }
 
 /**
@@ -310,11 +319,11 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		else { // didn't cross into a new tile, so simply move
 			pos_y = check_y + size_y; 
 		}
-	}
+	}	
+}
 
-	game_map->cam_x = (int)pos_x - 320;
-	game_map->cam_y = (int)pos_y - 240;
-	
+void Map::setCameraFollow(Actor * actor) {
+	cameraFollow = actor;
 }
 
 // if there is collision directly underfoot, return true
@@ -323,6 +332,10 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 }
 
 void Map::renderBackground() {
+	if(cameraFollow != NULL) {
+		game_map->cam_x = (int)cameraFollow->pos_x - 320;
+		game_map->cam_y = (int)cameraFollow->pos_y - 240;
+	}
 	
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
@@ -349,6 +362,12 @@ void Map::renderBackground() {
 		}
 	}
 
+}
+
+void Map::actorDestroyed(Actor * actor) {
+	if(actor == cameraFollow) {
+		cameraFollow = NULL;
+	}
 }
 
 // and fringe
