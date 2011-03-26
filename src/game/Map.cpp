@@ -19,16 +19,16 @@ Map::Map(sf::RenderWindow &_target) {
 	// TEMP: random level
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
-			map_bg[i][j] = rand() % 4 + 11;
+			map_bg[i][j] = rand() % 4 + 17;
 		}
 	}
 	
 	// prep the rects for each tile
 	for (int i=0; i<TILE_COUNT-1; i++) {
 	
-		// assumes tileset is 320px wide
-		tile_rects[i+1].Left = (i % 10) * TILE_SIZE;
-		tile_rects[i+1].Top = (i / 10) * TILE_SIZE;
+		// assumes tileset is 512px wide
+		tile_rects[i+1].Left = (i % 16) * TILE_SIZE;
+		tile_rects[i+1].Top = (i / 16) * TILE_SIZE;
 		tile_rects[i+1].Right = tile_rects[i+1].Left + TILE_SIZE;
 		tile_rects[i+1].Bottom = tile_rects[i+1].Top + TILE_SIZE;
 	}
@@ -60,7 +60,7 @@ void Map::render() {
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			
-			sprites_bg[i][j].SetPosition(i*32 - cam_off_x, j*32 - cam_off_y);
+			sprites_bg[i][j].SetPosition(i*32 - cam_off_x + 0.5f, j*32 - cam_off_y + 0.5f);
 			
 			// and which sprite should we display?
 			// outside the map
