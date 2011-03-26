@@ -1,3 +1,4 @@
+#pragma once
 /*
  *  Sound.h
  *  Energy
@@ -6,21 +7,19 @@
  *
  */
 
-#ifndef MAP_H
-#define MAP_H
 
 #include <SFML/Audio.hpp>
 #include <string>
-
 using namespace std;
 
 class Sound
 {
-	private:
+private:
 	sf::Music song;
 
-	public:
+public:
 	Sound();
+	Sound(string filename);
 	~Sound();
 
 	bool loadSound(string filename);
@@ -28,4 +27,3 @@ class Sound
 
 };
 
-#endif

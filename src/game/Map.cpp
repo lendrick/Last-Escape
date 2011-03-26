@@ -34,6 +34,7 @@ Map::Map() {
 	
 	cam_x = 0;
 	cam_y = 0;
+	cameraFollow = NULL;
 	
 	loadMap("subwaymap.tmx");
 }
@@ -200,17 +201,23 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 	return true;
 }
 
+
+bool Map::move(Actor &actor, float &move_x, float &move_y) {
+	return move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
+}
+
 /**
  * Attempt to move object at pos(x,y), of size(x,y), desired delta (x,y)
  * Assumes maximum move is tile size!
  * If unable to do so, move as much as possible and set the new pos(x,y)
  */
-void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
+bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
 	float orig_x = pos_x;
 	float orig_y = pos_y;
 	int current_tile;
 	float check_x;
 	float check_y;
+	bool impact = false;
 	
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
@@ -231,6 +238,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = ((int)check_x >> TILE_SHIFT) * TILE_SIZE - size_x/2 - 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -257,6 +265,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_x = (((int)check_x >> TILE_SHIFT)+1) * TILE_SIZE + size_x/2 + 1;
 				move_x = pos_x - orig_x;
+				impact = true;
 			}
 		
 		}
@@ -284,6 +293,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = ((int)check_y >> TILE_SHIFT) * TILE_SIZE -1;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
@@ -309,17 +319,20 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			else { // move to the tile edge
 				pos_y = (((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE +1 + size_y;
 				move_y = pos_y - orig_y;
+				impact = true;
 			}
 		
 		}
 		else { // didn't cross into a new tile, so simply move
 			pos_y = check_y + size_y; 
 		}
-	}
-
-	game_map->cam_x = (int)pos_x - 320;
-	game_map->cam_y = (int)pos_y - 240;
+	}	
 	
+	return impact;
+}
+
+void Map::setCameraFollow(Actor * actor) {
+	cameraFollow = actor;
 }
 
 // if there is collision directly underfoot, return true
@@ -328,6 +341,10 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 }
 
 void Map::renderBackground() {
+	if(cameraFollow != NULL) {
+		game_map->cam_x = (int)cameraFollow->pos_x - 320;
+		game_map->cam_y = (int)cameraFollow->pos_y - 240;
+	}
 	
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
@@ -354,6 +371,12 @@ void Map::renderBackground() {
 		}
 	}
 
+}
+
+void Map::actorDestroyed(Actor * actor) {
+	if(actor == cameraFollow) {
+		cameraFollow = NULL;
+	}
 }
 
 // and fringe

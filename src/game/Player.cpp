@@ -136,10 +136,10 @@ void Player::update(float dt) {
 	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
 	// when held down)
 
-	if (input.jump())
+	if (input.jumping())
 		jump();
 
-	if (input.shoot())
+	if (input.shooting())
 		shoot();
 
 	// gravity

@@ -14,6 +14,7 @@
 #include "TempPlayer.h"
 #include "Player.h"
 #include "Input.h"
+#include "Sound.h"
 
 list<Actor *> actors;
 Map * game_map;
@@ -23,23 +24,13 @@ Input input;
 
 sf::Font fontUI;
 
-/* TODO:
- * 
- * Okay, we need to clean this stuff up.  The update function should be empty
- * except for the loop that checks all actors and runs their update functions.
- * Player should be an actor, and should update when the other actors do.
- * Input and collision handling for the player need to go in the player's 
- * update() function.
- * 
- * The collide() function is intended to be an event that is called from an
- * actor's update() function when it collides with another object.  Each frame,
- * Actors should iterate through the list and see what's colliding with them,
- * then run their own collide() function, passing the other actor as the argument.
- * Enemies and enemy bullets are exempt from this, unless we want them colliding
- * with each other (we can handle the important collisions from the Player and
- * PlayerBullet classes.
- * 
- * */
+Sound * backgroundMusic = new Sound("01 Game-Game_0.ogg");
+Sound * fireSound = new Sound();
+Sound * damageSound = new Sound();
+Sound * deathSound = new Sound();
+Sound * bulletHitSound = new Sound();
+Sound * enemyDeathSound = new Sound();
+
 
 void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -102,6 +93,7 @@ int main()
 	game_map = new Map();
 	Player p1;
 	g_player = &p1;
+	game_map->setCameraFollow(g_player);
 
 	sf::Clock Clock;
 
@@ -109,7 +101,8 @@ int main()
 	sf::Image xeon;
 	xeon.LoadFromFile("images/xeon.png");
 	AnimatedActor testActor(xeon);
-
+	backgroundMusic->playSound();
+	
 	// Start game loop
 	while (App->IsOpened())
 	{

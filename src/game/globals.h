@@ -15,6 +15,7 @@ class AnimatedActor;
 class Map;
 class Player;
 class Input;
+class Sound;
 
 extern list<Actor *> actors;
 extern Map *game_map;
@@ -29,3 +30,10 @@ enum Facing {
 	FACING_LEFT,
 	FACING_RIGHT
 };
+
+extern Sound * backgroundMusic;
+extern Sound * fireSound;
+extern Sound * damageSound;
+extern Sound * deathSound;
+extern Sound * bulletHitSound;
+extern Sound * enemyDeathSound;
