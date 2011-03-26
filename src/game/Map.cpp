@@ -4,8 +4,11 @@
  
 #include "Map.h"
 
+/* TODO:
+ * add way to define enemies in a file */
 #include "Collectible.h"
 #include "Enemy.h"
+#include "EnemyWalker.h"
 
 Map::Map() {
 	
