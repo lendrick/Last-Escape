@@ -26,7 +26,7 @@ EnemyFlyer::EnemyFlyer()
 	tmp = addAnimation("fly");
 	tmp->addFrame(0, .2f);
 	tmp->addFrame(1, .2f);
-	tmp->setLoop(true);
+	tmp->setDoLoop(true);
 	
 	setCurrentAnimation("fly");	
 	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);

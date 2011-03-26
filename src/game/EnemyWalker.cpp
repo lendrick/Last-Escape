@@ -26,7 +26,7 @@ EnemyWalker::EnemyWalker()
 	tmp->addFrame(1, .2f);
 	tmp->addFrame(2, .2f);
 	tmp->addFrame(1, .2f);
-	tmp->setLoop(true);
+	tmp->setDoLoop(true);
 	
 	setCurrentAnimation("walk");
 }

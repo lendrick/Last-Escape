@@ -79,7 +79,7 @@ Player::Player()
 	tmp->addFrame(1, .2f);
 	tmp->addFrame(2, .2f);
 	tmp->addFrame(3, .2f);
-	tmp->setLoop(true);
+	tmp->setDoLoop(true);
 	
 	tmp = addAnimation("jump");
 	tmp->addFrame(24, 0.1f);
