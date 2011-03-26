@@ -101,7 +101,7 @@ int main()
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
 
-	sf::Clock Clock;
+	
 
 	// Create Animation test
 
@@ -109,6 +109,9 @@ int main()
 
 	ui_init();
 
+	sf::Clock Clock;
+	Clock.Reset();
+	
 	// Start game loop
 	while (App->IsOpened())
 	{

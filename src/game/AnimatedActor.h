@@ -18,7 +18,7 @@ public:
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
-	void draw();	///< update Animation
+	virtual void draw();	///< update Animation
 	void loadAnimationsFromFile(std::string filepath);
 	
 	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
