@@ -45,7 +45,6 @@ void Animation::update()
 			{
 				frameIterator = 0;
 				this->sprite.SetSubRect(frames.at(frameIterator).rect );
-				cout << "looped" << endl;
 			}
 		}
 		else
