@@ -44,7 +44,7 @@ void Player::init() {
 	
 	pos_x = 64.0f;
 	pos_y = 0.0f;
-	facing_rightwards = true;
+	facing_direction = FACING_RIGHT;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -77,7 +77,7 @@ void Player::shoot() {
 		last_shoot_time = anim_time;
 		energy -= energy_cost_shoot;
 
-		Actor* bullet = new PlayerBullet(facing_rightwards);
+		Actor* bullet = new PlayerBullet(facing_direction);
 		bullet->setPos(pos_x, pos_y - height/2);
 	}
 }
@@ -91,7 +91,7 @@ void Player::update(float dt) {
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
-
+	
 	// left/right move
 	if (input.IsKeyDown(sf::Key::Left)) {
 		speed_x -= speed_delta*dt;
@@ -155,15 +155,18 @@ void Player::update(float dt) {
 	sprite.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
 		(sprite_tile_col+1)*SPRITE_TILE_W, (sprite_tile_row+1)*SPRITE_TILE_H));
 	
+	/* TODO: Player's direction should depend on what arrow is being pressed, not player speed.
+	 * Right now you can't turn around and fire quickly, which makes the controls feel klunky. */
+	
 	if (speed_x > 0)
 	{
-		facing_rightwards = true;
+		facing_direction = FACING_RIGHT;
 		sprite.FlipX(false);
 		sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
 	else if (speed_x < 0)
 	{
-		facing_rightwards = false;
+		facing_direction = FACING_LEFT;
 		sprite.FlipX(true);
 		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}

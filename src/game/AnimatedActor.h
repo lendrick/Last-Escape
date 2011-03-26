@@ -7,6 +7,13 @@
 class AnimatedActor : public Actor
 {
 public:
+	enum Facing {
+		FACING_UP,
+		FACING_DOWN,
+		FACING_LEFT,
+		FACING_RIGHT
+	};
+	
 	AnimatedActor(sf::Image&);
 	AnimatedActor();
 	void setImage(sf::Image&);
@@ -17,6 +24,10 @@ public:
 	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
 
 protected:
+	int facing_direction;
 	Animation *currentAnimation; ///< TODO use a queue
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
+
+private:
+	void init();
 };

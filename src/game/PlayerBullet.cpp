@@ -2,10 +2,11 @@
 
 #include "Enemy.h"
 
-PlayerBullet::PlayerBullet(bool rightwards):
+PlayerBullet::PlayerBullet(int facing):
 AnimatedActor()
 {
-	bullet_speed = (rightwards ? +1 : -1) * 480.f;
+	facing_direction = facing;
+	bullet_speed = ((facing_direction == FACING_RIGHT) ? +1 : -1) * 480.f;
 	setPlaceholder(sf::Color(0, 255, 0), 8, 8);
 }
 

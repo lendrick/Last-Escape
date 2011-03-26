@@ -3,6 +3,7 @@
 AnimatedActor::AnimatedActor(sf::Image& image)
 :Actor()
 {
+	init();
 	setImage(image);
 
 	//testing values
@@ -26,10 +27,15 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 AnimatedActor::AnimatedActor()
 :Actor()
 {
+	init();
 }
 
 AnimatedActor::~AnimatedActor()
 {
+}
+
+void AnimatedActor::init() {
+	facing_direction = FACING_RIGHT;
 }
 
 void AnimatedActor::setImage(sf::Image & image) 

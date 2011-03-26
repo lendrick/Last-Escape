@@ -2,10 +2,10 @@
 #define PLAYER_H
 
 #include "Map.h"
-#include "Actor.h"
+#include "AnimatedActor.h"
 #include "globals.h"
 
-class Player : public Actor {
+class Player : public AnimatedActor {
 public:
 	Player();
 	~Player();
@@ -27,7 +27,6 @@ public:
 	float energy;
 	float energy_max;
 
-	bool facing_rightwards;
 	float speed_x;
 	float speed_y;
 };
