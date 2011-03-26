@@ -167,6 +167,8 @@ void Player::update(float dt) {
 		sprite.Rotate(360.f*dt);
 	else
 		sprite.SetRotation(0);
+	
+	checkCollisions();
 }
 
 void Player::draw() {

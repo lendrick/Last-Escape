@@ -42,4 +42,6 @@ void EnemyWalker::update(float dt) {
 	game_map->move(pos_x, pos_y, width, height, delta_x, delta_y);
 	speed_x = delta_x / dt;
 	speed_y = delta_y / dt;
+	
+	checkCollisions();
 }

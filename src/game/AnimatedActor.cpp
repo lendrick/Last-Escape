@@ -1,9 +1,9 @@
  #include "AnimatedActor.h"
 
 AnimatedActor::AnimatedActor(sf::Image& image)
+:Actor()
 {
-	this->sprite.SetImage(image);
-//	this->sprite.Resize(24, 48);
+	setImage(image);
 
 	//testing values
 	this->setOrigin(64.0f, 400.0f);
@@ -23,13 +23,24 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 //	this->animationQueue.front()->toDefaultAnimation();
 }
 
+AnimatedActor::AnimatedActor()
+:Actor()
+{
+}
+
 AnimatedActor::~AnimatedActor()
 {
 }
 
-AnimatedActor::AnimatedActor()
+void AnimatedActor::setImage(sf::Image & image) 
 {
-
+	this->sprite.SetImage(image);
+	this->sprite.SetX(64.f);
+	this->sprite.SetY(400.f);
+	//	this->sprite.Resize(24, 48);
+	
+	this->currentAnimation = new Animation(this->sprite);
+	this->currentAnimation->toDefaultXeonWalkAnimation(); //testing 
 }
 
 void AnimatedActor::update(float dt)
