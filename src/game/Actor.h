@@ -12,7 +12,7 @@ public:
 	void setPos(float px, float py);
 	
 	// returns true if the actor collided with a map tile
-	bool move(float mx, float my);
+	bool move(float &mx, float &my);
 	
 	void getPos(float &px, float &py);
 	
