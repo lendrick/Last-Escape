@@ -64,15 +64,12 @@ void cleanup() {
 	if(actors.empty())
 		return;
 	
-	list<Actor *>::iterator i = actors.end();
+	list<Actor *>::iterator i = actors.begin();
 	list<Actor *>::iterator tmp;
-	
-	i--;
-	
-	while(i != actors.begin()) {
-		tmp = i;
-		i--;
 		
+	while(i != actors.end()) {
+		tmp = i;
+		++i;
 		if((*tmp)->isDestroyed()) {
 			delete *tmp;
 			actors.erase(tmp);

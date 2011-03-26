@@ -19,7 +19,7 @@ EnemyWalker::EnemyWalker() {
 	speed_x = 0;
 	speed_y = 0;
 
-	setPlaceholder(sf::Color(255, 0, 0), 16, 16);
+	setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
 
 void EnemyWalker::update(float dt) {

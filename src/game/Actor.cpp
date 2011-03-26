@@ -12,14 +12,14 @@ Actor::Actor() {
 Actor::~Actor() {
 }
 
-void Actor::setPlaceholder(sf::Color c, float w, float h) {
+void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
 	width = w;
 	height = h;
-	xOrigin = w/2;
-	yOrigin = h/2;
+	xOrigin = w*xoff;
+	yOrigin = h*yoff;
 	sprite.SetColor(c);
 	sprite.SetScale(width, height);
-	sprite.SetCenter(0.5, 0.5);
+	sprite.SetCenter(xoff, yoff);
 }
 
 void Actor::setPos(float px, float py) {

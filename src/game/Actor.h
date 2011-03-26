@@ -7,7 +7,7 @@ public:
 	Actor();
 	~Actor();
 
-	void setPlaceholder(sf::Color c, float w, float h);
+	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
 	void setPos(float px, float py);
 	void move(float mx, float my);

@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "PlayerBullet.h"
+
 const int SPRITE_TILE_W = 128;
 const int SPRITE_TILE_H = 128;
 
@@ -30,6 +32,7 @@ Player::Player() {
 
 	pos_x = 64.0f;
 	pos_y = 0.0f;
+	facing_rightwards = true;
 	width = 24;
 	height = 48;
 	speed_x = 0.0f;
@@ -67,14 +70,16 @@ void Player::jump() {
 
 void Player::shoot() {
 	const float shoot_reload_timer = 0.5f;
-
+	
 	if (energy < energy_cost_shoot)
 		return;
 
 	if (anim_time - last_shoot_time > shoot_reload_timer) {
 		last_shoot_time = anim_time;
 		energy -= energy_cost_shoot;
-		// TODO: emit bullets
+
+		Actor* bullet = new PlayerBullet(facing_rightwards);
+		bullet->setPos(pos_x, pos_y - height/2);
 	}
 }
 
@@ -153,11 +158,13 @@ void Player::logic(float dt) {
 	
 	if (speed_x > 0)
 	{
+		facing_rightwards = true;
 		spr.FlipX(false);
 		spr.SetCenter(SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
 	}
 	else if (speed_x < 0)
 	{
+		facing_rightwards = false;
 		spr.FlipX(true);
 		spr.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
 	}
