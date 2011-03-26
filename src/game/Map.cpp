@@ -201,7 +201,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			}
 			else { // move to the tile edge
 				pos_x = (((int)check_x >> TILE_SHIFT)+1) * TILE_SIZE + size_x/2 + 1;
-				move_x = orig_x - pos_x;
+				move_x = pos_x - orig_x;
 			}
 		
 		}
@@ -253,7 +253,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			}
 			else { // move to the tile edge
 				pos_y = (((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE +1 + size_y;
-				move_y = orig_y - pos_y;
+				move_y = pos_y - orig_y;
 			}
 		
 		}
