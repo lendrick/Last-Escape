@@ -5,11 +5,34 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <list>
+#include <boost/foreach.hpp>
 #include "Map.h"
+#include "Actor.h"
 #include "globals.h"
 
 std::list<Actor *> actors;
 Map * game_map;
+
+/// This function cleans up deleted actors.
+void cleanup() {
+	if(actors.empty())
+		return;
+	
+	list<Actor *>::iterator i = actors.end();
+	list<Actor *>::iterator tmp;
+	
+	i--;
+	
+	while(i != actors.begin()) {
+		tmp = i;
+		i--;
+		
+		if((*tmp)->isDestroyed()) {
+			delete *tmp;
+			actors.erase(tmp);
+		}
+	}
+}
 
 ////////////////////////////////////////////////////////////
 /// Entry point of application
@@ -48,6 +71,7 @@ int main()
 		if (input.IsKeyDown(sf::Key::Up))    game_map->cam_y--;
 		if (input.IsKeyDown(sf::Key::Down))  game_map->cam_y++;
 
+		cleanup();
 		
 		// Draw Map
 		game_map->render();
