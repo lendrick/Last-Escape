@@ -2,6 +2,9 @@
 
 #include <list>
 
+#define foreach BOOST_FOREACH
+#define reverse_foreach BOOST_REVERSE_FOREACH
+
 using namespace std;
 
 class Actor;
