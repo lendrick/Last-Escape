@@ -21,8 +21,25 @@ const int SPRITE_SHOOT_COUNT = 3;
 const float SPRITE_SHOOT_SPEED = 16.f;
 
 const float energy_cost_jump = 10.f;
-const float energy_cost_shoot = 5.f;
 const float energy_recharge_rate = 5.f; // units per second
+
+struct WeaponDesc {
+	const char* name;
+	float energy_cost;
+	float reload_time;
+	float angle_variation;
+
+	int sprite_row;
+	int sprite_count;
+	float sprite_speed;
+};
+
+WeaponDesc weapons[] = {
+	{"Blaster", 5.0, 0.5, 0.0,
+		2, 3, 16.0 },
+	{"Overcharged Blaster", 2.5, 0.1, 10.0,
+		2, 3, 32.0 },
+};
 
 Player::Player() {
 	init();
@@ -52,6 +69,7 @@ void Player::init() {
 	speed_x = 0.0f;
 	speed_y = 0.0f;
 	
+	current_weapon = 0;
 }
 
 void Player::jump() {
@@ -70,14 +88,14 @@ void Player::jump() {
 void Player::shoot() {
 	const float shoot_reload_timer = 0.5f;
 	
-	if (energy < energy_cost_shoot)
+	if (energy < weapons[current_weapon].energy_cost)
 		return;
 
-	if (anim_time - last_shoot_time > shoot_reload_timer) {
+	if (anim_time - last_shoot_time > weapons[current_weapon].reload_time) {
 		last_shoot_time = anim_time;
-		energy -= energy_cost_shoot;
+		energy -= weapons[current_weapon].energy_cost;
 
-		Actor* bullet = new PlayerBullet(facing_direction);
+		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
 		bullet->setPos(pos_x, pos_y - height/2);
 	}
 }
@@ -198,7 +216,7 @@ void Player::collide(Actor & otherActor)
 	
 	if (otherActor.isCollectible())
 	{
-		otherActor.destroy();
+		otherActor.collide(*this);
 	}
 }
 

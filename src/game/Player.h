@@ -21,6 +21,8 @@ public:
 	void jump();
 	void shoot();
 
+	int current_weapon;
+
 	float anim_time;
 	float last_shoot_time;
 
