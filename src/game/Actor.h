@@ -25,18 +25,18 @@ public:
 	
 	virtual void collide(Actor * otherActor) { }
 	virtual void collidePlayer(Player& player) { }
-	virtual void update() { }
+	virtual void update(float dt) { }
 	virtual void draw();
 	
 	void destroy();
 	bool isDestroyed();
 	
-private:
+protected:
 	sf::Image image;
 	sf::Sprite sprite;
 
 	int xOrigin, yOrigin;
 	int height, width;
-	float x, y;
+	float pos_x, pos_y;
 	bool destroyed;
 };
