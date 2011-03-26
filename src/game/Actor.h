@@ -28,8 +28,13 @@ public:
 	virtual void collide(Actor& otherActor) { }
 	virtual void onDestroy() { };
 	
+	// This function takes care of things that happen when the actor dies, if applicable
+	// Start death animation, etc.  destroy() should be called in update() and not in collide()
+	virtual void die() { };
+	
 	virtual void update(float dt) { };
 	virtual void draw();
+	
 	
 	void destroy();
 	

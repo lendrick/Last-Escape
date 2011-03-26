@@ -25,11 +25,23 @@ const float energy_cost_shoot = 5.f;
 const float energy_recharge_rate = 5.f; // units per second
 
 Player::Player() {
+	init();
+	if (!image.LoadFromFile("images/xeon.png"))
+		printf("failed to load images/xeon.png\n");
+	sprite.SetImage(image);
+	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+}
+	
+Player::~Player() {
+
+}
+
+void Player::init() {
 	anim_time = 0.0f;
 	last_shoot_time = -100.f;
-
+	
 	energy = energy_max = 100.f;
-
+	
 	pos_x = 64.0f;
 	pos_y = 0.0f;
 	facing_rightwards = true;
@@ -39,14 +51,7 @@ Player::Player() {
 	yOrigin = height;
 	speed_x = 0.0f;
 	speed_y = 0.0f;
-	if (!image.LoadFromFile("images/xeon.png"))
-		printf("failed to load images/xeon.png\n");
-	sprite.SetImage(image);
-	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
-}
 	
-Player::~Player() {
-
 }
 
 void Player::jump() {
@@ -179,4 +184,13 @@ void Player::draw() {
 	App->Draw(sprite);
 }
 
+void Player::collide(Actor & otherActor) 
+{
+	if(otherActor.isEnemy()) {
+		die();
+	}
+}
 
+void Player::die() {
+	init();
+}
