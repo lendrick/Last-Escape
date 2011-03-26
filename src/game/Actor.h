@@ -23,14 +23,19 @@ public:
 	
 	bool isColliding(Actor * otherActor);
 	
-	virtual void collide(Actor * otherActor) { }
+	virtual void collide(Actor& otherActor) { }
 	virtual void collidePlayer(Player& player) { }
 	virtual void update(float dt) { }
 	virtual void draw();
 	
 	void destroy();
 	bool isDestroyed();
-	
+
+	// stupid version of dynamic casting
+	virtual bool isPlayer() { return false; }
+	virtual bool isEnemy() { return false; }
+	virtual bool isCollectible() { return false; }
+
 protected:
 	sf::Image image;
 	sf::Sprite sprite;
