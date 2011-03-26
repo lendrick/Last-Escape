@@ -8,7 +8,7 @@
 #include "Map.h"
 #include "globals.h"
 
-list<Actor *> actors;
+std::list<Actor *> actors;
 Map * game_map;
 
 ////////////////////////////////////////////////////////////
