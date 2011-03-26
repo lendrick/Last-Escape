@@ -27,6 +27,7 @@ public:
 
 	float pos_x;
 	float pos_y;
+	bool facing_rightwards;
 	int width;
 	int height;
 	float speed_x;

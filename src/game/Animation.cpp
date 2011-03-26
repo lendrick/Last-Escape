@@ -4,7 +4,7 @@
 Animation::Animation(sf::Sprite& sprite)
 : sprite(sprite)
 {
-	this->animationTimer.Reset();
+	this->timePassedForFrame = 0.f;
 	this->frameIterator = 0;
 }
 
@@ -13,7 +13,7 @@ Animation::~Animation()
 }
 
 // testing purposes
-void Animation::toDefaultXeonAnimation()
+void Animation::toDefaultXeonWalkAnimation()
 {
 	Frame f0;
 	f0.rect = sf::IntRect(10,40, 10+64, 104);
@@ -43,9 +43,10 @@ void Animation::toDefaultXeonAnimation()
 	this->doLoop = true;
 }
 
-void Animation::update()
+void Animation::update(float dt)
 {
-	if(!this->frames.empty() && animationTimer.GetElapsedTime() > this->frames.at(frameIterator).timeToNextFrame)
+	this->timePassedForFrame += dt;
+	if(!this->frames.empty() && timePassedForFrame > this->frames.at(frameIterator).timeToNextFrame)
 	{
 		// is the last Frame in frames-vector.
 		if(this->frames.size()-1 == frameIterator)
@@ -63,7 +64,7 @@ void Animation::update()
 			this->frameIterator++;
 			this->sprite.SetSubRect(frames.at(frameIterator).rect );
 		}
-		animationTimer.Reset();
+		this->timePassedForFrame = 0; //may minus timeToNextFrame instead
 	}
 }
 
