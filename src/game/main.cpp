@@ -5,19 +5,24 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <list>
-#include <boost/foreach.hpp>
+//#include <boost/foreach.hpp>
+#include "globals.h"
+
 #include "Map.h"
 #include "Actor.h"
-#include "globals.h"
+#include "TempPlayer.h";
+
 
 list<Actor *> actors;
 Map * game_map;
+sf::RenderWindow *App;
+
 
 /// This function calls update() on all the actors, including (eventually) the player
 void update() {
-	foreach(Actor * actor, actors) {
-		actor->update();
-	}
+//	foreach(Actor * actor, actors) {
+//		actor->update();
+//	}
 }
 
 /// This function cleans up deleted actors.
@@ -50,45 +55,44 @@ void cleanup() {
 int main()
 {
 	// Create main window
-	sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
-	const sf::Input& input = App.GetInput();
+	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App->UseVerticalSync(true);
+	const sf::Input& input = App->GetInput();
 
 	// Create game objects
-	game_map = new Map(App);
+	game_map = new Map();
+	TempPlayer p1;
 
 	// Start game loop
-	while (App.IsOpened())
+	while (App->IsOpened())
 	{
 		// Process events
 		sf::Event Event;
-		while (App.GetEvent(Event))
+		while (App->GetEvent(Event))
 		{
 			// Close window : exit
 			if (Event.Type == sf::Event::Closed)
-				App.Close();
+				App->Close();
 		}
 
 		// Clear screen
-		App.Clear();
-
-		// TEMP: scrolling camera
-		if (input.IsKeyDown(sf::Key::Left))  game_map->cam_x--;
-		if (input.IsKeyDown(sf::Key::Right)) game_map->cam_x++;
-		if (input.IsKeyDown(sf::Key::Up))    game_map->cam_y--;
-		if (input.IsKeyDown(sf::Key::Down))  game_map->cam_y++;
-
+		App->Clear();
 		update();
-		
 		cleanup();
-		
-		// Draw Map
-		game_map->render();
+
+
+		p1.logic();
+
+		game_map->renderBackground();
+		p1.render();
+		game_map->renderForeground();
 
 		// Finally, display the rendered frame on screen
-		App.Display();
+		App->Display();
 	}
 	
 	delete game_map;
-
+	delete App;
+	
 	return EXIT_SUCCESS;
 }
