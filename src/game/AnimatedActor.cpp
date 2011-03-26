@@ -33,7 +33,7 @@ Animation * AnimatedActor::addAnimation(std::string name) {
 	if(frame_w == 0 || frame_h == 0) {
 		cout << "ERROR: Must set frame size before adding animation.\n";
 	}
-	Animation* a = new Animation(this->sprite);
+	Animation* a = new Animation(this->sprite, name);
 	this->animations[name] = a;
 	a->setFrameSize(frame_w, frame_h);
 }

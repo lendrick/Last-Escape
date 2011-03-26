@@ -32,7 +32,7 @@ public:
 	float speed_x;
 	float speed_y;
 	
-	int shoot_duration;
+	float shoot_duration;
 };
 
 
