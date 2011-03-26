@@ -6,7 +6,6 @@
 class Enemy : public Actor
 {
 public:
-	virtual void collidePlayer(Player& player);
 	virtual void collide(Actor& otherActor);
 
 	virtual bool isEnemy() { return true; }

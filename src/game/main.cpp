@@ -21,21 +21,27 @@ Player *g_player;
 
 sf::Font fontUI;
 
+/* TODO:
+ * 
+ * Okay, we need to clean this stuff up.  The update function should be empty
+ * except for the loop that checks all actors and runs their update functions.
+ * Player should be an actor, and should update when the other actors do.
+ * Input and collision handling for the player need to go in the player's 
+ * update() function.
+ * 
+ * The collide() function is intended to be an event that is called from an
+ * actor's update() function when it collides with another object.  Each frame,
+ * Actors should iterate through the list and see what's colliding with them,
+ * then run their own collide() function, passing the other actor as the argument.
+ * Enemies and enemy bullets are exempt from this, unless we want them colliding
+ * with each other (we can handle the important collisions from the Player and
+ * PlayerBullet classes.
+ * 
+ * */
+
 void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 		(*it)->update(dt);
-
-	// Check for collisions with the player
-	float px1, py1, px2, py2;
-	player.getBoundingBox(px1, py1, px2, py2);
-	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-	{
-		float x1, y1, x2, y2;
-		(*it)->getBoundingBox(x1, y1, x2, y2);
-		if (px2 < x1 || x2 < px1 || py2 < y1 || y2 < py1)
-			continue;
-		(*it)->collidePlayer(player);
-	}
 
 	// Check for inter-actor collisions (inefficiently)
 	for (list<Actor*>::iterator it1 = actors.begin(); it1 != actors.end(); ++it1)
@@ -64,15 +70,12 @@ void cleanup() {
 	if(actors.empty())
 		return;
 	
-	list<Actor *>::iterator i = actors.end();
+	list<Actor *>::iterator i = actors.begin();
 	list<Actor *>::iterator tmp;
-	
-	i--;
-	
-	while(i != actors.begin()) {
-		tmp = i;
-		i--;
 		
+	while(i != actors.end()) {
+		tmp = i;
+		++i;
 		if((*tmp)->isDestroyed()) {
 			delete *tmp;
 			actors.erase(tmp);
@@ -151,10 +154,7 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
-		p1.logic(ElapsedTime);
-
 		game_map->renderBackground();
-		p1.render();
 		renderActors();
 		game_map->renderForeground();
 

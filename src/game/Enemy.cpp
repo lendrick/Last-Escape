@@ -2,14 +2,15 @@
 
 #include "Player.h"
 
-void Enemy::collidePlayer(Player& player) {
-	// TODO: kill the player
-	player.spr.FlipY(true);
-}
-
 void Enemy::collide(Actor& otherActor) {
 	if (otherActor.isCollectible())
 		otherActor.destroy();
+	
+	if (otherActor.isPlayer())
+	{
+		// TODO: kill the player
+		otherActor.sprite.FlipY(true);
+	}
 }
 
 EnemyWalker::EnemyWalker() {
@@ -19,7 +20,7 @@ EnemyWalker::EnemyWalker() {
 	speed_x = 0;
 	speed_y = 0;
 
-	setPlaceholder(sf::Color(255, 0, 0), 16, 16);
+	setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
 
 void EnemyWalker::update(float dt) {

@@ -12,14 +12,14 @@ Actor::Actor() {
 Actor::~Actor() {
 }
 
-void Actor::setPlaceholder(sf::Color c, float w, float h) {
+void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
 	width = w;
 	height = h;
-	xOrigin = w/2;
-	yOrigin = h/2;
+	xOrigin = w*xoff;
+	yOrigin = h*yoff;
 	sprite.SetColor(c);
 	sprite.SetScale(width, height);
-	sprite.SetCenter(0.5, 0.5);
+	sprite.SetCenter(xoff, yoff);
 }
 
 void Actor::setPos(float px, float py) {
@@ -70,12 +70,9 @@ bool Actor::isColliding(Actor * otherActor) {
 	getBoundingBox(x1, y1, x2, y2);
 	otherActor->getBoundingBox(ox1, oy1, ox2, oy2);
 	
-	if( ( (x1 < ox1 && ox1 < x2) || (x1 < ox2 && ox2 < x2) ) &&
-		( (y1 < oy1 && oy1 < y2) || (y1 < oy2 && oy2 < y2) ) ) {
-		return true;
-	}
-	
-	return false;
+	if (x2 < ox1 || ox2 < x1 || y2 < oy1 || oy2 < y1)
+		return false;
+	return true;
 }
 
 void Actor::draw() {
