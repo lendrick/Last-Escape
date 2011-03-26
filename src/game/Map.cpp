@@ -5,6 +5,7 @@
 #include "Map.h"
 
 #include "Collectible.h"
+#include "Enemy.h"
 
 Map::Map() {
 	
@@ -32,6 +33,8 @@ Map::Map() {
 	loadMap("subwaymap.txt");
 
 	// TODO: load these from a data file
+	(new EnemyWalker())->setPos(384, 256);
+
 	(new CollectiblePill())->setPos(128, 256);
 	(new CollectiblePill())->setPos(128+32, 256-32);
 	(new CollectiblePill())->setPos(128+64, 256-64);

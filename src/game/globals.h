@@ -13,9 +13,10 @@ using namespace std;
 class Actor;
 class AnimatedActor;
 class Map;
+class Player;
 
 extern list<Actor *> actors;
 extern Map *game_map;
 extern sf::RenderWindow *App;
-
+extern Player *g_player;
 

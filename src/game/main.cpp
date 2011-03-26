@@ -17,12 +17,13 @@
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
+Player *g_player;
 
 sf::Font fontUI;
 
-void update(Player& player) {
+void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-		(*it)->update();
+		(*it)->update(dt);
 
 	// Check for collisions with the player
 	float px1, py1, px2, py2;
@@ -96,6 +97,7 @@ int main()
 	// Create game objects
 	game_map = new Map();
 	Player p1;
+	g_player = &p1;
 
 	sf::Clock Clock;
 
@@ -130,7 +132,7 @@ int main()
 
 		// Clear screen
 		App->Clear();
-		update(p1);
+		update(p1, ElapsedTime);
 		cleanup();
 
 		p1.logic(ElapsedTime);

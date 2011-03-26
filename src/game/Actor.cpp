@@ -23,18 +23,18 @@ void Actor::setPlaceholder(sf::Color c, float w, float h) {
 }
 
 void Actor::setPos(float px, float py) {
-	x = px;
-	y = py;
+	pos_x = px;
+	pos_y = py;
 }
 
 void Actor::move(float mx, float my) {
-	x += mx;
-	y += my;
+	pos_x += mx;
+	pos_y += my;
 }
 
 void Actor::getPos(float &px, float &py) {
-	px = x;
-	py = y;
+	px = pos_x;
+	py = pos_y;
 }
 
 void Actor::setSize(int w, int h) {
@@ -58,8 +58,8 @@ void Actor::getOrigin(int &ox, int &oy) {
 }
 
 void Actor::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
-	x1 = x - xOrigin;
-	y1 = y - yOrigin;
+	x1 = pos_x - xOrigin;
+	y1 = pos_y - yOrigin;
 	x2 = x1 + width;
 	y2 = y1 + height;
 }
@@ -79,9 +79,7 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	if (isDestroyed())
-		return;
-	sprite.SetPosition(x - game_map->cam_x, y - game_map->cam_y);
+	sprite.SetPosition(pos_x - game_map->cam_x, pos_y - game_map->cam_y);
 	App->Draw(sprite);
 }
 
