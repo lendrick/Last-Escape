@@ -25,7 +25,7 @@ Input input;
 sf::Font fontUI;
 
 Sound * backgroundMusic = new Sound("01 Game-Game_0.ogg");
-Sound * fireSound = new Sound();
+Sound * fireSound = new Sound("shoot.ogg");
 Sound * damageSound = new Sound();
 Sound * deathSound = new Sound();
 Sound * bulletHitSound = new Sound();

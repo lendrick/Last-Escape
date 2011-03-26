@@ -16,7 +16,8 @@ class Sound
 {
 private:
 	sf::Music song;
-
+	string file;
+	
 public:
 	Sound();
 	Sound(string filename);

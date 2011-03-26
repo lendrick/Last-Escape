@@ -1,6 +1,8 @@
 #include "Player.h"
 #include "Input.h"
 #include "PlayerBullet.h"
+#include "Sound.h"
+#include "globals.h"
 
 const int SPRITE_TILE_W = 128;
 const int SPRITE_TILE_H = 128;
@@ -92,6 +94,7 @@ void Player::shoot() {
 		return;
 
 	if (anim_time - last_shoot_time > weapons[current_weapon].reload_time) {
+		fireSound->playSound();
 		last_shoot_time = anim_time;
 		energy -= weapons[current_weapon].energy_cost;
 
