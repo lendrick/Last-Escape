@@ -10,7 +10,7 @@
 
 #include "Map.h"
 #include "Actor.h"
-#include "TempPlayer.h";
+#include "TempPlayer.h"
 
 
 list<Actor *> actors;
