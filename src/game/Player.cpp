@@ -49,7 +49,6 @@ Player::Player()
 	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
 	this->setImage(image);
-	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 }
 	
 Player::~Player() {
@@ -72,12 +71,6 @@ void Player::init() {
 	speed_x = 0.0f;
 	speed_y = 0.0f;
 
-	setSize(width, height);
-/*	if (!image.LoadFromFile("images/xeon.png"))
-		printf("failed to load images/xeon.png\n");
-	sprite.SetImage(image);
-	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
-*/
 	// Set Animations
 	Animation* walkAnimation = new Animation(this->sprite);
 	walkAnimation->toDefaultXeonWalkAnimation();
@@ -207,12 +200,12 @@ void Player::update(float dt) {
 	if (facing_direction == FACING_RIGHT)
 	{
 		sprite.FlipX(false);
-		sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+		sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
 	}
 	else if (facing_direction == FACING_LEFT)
 	{
 		sprite.FlipX(true);
-		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
 	}
 
 	if (speed_y == terminal_velocity)

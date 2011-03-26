@@ -76,7 +76,9 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	sprite.SetPosition(pos_x - game_map->cam_x, pos_y - game_map->cam_y);
+	sprite.SetPosition(
+		0.5f + (int)(pos_x - game_map->cam_x),
+		0.5f + (int)(pos_y - game_map->cam_y));
 	App->Draw(sprite);
 }
 
