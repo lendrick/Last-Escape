@@ -16,7 +16,6 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 	this->animations["jump"] = jumpAnimation;
 
 	this->setCurrentAnimation("jump");
->>>>>>> origin/master
 
 //	this->animationQueue.push(new Animation(&this->sprite));
 //	this->animationQueue.front()->toDefaultAnimation();
