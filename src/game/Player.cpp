@@ -22,7 +22,7 @@ Player::Player() {
 	anim_time = 0.0f;
 	last_shoot_time = -100.f;
 	pos_x = 64.0f;
-	pos_y = 400.0f;
+	pos_y = 0.0f;
 	width = 24;
 	height = 48;
 	speed_x = 0.0f;
@@ -76,6 +76,10 @@ void Player::logic(float dt) {
 		else speed_x = 0.0;
 	}
 	
+	// various actions (main() already handles KeyPressed so it doesn't miss
+	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
+	// when held down)
+
 	if (input.IsKeyDown(sf::Key::Up))
 		jump();
 

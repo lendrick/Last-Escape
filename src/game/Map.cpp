@@ -27,7 +27,7 @@ Map::Map() {
 	cam_x = 0;
 	cam_y = 0;
 	
-	loadMap("test_map.txt");
+	loadMap("subwaymap.txt");
 	
 }
 
