@@ -30,10 +30,9 @@ set (game_incs ${game_incs} PARENT_SCOPE)
 include_directories (${game_incs})
 
 #add our executable
-#of course you have to add a sourcefile before doing that, just uncomment the following lines as soon as there is one
 add_executable (xeonergy ${game_srcs})
 
-set_target_properties (xeonergy PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+#set_target_properties (xeonergy PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 #linking to libraries. same as above
 target_link_libraries (xeonergy ${SFML_LIBRARIES})

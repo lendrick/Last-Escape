@@ -1,24 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
-
-#set up the project
-project (Xeonergy)
-
-#tell cmake where to search for package finding modules
-set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
-#Variables to control the build type
-SET(CMAKE_BUILD_TYPE debug)
-#SET(CMAKE_BUILD_TYPE distribution)
-SET(CMAKE_CXX_FLAGS_DEBUG "-g3")
-SET(CMAKE_C_FLAGS_DEBUG "-g3")
-SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
-SET(CMAKE_C_FLAGS_DISTRIBUTION "-Wall")
-
 #find the required libraries
-#not sure whether these are required:
-#find_package (Freetype REQUIRED)
-#find_package (Sndfile REQUIRED)
-#find_package (OpenAL REQUIRED)
 find_package (SFML 1.6 COMPONENTS system window graphics audio REQUIRED)
 include_directories (${SFML_INCLUDE_DIR})
 
