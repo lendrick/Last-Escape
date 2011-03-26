@@ -45,10 +45,24 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	init();
 	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
 	this->setImage(image);
+	//sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+	
+	Animation* walkAnimation = new Animation(this->sprite);
+	walkAnimation->toDefaultXeonWalkAnimation();
+	this->animations["walk"] = walkAnimation;
+	
+	Animation* jumpAnimation = new Animation(this->sprite);
+	jumpAnimation->toDefaultXeonJumpAnimation();
+	this->animations["jump"] = jumpAnimation;
+	
+	Animation* idleAnimation = new Animation(this->sprite);
+	idleAnimation->toDefaultXeonIdleAnimation();
+	this->animations["idle"] = idleAnimation;
+
+	init();
 }
 	
 Player::~Player() {
@@ -68,21 +82,12 @@ void Player::init() {
 	height = 48;
 	xOrigin = width/2;
 	yOrigin = height;
+	setDrawOffset(32, 64);
 	speed_x = 0.0f;
 	speed_y = 0.0f;
 
 	// Set Animations
-	Animation* walkAnimation = new Animation(this->sprite);
-	walkAnimation->toDefaultXeonWalkAnimation();
-	this->animations["walk"] = walkAnimation;
-	
-	Animation* jumpAnimation = new Animation(this->sprite);
-	jumpAnimation->toDefaultXeonJumpAnimation();
-	this->animations["jump"] = jumpAnimation;
 
-	Animation* idleAnimation = new Animation(this->sprite);
-	idleAnimation->toDefaultXeonIdleAnimation();
-	this->animations["idle"] = idleAnimation;
 
 	this->setCurrentAnimation("idle");
 
@@ -103,7 +108,6 @@ void Player::jump() {
 }
 
 void Player::shoot() {
-	cout << "shoot\n";
 	const float shoot_reload_timer = 0.5f;
 	
 	if (energy < weapons[current_weapon].energy_cost)
@@ -218,10 +222,12 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
+	/*
 	sprite.SetPosition(
 		0.5f + (int)(pos_x - game_map->cam_x - width/2),
 		0.5f + (int)(pos_y - game_map->cam_y - height));
 //	App->Draw(sprite);
+*/
 	AnimatedActor::draw();
 }
 
