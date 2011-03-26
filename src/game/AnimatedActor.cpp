@@ -8,7 +8,7 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 	this->sprite.SetImage(image);
 	this->sprite.SetX(64.f);
 	this->sprite.SetY(400.f);
-	this->sprite.Resize(24, 48);
+//	this->sprite.Resize(24, 48);
 
 	this->currentAnimation = new Animation(this->sprite);
 	this->currentAnimation->toDefaultXeonAnimation(); //testing 
