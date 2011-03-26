@@ -10,7 +10,7 @@
 
 #include "Map.h"
 #include "Actor.h"
-#include "TempPlayer.h"
+#include "Player.h"
 
 
 list<Actor *> actors;
@@ -61,7 +61,9 @@ int main()
 
 	// Create game objects
 	game_map = new Map();
-	TempPlayer p1;
+	Player p1;
+
+	sf::Clock Clock;
 
 	// Start game loop
 	while (App->IsOpened())
@@ -75,13 +77,15 @@ int main()
 				App->Close();
 		}
 
+		float ElapsedTime = Clock.GetElapsedTime();
+		Clock.Reset();
+
 		// Clear screen
 		App->Clear();
 		update();
 		cleanup();
 
-
-		p1.logic();
+		p1.logic(ElapsedTime);
 
 		game_map->renderBackground();
 		p1.render();
