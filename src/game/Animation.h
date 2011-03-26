@@ -6,6 +6,7 @@
 ///
 struct Frame
 {
+	int number;
 	sf::IntRect rect;
 	float timeToNextFrame;
 };
@@ -13,7 +14,7 @@ struct Frame
 class Animation
 {
 public: 
-	Animation(sf::Sprite&);
+	Animation(sf::Sprite&, std::string name = "");
 	virtual ~Animation();
 	void update(); //TODO may return if it finished
 	void updateFrame(); //set's the sprite's subRect to the current Frame
@@ -30,6 +31,9 @@ public:
 	void toDefaultXeonJumpAnimation();
 	void toDefaultXeonIdleAnimation();
 
+	void setFrameSize(int fw, int fh);
+	void addFrame(int num, float duration);
+	void reset();
 private:
 	vector<Frame> frames;		///< Contains the frames for the Animation.
 	std::string name;
@@ -38,4 +42,5 @@ private:
 	unsigned int frameIterator;	///< id to the current Frame.
 	bool doLoop; 				///< true if the Animation shall be repeated.
 	bool isFinished;			///< is true if the AnimationCycle finished.
+	int frame_w, frame_h;
 };

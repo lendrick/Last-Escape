@@ -19,15 +19,20 @@ public:
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
 	void draw();	///< update Animation
-	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
 	void loadAnimationsFromFile(std::string filepath);
-
+	
+	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
+	void resetCurrentAnimation();
+	
+	Animation * addAnimation(std::string name);
+	void setFrameSize(int fw, int fh);
 protected:
 	void flipDirection();
 	int facing_direction;
 	Animation *currentAnimation; ///< TODO use a queue
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
-
+	int frame_h, frame_w;
+	
 private:
 	void init();
 };
