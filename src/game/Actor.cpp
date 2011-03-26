@@ -8,17 +8,17 @@ Actor::Actor() {
 Actor::~Actor() {
 }
 
-void Actor::setPos(int px, int py) {
+void Actor::setPos(float px, float py) {
 	px = x;
 	py = y;
 }
 
-void Actor::move(int mx, int my) {
+void Actor::move(float mx, float my) {
 	x += mx;
 	y += my;
 }
 
-void Actor::getPos(int &px, int &py) {
+void Actor::getPos(float &px, float &py) {
 	px = x;
 	py = y;
 }
