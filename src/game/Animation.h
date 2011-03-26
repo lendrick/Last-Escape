@@ -15,7 +15,9 @@ class Animation
 public: 
 	Animation(sf::Sprite&);
 	virtual ~Animation();
-	void update(float dt);
+	void update(float dt); //TODO may return if it finished
+	bool getIsFinished();
+	void setIsFinished(bool);
 
 	/// Added for testing purposes.
 	/// TODO read animations from a config file.
@@ -30,4 +32,5 @@ private:
 	float timePassedForFrame;	///< Saves the passed time for the frame
 	unsigned int frameIterator;	///< id to the current Frame.
 	bool doLoop; 				///< true if the Animation shall be repeated.
+	bool isFinished;			///< is true if the AnimationCycle finished.
 };
