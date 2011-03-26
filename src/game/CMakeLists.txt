@@ -17,6 +17,10 @@ foreach (folder ${folders})
 	#store sourcefile into the variable we gonna use
 	list (APPEND game_srcs ${srcs})
 
+	#add TinyXML
+	file (GLOB srcs RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${folder}/tinyxml/*.cpp")
+	list (APPEND game_srcs ${srcs})
+
 	#store the include directories
 	list (APPEND game_incs "${CMAKE_CURRENT_SOURCE_DIR}/${folder}")
 
