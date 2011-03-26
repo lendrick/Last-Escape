@@ -11,7 +11,7 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 //	this->sprite.Resize(24, 48);
 
 	this->currentAnimation = new Animation(this->sprite);
-	this->currentAnimation->toDefaultXeonAnimation(); //testing 
+	this->currentAnimation->toDefaultXeonWalkAnimation(); //testing 
 
 //	this->animationQueue.push(new Animation(&this->sprite));
 //	this->animationQueue.front()->toDefaultAnimation();
@@ -21,15 +21,10 @@ AnimatedActor::~AnimatedActor()
 {
 }
 
-void AnimatedActor::update()
+void AnimatedActor::update(float dt)
 {
-	this->currentAnimation->update();
-}
-
-// not tested, yet. Writen in nano without autocorrection
-void AnimatedActor::draw()
-{
-	App->Draw(this->sprite);
+	Actor::update(dt);
+	this->currentAnimation->update(dt);
 }
 
 // implemented for testing
