@@ -1,7 +1,10 @@
 #include "EnemyWalker.h"
 #include "Player.h"
+#include "Map.h"
 
-EnemyWalker::EnemyWalker() {
+EnemyWalker::EnemyWalker()
+:Enemy()
+{
 	
 	walk_speed = 120.f;
 	
@@ -9,6 +12,10 @@ EnemyWalker::EnemyWalker() {
 	speed_y = 0;
 	
 	setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
+}
+
+EnemyWalker::~EnemyWalker()
+{
 }
 
 void EnemyWalker::update(float dt) {

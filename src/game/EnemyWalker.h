@@ -5,6 +5,7 @@ class EnemyWalker : public Enemy
 {
 public:
 	EnemyWalker();
+	~EnemyWalker();
 	virtual void update(float dt);
 private:
 	float walk_speed;

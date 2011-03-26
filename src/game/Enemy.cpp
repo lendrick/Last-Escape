@@ -2,6 +2,15 @@
 
 #include "Player.h"
 
+Enemy::Enemy()
+:AnimatedActor()
+{
+}
+
+Enemy::~Enemy()
+{
+}
+
 void Enemy::collide(Actor& otherActor) {
 	if (otherActor.isCollectible())
 		otherActor.destroy();
