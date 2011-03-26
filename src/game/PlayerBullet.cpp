@@ -2,8 +2,9 @@
 
 #include "Enemy.h"
 
-PlayerBullet::PlayerBullet(bool rightwards) {
-
+PlayerBullet::PlayerBullet(bool rightwards):
+AnimatedActor()
+{
 	bullet_speed = (rightwards ? +1 : -1) * 480.f;
 	setPlaceholder(sf::Color(0, 255, 0), 8, 8);
 }

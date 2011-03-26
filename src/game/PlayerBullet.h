@@ -1,9 +1,9 @@
 #ifndef PLAYERBULLET_H
 #define PLAYERBULLET_H
 
-#include "Actor.h"
+#include "AnimatedActor.h"
 
-class PlayerBullet  : public Actor
+class PlayerBullet  : public AnimatedActor
 {
 public:
 	PlayerBullet(bool rightwards);

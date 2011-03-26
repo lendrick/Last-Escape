@@ -8,6 +8,8 @@ class AnimatedActor : public Actor
 {
 public:
 	AnimatedActor(sf::Image&);
+	AnimatedActor();
+	void setImage(sf::Image&);
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
 	void update(float dt);	///< update Animation
