@@ -99,11 +99,13 @@ void Player::update(float dt) {
 		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
+		facing_direction = move_direction;
 	}
 	else if (input.IsKeyDown(sf::Key::Right)) {
 		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
+		facing_direction = move_direction;
 	}
 	else {
 		if (speed_x > speed_delta_decel*dt) speed_x -= speed_delta_decel*dt;
@@ -111,7 +113,7 @@ void Player::update(float dt) {
 		else speed_x = 0.0;
 	}
 	
-	facing_direction = move_direction;
+
 	
 	// various actions (main() already handles KeyPressed so it doesn't miss
 	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
