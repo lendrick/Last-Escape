@@ -116,6 +116,7 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
+		game_map->renderLandscape();
 		game_map->renderBackground();
 		renderActors();
 		game_map->renderForeground();
