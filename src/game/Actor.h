@@ -10,6 +10,7 @@ public:
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
 	void setPos(float px, float py);
+	void setDrawOffset(int ox, int oy);
 	
 	// returns true if the actor collided with a map tile
 	bool move(float &mx, float &my);
@@ -57,6 +58,7 @@ public:
 	int height, width;
 	float pos_x, pos_y;
 	bool destroyed;
+	int xDrawOffset, yDrawOffset;
 protected:
 	void checkCollisions();
 };

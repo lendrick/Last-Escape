@@ -103,6 +103,7 @@ void Player::jump() {
 }
 
 void Player::shoot() {
+	cout << "shoot\n";
 	const float shoot_reload_timer = 0.5f;
 	
 	if (energy < weapons[current_weapon].energy_cost)

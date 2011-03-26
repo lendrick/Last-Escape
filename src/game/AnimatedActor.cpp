@@ -1,4 +1,4 @@
- #include "AnimatedActor.h"
+#include "AnimatedActor.h"
 
 AnimatedActor::AnimatedActor(sf::Image& image)
 :Actor()

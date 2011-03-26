@@ -7,6 +7,7 @@ Actor::Actor() {
 	setPos(0, 0);
 	destroyed = false;
 	actors.push_back(this);
+	setDrawOffset(0, 0);
 }
 
 Actor::~Actor() {
@@ -25,6 +26,11 @@ void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff
 void Actor::setPos(float px, float py) {
 	pos_x = px;
 	pos_y = py;
+}
+
+void Actor::setDrawOffset(int ox, int oy) {
+	xDrawOffset = ox;
+	yDrawOffset = oy;
 }
 
 // returns true if the actor collided with a map tile
