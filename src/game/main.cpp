@@ -8,10 +8,8 @@
 #include "Map.h"
 #include "globals.h"
 
-using namespace std;
-
 list<Actor *> actors;
-Map * map;
+Map * game_map;
 
 /// This function cleans up deleted actors.
 void cleanup() {
@@ -30,7 +28,7 @@ int main()
 	const sf::Input& input = App.GetInput();
 
 	// Create game objects
-	map = new Map(App);
+	game_map = new Map(App);
 
 	// Start game loop
 	while (App.IsOpened())
@@ -48,21 +46,21 @@ int main()
 		App.Clear();
 
 		// TEMP: scrolling camera
-		if (input.IsKeyDown(sf::Key::Left))  map->cam_x--;
-		if (input.IsKeyDown(sf::Key::Right)) map->cam_x++;
-		if (input.IsKeyDown(sf::Key::Up))    map->cam_y--;
-		if (input.IsKeyDown(sf::Key::Down))  map->cam_y++;
+		if (input.IsKeyDown(sf::Key::Left))  game_map->cam_x--;
+		if (input.IsKeyDown(sf::Key::Right)) game_map->cam_x++;
+		if (input.IsKeyDown(sf::Key::Up))    game_map->cam_y--;
+		if (input.IsKeyDown(sf::Key::Down))  game_map->cam_y++;
 
 		cleanup();
 		
 		// Draw Map
-		map->render();
+		game_map->render();
 
 		// Finally, display the rendered frame on screen
 		App.Display();
 	}
 	
-	delete m;
+	delete game_map;
 
 	return EXIT_SUCCESS;
 }
