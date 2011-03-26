@@ -10,14 +10,9 @@ public:
 	AnimatedActor(sf::Image&);
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
-	void update();  		///< update Animation
-	void draw();    		///< draw Current AnimationFrame
+	void update(float dt);	///< update Animation
 
 private:
 	Animation *currentAnimation; ///< TODO use a queue
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
-	
-	//Drawing resources may move into a simper Actor subclass that implements simple drawing
-	sf::Image image;
-	sf::Sprite sprite;
 };

@@ -142,7 +142,7 @@ int main()
 		renderActors();
 		game_map->renderForeground();
 
-		testActor.update();
+		testActor.update(ElapsedTime);
 		testActor.draw();
 
 		renderUI(p1);
