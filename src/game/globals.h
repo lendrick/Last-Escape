@@ -2,7 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include <list>
-
+#include <iostream>
 
 #define foreach BOOST_FOREACH
 #define reverse_foreach BOOST_REVERSE_FOREACH
@@ -10,6 +10,7 @@
 using namespace std;
 
 class Actor;
+class AnimatedActor;
 class Map;
 
 extern list<Actor *> actors;
