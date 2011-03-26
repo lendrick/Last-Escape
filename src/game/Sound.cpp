@@ -31,6 +31,5 @@ bool Sound::loadSound(string filename)
 void Sound::playSound()
 {
 	//std::cout << "play sound " << file << "\n";
-	song.Stop();
 	song.Play();
 }
