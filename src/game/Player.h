@@ -14,6 +14,7 @@ public:
 	void logic(float dt);
 	void render();
 	
+	float anim_time;
 	float pos_x;
 	float pos_y;
 	int width;
