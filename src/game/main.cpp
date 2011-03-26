@@ -10,7 +10,7 @@
 #include "Actor.h"
 #include "globals.h"
 
-list<Actor *> actors;
+std::list<Actor *> actors;
 Map * game_map;
 
 /// This function cleans up deleted actors.
@@ -44,6 +44,7 @@ int main()
 {
 	// Create main window
 	sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
+	App.UseVerticalSync(true);
 	const sf::Input& input = App.GetInput();
 
 	// Create game objects
