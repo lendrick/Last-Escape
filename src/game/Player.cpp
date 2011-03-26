@@ -154,6 +154,11 @@ void Player::logic(float dt) {
 		spr.FlipX(true);
 		spr.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - width/2, SPRITE_CENTER_Y-height);
 	}
+
+	if (speed_y == terminal_velocity)
+		spr.Rotate(360.f*dt);
+	else
+		spr.SetRotation(0);
 }
 
 void Player::render() {
