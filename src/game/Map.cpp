@@ -267,6 +267,11 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 	
 }
 
+// if there is collision directly underfoot, return true
+bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
+	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
+}
+
 void Map::renderBackground() {
 	
 	// which tile is at the topleft corner of the screen?
