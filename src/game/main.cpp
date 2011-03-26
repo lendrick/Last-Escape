@@ -10,6 +10,7 @@
 
 #include "Map.h"
 #include "Actor.h"
+#include "AnimatedActor.h"
 #include "TempPlayer.h"
 
 
@@ -63,6 +64,11 @@ int main()
 	game_map = new Map();
 	TempPlayer p1;
 
+	// Create Animation test
+	sf::Image xeon;
+	xeon.LoadFromFile("images/xeonsheet.png");
+	AnimatedActor testActor(xeon);
+
 	// Start game loop
 	while (App->IsOpened())
 	{
@@ -86,6 +92,9 @@ int main()
 		game_map->renderBackground();
 		p1.render();
 		game_map->renderForeground();
+
+		testActor.update();
+		testActor.draw();
 
 		// Finally, display the rendered frame on screen
 		App->Display();
