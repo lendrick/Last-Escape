@@ -1,10 +1,5 @@
-/*
- *  Map.h
- *  Energy
- *
- *  Created by Clint Bellanger on 3/25/11.
- *  Copyright 2011 Clint Bellanger. All rights reserved.
- *
+/**
+ *  Map
  */
 
 #ifndef MAP_H

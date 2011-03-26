@@ -1,12 +1,7 @@
-/*
- *  Map.cpp
- *  Energy
- *
- *  Created by Clint Bellanger on 3/25/11.
- *  Copyright 2011 Clint Bellanger. All rights reserved.
- *
+/**
+ *  Map
  */
-
+ 
 #include "Map.h"
 
 Map::Map(sf::RenderWindow &_target) {
@@ -24,18 +19,18 @@ Map::Map(sf::RenderWindow &_target) {
 	// TEMP: random level
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
-			map_bg[i][j] = rand() % 5;
+			map_bg[i][j] = rand() % 4 + 11;
 		}
 	}
 	
 	// prep the rects for each tile
-	for (int i=0; i<TILE_COUNT; i++) {
+	for (int i=0; i<TILE_COUNT-1; i++) {
 	
-		// assumes tileset is 640px wide
-		tile_rects[i].Left = (i % 20) * TILE_SIZE;
-		tile_rects[i].Top = (i / 20) * TILE_SIZE;
-		tile_rects[i].Right = tile_rects[i].Left + TILE_SIZE;
-		tile_rects[i].Bottom = tile_rects[i].Top + TILE_SIZE;
+		// assumes tileset is 320px wide
+		tile_rects[i+1].Left = (i % 10) * TILE_SIZE;
+		tile_rects[i+1].Top = (i / 10) * TILE_SIZE;
+		tile_rects[i+1].Right = tile_rects[i+1].Left + TILE_SIZE;
+		tile_rects[i+1].Bottom = tile_rects[i+1].Top + TILE_SIZE;
 	}
 	
 	cam_x = 0;
@@ -70,7 +65,8 @@ void Map::render() {
 			// and which sprite should we display?
 			// outside the map
 			if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X ||
-					cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) {
+				cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) {
+				
 				sprites_bg[i][j].SetSubRect(tile_rects[0]);
 			}
 			else { // inside the map
@@ -82,7 +78,10 @@ void Map::render() {
 
 	// render background
 	for (int i=0; i<VIEW_TILES_X; i++) {
+
+		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
+			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
 			target->Draw(sprites_bg[i][j]);
 		}
 	}

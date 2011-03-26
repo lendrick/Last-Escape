@@ -4,9 +4,14 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
+#include <list>
 #include "Map.h"
+#include "globals.h"
 
 using namespace std;
+
+list<Actor *> actors;
+Map * map;
 
 ////////////////////////////////////////////////////////////
 /// Entry point of application
@@ -16,42 +21,43 @@ using namespace std;
 ////////////////////////////////////////////////////////////
 int main()
 {
-    // Create main window
-    sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
+	// Create main window
+	sf::RenderWindow App(sf::VideoMode(640, 480), "SFML Graphics");
 	const sf::Input& input = App.GetInput();
 
 	// Create game objects
-	Map m(App);
+	map = new Map(App);
 
-    // Start game loop
-    while (App.IsOpened())
-    {
-        // Process events
-        sf::Event Event;
-        while (App.GetEvent(Event))
-        {
-            // Close window : exit
-            if (Event.Type == sf::Event::Closed)
-                App.Close();
-        }
+	// Start game loop
+	while (App.IsOpened())
+	{
+		// Process events
+		sf::Event Event;
+		while (App.GetEvent(Event))
+		{
+			// Close window : exit
+			if (Event.Type == sf::Event::Closed)
+				App.Close();
+		}
 
-
-        // Clear screen
-        App.Clear();
+		// Clear screen
+		App.Clear();
 
 		// TEMP: scrolling camera
-		if (input.IsKeyDown(sf::Key::Left))  m.cam_x--;
-		if (input.IsKeyDown(sf::Key::Right)) m.cam_x++;
-		if (input.IsKeyDown(sf::Key::Up))    m.cam_y--;
-		if (input.IsKeyDown(sf::Key::Down))  m.cam_y++;
+		if (input.IsKeyDown(sf::Key::Left))  map->cam_x--;
+		if (input.IsKeyDown(sf::Key::Right)) map->cam_x++;
+		if (input.IsKeyDown(sf::Key::Up))    map->cam_y--;
+		if (input.IsKeyDown(sf::Key::Down))  map->cam_y++;
 
 		
 		// Draw Map
-		m.render();
+		map->render();
 
-        // Finally, display the rendered frame on screen
-        App.Display();
-    }
+		// Finally, display the rendered frame on screen
+		App.Display();
+	}
+	
+	delete m;
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
