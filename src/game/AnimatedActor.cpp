@@ -47,6 +47,7 @@ Animation * AnimatedActor::addAnimation(std::string name) {
 	Animation* a = new Animation(this->sprite, name);
 	this->animations[name] = a;
 	a->setFrameSize(frame_w, frame_h);
+	return a;
 }
 
 void AnimatedActor::setFrameSize(int fw, int fh) {
