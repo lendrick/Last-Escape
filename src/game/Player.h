@@ -31,6 +31,8 @@ public:
 
 	float speed_x;
 	float speed_y;
+	
+	int shoot_duration;
 };
 
 
