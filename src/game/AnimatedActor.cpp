@@ -2,12 +2,12 @@
 
 AnimatedActor::AnimatedActor(sf::Image& image)
 {
-	//testing values
-	this->setOrigin(64.0f, 400.0f);
-	this->setSize(24, 48);
 	this->sprite.SetImage(image);
 //	this->sprite.Resize(24, 48);
 
+	//testing values
+	this->setOrigin(64.0f, 400.0f);
+	this->setSize(24, 48);
 	// Set walk-animation TODO read animations from config file
 	Animation* walkAnimation = new Animation(this->sprite);
 	walkAnimation->toDefaultXeonWalkAnimation();
@@ -25,6 +25,11 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 
 AnimatedActor::~AnimatedActor()
 {
+}
+
+AnimatedActor::AnimatedActor()
+{
+
 }
 
 void AnimatedActor::update(float dt)

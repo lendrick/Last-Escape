@@ -8,12 +8,13 @@ class AnimatedActor : public Actor
 {
 public:
 	AnimatedActor(sf::Image&);
+	AnimatedActor();
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
 	void update(float dt);	///< update Animation
 	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
 
-private:
+protected:
 	Animation *currentAnimation; ///< TODO use a queue
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
 };
