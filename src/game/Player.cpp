@@ -45,6 +45,13 @@ Player::~Player() {
 
 }
 
+void Player::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
+	x1 = pos_x - width/2;
+	x2 = pos_x + width/2;
+	y1 = pos_y - height;
+	y2 = pos_y;
+}
+
 void Player::jump() {
 	const int jump_speed = 380;
 
@@ -79,7 +86,7 @@ void Player::logic(float dt) {
 	const int terminal_velocity = 16.0*60;
 
 	// recharge energy
-	energy = std::min(energy + energy_recharge_rate*dt, energy_max);
+	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
 
 	// left/right move
 	if (input.IsKeyDown(sf::Key::Left)) {

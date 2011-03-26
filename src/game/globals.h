@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include <list>
+#include <cstdio>
 
 
 #define foreach BOOST_FOREACH

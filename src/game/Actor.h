@@ -1,10 +1,14 @@
 #pragma once
 #include "globals.h"
+class Player;
 
 class Actor {
 public:
 	Actor();
 	~Actor();
+
+	void setPlaceholder(sf::Color c, float w, float h);
+
 	void setPos(float px, float py);
 	void move(float mx, float my);
 	void getPos(float &px, float &py);
@@ -15,18 +19,22 @@ public:
 	void setOrigin(int ox, int oy);
 	void getOrigin(int &ox, int &oy);
 	
-	void getBoundingBox(int &x1, int &y1, int &x2, int &y2);
+	void getBoundingBox(float &x1, float &y1, float &x2, float &y2);
 	
 	bool isColliding(Actor * otherActor);
 	
-	virtual void collide(Actor * otherActor) = 0;
-	virtual void update() = 0;
-	virtual void draw() = 0;
+	virtual void collide(Actor * otherActor) { }
+	virtual void collidePlayer(Player& player) { }
+	virtual void update() { }
+	virtual void draw();
 	
 	void destroy();
 	bool isDestroyed();
 	
 private:
+	sf::Image image;
+	sf::Sprite sprite;
+
 	int xOrigin, yOrigin;
 	int height, width;
 	float x, y;

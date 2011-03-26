@@ -12,18 +12,32 @@
 #include "Actor.h"
 #include "Player.h"
 
-
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
 
 sf::Font fontUI;
 
-/// This function calls update() on all the actors, including (eventually) the player
-void update() {
-//	foreach(Actor * actor, actors) {
-//		actor->update();
-//	}
+void update(Player& player) {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+		(*it)->update();
+
+	// Check for collisions with the player
+	float px1, py1, px2, py2;
+	player.getBoundingBox(px1, py1, px2, py2);
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		float x1, y1, x2, y2;
+		(*it)->getBoundingBox(x1, y1, x2, y2);
+		if (px2 < x1 || x2 < px1 || py2 < y1 || y2 < py1)
+			continue;
+		(*it)->collidePlayer(player);
+	}
+}
+
+void renderActors() {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+		(*it)->draw();
 }
 
 /// This function cleans up deleted actors.
@@ -109,13 +123,14 @@ int main()
 
 		// Clear screen
 		App->Clear();
-		update();
+		update(p1);
 		cleanup();
 
 		p1.logic(ElapsedTime);
 
 		game_map->renderBackground();
 		p1.render();
+		renderActors();
 		game_map->renderForeground();
 
 		renderUI(p1);

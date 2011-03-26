@@ -4,6 +4,8 @@
  
 #include "Map.h"
 
+#include "Collectible.h"
+
 Map::Map() {
 	
 	loadTileset("tileset.png");
@@ -28,7 +30,18 @@ Map::Map() {
 	cam_y = 0;
 	
 	loadMap("subwaymap.txt");
-	
+
+	// TODO: load these from a data file
+	(new CollectiblePill())->setPos(128, 256);
+	(new CollectiblePill())->setPos(128+32, 256-32);
+	(new CollectiblePill())->setPos(128+64, 256-64);
+	(new CollectiblePill())->setPos(128+96, 256-96);
+	(new CollectiblePill())->setPos(800, 300);
+	(new CollectiblePill())->setPos(820, 425);
+
+	for (float y = 270; y < 360; y += 16)
+		for (float x = 256; x < 768; x += 16)
+			(new CollectiblePill())->setPos(x, y);
 }
 
 void Map::loadTileset(string filename) {

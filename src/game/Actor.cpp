@@ -1,4 +1,5 @@
 #include "Actor.h"
+#include "Map.h"
 #include "globals.h"
 #include <list>
 
@@ -11,9 +12,19 @@ Actor::Actor() {
 Actor::~Actor() {
 }
 
+void Actor::setPlaceholder(sf::Color c, float w, float h) {
+	width = w;
+	height = h;
+	xOrigin = w/2;
+	yOrigin = h/2;
+	sprite.SetColor(c);
+	sprite.SetScale(width, height);
+	sprite.SetCenter(0.5, 0.5);
+}
+
 void Actor::setPos(float px, float py) {
-	px = x;
-	py = y;
+	x = px;
+	y = py;
 }
 
 void Actor::move(float mx, float my) {
@@ -46,7 +57,7 @@ void Actor::getOrigin(int &ox, int &oy) {
 	oy = yOrigin;
 }
 
-void Actor::getBoundingBox(int &x1, int &y1, int &x2, int &y2) {
+void Actor::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
 	x1 = x - xOrigin;
 	y1 = y - yOrigin;
 	x2 = x1 + width;
@@ -54,8 +65,8 @@ void Actor::getBoundingBox(int &x1, int &y1, int &x2, int &y2) {
 }
 
 bool Actor::isColliding(Actor * otherActor) {
-	int x1, y1, x2, y2;
-	int ox1, oy1, ox2, oy2;
+	float x1, y1, x2, y2;
+	float ox1, oy1, ox2, oy2;
 	getBoundingBox(x1, y1, x2, y2);
 	otherActor->getBoundingBox(ox1, oy1, ox2, oy2);
 	
@@ -65,6 +76,13 @@ bool Actor::isColliding(Actor * otherActor) {
 	}
 	
 	return false;
+}
+
+void Actor::draw() {
+	if (isDestroyed())
+		return;
+	sprite.SetPosition(x - game_map->cam_x, y - game_map->cam_y);
+	App->Draw(sprite);
 }
 
 void Actor::destroy() {
