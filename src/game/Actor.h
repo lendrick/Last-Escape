@@ -23,11 +23,16 @@ public:
 	
 	bool isColliding(Actor * otherActor);
 	
+	// Event functions
+	//TODO: rename collide onCollide
 	virtual void collide(Actor& otherActor) { }
+	virtual void onDestroy() { };
+	
 	virtual void update(float dt) { };
 	virtual void draw();
 	
 	void destroy();
+	
 	bool isDestroyed();
 
 	// stupid version of dynamic casting

@@ -81,6 +81,7 @@ void Actor::draw() {
 }
 
 void Actor::destroy() {
+	onDestroy();
 	destroyed = true;
 }
 
