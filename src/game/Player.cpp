@@ -189,8 +189,14 @@ void Player::draw() {
 
 void Player::collide(Actor & otherActor) 
 {
-	if(otherActor.isEnemy()) {
+	if(otherActor.isEnemy()) 
+	{
 		die();
+	}
+	
+	if (otherActor.isCollectible())
+	{
+		otherActor.destroy();
 	}
 }
 
