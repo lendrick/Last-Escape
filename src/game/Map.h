@@ -42,6 +42,7 @@ public:
 	bool checkHorizontalLine(int x1, int x2, int y);
 	bool checkVerticalLine(int x, int y1, int y2);
 	void move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
+	bool isGrounded(float &pos_x, float &pos_y, int size_x);
 	void renderBackground();
 	void renderForeground();
 
