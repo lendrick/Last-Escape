@@ -11,7 +11,6 @@
 #include "Map.h"
 #include "Actor.h"
 #include "AnimatedActor.h"
-#include "TempPlayer.h"
 #include "Player.h"
 #include "Input.h"
 #include "Sound.h"

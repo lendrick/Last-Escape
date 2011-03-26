@@ -80,7 +80,7 @@ void Player::jump() {
 	if (energy < energy_cost_jump)
 		return;
 
-	if (speed_y == 0 && game_map->isGrounded(pos_x, pos_y, width))
+	if (speed_y == 0 && isGrounded())
 	{
 		speed_y = -jump_speed;
 		energy -= energy_cost_jump;
@@ -108,6 +108,10 @@ void Player::update(float dt) {
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+	
+	if(isGrounded()) {
+		speed_y = 0;
+	}
 	
 	int move_direction = FACING_NONE; 
 
@@ -165,7 +169,7 @@ void Player::update(float dt) {
 		sprite_tile_row = SPRITE_SHOOT_ROW;
 		sprite_tile_col = int((anim_time-last_shoot_time) * SPRITE_SHOOT_SPEED);
 	}
-	else if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y < 0)
+	else if (!isGrounded() && speed_y < 0)
 	{
 		sprite_tile_row = SPRITE_JUMP_ROW;
 	}

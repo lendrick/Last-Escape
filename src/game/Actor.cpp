@@ -86,6 +86,10 @@ void Actor::destroy() {
 	destroyed = true;
 }
 
+bool Actor::isGrounded() {
+	return game_map->isGrounded(*this);
+}
+
 bool Actor::isDestroyed() {
 	return destroyed;
 }

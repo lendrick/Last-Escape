@@ -24,6 +24,7 @@ void EnemyWalker::update(float dt) {
 	const float vision_range = 320;
 	
 	speed_y += speed_gravity*dt;
+	if(isGrounded()) speed_y = 0;
 	
 	// Chase the player
 	float dx = g_player->pos_x - pos_x;

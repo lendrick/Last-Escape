@@ -25,6 +25,7 @@ public:
 	void getBoundingBox(float &x1, float &y1, float &x2, float &y2);
 	
 	bool isColliding(Actor * otherActor);
+	bool isGrounded();
 	
 	// Event functions
 	//TODO: rename collide onCollide

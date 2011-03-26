@@ -46,6 +46,7 @@ public:
 	void setCameraFollow(Actor * actor);
 	bool move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
 	bool move(Actor &actor, float &move_x, float &move_y);
+	bool isGrounded(Actor &actor);
 	bool isGrounded(float &pos_x, float &pos_y, int size_x);
 	void renderBackground();
 	void renderForeground();

@@ -335,6 +335,10 @@ void Map::setCameraFollow(Actor * actor) {
 	cameraFollow = actor;
 }
 
+bool Map::isGrounded(Actor & actor) {
+	return isGrounded(actor.pos_x, actor.pos_y, actor.width);
+}
+
 // if there is collision directly underfoot, return true
 bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
