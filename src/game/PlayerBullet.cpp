@@ -20,6 +20,5 @@ void PlayerBullet::collide(Actor& otherActor) {
 void PlayerBullet::update(float dt) {
 	move(bullet_speed*dt, 0);
 
-	// TODO: should delete bullets eventually
 	checkCollisions();
 }

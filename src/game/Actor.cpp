@@ -90,14 +90,13 @@ bool Actor::isDestroyed() {
 
 void Actor::checkCollisions() {
 	list<Actor*>::iterator it2 = actors.begin();
-	++it2;
 	
 	for (; it2 != actors.end(); ++it2)
 	{
-		if (isColliding(*it2))
+		// Don't collide with self. :)
+		if (*it2 != this && isColliding(*it2))
 		{
 			collide(**it2);
-			//collide(**it1);
 		}
 	}
 }
