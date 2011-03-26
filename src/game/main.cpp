@@ -87,7 +87,7 @@ int main()
 
 	// Create Animation test
 	sf::Image xeon;
-	xeon.LoadFromFile("images/xeonsheet.png");
+	xeon.LoadFromFile("images/xeon.png");
 	AnimatedActor testActor(xeon);
 
 	// Start game loop
