@@ -12,12 +12,14 @@
 #include "Actor.h"
 #include "AnimatedActor.h"
 #include "TempPlayer.h"
+#include "Player.h"
 
 
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
 
+sf::Font fontUI;
 
 /// This function calls update() on all the actors, including (eventually) the player
 void update() {
@@ -47,6 +49,19 @@ void cleanup() {
 	}
 }
 
+void renderUI(Player& player) {
+	char buf[256];
+	float energy = 100*player.energy/player.energy_max;
+	sprintf(buf, "Energy: %.0f%%", energy);
+	sf::String textEnergy(buf, fontUI, 12);
+	if (energy < 20.f)
+		textEnergy.SetColor(sf::Color(0xef, 0x29, 0x29));
+	else
+		textEnergy.SetColor(sf::Color(0xed, 0xd4, 0x00));
+	textEnergy.Move(8, 8);
+	App->Draw(textEnergy);
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -60,9 +75,15 @@ int main()
 	App->UseVerticalSync(true);
 	const sf::Input& input = App->GetInput();
 
+	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
+		printf("failed to load font\n");
+	
+
 	// Create game objects
 	game_map = new Map();
-	TempPlayer p1;
+	Player p1;
+
+	sf::Clock Clock;
 
 	// Create Animation test
 	sf::Image xeon;
@@ -79,15 +100,26 @@ int main()
 			// Close window : exit
 			if (Event.Type == sf::Event::Closed)
 				App->Close();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
+				App->Close();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Up)
+				p1.jump();
+
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Space)
+				p1.shoot();
 		}
+
+		float ElapsedTime = Clock.GetElapsedTime();
+		Clock.Reset();
 
 		// Clear screen
 		App->Clear();
 		update();
 		cleanup();
 
-
-		p1.logic();
+		p1.logic(ElapsedTime);
 
 		game_map->renderBackground();
 		p1.render();
@@ -95,6 +127,8 @@ int main()
 
 		testActor.update();
 		testActor.draw();
+
+		renderUI(p1);
 
 		// Finally, display the rendered frame on screen
 		App->Display();

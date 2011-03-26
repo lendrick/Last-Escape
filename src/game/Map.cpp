@@ -27,7 +27,7 @@ Map::Map() {
 	cam_x = 0;
 	cam_y = 0;
 	
-	loadMap("test_map.txt");
+	loadMap("subwaymap.txt");
 	
 }
 
@@ -144,7 +144,6 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 	return true;
 }
 
-
 /**
  * Attempt to move object at pos(x,y), of size(x,y), desired delta (x,y)
  * Assumes maximum move is tile size!
@@ -166,7 +165,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		
 		current_tile = (int)check_x >> TILE_SHIFT;
 		
-		check_x += move_x;
+		check_x += move_x + 1;
 		if (current_tile != (int)check_x >> TILE_SHIFT) {
 		
 			// crossed into a new tile, so check all points on this edge
@@ -175,7 +174,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 			}
 			else { // move to the tile edge
 				pos_x = ((int)check_x >> TILE_SHIFT) * TILE_SIZE - size_x/2 - 1;
-				move_x = pos_x - orig_x - 1;
+				move_x = pos_x - orig_x;
 			}
 		
 		}
@@ -192,7 +191,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		
 		current_tile = (int)check_x >> TILE_SHIFT;
 		
-		check_x += move_x;
+		check_x += move_x - 1;
 		if (current_tile != (int)check_x >> TILE_SHIFT) {
 		
 			// crossed into a new tile, so check all points on this edge
@@ -219,7 +218,7 @@ void Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		
 		current_tile = (int)check_y >> TILE_SHIFT;
 		
-		check_y += move_y;
+		check_y += move_y + 1;
 		if (current_tile != (int)check_y >> TILE_SHIFT) {
 		
 			// crossed into a new tile, so check all points on this edge
