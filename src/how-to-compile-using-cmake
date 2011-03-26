@@ -47,7 +47,7 @@ B) Building the game:
 
 4. Run CMake:
 
-	cmake ../source
+	cmake ../src
 
 5. Compile Xeonergy:
 
