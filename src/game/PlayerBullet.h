@@ -6,7 +6,7 @@
 class PlayerBullet  : public AnimatedActor
 {
 public:
-	PlayerBullet(bool rightwards);
+	PlayerBullet(int facing);
 	virtual void collide(Actor& otherActor);
 	virtual void update(float dt);
 private:

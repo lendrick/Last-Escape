@@ -17,6 +17,11 @@ public:
 	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
 
 protected:
+	void flipDirection();
+	int facing_direction;
 	Animation *currentAnimation; ///< TODO use a queue
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
+
+private:
+	void init();
 };

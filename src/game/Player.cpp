@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "Input.h"
 #include "PlayerBullet.h"
 
 const int SPRITE_TILE_W = 128;
@@ -44,7 +44,7 @@ void Player::init() {
 	
 	pos_x = 64.0f;
 	pos_y = 0.0f;
-	facing_rightwards = true;
+	facing_direction = FACING_RIGHT;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -96,30 +96,34 @@ void Player::shoot() {
 	if (last_shoot_time > shoot_reload_timer) {
 		energy -= energy_cost_shoot;
 
-		Actor* bullet = new PlayerBullet(facing_rightwards);
+		Actor* bullet = new PlayerBullet(facing_direction);
 		bullet->setPos(pos_x, pos_y - height/2);
 	}
 }
 
 void Player::update(float dt) {
-	AnimatedActor::update(dt);
-	const sf::Input& input = App->GetInput();
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+	
+	int move_direction = FACING_NONE; 
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
-
+	
 	// left/right move
-	if (input.IsKeyDown(sf::Key::Left)) {
+	if (input.direction() == FACING_LEFT) {
+		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
+		facing_direction = move_direction;
 	}
-	else if (input.IsKeyDown(sf::Key::Right)) {
+	else if (input.direction() == FACING_RIGHT) {
+		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
+		facing_direction = move_direction;
 	}
 	else {
 		if (speed_x > speed_delta_decel*dt) speed_x -= speed_delta_decel*dt;
@@ -127,14 +131,16 @@ void Player::update(float dt) {
 		else speed_x = 0.0;
 	}
 	
+
+	
 	// various actions (main() already handles KeyPressed so it doesn't miss
 	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
 	// when held down)
 
-	if (input.IsKeyDown(sf::Key::Up))
+	if (input.jump())
 		jump();
 
-	if (input.IsKeyDown(sf::Key::Space))
+	if (input.shoot())
 		shoot();
 
 	// gravity
@@ -166,15 +172,13 @@ void Player::update(float dt) {
 		this->setCurrentAnimation("idle"); 
 	}
 
-	if (speed_x > 0)
+	if (facing_direction == FACING_RIGHT)
 	{
-		facing_rightwards = true;
 		sprite.FlipX(false);
 		sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
-	else if (speed_x < 0)
+	else if (facing_direction == FACING_LEFT)
 	{
-		facing_rightwards = false;
 		sprite.FlipX(true);
 		sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	}
@@ -197,8 +201,14 @@ void Player::draw() {
 
 void Player::collide(Actor & otherActor) 
 {
-	if(otherActor.isEnemy()) {
+	if(otherActor.isEnemy()) 
+	{
 		die();
+	}
+	
+	if (otherActor.isCollectible())
+	{
+		otherActor.destroy();
 	}
 }
 

@@ -219,4 +219,39 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup color="#00ffff" name="pills" width="200" height="50">
+  <properties>
+   <property name="type" value="pill"/>
+  </properties>
+  <object x="736" y="352"/>
+  <object x="768" y="320"/>
+  <object x="800" y="288"/>
+  <object x="832" y="320"/>
+  <object x="864" y="352"/>
+  <object x="704" y="352"/>
+  <object x="736" y="320"/>
+  <object x="768" y="288"/>
+  <object x="800" y="256"/>
+  <object x="832" y="288"/>
+  <object x="864" y="320"/>
+  <object x="896" y="352"/>
+  <object x="416" y="320"/>
+  <object x="448" y="288"/>
+  <object x="480" y="256"/>
+ </objectgroup>
+ <objectgroup name="smoke" width="200" height="50">
+  <properties>
+   <property name="type" value="smoke"/>
+  </properties>
+  <object x="1167" y="437"/>
+  <object x="174" y="436"/>
+  <object x="78" y="434"/>
+ </objectgroup>
+ <objectgroup color="#ff0000" name="walkers" width="200" height="50">
+  <properties>
+   <property name="type" value="walker"/>
+  </properties>
+  <object x="1027" y="420"/>
+  <object x="387" y="326"/>
+ </objectgroup>
 </map>

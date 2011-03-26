@@ -13,11 +13,13 @@
 #include "AnimatedActor.h"
 #include "TempPlayer.h"
 #include "Player.h"
+#include "Input.h"
 
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
 Player *g_player;
+Input input;
 
 sf::Font fontUI;
 
@@ -76,7 +78,7 @@ void renderUI(Player& player) {
 		textEnergy.SetColor(sf::Color(0xef, 0x29, 0x29));
 	else
 		textEnergy.SetColor(sf::Color(0xed, 0xd4, 0x00));
-	textEnergy.Move(8, 8);
+  textEnergy.Move(8, 8);
 	App->Draw(textEnergy);
 }
 
@@ -91,7 +93,6 @@ int main()
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
 	App->UseVerticalSync(true);
-	const sf::Input& input = App->GetInput();
 
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
@@ -111,23 +112,9 @@ int main()
 	// Start game loop
 	while (App->IsOpened())
 	{
-		// Process events
-		sf::Event Event;
-		while (App->GetEvent(Event))
-		{
-			// Close window : exit
-			if (Event.Type == sf::Event::Closed)
-				App->Close();
-
-			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
-				App->Close();
-
-			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Up)
-				p1.jump();
-
-			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Space)
-				p1.shoot();
-		}
+		input.poll();
+		if(input.quit())
+			App->Close();
 
 		float ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();

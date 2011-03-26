@@ -3,6 +3,7 @@
 AnimatedActor::AnimatedActor(sf::Image& image)
 :Actor()
 {
+	init();
 	setImage(image);
 
 	//testing values
@@ -15,10 +16,15 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 AnimatedActor::AnimatedActor()
 :Actor()
 {
+	init();
 }
 
 AnimatedActor::~AnimatedActor()
 {
+}
+
+void AnimatedActor::init() {
+	facing_direction = FACING_RIGHT;
 }
 
 void AnimatedActor::setImage(sf::Image & image) 
@@ -54,5 +60,17 @@ void AnimatedActor::setCurrentAnimation(std::string name)
 		this->currentAnimation = this->animations[name];
 		this->currentAnimation->updateFrame();
 		cout << name << endl;
+	}
+}
+
+void AnimatedActor::flipDirection() {
+	if(facing_direction == FACING_LEFT) {
+		facing_direction = FACING_RIGHT;
+	} else if(facing_direction == FACING_RIGHT) {
+		facing_direction = FACING_LEFT;
+	} else if(facing_direction == FACING_UP) {
+		facing_direction = FACING_DOWN;
+	} else if(facing_direction == FACING_DOWN) {
+		facing_direction = FACING_UP;
 	}
 }
