@@ -25,6 +25,7 @@ AnimatedActor::~AnimatedActor()
 
 void AnimatedActor::init() {
 	facing_direction = FACING_RIGHT;
+	this->currentAnimation = NULL;
 }
 
 void AnimatedActor::setImage(sf::Image & image) 
@@ -36,9 +37,9 @@ void AnimatedActor::setImage(sf::Image & image)
 	//	this->sprite.Resize(24, 48);
 }
 
-void AnimatedActor::update(float dt)
+
+void AnimatedActor::draw()
 {
-	Actor::update(dt);
 	if(currentAnimation != NULL)
 	{
 		if(currentAnimation->getIsFinished())
@@ -48,9 +49,10 @@ void AnimatedActor::update(float dt)
 		}
 		else
 		{
-			this->currentAnimation->update(dt);
+			this->currentAnimation->update();
 		}
 	}
+	Actor::draw();
 }
 
 void AnimatedActor::setCurrentAnimation(std::string name)

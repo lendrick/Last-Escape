@@ -4,7 +4,7 @@
 Animation::Animation(sf::Sprite& sprite)
 : sprite(sprite)
 {
-	this->timePassedForFrame = 0.f;
+	this->animationTimer.Reset();
 	this->frameIterator = 0;
 	this->isFinished = false;
 }
@@ -90,10 +90,9 @@ void Animation::setIsFinished(bool value)
 	this->isFinished = value;
 }
 
-void Animation::update(float dt)
+void Animation::update()
 {
-	this->timePassedForFrame += dt;
-	if(!this->frames.empty() && timePassedForFrame > this->frames.at(frameIterator).timeToNextFrame)
+	if(!this->frames.empty() && this->animationTimer.GetElapsedTime() > this->frames.at(frameIterator).timeToNextFrame)
 	{
 		// is the last Frame in frames-vector.
 		if(this->frames.size()-1 == frameIterator)
@@ -115,7 +114,7 @@ void Animation::update(float dt)
 			this->frameIterator++;
 			this->updateFrame();
 		}
-		this->timePassedForFrame = 0; //may minus timeToNextFrame instead
+		this->animationTimer.Reset();
 	}
 }
 
