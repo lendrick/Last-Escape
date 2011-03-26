@@ -166,6 +166,18 @@ void Map::loadMap(string filename) {
 				actor->setPos(x, y);
 			}
 		}
+		else if(childName == "properties")
+		{
+			for (TiXmlNode* prop = child->FirstChild(); prop; prop = prop->NextSibling())
+			{
+				std::string propname = ((TiXmlElement*)prop)->Attribute("name");
+				std::string propval = ((TiXmlElement*)prop)->Attribute("value");
+				if(propname == "landscape") {
+					landscapeImg.LoadFromFile("images/landscapes/" + propval);
+					landscape.SetImage(landscapeImg);
+				}
+			}
+		}
 	}
 }
 
@@ -420,6 +432,19 @@ void Map::renderForeground() {
 			App->Draw(tile_sprites[i][j]);
 		}
 	}
+}
+
+void Map::renderLandscape() {
+	// Draw it four times, aka repeating in X and Y
+	sf::Vector2f topleft(-(float)(cam_x % landscapeImg.GetWidth()), -(float)(cam_y % landscapeImg.GetHeight()));
+	landscape.SetPosition(topleft);
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y);
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x, topleft.y + landscapeImg.GetHeight());
+	App->Draw(landscape);
+	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y + landscapeImg.GetHeight());
+	App->Draw(landscape);
 }
 
 Map::~Map() {

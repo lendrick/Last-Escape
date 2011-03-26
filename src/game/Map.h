@@ -26,6 +26,8 @@ class Map {
 private:
 	sf::RenderWindow *target;
 	sf::Image tileset;
+	sf::Image landscapeImg;
+	sf::Sprite landscape;
 	sf::IntRect tile_rects[1024];
 	
 	// map layers
@@ -48,6 +50,7 @@ public:
 	bool move(Actor &actor, float &move_x, float &move_y);
 	bool isGrounded(Actor &actor);
 	bool isGrounded(float &pos_x, float &pos_y, int size_x);
+	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
 	
