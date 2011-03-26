@@ -31,6 +31,7 @@ void Actor::setPos(float px, float py) {
 void Actor::setDrawOffset(int ox, int oy) {
 	xDrawOffset = ox;
 	yDrawOffset = oy;
+	sprite.SetCenter(ox, oy);
 }
 
 // returns true if the actor collided with a map tile
@@ -82,7 +83,7 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	sprite.SetPosition(pos_x - game_map->cam_x + xDrawOffset, pos_y - game_map->cam_y + yDrawOffset);
+	sprite.SetPosition(pos_x - game_map->cam_x, pos_y - game_map->cam_y);
 	App->Draw(sprite);
 }
 
