@@ -5,7 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <list>
+#include <boost/foreach.hpp>
 #include "Map.h"
+#include "Actor.h"
 #include "globals.h"
 
 list<Actor *> actors;
@@ -13,6 +15,23 @@ Map * game_map;
 
 /// This function cleans up deleted actors.
 void cleanup() {
+	if(actors.empty())
+		return;
+	
+	list<Actor *>::iterator i = actors.end();
+	list<Actor *>::iterator tmp;
+	
+	i--;
+	
+	while(i != actors.begin()) {
+		tmp = i;
+		i--;
+		
+		if((*tmp)->isDestroyed()) {
+			delete *tmp;
+			actors.erase(tmp);
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////
