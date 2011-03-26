@@ -1,8 +1,11 @@
 #include "Actor.h"
+#include "globals.h"
+#include <list>
 
 Actor::Actor() {
 	setPos(0, 0);
 	destroyed = false;
+	actors.push_back(this);
 }
 
 Actor::~Actor() {
