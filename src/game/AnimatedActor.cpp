@@ -68,3 +68,15 @@ void AnimatedActor::setCurrentAnimation(std::string name)
 	if(this->currentAnimation != this->animations[name])
 	this->currentAnimation = this->animations[name];
 }
+
+void AnimatedActor::flipDirection() {
+	if(facing_direction == FACING_LEFT) {
+		facing_direction = FACING_RIGHT;
+	} else if(facing_direction == FACING_RIGHT) {
+		facing_direction = FACING_LEFT;
+	} else if(facing_direction == FACING_UP) {
+		facing_direction = FACING_DOWN;
+	} else if(facing_direction == FACING_DOWN) {
+		facing_direction = FACING_UP;
+	}
+}
