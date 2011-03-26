@@ -192,11 +192,11 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
-
 	sprite.SetPosition(
 		0.5f + (int)(pos_x - game_map->cam_x - width/2),
 		0.5f + (int)(pos_y - game_map->cam_y - height));
-	App->Draw(sprite);
+//	App->Draw(sprite);
+	AnimatedActor::draw();
 }
 
 void Player::collide(Actor & otherActor) 
