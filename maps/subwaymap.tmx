@@ -243,9 +243,9 @@
   <properties>
    <property name="type" value="smoke"/>
   </properties>
-  <object x="1167" y="437"/>
-  <object x="174" y="436"/>
-  <object x="78" y="434"/>
+  <object x="1170" y="445"/>
+  <object x="172" y="446"/>
+  <object x="76" y="444"/>
  </objectgroup>
  <objectgroup color="#ff0000" name="walkers" width="200" height="50">
   <properties>
@@ -253,5 +253,11 @@
   </properties>
   <object x="1027" y="420"/>
   <object x="387" y="326"/>
+ </objectgroup>
+ <objectgroup color="#00ff00" name="flyers" width="200" height="50">
+  <properties>
+   <property name="type" value="flyer"/>
+  </properties>
+  <object x="929" y="292"/>
  </objectgroup>
 </map>
