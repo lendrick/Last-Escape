@@ -9,6 +9,8 @@ AnimatedActor::AnimatedActor(sf::Image& image)
 	//testing values
 	this->setOrigin(64.0f, 400.0f);
 	this->setSize(24, 48);
+
+	setDrawOffset(-image.GetWidth() / 2, -image.GetHeight());
 //	this->animationQueue.push(new Animation(&this->sprite));
 //	this->animationQueue.front()->toDefaultAnimation();
 }

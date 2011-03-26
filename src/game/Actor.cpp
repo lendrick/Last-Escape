@@ -7,6 +7,7 @@ Actor::Actor() {
 	setPos(0, 0);
 	destroyed = false;
 	actors.push_back(this);
+	setDrawOffset(0, 0);
 }
 
 Actor::~Actor() {
@@ -27,8 +28,13 @@ void Actor::setPos(float px, float py) {
 	pos_y = py;
 }
 
+void Actor::setDrawOffset(int ox, int oy) {
+	xDrawOffset = ox;
+	yDrawOffset = oy;
+}
+
 // returns true if the actor collided with a map tile
-bool Actor::move(float mx, float my) {
+bool Actor::move(float &mx, float &my) {
   return game_map->move(*this, mx, my);
 }
 
@@ -76,7 +82,7 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	sprite.SetPosition(pos_x - game_map->cam_x, pos_y - game_map->cam_y);
+	sprite.SetPosition(pos_x - game_map->cam_x + xDrawOffset, pos_y - game_map->cam_y + yDrawOffset);
 	App->Draw(sprite);
 }
 
