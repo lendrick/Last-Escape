@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "Input.h"
 #include "PlayerBullet.h"
 
 const int SPRITE_TILE_W = 128;
@@ -83,7 +83,6 @@ void Player::shoot() {
 }
 
 void Player::update(float dt) {
-	const sf::Input& input = App->GetInput();
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
@@ -95,12 +94,12 @@ void Player::update(float dt) {
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
 	
 	// left/right move
-	if (input.IsKeyDown(sf::Key::Left)) {
+	if (input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
 	}
-	else if (input.IsKeyDown(sf::Key::Right)) {
+	else if (input.direction() == FACING_RIGHT) {
 		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
@@ -117,10 +116,10 @@ void Player::update(float dt) {
 	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
 	// when held down)
 
-	if (input.IsKeyDown(sf::Key::Up))
+	if (input.jump())
 		jump();
 
-	if (input.IsKeyDown(sf::Key::Space))
+	if (input.shoot())
 		shoot();
 
 	// gravity
