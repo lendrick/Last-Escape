@@ -10,6 +10,8 @@
 
 #include "Map.h"
 #include "Actor.h"
+#include "AnimatedActor.h"
+#include "TempPlayer.h"
 #include "Player.h"
 
 list<Actor *> actors;
@@ -97,6 +99,11 @@ int main()
 
 	sf::Clock Clock;
 
+	// Create Animation test
+	sf::Image xeon;
+	xeon.LoadFromFile("images/xeon.png");
+	AnimatedActor testActor(xeon);
+
 	// Start game loop
 	while (App->IsOpened())
 	{
@@ -132,6 +139,9 @@ int main()
 		p1.render();
 		renderActors();
 		game_map->renderForeground();
+
+		testActor.update();
+		testActor.draw();
 
 		renderUI(p1);
 
