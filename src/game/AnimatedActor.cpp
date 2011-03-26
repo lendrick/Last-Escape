@@ -73,6 +73,10 @@ void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
 	}
 }
 
+void AnimatedActor::resetCurrentAnimation() {
+	this->currentAnimation->reset();
+}
+
 void AnimatedActor::flipDirection() {
 	if(facing_direction == FACING_LEFT) {
 		facing_direction = FACING_RIGHT;

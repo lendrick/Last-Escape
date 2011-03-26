@@ -55,6 +55,8 @@ Player::Player()
 	yOrigin = height;
 	setDrawOffset(64, 104);
 	setFrameSize(128, 128);
+	shoot_duration = 0.6f;
+	last_shoot_time = 0;
 	
 	//sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	
@@ -85,11 +87,18 @@ Player::Player()
 	tmp->addFrame(24, 0.1f);
 	tmp->addFrame(25, 0.1f);
 	tmp->addFrame(26, 0.1f);
-	tmp->addFrame(27, 0.1f);
+	
+	tmp = addAnimation("fall");
+	tmp->addFrame(27, 0.2f);
 	tmp->addFrame(28, 0.1f);
 	
 	tmp = addAnimation("idle");
 	tmp->addFrame(0, 0.2f);
+	
+	tmp = addAnimation("shoot");
+	tmp->addFrame(16, 0.1f);
+	tmp->addFrame(17, 0.1f);
+	tmp->addFrame(18, 0.1f);
 
 	init();
 }
@@ -145,6 +154,8 @@ void Player::shoot() {
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
 		bullet->setPos(pos_x, pos_y - height/2);
+  	setCurrentAnimation("shoot");
+		resetCurrentAnimation();
 	}
 }
 
@@ -207,16 +218,15 @@ void Player::update(float dt) {
 	speed_y = delta_y / dt;
 
 	// Compute animations:
-/*
-	if (anim_time < last_shoot_time + SPRITE_SHOOT_COUNT/SPRITE_SHOOT_SPEED)
-	{
-		this->setCurrentAnimation("walk"); //TODO add shoot animation
-	}
 
-  else */ if (!isGrounded() && speed_y != 0)
-
+	if(time < last_shoot_time + shoot_duration) {
+		this->setCurrentAnimation("shoot");
+	} else if (!isGrounded() && speed_y != 0)
 	{
-		this->setCurrentAnimation("jump");
+		if(speed_y < 0)
+			this->setCurrentAnimation("jump");
+		else
+			this->setCurrentAnimation("fall");
 	}
 	else if (speed_x != 0)
 	{
