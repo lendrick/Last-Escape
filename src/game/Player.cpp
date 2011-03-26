@@ -43,11 +43,12 @@ WeaponDesc weapons[] = {
 		2, 3, 32.0 },
 };
 
-Player::Player() {
+Player::Player()
+: AnimatedActor() {
 	init();
 	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
-	sprite.SetImage(image);
+	this->setImage(image);
 	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 }
 	
@@ -56,7 +57,6 @@ Player::~Player() {
 }
 
 void Player::init() {
-	anim_time = 0.0f;
 	last_shoot_time = -100.f;
 	
 	energy = energy_max = 100.f;
@@ -70,7 +70,28 @@ void Player::init() {
 	yOrigin = height;
 	speed_x = 0.0f;
 	speed_y = 0.0f;
+
+	setSize(width, height);
+/*	if (!image.LoadFromFile("images/xeon.png"))
+		printf("failed to load images/xeon.png\n");
+	sprite.SetImage(image);
+	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+*/
+	// Set Animations
+	Animation* walkAnimation = new Animation(this->sprite);
+	walkAnimation->toDefaultXeonWalkAnimation();
+	this->animations["walk"] = walkAnimation;
 	
+	Animation* jumpAnimation = new Animation(this->sprite);
+	jumpAnimation->toDefaultXeonJumpAnimation();
+	this->animations["jump"] = jumpAnimation;
+
+	Animation* idleAnimation = new Animation(this->sprite);
+	idleAnimation->toDefaultXeonIdleAnimation();
+	this->animations["idle"] = idleAnimation;
+
+	this->setCurrentAnimation("idle");
+
 	current_weapon = 0;
 }
 
@@ -93,9 +114,8 @@ void Player::shoot() {
 	if (energy < weapons[current_weapon].energy_cost)
 		return;
 
-	if (anim_time - last_shoot_time > weapons[current_weapon].reload_time) {
+	if (last_shoot_time > weapons[current_weapon].reload_time) {
 		fireSound->playSound();
-		last_shoot_time = anim_time;
 		energy -= weapons[current_weapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
@@ -156,33 +176,24 @@ void Player::update(float dt) {
 	speed_y = delta_y / dt;
 
 	// Compute animations:
-
-	anim_time += dt;
-
-	int sprite_tile_col = 0, sprite_tile_row = 0;
+/*
 	if (anim_time < last_shoot_time + SPRITE_SHOOT_COUNT/SPRITE_SHOOT_SPEED)
 	{
-		sprite_tile_row = SPRITE_SHOOT_ROW;
-		sprite_tile_col = int((anim_time-last_shoot_time) * SPRITE_SHOOT_SPEED);
+		this->setCurrentAnimation("walk"); //TODO add shoot animation
 	}
-	else if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y < 0)
+	else*/ if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y != 0)
 	{
-		sprite_tile_row = SPRITE_JUMP_ROW;
+		this->setCurrentAnimation("jump");
 	}
 	else if (speed_x != 0)
 	{
-		sprite_tile_row = SPRITE_WALK_ROW;
-		sprite_tile_col = int(anim_time*SPRITE_WALK_SPEED) % SPRITE_WALK_COUNT;
+		this->setCurrentAnimation("walk");
 	}
 	else
 	{
-		sprite_tile_row = SPRITE_IDLE_ROW;
-		sprite_tile_col = 0;
+		this->setCurrentAnimation("idle"); 
 	}
 
-	sprite.SetSubRect(sf::IntRect(sprite_tile_col*SPRITE_TILE_W, sprite_tile_row*SPRITE_TILE_H,
-		(sprite_tile_col+1)*SPRITE_TILE_W, (sprite_tile_row+1)*SPRITE_TILE_H));
-		
 	if (facing_direction == FACING_RIGHT)
 	{
 		sprite.FlipX(false);
@@ -203,11 +214,11 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
-
 	sprite.SetPosition(
 		0.5f + (int)(pos_x - game_map->cam_x - width/2),
 		0.5f + (int)(pos_y - game_map->cam_y - height));
-	App->Draw(sprite);
+//	App->Draw(sprite);
+	AnimatedActor::draw();
 }
 
 void Player::collide(Actor & otherActor) 
