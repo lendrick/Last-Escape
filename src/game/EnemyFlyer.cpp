@@ -5,9 +5,9 @@
 EnemyFlyer::EnemyFlyer()
 :Enemy()
 {
-	patrolLength = 400;
+	patrolLength = 100;
 	
-	fly_speed = 120.f;
+	fly_speed = 200.f;
 	
 	speed_x = 0;
 	speed_y = 0;
