@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "globals.h"
+#include "Ui.h"
 
 Input::Input() {
 	initFrame();
@@ -19,20 +20,22 @@ void Input::poll() {
 	// Process events
 	initFrame();
 	sf::Event Event;
-	
-	
+
+
 	while (App->GetEvent(Event))
 	{
+		if (ui_event(Event))
+			continue;
 		// Close window : exit
 		if (Event.Type == sf::Event::Closed)
 			inputQuit = true;
-		
+
 		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
-			inputQuit = true;
-		
+			ui_togglePause();
+
 		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Up)
 			inputJump = true;
-		
+
 		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Space)
 			inputShoot = true;
 	}
@@ -46,14 +49,14 @@ void Input::poll() {
 	}
 }
 
-int Input::direction() 
+int Input::direction()
 {
 	return inputDirection;
 }
 
 bool Input::jump()
 {
-	return inputJump; 
+	return inputJump;
 }
 
 bool Input::quit()
@@ -71,7 +74,7 @@ bool Input::shooting()
 	return inputShoot || App->GetInput().IsKeyDown(sf::Key::Space);
 }
 
-bool Input::jumping() 
+bool Input::jumping()
 {
 	return inputJump || App->GetInput().IsKeyDown(sf::Key::Up);
-}	
+}
