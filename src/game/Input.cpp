@@ -68,10 +68,10 @@ bool Input::shoot()
 
 bool Input::shooting()
 {
-	return App->GetInput().IsKeyDown(sf::Key::Space);
+	return inputShoot || App->GetInput().IsKeyDown(sf::Key::Space);
 }
 
 bool Input::jumping() 
 {
-	return App->GetInput().IsKeyDown(sf::Key::Up);
+	return inputJump || App->GetInput().IsKeyDown(sf::Key::Up);
 }	
