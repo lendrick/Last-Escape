@@ -147,6 +147,8 @@ void Map::loadMap(string filename) {
 				Actor* actor;
 				if (type == "pill")
 					actor = new CollectiblePill();
+				else if (type == "weaponupgrade")
+					actor = new CollectibleWeaponUpgrade();
 				else if (type == "smoke")
 					actor = new ParticleEmitter();
 				else if (type == "walker")

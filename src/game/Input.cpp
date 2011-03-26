@@ -53,7 +53,7 @@ int Input::direction()
 
 bool Input::jump()
 {
-	return inputJump;
+	return inputJump || App->GetInput().IsKeyDown(sf::Key::Up);
 }
 
 bool Input::quit()
@@ -63,5 +63,5 @@ bool Input::quit()
 
 bool Input::shoot()
 {
-	return inputShoot;
+	return inputShoot || App->GetInput().IsKeyDown(sf::Key::Space);
 }
