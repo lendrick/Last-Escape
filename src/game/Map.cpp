@@ -9,6 +9,7 @@
 #include "Collectible.h"
 #include "Enemy.h"
 #include "EnemyWalker.h"
+#include "EnemyFlyer.h"
 #include "Particles.h"
 
 Map::Map() {
@@ -149,6 +150,8 @@ void Map::loadMap(string filename) {
 					actor = new ParticleEmitter();
 				else if (type == "walker")
 					actor = new EnemyWalker();
+				else if (type == "flyer")
+					actor = new EnemyFlyer();
 				else
 				{
 					printf("unrecognised object type %s\n", type.c_str());
