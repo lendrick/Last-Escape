@@ -95,7 +95,7 @@ void Actor::checkCollisions() {
 	for (; it2 != actors.end(); ++it2)
 	{
 		// Don't collide with self. :)
-		if (*it2 != this && isColliding(*it2))
+		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && isColliding(*it2))
 		{
 			collide(**it2);
 		}
