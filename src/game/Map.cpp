@@ -4,12 +4,11 @@
  
 #include "Map.h"
 
-#include "tinyxml/tinyxml.h"
-
+/* TODO:
+ * add way to define enemies in a file */
 #include "Collectible.h"
 #include "Enemy.h"
 #include "EnemyWalker.h"
-#include "Particles.h"
 
 Map::Map() {
 	
@@ -34,7 +33,21 @@ Map::Map() {
 	cam_x = 0;
 	cam_y = 0;
 	
-	loadMap("subwaymap.tmx");
+	loadMap("subwaymap.txt");
+
+	// TODO: load these from a data file
+	(new EnemyWalker())->setPos(384, 256);
+
+	(new CollectiblePill())->setPos(128, 256);
+	(new CollectiblePill())->setPos(128+32, 256-32);
+	(new CollectiblePill())->setPos(128+64, 256-64);
+	(new CollectiblePill())->setPos(128+96, 256-96);
+	(new CollectiblePill())->setPos(800, 300);
+	(new CollectiblePill())->setPos(820, 425);
+
+	for (float y = 270; y < 360; y += 16)
+		for (float x = 256; x < 768; x += 16)
+			(new CollectiblePill())->setPos(x, y);
 }
 
 void Map::loadTileset(string filename) {
@@ -68,99 +81,54 @@ void Map::loadMap(string filename) {
 		}
 	}
 	
-	TiXmlDocument doc;
-	if (!doc.LoadFile(("maps/" + filename).c_str()))
-	{
-		printf("failed to open map\n");
-		return;
-	}
+	infile.open(("maps/" + filename).c_str(), ios::in);
 
-	TiXmlElement* root = doc.RootElement();
-	root->QueryIntAttribute("width", &width);
-	root->QueryIntAttribute("height", &height);
+	if (infile.is_open()) {
+		while (!infile.eof()) {
 
-	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
-	{
-		std::string childName = child->Value();
-		if (childName == "layer")
-		{
-			typedef int tiles_t[MAP_TILES_X][MAP_TILES_Y];
-			tiles_t* tiles;
+			getline(infile, line);
+			line = trim(line, '\r');
 
-			std::string layerName = ((TiXmlElement*)child)->Attribute("name");
-			if (layerName == "background")
-				tiles = &background;
-			else if (layerName == "fringe")
-				tiles = &fringe;
-			else if (layerName == "foreground")
-				tiles = &foreground;
-			else if (layerName == "collision")
-				tiles = &collision;
-			else
-				continue;
+			if (line.length() == 0) continue;
+			starts_with = line.at(0);
+			if (starts_with == "#") continue;
+			else if (starts_with == "[") {
+				section = trim(parse_section_title(line), ' ');
+				
+				// read in tile layers
+				if (section == "background" || section == "fringe" || section == "foreground" || section == "collision") {
+					for (int j=0; j<height; j++) {
+						getline(infile, line);
+						line = trim(line, '\r');
+						line = line + ",";
+						
+						for (int i=0; i<width; i++) {
+							comma = line.find_first_of(',');
+							if (section == "background")
+								background[i][j] = atoi(line.substr(0, comma).c_str());
+							else if (section == "fringe")
+								fringe[i][j] = atoi(line.substr(0, comma).c_str());
+							else if (section == "foreground")
+								foreground[i][j] = atoi(line.substr(0, comma).c_str());
+							else if (section == "collision")
+								collision[i][j] = atoi(line.substr(0, comma).c_str());
 
-			const char* text = ((TiXmlElement*)child->FirstChild())->GetText();
-			if (!text)
-				continue;
-
-			const char* start = text;
-			for (int j = 0; j < height; j++) {
-				for (int i = 0; i < width; i++) {
-					const char* end = strchr(start, ',');
-					if (!end)
-						end = start + strlen(start);
-					(*tiles)[i][j] = atoi(std::string(start, end).c_str());
-					start = end+1;
+							line = line.substr(comma+1, line.length());
+						}
+					}
 				}
 			}
-		}
-		else if (childName == "objectgroup")
-		{
-			const char* defaultType;
-
-			// Look for a 'type' property as default for the whole group
-			TiXmlElement* prop = TiXmlHandle(child).FirstChild("properties").FirstChild("property").ToElement();
-			if (prop && strcmp(prop->Attribute("name"), "type") == 0)
-				defaultType = prop->Attribute("value");
-
-			for (TiXmlNode* object = child->FirstChild(); object; object = object->NextSibling())
-			{
-				// Skip everything except <object>
-				if (strcmp(object->Value(), "object") != 0)
-					continue;
-
-				std::string type;
-				if (((TiXmlElement*)object)->Attribute("type"))
-				{
-					type = ((TiXmlElement*)object)->Attribute("type");
-				}
-				else
-				{
-					if (defaultType)
-						type = defaultType;
-					else
-						continue;
-				}
-
-				Actor* actor;
-				if (type == "pill")
-					actor = new CollectiblePill();
-				else if (type == "smoke")
-					actor = new ParticleEmitter();
-				else if (type == "walker")
-					actor = new EnemyWalker();
-				else
-				{
-					printf("unrecognised object type %s\n", type.c_str());
-					continue;
-				}
-				int x = 0, y = 0;
-				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
-				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
-				actor->setPos(x, y);
+			else { // this is data.  treatment depends on section type
+				parse_key_pair(line, key, val);          
+				key = trim(key, ' ');
+				val = trim(val, ' ');
+				
+				if (key == "width") width = atoi(val.c_str());
+				else if (key == "height") height = atoi(val.c_str());
 			}
 		}
 	}
+
 }
 
 /**
@@ -193,6 +161,11 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 		if (collision[check_x][check_y]) return false; // solid tile
 	}
 	return true;
+}
+
+
+void Map::move(Actor &actor, float &move_x, float &move_y) {
+	move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
 }
 
 /**

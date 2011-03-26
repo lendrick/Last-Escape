@@ -28,8 +28,7 @@ void Actor::setPos(float px, float py) {
 }
 
 void Actor::move(float mx, float my) {
-	pos_x += mx;
-	pos_y += my;
+  game_map->move(*this, mx, my);
 }
 
 void Actor::getPos(float &px, float &py) {
