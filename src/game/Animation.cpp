@@ -80,6 +80,14 @@ void Animation::setIsFinished(bool value)
 {
 	this->isFinished = value;
 }
+void Animation::setDoLoop(bool value)
+{
+	this->doLoop = value;
+}
+void Animation::addFrame(Frame frame)
+{
+	this->frames.push_back(frame);
+}
 
 void Animation::update()
 {

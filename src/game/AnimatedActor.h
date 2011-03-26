@@ -1,5 +1,10 @@
 #pragma once
+
+#include <fstream>
+#include <sstream>
+
 #include "globals.h"
+#include "tinyxml/tinyxml.h"
 #include "Animation.h"
 #include "Actor.h"
 // This class is for all actors with animations (or even still actors).  It inherits Actor.
@@ -15,6 +20,7 @@ public:
 	void collide(Actor*); 	///< implemented empty for testing;
 	void draw();	///< update Animation
 	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
+	void loadAnimationsFromFile(std::string filepath);
 
 protected:
 	void flipDirection();

@@ -67,3 +67,63 @@ void AnimatedActor::flipDirection() {
 		facing_direction = FACING_UP;
 	}
 }
+
+void AnimatedActor::loadAnimationsFromFile(std::string filename)
+{
+	TiXmlDocument doc;
+	if (!doc.LoadFile(("animations/" + filename).c_str()))
+	{
+		printf("failed to open map\n");
+		return;
+	}
+
+	TiXmlElement* root = doc.RootElement();
+
+	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
+	{
+		std::string childName = child->Value();
+		if (childName == "animation")
+		{
+			Animation *newAnimation = new Animation(this->sprite);
+			for (TiXmlNode* aChild = child->FirstChild(); aChild; aChild = aChild->NextSibling())
+			{
+				std::string aChildName = aChild->Value();
+				if(aChildName == "name")
+				{
+					std::string aName = ((TiXmlElement*)aChild)->GetText();
+					this->animations[aName] = newAnimation;
+					cout << "added Animation with name" << aName << endl;
+				}
+				else if(aChildName == "doLoop")
+				{
+					stringstream ss( ((TiXmlElement*)aChild)->GetText() );
+					bool aDoLoop;
+					ss >> aDoLoop;
+					newAnimation->setDoLoop(aDoLoop);
+				}
+				else if(aChildName == "frames")
+				{
+					for (TiXmlNode* fChild = aChild->FirstChild(); fChild; fChild = fChild->NextSibling())
+					{
+						std::string fChildName = child->Value();
+						if(fChildName == "frame")
+						{
+							Frame frame;
+							int x, y, xw, yh;
+							((TiXmlElement*)fChild)->QueryIntAttribute("x", &x);
+							((TiXmlElement*)fChild)->QueryIntAttribute("y", &y);
+							((TiXmlElement*)fChild)->QueryIntAttribute("xw", &xw);
+							((TiXmlElement*)fChild)->QueryIntAttribute("yh", &yh);
+							((TiXmlElement*)fChild)->QueryFloatAttribute("timeToNextFrame", &frame.timeToNextFrame);
+							newAnimation->addFrame(frame);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			cout << "Unkown child name" << childName << endl;
+		}
+	}
+}

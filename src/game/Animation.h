@@ -17,8 +17,11 @@ public:
 	virtual ~Animation();
 	void update(); //TODO may return if it finished
 	void updateFrame(); //set's the sprite's subRect to the current Frame
+
 	bool getIsFinished();
 	void setIsFinished(bool);
+	void setDoLoop(bool);
+	void addFrame(Frame);
 
 	/// Added for testing purposes.
 	/// TODO read animations from a config file.
