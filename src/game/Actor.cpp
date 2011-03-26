@@ -4,6 +4,10 @@
 #include <list>
 
 Actor::Actor() {
+	xOrigin = 0;
+	yOrigin = 0;
+	width = 0;
+	height = 0;
 	setPos(0, 0);
 	destroyed = false;
 	actors.push_back(this);
