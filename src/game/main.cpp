@@ -99,7 +99,6 @@ int main()
 	// Create Animation test
 	sf::Image xeon;
 	xeon.LoadFromFile("images/xeon.png");
-	AnimatedActor testActor(xeon);
 	backgroundMusic->playSound();
 	
 	// Start game loop
@@ -120,9 +119,6 @@ int main()
 		game_map->renderBackground();
 		renderActors();
 		game_map->renderForeground();
-
-		testActor.update(ElapsedTime);
-		testActor.draw();
 
 		renderUI(p1);
 

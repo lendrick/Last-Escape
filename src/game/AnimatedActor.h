@@ -13,7 +13,7 @@ public:
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
-	void update(float dt);	///< update Animation
+	void draw();	///< update Animation
 	void setCurrentAnimation(std::string name); ///< Set's the current Animation for the given Name
 
 protected:
