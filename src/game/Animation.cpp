@@ -105,13 +105,13 @@ void Animation::addFrame(int num, float duration) {
 	int w = img->GetWidth();
 	int h = img->GetHeight();
 	
-	std::cout << w << "x" << h << "\n";
+	//std::cout << w << "x" << h << "\n";
 	
 	int x_tiles = w / frame_w;
 	int y_tiles = h / frame_h;
-	std::cout << frame_w << "x" << frame_h << "\n";
-	std::cout << x_tiles << "x" << y_tiles << "\n";
-	std::cout << num << "\n";
+	//std::cout << frame_w << "x" << frame_h << "\n";
+	//std::cout << x_tiles << "x" << y_tiles << "\n";
+	//std::cout << num << "\n";
 	
 	int column = num % y_tiles;
 	int row = (num - column) / x_tiles;
@@ -119,11 +119,16 @@ void Animation::addFrame(int num, float duration) {
 	Frame frame;
 	frame.rect = sf::IntRect(column * frame_w, row * frame_h, column * frame_w + frame_w, row * frame_h + frame_h);
 	frame.timeToNextFrame = duration;
+	frame.number = num;
 	frames.push_back(frame);	
 }
 
 void Animation::setLoop(bool loop) {
 	doLoop = loop;
+}
+
+void Animation::reset() {
+	frameIterator = 0;
 }
 
 bool Animation::getIsFinished()
@@ -165,6 +170,7 @@ void Animation::update()
 
 void Animation::updateFrame()
 {
+	cout << frameIterator << ":" << frames.at(frameIterator).number << " ";
 	if(!this->frames.empty())
 		this->sprite.SetSubRect(frames.at(frameIterator).rect );
 	else

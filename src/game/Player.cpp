@@ -48,8 +48,17 @@ Player::Player()
 	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
 	this->setImage(image);
+	
+	width = 24;
+	height = 48;
+	xOrigin = width/2;
+	yOrigin = height;
+	setDrawOffset(64, 104);
+	setFrameSize(128, 128);
+	
 	//sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
 	
+	/*
 	Animation* walkAnimation = new Animation(this->sprite);
 	walkAnimation->toDefaultXeonWalkAnimation();
 	this->animations["walk"] = walkAnimation;
@@ -61,6 +70,26 @@ Player::Player()
 	Animation* idleAnimation = new Animation(this->sprite);
 	idleAnimation->toDefaultXeonIdleAnimation();
 	this->animations["idle"] = idleAnimation;
+	*/
+	
+	Animation * tmp;
+	
+	tmp = addAnimation("walk");
+	tmp->addFrame(0, .2f);
+	tmp->addFrame(1, .2f);
+	tmp->addFrame(2, .2f);
+	tmp->addFrame(3, .2f);
+	tmp->setLoop(true);
+	
+	tmp = addAnimation("jump");
+	tmp->addFrame(24, 0.1f);
+	tmp->addFrame(25, 0.1f);
+	tmp->addFrame(26, 0.1f);
+	tmp->addFrame(27, 0.1f);
+	tmp->addFrame(28, 0.1f);
+	
+	tmp = addAnimation("idle");
+	tmp->addFrame(0, 0.2f);
 
 	init();
 }
@@ -78,11 +107,7 @@ void Player::init() {
 	pos_x = 64.0f;
 	pos_y = 0.0f;
 	facing_direction = FACING_RIGHT;
-	width = 24;
-	height = 48;
-	xOrigin = width/2;
-	yOrigin = height;
-	setDrawOffset(64, 104);
+
 	speed_x = 0.0f;
 	speed_y = 0.0f;
 

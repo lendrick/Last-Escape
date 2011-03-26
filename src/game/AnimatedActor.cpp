@@ -24,10 +24,24 @@ void AnimatedActor::init() {
 
 void AnimatedActor::setImage(sf::Image & image) 
 {
+	setFrameSize(0, 0);
 	this->sprite.SetImage(image);
 	this->currentAnimation = NULL;
 }
 
+Animation * AnimatedActor::addAnimation(std::string name) {
+	if(frame_w == 0 || frame_h == 0) {
+		cout << "ERROR: Must set frame size before adding animation.\n";
+	}
+	Animation* a = new Animation(this->sprite);
+	this->animations[name] = a;
+	a->setFrameSize(frame_w, frame_h);
+}
+
+void AnimatedActor::setFrameSize(int fw, int fh) {
+	frame_w = fw;
+	frame_h = fh;
+}
 
 void AnimatedActor::draw()
 {
@@ -46,12 +60,15 @@ void AnimatedActor::draw()
 	Actor::draw();
 }
 
-void AnimatedActor::setCurrentAnimation(std::string name)
+void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
 {
 	if(this->currentAnimation != this->animations[name])
 	{
 		this->currentAnimation = this->animations[name];
 		this->currentAnimation->updateFrame();
+		if(reset)
+			this->currentAnimation->reset();
+		
 		cout << name << endl;
 	}
 }
