@@ -47,7 +47,7 @@ void Actor::getBoundingBox(int &x1, int &y1, int &x2, int &y2) {
 	x1 = x - xOrigin;
 	y1 = y - yOrigin;
 	x2 = x1 + width;
-	y2 = y1 + heightl
+	y2 = y1 + height;
 }
 
 bool Actor::isColliding(Actor * otherActor) {
