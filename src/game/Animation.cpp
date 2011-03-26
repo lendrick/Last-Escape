@@ -101,7 +101,10 @@ void Animation::updateFrame()
 		this->sprite.SetSubRect(frames.at(frameIterator).rect );
 	else
 		cout << "no frames!" << endl;
+	
+	/*
 	cout << name << " " << frameIterator << ":" << frames.at(frameIterator).number << 
 		" (" << frames.at(frameIterator).timeToNextFrame << ")\n";
+		*/
 	
 }

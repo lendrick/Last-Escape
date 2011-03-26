@@ -45,9 +45,7 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	if (!image.LoadFromFile("images/xeon.png"))
-		printf("failed to load images/xeon.png\n");
-	this->setImage(image);
+	this->setImage(*xeonImage);
 	
 	width = 24;
 	height = 48;
@@ -238,16 +236,7 @@ void Player::update(float dt) {
 		this->setCurrentAnimation("idle"); 
 	}
 
-	if (facing_direction == FACING_RIGHT)
-	{
-		sprite.FlipX(false);
-		//sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
-	else if (facing_direction == FACING_LEFT)
-	{
-		sprite.FlipX(true);
-		//sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
+	updateSpriteFacing();
 
 	if (speed_y == terminal_velocity)
 		sprite.Rotate(360.f*dt);
@@ -258,12 +247,7 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
-	/*
-	sprite.SetPosition(
-		0.5f + (int)(pos_x - game_map->cam_x - width/2),
-		0.5f + (int)(pos_y - game_map->cam_y - height));
-//	App->Draw(sprite);
-*/
+
 	AnimatedActor::draw();
 }
 

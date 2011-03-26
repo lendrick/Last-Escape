@@ -29,6 +29,10 @@ Sound * deathSound = new Sound();
 Sound * bulletHitSound = new Sound();
 Sound * enemyDeathSound = new Sound();
 
+sf::Image * xeonImage;
+sf::Image * walkerImage;
+sf::Image * flyerImage;
+
 
 void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -58,6 +62,17 @@ void cleanup() {
 	}
 }
 
+sf::Image * loadImage(std::string filename) 
+{
+	sf::Image * img = new sf::Image;
+	if(!img->LoadFromFile(filename)) {
+		cout << "Failed to load image " << filename << "\n";
+		return NULL;
+	}
+	
+	return img;
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -74,6 +89,11 @@ int main()
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
 
+	xeonImage = loadImage("images/xeon.png");
+	walkerImage = loadImage("images/walker.png");
+	flyerImage = loadImage("images/flyer.png");
+	
+	
 
 	// Create game objects
 	game_map = new Map();
@@ -84,8 +104,7 @@ int main()
 	sf::Clock Clock;
 
 	// Create Animation test
-	sf::Image xeon;
-	xeon.LoadFromFile("images/xeon.png");
+
 	backgroundMusic->playSound();
 
 	ui_init();

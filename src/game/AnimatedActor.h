@@ -18,6 +18,8 @@ public:
 	void resetCurrentAnimation();
 	Animation * addAnimation(std::string name);
 	void setFrameSize(int fw, int fh);
+	void updateSpriteFacing();
+	
 protected:
 	void flipDirection();
 	int facing_direction;
