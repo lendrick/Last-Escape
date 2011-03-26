@@ -68,6 +68,7 @@ int main()
 {
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
 
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
@@ -104,7 +105,6 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
-		game_map->renderLandscape();
 		game_map->renderBackground();
 		renderActors();
 		game_map->renderForeground();

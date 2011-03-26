@@ -219,9 +219,10 @@ void Player::update(float dt) {
 
 	// Compute animations:
 
-	if(time < last_shoot_time + shoot_duration) {
+	if(time - last_shoot_time < shoot_duration) {
 		this->setCurrentAnimation("shoot");
-	} else if (!isGrounded() && speed_y != 0)
+	} 
+	else if (!isGrounded() && speed_y != 0)
 	{
 		if(speed_y < 0)
 			this->setCurrentAnimation("jump");
