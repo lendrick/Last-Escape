@@ -12,6 +12,13 @@ Sound::Sound()
 {
 }
 
+Sound::Sound(string filename) {
+	loadSound(filename);
+}
+
+Sound::~Sound() {
+}
+
 bool Sound::loadSound(string filename)
 {
 	return song.OpenFromFile(("audio/" + filename).c_str());

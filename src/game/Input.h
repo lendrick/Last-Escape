@@ -9,6 +9,8 @@ public:
 	bool jump();
 	bool quit();
 	bool shoot();
+	bool shooting();
+	bool jumping();
 	
 private:
 	void initFrame();
