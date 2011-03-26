@@ -6,6 +6,7 @@
 ///
 struct Frame
 {
+	int number;
 	sf::IntRect rect;
 	float timeToNextFrame;
 };
@@ -22,6 +23,7 @@ public:
 	void setFrameSize(int fw, int fh);
 	void addFrame(int num, float duration);
 	void setLoop(bool loop);
+	void reset();
 
 	/// Added for testing purposes.
 	/// TODO read animations from a config file.
