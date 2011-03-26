@@ -9,6 +9,7 @@
 #include "Collectible.h"
 #include "Enemy.h"
 #include "EnemyWalker.h"
+#include "Particles.h"
 
 Map::Map() {
 	
@@ -48,6 +49,8 @@ Map::Map() {
 	for (float y = 270; y < 360; y += 16)
 		for (float x = 256; x < 768; x += 16)
 			(new CollectiblePill())->setPos(x, y);
+
+	(new ParticleEmitter())->setPos(1136, 448);
 }
 
 void Map::loadTileset(string filename) {
