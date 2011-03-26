@@ -15,11 +15,13 @@ public:
 
 	virtual void update(float dt);
 	virtual void draw();
+	virtual void die();
+	virtual void collide(Actor & otherActor);
+	void init();
 
 	void jump();
 	void shoot();
 
-	float anim_time;
 	float last_shoot_time;
 
 	float energy;

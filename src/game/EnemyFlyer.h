@@ -1,3 +1,14 @@
 #pragma once
+#include "Enemy.h"
 
-// This is the Flyer enemy class.  Inherits Enemy.
+class EnemyFlyer : public Enemy
+{
+public:
+	EnemyFlyer();
+	~EnemyFlyer();
+	virtual void update(float dt);
+private:
+	float fly_speed;
+	float speed_x;
+	float speed_y;
+}; 

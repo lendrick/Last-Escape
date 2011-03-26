@@ -16,6 +16,7 @@ public:
 	Animation(sf::Sprite&);
 	virtual ~Animation();
 	void update(float dt); //TODO may return if it finished
+	void updateFrame(); //set's the sprite's subRect to the current Frame
 	bool getIsFinished();
 	void setIsFinished(bool);
 
@@ -24,6 +25,7 @@ public:
 	/// This function loads the coords for the xeon idle animation
 	void toDefaultXeonWalkAnimation();
 	void toDefaultXeonJumpAnimation();
+	void toDefaultXeonIdleAnimation();
 
 private:
 	vector<Frame> frames;		///< Contains the frames for the Animation.

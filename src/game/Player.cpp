@@ -24,12 +24,24 @@ const float energy_cost_jump = 10.f;
 const float energy_cost_shoot = 5.f;
 const float energy_recharge_rate = 5.f; // units per second
 
-Player::Player() {
-	anim_time = 0.0f;
+Player::Player()
+: AnimatedActor() {
+	init();
+	if (!image.LoadFromFile("images/xeon.png"))
+		printf("failed to load images/xeon.png\n");
+	this->setImage(image);
+	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+}
+	
+Player::~Player() {
+
+}
+
+void Player::init() {
 	last_shoot_time = -100.f;
-
+	
 	energy = energy_max = 100.f;
-
+	
 	pos_x = 64.0f;
 	pos_y = 0.0f;
 	facing_rightwards = true;
@@ -39,11 +51,13 @@ Player::Player() {
 	yOrigin = height;
 	speed_x = 0.0f;
 	speed_y = 0.0f;
-	if (!image.LoadFromFile("images/xeon.png"))
+
+	setSize(width, height);
+/*	if (!image.LoadFromFile("images/xeon.png"))
 		printf("failed to load images/xeon.png\n");
 	sprite.SetImage(image);
 	sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
-
+*/
 	// Set Animations
 	Animation* walkAnimation = new Animation(this->sprite);
 	walkAnimation->toDefaultXeonWalkAnimation();
@@ -53,11 +67,11 @@ Player::Player() {
 	jumpAnimation->toDefaultXeonJumpAnimation();
 	this->animations["jump"] = jumpAnimation;
 
-	this->setCurrentAnimation("jump");
-}
-	
-Player::~Player() {
+	Animation* idleAnimation = new Animation(this->sprite);
+	idleAnimation->toDefaultXeonIdleAnimation();
+	this->animations["idle"] = idleAnimation;
 
+	this->setCurrentAnimation("idle");
 }
 
 void Player::jump() {
@@ -79,8 +93,7 @@ void Player::shoot() {
 	if (energy < energy_cost_shoot)
 		return;
 
-	if (anim_time - last_shoot_time > shoot_reload_timer) {
-		last_shoot_time = anim_time;
+	if (last_shoot_time > shoot_reload_timer) {
 		energy -= energy_cost_shoot;
 
 		Actor* bullet = new PlayerBullet(facing_rightwards);
@@ -135,12 +148,12 @@ void Player::update(float dt) {
 	speed_y = delta_y / dt;
 
 	// Compute animations:
-
+/*
 	if (anim_time < last_shoot_time + SPRITE_SHOOT_COUNT/SPRITE_SHOOT_SPEED)
 	{
-		this->setCurrentAnimation("shoot"); //TODO add this animation
+		this->setCurrentAnimation("walk"); //TODO add shoot animation
 	}
-	else if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y < 0)
+	else*/ if (!game_map->isGrounded(pos_x, pos_y, width) && speed_y != 0)
 	{
 		this->setCurrentAnimation("jump");
 	}
@@ -150,7 +163,7 @@ void Player::update(float dt) {
 	}
 	else
 	{
-		this->setCurrentAnimation("idle"); //TODO add animation
+		this->setCurrentAnimation("idle"); 
 	}
 
 	if (speed_x > 0)
@@ -182,4 +195,13 @@ void Player::draw() {
 	App->Draw(sprite);
 }
 
+void Player::collide(Actor & otherActor) 
+{
+	if(otherActor.isEnemy()) {
+		die();
+	}
+}
 
+void Player::die() {
+	init();
+}

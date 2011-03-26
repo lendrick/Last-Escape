@@ -26,6 +26,7 @@ void AnimatedActor::setImage(sf::Image & image)
 	this->sprite.SetImage(image);
 	this->sprite.SetX(64.f);
 	this->sprite.SetY(400.f);
+	this->currentAnimation = NULL;
 	//	this->sprite.Resize(24, 48);
 }
 
@@ -49,5 +50,9 @@ void AnimatedActor::update(float dt)
 void AnimatedActor::setCurrentAnimation(std::string name)
 {
 	if(this->currentAnimation != this->animations[name])
-	this->currentAnimation = this->animations[name];
+	{
+		this->currentAnimation = this->animations[name];
+		this->currentAnimation->updateFrame();
+		cout << name << endl;
+	}
 }
