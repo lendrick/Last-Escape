@@ -33,3 +33,8 @@ void Sound::playSound()
 	//std::cout << "play sound " << file << "\n";
 	song.Play();
 }
+
+void Sound::setLoop(bool loop)
+{
+	song.SetLoop(loop);
+}

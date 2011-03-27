@@ -101,8 +101,10 @@ int main(int argc, char** argv)
 
 
 	if (enableMusic)
+	{
+		soundCache["01 Game-Game_0.ogg"]->setLoop(true);
 		soundCache["01 Game-Game_0.ogg"]->playSound();
-
+	}
 	ui_init();
 
 	sf::Clock Clock;
