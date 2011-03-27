@@ -344,7 +344,7 @@ void respawn()
 }
 
 void Player::die() {
-	if (godMode)
+	if (godMode || dying)
 		return;
 
 	if(armor == 0)

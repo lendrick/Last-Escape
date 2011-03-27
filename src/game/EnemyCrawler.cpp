@@ -46,16 +46,22 @@ EnemyCrawler::EnemyCrawler()
 	tmp->setDoLoop(true);
 	
 	tmp = addAnimation("die");
+	tmp->addFrame(8, .07f);
 	tmp->addFrame(7, .07f);
 	tmp->addFrame(6, .07f);
 	tmp->addFrame(5, .07f);
-	tmp->addFrame(4, .07f);
+	
+	tmp = addAnimation("hurt");
+	tmp->addFrame(4, 0.07f);
+
 	
 	setCurrentAnimation("walk");
 }
 
 void EnemyCrawler::update(float dt) {
 	if(!dying) {
+		
+		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
 		const float vision_range = 320;
 		const float vision_min_range = 32;
@@ -92,6 +98,15 @@ void EnemyCrawler::draw() {
 	AnimatedActor::draw();
 }
 
+void EnemyCrawler::doDamage(float damage) {
+	life -= damage;
+	if(life <= 0) 
+		die();
+	else 
+		setCurrentAnimation("hurt");
+
+}
+
 void EnemyCrawler::die() {
 	setCanCollide(false);
 	dying = true;
@@ -107,6 +122,10 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 		destroy();
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
 		ball->setPos(pos_x-16, pos_y-16);
+	}
+	
+	if(anim == "hurt") {
+		setCurrentAnimation("walk");
 	}
 }
 
