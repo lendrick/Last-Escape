@@ -15,6 +15,7 @@
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
+#include "Actor.h"
 #include <cstdlib>
 
 Map::Map(const char* mapName) {
@@ -74,6 +75,7 @@ void Map::loadMap(string filename) {
 			
 		}
 	}
+	clear();
 	
 	TiXmlDocument doc;
 	if (!doc.LoadFile(("maps/" + filename).c_str()))
@@ -493,6 +495,13 @@ void Map::renderLandscape() {
 	App->Draw(landscape);
 }
 
-Map::~Map() {
+void Map::clear() {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+		Actor * actor = *it;
+		if(!actor->isPlayer()) actor->destroy();
+	}
+}
 
+Map::~Map() {
+	clear();
 }

@@ -54,6 +54,7 @@ public:
 	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
+	void clear();
 	
 	void actorDestroyed(Actor * actor);
 
