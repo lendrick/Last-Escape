@@ -28,6 +28,8 @@ public:
 	void shoot();
 	void crouch();
 
+	void upgradeWeapon();
+
 	int current_weapon;
 
 	float time;

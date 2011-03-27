@@ -50,7 +50,7 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
 		destroy();
-		((Player&)otherActor).current_weapon += 1;
+		((Player&)otherActor).upgradeWeapon();
 	}
 }
 
