@@ -54,6 +54,8 @@ public:
 	virtual bool isStartPoint() { return false; }
 	virtual bool isExitPoint() { return false; }
 	virtual bool isSpawnPoint() { return false; }
+	virtual bool isTeleportEnter() { return false; }
+	virtual bool isTeleportExit() { return false; }
 
 	sf::Image image;
 	sf::Sprite sprite;
