@@ -324,12 +324,11 @@ void Player::collide(Actor & otherActor)
 	}
 	
 	if(otherActor.isExitPoint()) {
+		currentStart = NULL;
 		std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
 		if(!mapname.empty()) {
 			game_map->loadMap(mapname);
 		}
-		currentStart = NULL;
-		init();
 	}
 	
 	if (otherActor.isCollectible() || otherActor.isExitPoint() || otherActor.isTeleportEnter())
