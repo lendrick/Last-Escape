@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 	}
 
 	// Create main window
-	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics", sf::Style::Close);
 	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
 		(sf::VideoMode::GetDesktopMode().Height/2)-260);
 	App->SetFramerateLimit(60);
