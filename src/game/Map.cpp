@@ -397,8 +397,8 @@ bool Map::isSolid(int x, int y) {
 
 void Map::renderBackground() {
 	if(cameraFollow != NULL) {
-		game_map->cam_x = (int)cameraFollow->pos_x - 320;
-		game_map->cam_y = (int)cameraFollow->pos_y - 240;
+		game_map->cam_x = std::max(0, (int)cameraFollow->pos_x - (int)App->GetWidth()/2);
+		game_map->cam_y = std::max(0, (int)cameraFollow->pos_y - (int)App->GetHeight()/2);
 	}
 	
 	// which tile is at the topleft corner of the screen?
