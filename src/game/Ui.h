@@ -3,9 +3,6 @@
 #include "SFML/System.hpp"
 #include "Player.h"
 
-extern sf::Font fontUI;
-extern int focused_widget;
-
 #define UI_CONTAINER	0
 #define UI_BUTTON	1
 #define UI_LABEL	2
@@ -21,6 +18,7 @@ public:
 	void getPos(float &px, float &py);
 
 	void setText(const sf::Unicode::Text &Text);
+	sf::String getText();
 	void setTextColor(int r, int g, int b);
 	void setTextSize(int sz);
 
@@ -30,6 +28,7 @@ public:
 	void hide();
 	bool isHidden();
 	bool isChecked();
+	bool toggleBg();
 
 	int getId();
 
@@ -58,7 +57,16 @@ protected:
 	float pos_x, pos_y;
 	bool checked;
 	bool hidden;
+	bool has_bg;
 };
+
+extern sf::Font fontUI;
+extern int focused_widget;
+extern Widget *ui_base;
+extern Widget *ui_energy;
+extern Widget *ui_hud;
+extern Widget *ui_menu;
+extern Widget *ui_pause;
 
 void ui_init(void);
 int ui_event(sf::Event &Event);
@@ -67,4 +75,6 @@ void ui_exit(void);
 void ui_start();
 void ui_togglePause();
 void ui_showMenu();
+void ui_showOptions();
 void ui_quit();
+bool ui_menuOpen();

@@ -17,9 +17,9 @@ AnimatedActor()
 	speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
 	
 	width = 16;
-	height = 8;
+	height = 20;
 	xOrigin = width/2;
-	yOrigin = height;
+	yOrigin = height/2;
 	setDrawOffset(16, 8);
 	setFrameSize(16, 16);
 	
