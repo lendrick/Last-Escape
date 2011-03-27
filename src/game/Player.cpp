@@ -327,7 +327,7 @@ void Player::collide(Actor & otherActor)
 	}
 }
 
-void bla()
+void respawn()
 {
 	ui_showMenu();
 	game_map->loadMap(game_map->currentFilename);
@@ -359,9 +359,8 @@ void Player::onAnimationComplete(std::string anim) {
 			CollectibleEnergyBall * ball = new CollectibleEnergyBall();
 			ball->setPos(pos_x, pos_y-30);
 		} else {
-			lifes = start_lifes +1; //loses another life on the game over screen for some reason
-									//not enough time left to fix it properly!
-			ui_popupImage("images/game_over.png", bla);
+			lifes = start_lifes; 
+			ui_popupImage("images/game_over.png", respawn);
 		}
 	}
 }
