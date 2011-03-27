@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "SoundCache.h"
+#include "Collectible.h"
 
 EnemyFlyer::EnemyFlyer()
 :Enemy()
@@ -42,6 +43,12 @@ EnemyFlyer::EnemyFlyer()
 	tmp->addFrame(2, .2f);
 	tmp->setDoLoop(true);
 	
+	tmp = addAnimation("die");
+	tmp->addFrame(4, .1f);
+	tmp->addFrame(5, .1f);
+	tmp->addFrame(6, .1f);
+	tmp->addFrame(7, .1f);
+	
 	setCurrentAnimation("fly");	
 	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
@@ -77,9 +84,16 @@ void EnemyFlyer::die() {
 	dying = true;
 	speed_x = 0;
 	speed_y = 0;
-	//setCurrentAnimation("die");
+	setCurrentAnimation("die");
 	fireSound->playSound();
-	destroy();
 }
 
+void EnemyFlyer::onAnimationComplete(std::string anim) {
+	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
+	if(anim == "die") {
+		destroy();
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x, pos_y-16);
+	}
+}
 
