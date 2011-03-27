@@ -42,3 +42,9 @@ extern sf::Image * xeonImage;
 extern sf::Image * walkerImage;
 extern sf::Image * flyerImage;
 extern sf::Image * xeonBulletImage;
+extern sf::Image * plasmaBallImage;
+extern sf::Image * smallEnergyImage;
+extern sf::Image * bigEnergyImage;
+extern sf::Image * shieldImage;
+
+extern bool paused;

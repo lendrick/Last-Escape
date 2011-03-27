@@ -244,8 +244,10 @@ void ui_togglePause()
 {
 	if (ui_pause->isHidden()) {
 		ui_pause->show();
+		paused = true;
 	}else{
 		ui_pause->hide();
+		paused = false;
 	}
 }
 

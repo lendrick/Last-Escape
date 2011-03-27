@@ -2,12 +2,32 @@
 
 #include "Player.h"
 
-Collectible::Collectible() {
+Collectible::Collectible()
+:AnimatedActor()
+{
 }
 
 
-CollectiblePill::CollectiblePill() {
-	setPlaceholder(sf::Color(0, 255, 255), 8, 8);
+void Collectible::init() 
+{
+	width = 32;
+	height = 32;
+	xOrigin = width/2;
+	yOrigin = height/2;
+	setDrawOffset(16, 16);
+	setFrameSize(32, 32);
+	
+	Animation * tmp;
+	tmp = addAnimation("image");
+	tmp->addFrame(0, .1f);
+	setCurrentAnimation("image");
+}
+
+CollectiblePill::CollectiblePill()
+:Collectible()
+{
+	this->setImage(*smallEnergyImage);
+	init();
 }
 
 void CollectiblePill::collide(Actor& otherActor) {
@@ -19,8 +39,11 @@ void CollectiblePill::collide(Actor& otherActor) {
 }
 
 
-CollectibleWeaponUpgrade::CollectibleWeaponUpgrade() {
-	setPlaceholder(sf::Color(0, 255, 255), 16, 16);
+CollectibleWeaponUpgrade::CollectibleWeaponUpgrade()
+:Collectible()
+{
+	this->setImage(*plasmaBallImage);
+	init();
 }
 
 void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
@@ -32,8 +55,10 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 }
 
 
-CollectibleArmor::CollectibleArmor() {
-	setPlaceholder(sf::Color(0, 255, 255), 16, 16);
+CollectibleArmor::CollectibleArmor()
+:Collectible() {
+	this->setImage(*shieldImage);
+	init();
 }
 
 void CollectibleArmor::collide(Actor& otherActor) {

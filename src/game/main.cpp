@@ -33,6 +33,12 @@ sf::Image * xeonImage;
 sf::Image * walkerImage;
 sf::Image * flyerImage;
 sf::Image * xeonBulletImage;
+sf::Image * plasmaBallImage;
+sf::Image * smallEnergyImage;
+sf::Image * bigEnergyImage;
+sf::Image * shieldImage;
+
+bool paused = false;
 
 
 void update(Player& player, float dt) {
@@ -74,6 +80,17 @@ sf::Image * loadImage(std::string filename)
 	return img;
 }
 
+void load_images() {
+	xeonImage = loadImage("images/xeon.png");
+	walkerImage = loadImage("images/walker.png");
+	flyerImage = loadImage("images/flyer.png");
+	xeonBulletImage = loadImage("images/xeon-bullet.png");
+	plasmaBallImage = loadImage("images/plasmaball.png");
+	smallEnergyImage = loadImage("images/smallenergy.png");
+	bigEnergyImage = loadImage("images/bigenergy.png");
+	shieldImage = loadImage("images/shield.png");
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -101,10 +118,7 @@ int main(int argc, char** argv)
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
 
-	xeonImage = loadImage("images/xeon.png");
-	walkerImage = loadImage("images/walker.png");
-	flyerImage = loadImage("images/flyer.png");
-	xeonBulletImage = loadImage("images/xeon-bullet.png");
+	load_images();
 
 	// Create game objects
 	game_map = new Map(mapName);
@@ -137,7 +151,10 @@ int main(int argc, char** argv)
 
 		// Clear screen
 		App->Clear();
-		update(p1, frameTime);
+		
+		if(!paused) 
+			update(p1, frameTime);
+		
 		cleanup();
 
 		game_map->renderLandscape();
