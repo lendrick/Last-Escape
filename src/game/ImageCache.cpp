@@ -1,6 +1,6 @@
 #include "ImageCache.h"
 
-#include <list>
+#include <map>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -17,6 +17,11 @@ ImageCache::~ImageCache()
 		images.erase(i);
 		delete img;
 	}
+}
+
+sf::Image * ImageCache::operator[](std::string name)
+{
+	return getImage(name);
 }
 
 sf::Image * ImageCache::getImage(std::string name)

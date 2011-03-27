@@ -16,6 +16,7 @@
 #include "Sound.h"
 #include "Ui.h"
 #include "ImageCache.h"
+#include "SoundCache.h"
 
 list<Actor *> actors;
 Map * game_map;
@@ -23,14 +24,8 @@ sf::RenderWindow *App;
 Player *g_player;
 Input input;
 
-Sound * backgroundMusic = new Sound("01 Game-Game_0.ogg");
-Sound * fireSound = new Sound("shoot.ogg");
-Sound * damageSound = new Sound();
-Sound * deathSound = new Sound();
-Sound * bulletHitSound = new Sound();
-Sound * enemyDeathSound = new Sound();
-
 ImageCache imageCache;
+SoundCache soundCache;
 
 bool paused = false;
 
@@ -90,8 +85,6 @@ int main(int argc, char** argv)
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
 
-	load_images();
-
 	// Create game objects
 	game_map = new Map(mapName);
 	Player p1;
@@ -100,7 +93,7 @@ int main(int argc, char** argv)
 
 
 	if (enableMusic)
-		backgroundMusic->playSound();
+		soundCache["01 Game-Game_0.ogg"]->playSound();
 
 	ui_init();
 

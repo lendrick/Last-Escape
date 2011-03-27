@@ -3,6 +3,7 @@
 
 #include "Map.h"
 #include "AnimatedActor.h"
+#include "Sound.h"
 #include "globals.h"
 
 class Player : public AnimatedActor {
@@ -36,6 +37,7 @@ public:
 	float shoot_duration;
 	
 	int armor;
+	Sound * fireSound;
 };
 
 

@@ -4,6 +4,7 @@
 #include "Sound.h"
 #include "globals.h"
 #include "ImageCache.h"
+#include "SoundCache.h"
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
@@ -28,7 +29,7 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	this->setImage("xeon.png");
+	setImage("xeon.png");
 	
 	width = 24;
 	height = 48;
@@ -39,8 +40,10 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
-	this->loadAnimationsFromFile("xeon.xml");
+	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
+	
+	fireSound = soundCache["shoot.ogg"];
 
 	init();
 }
