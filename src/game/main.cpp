@@ -22,7 +22,7 @@
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
-Player *g_player;
+Player *g_player = 0;
 Input input;
 bool godMode = false;
 
@@ -93,12 +93,7 @@ int main(int argc, char** argv)
 		printf("failed to load font\n");
 
 	// Create game objects
-	game_map = new Map("");
-	Player p1;
-	
-	g_player = &p1;
-	game_map->setCameraFollow(g_player);
-
+	game_map = new Map(mapName);
 
 	if (enableMusic)
 	{
@@ -128,7 +123,7 @@ int main(int argc, char** argv)
 		App->Clear();
 		
 		if(!paused) 
-			update(p1, frameTime);
+			update(*g_player, frameTime);
 		
 		cleanup();
 
@@ -137,12 +132,13 @@ int main(int argc, char** argv)
 		renderActors();
 		game_map->renderForeground();
 
-		ui_render(p1);
+		ui_render(*g_player);
 
 		// Finally, display the rendered frame on screen
 		App->Display();
 	}
 
+	delete g_player;
 	delete game_map;
 	delete App;
 
