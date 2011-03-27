@@ -26,7 +26,7 @@ void Collectible::init()
 CollectiblePill::CollectiblePill()
 :Collectible()
 {
-	this->setImage(*smallEnergyImage);
+	this->setImage("smallenergy.png");
 	init();
 }
 
@@ -42,7 +42,7 @@ void CollectiblePill::collide(Actor& otherActor) {
 CollectibleWeaponUpgrade::CollectibleWeaponUpgrade()
 :Collectible()
 {
-	this->setImage(*plasmaBallImage);
+	this->setImage("plasmaball.png");
 	init();
 }
 
@@ -57,7 +57,7 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 
 CollectibleArmor::CollectibleArmor()
 :Collectible() {
-	this->setImage(*shieldImage);
+	this->setImage("shield.png");
 	init();
 }
 

@@ -1,10 +1,12 @@
 #include "AnimatedActor.h"
+#include "ImageCache.h"
+#include "globals.h"
 
-AnimatedActor::AnimatedActor(sf::Image& image)
+AnimatedActor::AnimatedActor(std::string filename)
 :Actor()
 {
 	init();
-	setImage(image);
+	setImage(filename);
 }
 
 AnimatedActor::AnimatedActor()
@@ -22,10 +24,10 @@ void AnimatedActor::init() {
 	this->currentAnimation = NULL;
 }
 
-void AnimatedActor::setImage(sf::Image & image) 
+void AnimatedActor::setImage(std::string filename) 
 {
 	setFrameSize(0, 0);
-	this->sprite.SetImage(image);
+	this->sprite.SetImage(*(imageCache.getImage(filename)));
 	this->currentAnimation = NULL;
 }
 

@@ -6,7 +6,7 @@
 PlayerBullet::PlayerBullet(int facing, float angleVariation):
 AnimatedActor()
 {
-	this->setImage(*xeonBulletImage);
+	this->setImage("xeon-bullet.png");
 	
 	facing_direction = facing;
 

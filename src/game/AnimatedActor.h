@@ -12,9 +12,9 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(sf::Image&);
+	AnimatedActor(std::string filename);
 	AnimatedActor();
-	void setImage(sf::Image&);
+	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;

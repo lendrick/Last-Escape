@@ -3,6 +3,7 @@
 #include "PlayerBullet.h"
 #include "Sound.h"
 #include "globals.h"
+#include "ImageCache.h"
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
@@ -27,7 +28,7 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	this->setImage(*xeonImage);
+	this->setImage("xeon.png");
 	
 	width = 24;
 	height = 48;

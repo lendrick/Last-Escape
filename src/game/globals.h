@@ -16,6 +16,7 @@ class Map;
 class Player;
 class Input;
 class Sound;
+class ImageCache;
 
 extern list<Actor *> actors;
 extern Map *game_map;
@@ -38,13 +39,6 @@ extern Sound * deathSound;
 extern Sound * bulletHitSound;
 extern Sound * enemyDeathSound;
 
-extern sf::Image * xeonImage;
-extern sf::Image * walkerImage;
-extern sf::Image * flyerImage;
-extern sf::Image * xeonBulletImage;
-extern sf::Image * plasmaBallImage;
-extern sf::Image * smallEnergyImage;
-extern sf::Image * bigEnergyImage;
-extern sf::Image * shieldImage;
-
 extern bool paused;
+
+extern ImageCache imageCache;

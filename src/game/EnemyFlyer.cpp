@@ -5,7 +5,7 @@
 EnemyFlyer::EnemyFlyer()
 :Enemy()
 {
-	setImage(*flyerImage);
+	setImage("flyer.png");
 	patrolLength = 100;
 	
 	fly_speed = 200.f;

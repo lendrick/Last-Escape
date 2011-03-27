@@ -15,6 +15,7 @@
 #include "Input.h"
 #include "Sound.h"
 #include "Ui.h"
+#include "ImageCache.h"
 
 list<Actor *> actors;
 Map * game_map;
@@ -29,14 +30,7 @@ Sound * deathSound = new Sound();
 Sound * bulletHitSound = new Sound();
 Sound * enemyDeathSound = new Sound();
 
-sf::Image * xeonImage;
-sf::Image * walkerImage;
-sf::Image * flyerImage;
-sf::Image * xeonBulletImage;
-sf::Image * plasmaBallImage;
-sf::Image * smallEnergyImage;
-sf::Image * bigEnergyImage;
-sf::Image * shieldImage;
+ImageCache imageCache;
 
 bool paused = false;
 
@@ -67,28 +61,6 @@ void cleanup() {
 			actors.erase(tmp);
 		}
 	}
-}
-
-sf::Image * loadImage(std::string filename) 
-{
-	sf::Image * img = new sf::Image;
-	if(!img->LoadFromFile(filename)) {
-		cout << "Failed to load image " << filename << "\n";
-		return NULL;
-	}
-	
-	return img;
-}
-
-void load_images() {
-	xeonImage = loadImage("images/xeon.png");
-	walkerImage = loadImage("images/walker.png");
-	flyerImage = loadImage("images/flyer.png");
-	xeonBulletImage = loadImage("images/xeon-bullet.png");
-	plasmaBallImage = loadImage("images/plasmaball.png");
-	smallEnergyImage = loadImage("images/smallenergy.png");
-	bigEnergyImage = loadImage("images/bigenergy.png");
-	shieldImage = loadImage("images/shield.png");
 }
 
 ////////////////////////////////////////////////////////////

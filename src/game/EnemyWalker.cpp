@@ -6,7 +6,7 @@
 EnemyWalker::EnemyWalker()
 :Enemy()
 {	
-	setImage(*walkerImage);
+	setImage("walker.png");
 	walk_speed = 120.f;
 	
 	speed_x = 0;
