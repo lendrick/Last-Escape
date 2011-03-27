@@ -34,7 +34,6 @@ Widget::Widget(int tp, Widget *par) {
 	txtPos = 0;
 	sval = 0.f;
 	slide = NULL;
-	
 	if (tp == UI_CONTAINER) {
 		if (ui_base != NULL) {
 			parent = ui_base;
@@ -524,6 +523,7 @@ void ui_hidePopup()
 
 void ui_showCredits()
 {
+	ui_menu->hide();
 	ui_popupImage("images/game_over.png",ui_showMenu);
 }
 
