@@ -6,6 +6,7 @@
 
 set (folders
 		.
+		tinyxml
 		#add all subdirectories here, one per line
 		)
 
@@ -15,10 +16,6 @@ foreach (folder ${folders})
 	file (GLOB srcs RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${folder}/*.cpp")
 
 	#store sourcefile into the variable we gonna use
-	list (APPEND game_srcs ${srcs})
-
-	#add TinyXML
-	file (GLOB srcs RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${folder}/tinyxml/*.cpp")
 	list (APPEND game_srcs ${srcs})
 
 	#store the include directories
@@ -34,15 +31,9 @@ set (game_incs ${game_incs} PARENT_SCOPE)
 include_directories (${game_incs})
 
 #add our executable
-#of course you have to add a sourcefile before doing that, just uncomment the following lines as soon as there is one
 add_executable (xeonergy ${game_srcs})
 
 set_target_properties (xeonergy PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
-#linking to libraries. same as above
+#linking to libraries
 target_link_libraries (xeonergy ${SFML_LIBRARIES})
-
-#instead, this will be used to make sure everything works
-#message (STATUS "INCLUDE DIRECTORIES: ${SFML_INCLUDE_DIR} ${game_incs}")
-#message (STATUS "SOURCE FILES: ${game_srcs}")
-#message (STATUS "LIBRARIES: ${SFML_LIBRARIES}")

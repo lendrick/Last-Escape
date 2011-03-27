@@ -13,10 +13,6 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall -Wextra -Wno-unused")
 SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
 
 #find the required libraries
-#not sure whether these are required:
-#find_package (Freetype REQUIRED)
-#find_package (Sndfile REQUIRED)
-#find_package (OpenAL REQUIRED)
 find_package (SFML 1.6 COMPONENTS system window graphics audio REQUIRED)
 include_directories (${SFML_INCLUDE_DIR})
 
