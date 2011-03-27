@@ -96,6 +96,6 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
 		destroy();
-		// TODO: count energy ball
+		g_player->energyBalls++;
 	}
 }
