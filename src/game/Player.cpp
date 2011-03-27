@@ -130,8 +130,17 @@ void Player::shoot() {
 		else {
 			bullet->setPos(pos_x, pos_y - 30);
 		}
-  	setCurrentAnimation("shoot");
-		resetCurrentAnimation();
+		
+		
+		if(walking) {
+			setCurrentAnimation("walkshoot");
+		}
+		else {
+			setCurrentAnimation("shoot");
+		}
+				
+				
+		//resetCurrentAnimation();
 	}
 }
 
@@ -144,6 +153,7 @@ void Player::update(float dt) {
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+	walking = false;
 	
 	time += dt;
 
@@ -174,6 +184,10 @@ void Player::update(float dt) {
 		else if (speed_x < -speed_delta_decel*dt) speed_x += speed_delta_decel*dt;
 		else speed_x = 0.0;
 	}
+	
+	if(speed_x !=0) {
+		walking = true;
+	}
 
 	if (input.jumping())
 		jump(dt);
@@ -199,7 +213,12 @@ void Player::update(float dt) {
 	// Compute animations:
 
 	if(time - last_shoot_time < shoot_duration) {
-		this->setCurrentAnimation("shoot");
+		if(walking) {
+			this->setCurrentAnimation("walkshoot");
+		}
+		else {
+			this->setCurrentAnimation("shoot");
+		}
 	} 
 	else if (!isGrounded() && speed_y != 0)
 	{
@@ -210,6 +229,7 @@ void Player::update(float dt) {
 	}
 	else if (speed_x != 0)
 	{
+		walking = true;
 		this->setCurrentAnimation("walk");
 	} 
 	else if(crouched) {
