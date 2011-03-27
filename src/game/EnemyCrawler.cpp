@@ -105,7 +105,7 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 	if(anim == "die") {
 		destroy();
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-16);
+		ball->setPos(pos_x-16, pos_y-16);
 	}
 }
 
