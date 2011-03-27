@@ -12,5 +12,9 @@ public:
 	virtual bool isExitPoint() { return true; }
 
 	void collide(Actor& otherActor);
+	void setMap(std::string filename);
+	std::string getMap();
+private:
+	std::string mapname;
 };
 

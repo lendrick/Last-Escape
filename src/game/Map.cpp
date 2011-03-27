@@ -15,6 +15,7 @@
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
+#include <cstdlib>
 
 Map::Map(const char* mapName) {
 	
@@ -173,6 +174,17 @@ void Map::loadMap(string filename) {
 					actor = new SpawnPoint();
 				} else if (type == "exit") {
 					actor = new ExitPoint(w, h); 
+					cout << "Exit point\n";
+					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
+					
+					if(prop != NULL) {
+						std::string mapname;
+						std::string attrname = ((TiXmlElement*)prop)->Attribute("name");
+						if(attrname == "map")
+							mapname = ((TiXmlElement*)prop)->Attribute("value");
+						if (!mapname.empty())
+							dynamic_cast<ExitPoint *>(actor)->setMap(mapname);
+					}
 				} else {
 					printf("unrecognised object type %s\n", type.c_str());
 					continue;
