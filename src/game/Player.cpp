@@ -272,6 +272,12 @@ void Player::collide(Actor & otherActor)
 }
 
 void Player::die() {
-	if(armor == 0) 
-		init();
+	float bug_cost = 30.0f;
+	if(armor == 0)
+	{
+		if(energy < bug_cost) 
+			init();
+		else
+			energy -= bug_cost;
+	}
 }
