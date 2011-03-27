@@ -24,7 +24,11 @@
   </data>
  </layer>
  <objectgroup name="specials" width="150" height="25">
-  <object x="4645" y="670"/>
+  <object name="exit" type="exit" x="4730" y="699" width="28" height="60">
+   <properties>
+    <property name="map" value="credits_map.tmx"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="pills" width="150" height="25">
   <properties>
@@ -87,5 +91,22 @@
   <object x="379" y="118"/>
   <object x="2224" y="367"/>
   <object x="2445" y="716"/>
+ </objectgroup>
+ <objectgroup name="smoke" width="150" height="25">
+  <properties>
+   <property name="type" value="smoke"/>
+  </properties>
+  <object x="432" y="338"/>
+  <object x="119" y="182"/>
+  <object x="854" y="586"/>
+  <object x="537" y="141"/>
+  <object x="1711" y="272"/>
+  <object x="1662" y="590"/>
+  <object x="2857" y="397"/>
+  <object x="3245" y="342"/>
+  <object x="3200" y="718"/>
+  <object x="3824" y="582"/>
+  <object x="4404" y="474"/>
+  <object x="4589" y="580"/>
  </objectgroup>
 </map>
