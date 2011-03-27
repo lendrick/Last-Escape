@@ -20,10 +20,10 @@ BossSpider::BossSpider()
 	life = 5;
 	
 	width = 60;
-	height = 40;
+	height = 64;
 	xOrigin = width/2;
 	yOrigin = height;
-	setDrawOffset(45, 40);
+	setDrawOffset(45, 64);
 	setFrameSize(64, 64);
 	lastShot = 0;
 	shootInterval = 0.5f;

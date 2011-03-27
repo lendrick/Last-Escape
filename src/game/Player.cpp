@@ -367,8 +367,6 @@ void Player::onAnimationComplete(std::string anim) {
 		if(lifes > 0) {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;
 			init();
-			CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-			ball->setPos(pos_x, pos_y-30);
 		} else {
 			lifes = start_lifes; 
 			energyBalls = 0;
