@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="200" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
+  <image source="../images/tileset.png" width="512" height="2048"/>
+ </tileset>
+ <layer name="background" width="200" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+  </data>
+ </layer>
+ <layer name="fringe" width="200" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAeDBOIAAB
+  </data>
+ </layer>
+ <layer name="foreground" width="200" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt2EEKglAYhVFbYjWpac2KBtVuXEK1yN6gQMQrNDDweQ7cqSN/PrRdNUDwcB8Qte4DIv2ATD8g0w/I9AMy/YBMPyAb68e6bNPZvewwMKjVWD+OzfA9uA+WYqwf17JbZ9vGfbAsv3x/9O/lO6iV/1eQ+X8FmX5Aph+Q6Qdk+gGZfkA2dT+en+e/3CEzNFU/duW5+95gbk7lvT3/cRd3AgBU7g08zyuC
+  </data>
+ </layer>
+ <layer name="collision" width="200" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt2jEKgDAQAEHz/0/bCysKihpn4Eib4rZKxgKU8fQF4MX0AU0f0PQBTR/Q9AFNH9D0AW2vj3FwYFb6gKYPaGf2Wx/8jf2Gpg9o+oCmD2j6gKYPaPqAdncfY3PCl9y1t94RmcHRPyRXDgDAzFYDrABf
+  </data>
+ </layer>
+</map>
