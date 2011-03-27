@@ -26,6 +26,7 @@ public:
 	bool loadSound(string filename);
 	void playSound();
 	void setLoop(bool);
+	sf::Sound::Status getStatus();
 	void stop();
 
 };
