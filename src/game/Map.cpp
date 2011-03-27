@@ -448,6 +448,10 @@ void Map::renderForeground() {
 }
 
 void Map::renderLandscape() {
+	// Do nothing if no landscape was specified
+	if (!landscapeImg.GetWidth())
+		return;
+
 	// Draw it four times, aka repeating in X and Y
 	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);
