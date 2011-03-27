@@ -104,5 +104,25 @@
  </layer>
  <objectgroup name="specials" width="200" height="20">
   <object type="start" x="48" y="79"/>
+  <object x="6317" y="364">
+   <properties>
+    <property name="map" value="desert_map.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="walkers" width="200" height="20">
+  <properties>
+   <property name="type" value="walker"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="centipedes" width="200" height="20">
+  <properties>
+   <property name="type" value="centipede"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="flyers" width="200" height="20">
+  <properties>
+   <property name="type" value="flyer"/>
+  </properties>
  </objectgroup>
 </map>
