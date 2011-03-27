@@ -21,6 +21,7 @@ public:
 
 	void jump(float dt);
 	void shoot();
+	void crouch();
 
 	int current_weapon;
 
@@ -35,6 +36,8 @@ public:
 	float speed_y;
 	
 	float shoot_duration;
+	
+	bool crouched;
 	
 	int armor;
 	Sound * fireSound;

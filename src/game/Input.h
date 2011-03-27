@@ -10,8 +10,10 @@ public:
 	bool jump();
 	bool quit();
 	bool shoot();
+	bool crouch();
 	bool shooting();
 	bool jumping();
+	bool crouching();
 
 private:
 	void initFrame();
@@ -20,6 +22,7 @@ private:
 	bool inputQuit;
 	bool inputShoot;
 	bool inputJump;
+	bool inputCrouch;
 };
 
 typedef struct InputItem {
