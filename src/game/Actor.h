@@ -50,6 +50,7 @@ public:
 	virtual bool isEnemy() { return false; }
 	virtual bool isCollectible() { return false; }
 	virtual bool isStartPoint() { return false; }
+	virtual bool isExitPoint() { return false; }
 
 	sf::Image image;
 	sf::Sprite sprite;

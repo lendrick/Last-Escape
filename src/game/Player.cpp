@@ -220,7 +220,7 @@ void Player::collide(Actor & otherActor)
 		die();
 	}
 	
-	if (otherActor.isCollectible())
+	if (otherActor.isCollectible() || otherActor.isExitPoint())
 	{
 		otherActor.collide(*this);
 	}
