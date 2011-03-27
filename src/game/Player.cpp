@@ -194,6 +194,7 @@ void Player::update(float dt) {
 	if(energyBalls == 10) {
 		energyBalls = 0;
 		lifes++;
+		soundCache["1up.ogg"]->playSound();
 	}
 	
 	time += dt;
