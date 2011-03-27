@@ -65,6 +65,8 @@ public:
 	
 	int cam_x;
 	int cam_y;
+
+	std::string currentFilename;
 };
 
 #endif

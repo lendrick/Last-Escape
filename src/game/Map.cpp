@@ -64,7 +64,9 @@ void Map::loadMap(string filename) {
 	int width;
 	int height;
 	unsigned int comma;
-	
+
+	currentFilename = filename;
+
 	// clear level
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {

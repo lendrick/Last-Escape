@@ -188,7 +188,10 @@ void Player::update(float dt) {
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
-	
+
+	if (godMode)
+		energy = std::max(energy, 10.f);
+
 	// left/right move
 	if (input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
@@ -311,6 +314,9 @@ void Player::collide(Actor & otherActor)
 }
 
 void Player::die() {
+	if (godMode)
+		return;
+
 	if(armor == 0)
 	{
 		lifes--;
@@ -319,6 +325,7 @@ void Player::die() {
 
 		if(lifes < 0) {
 			std::cout << "GAME OVER!" << std::endl;
+			game_map->loadMap(game_map->currentFilename);
 			ui_showMenu();
 		}
 	}

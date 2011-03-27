@@ -24,6 +24,7 @@ extern Map *game_map;
 extern sf::RenderWindow *App;
 extern Player *g_player;
 extern Input input;
+extern bool godMode;
 
 enum Facing {
 	FACING_NONE,
