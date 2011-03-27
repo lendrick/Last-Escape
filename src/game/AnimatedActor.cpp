@@ -91,6 +91,13 @@ void AnimatedActor::flipDirection() {
 
 void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {
+	if(this->sprite.GetImage() == NULL)
+	{
+		cout << "Error: tried to set Animations before an image was set" << endl;
+		cout << "animations/" << filename << " was ignored" << endl;
+		return;
+	}
+
 	TiXmlDocument doc;
 	if (!doc.LoadFile(("animations/" + filename).c_str()))
 	{
@@ -99,6 +106,10 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	}
 
 	TiXmlElement* root = doc.RootElement();
+	int frameWidth, frameHeight;
+	root->QueryIntAttribute("frameWidth",  &frameWidth);
+	root->QueryIntAttribute("frameHeight", &frameHeight);
+	this->setFrameSize(frameWidth, frameHeight);
 
 	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
 	{
@@ -117,10 +128,15 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 				}
 				else if(aChildName == "doLoop")
 				{
-					stringstream ss( ((TiXmlElement*)aChild)->GetText() );
-					bool aDoLoop;
-					ss >> aDoLoop;
-					newAnimation->setDoLoop(aDoLoop);
+					string value = ( ((TiXmlElement*)aChild)->GetText() );
+					if(value.size > 0)
+					{
+						char valueStartsWith = value.at(0);
+						if(valueStartsWith == 't' || valueStartsWith == 'T' || valueStartsWith == '1')
+						{
+							newAnimation->setDoLoop(true);
+						}
+					}
 				}
 				else if(aChildName == "frames")
 				{
@@ -129,12 +145,8 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 						std::string fChildName = child->Value();
 						if(fChildName == "frame")
 						{
-							Frame frame;
-							int x, y, xw, yh;
-							((TiXmlElement*)fChild)->QueryIntAttribute("x", &x);
-							((TiXmlElement*)fChild)->QueryIntAttribute("y", &y);
-							((TiXmlElement*)fChild)->QueryIntAttribute("xw", &xw);
-							((TiXmlElement*)fChild)->QueryIntAttribute("yh", &yh);
+							int number = 0;
+							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
 							((TiXmlElement*)fChild)->QueryFloatAttribute("timeToNextFrame", &frame.timeToNextFrame);
 							newAnimation->addFrame(frame);
 						}
@@ -144,7 +156,7 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 		}
 		else
 		{
-			cout << "Unkown child name" << childName << endl;
+			//most propably frameWidth or frameHeight
 		}
 	}
 }
