@@ -27,6 +27,18 @@ EnemyCentipede::EnemyCentipede()
 	setDrawOffset(32, 30);
 	setFrameSize(64, 32);
 	
+	//pick a random death sound
+	int sound_num = rand() % 19;
+	sound_num += 1;
+	std::string s;
+	std::stringstream out;
+	out << sound_num;
+	s = out.str();
+	
+	std::string sound_file = s + "-BugSplat.ogg";
+	//cout << sound_file;
+	fireSound = soundCache[sound_file];	
+	
 	Animation * tmp;
 	
 	tmp = addAnimation("walk");
@@ -124,6 +136,7 @@ void EnemyCentipede::die() {
 	speed_x = 0;
 	speed_y = 0;
 	setCurrentAnimation("die");
+	fireSound->playSound();
 }
 
 void EnemyCentipede::onAnimationComplete(std::string anim) {

@@ -3,6 +3,9 @@
 #include "Map.h"
 #include "globals.h"
 #include "Collectible.h"
+#include "Sound.h"
+#include "SoundCache.h"
+
 
 EnemyWalker::EnemyWalker()
 :Enemy()
@@ -22,6 +25,19 @@ EnemyWalker::EnemyWalker()
 	setFrameSize(32, 32);
 	
 	Animation * tmp;
+	
+	//pick a random death sound
+	int sound_num = rand() % 19;
+	sound_num += 1;
+	std::string s;
+	std::stringstream out;
+	out << sound_num;
+	s = out.str();
+	
+	std::string sound_file = s + "-BugSplat.ogg";
+	//cout << sound_file;
+	fireSound = soundCache[sound_file];	
+	
 	
 	tmp = addAnimation("walk");
 	tmp->addFrame(3, .2f);
@@ -87,6 +103,7 @@ void EnemyWalker::die() {
 	speed_x = 0;
 	speed_y = 0;
 	setCurrentAnimation("die");
+	fireSound->playSound();
 }
 
 void EnemyWalker::onAnimationComplete(std::string anim) {
