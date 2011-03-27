@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 
 #set up the project
-project (Xeonergy)
+project (LastEscape)
 
 #tell cmake where to search for package finding modules
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
