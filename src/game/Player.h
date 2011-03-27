@@ -18,13 +18,14 @@ public:
 	virtual void collide(Actor & otherActor);
 	void init();
 
-	void jump();
+	void jump(float dt);
 	void shoot();
 
 	int current_weapon;
 
 	float time;
 	float last_shoot_time;
+	float last_jump_time;
 
 	float energy;
 	float energy_max;
