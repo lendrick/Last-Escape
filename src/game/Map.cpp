@@ -11,6 +11,8 @@
 #include "EnemyWalker.h"
 #include "EnemyFlyer.h"
 #include "Particles.h"
+#include "StartPoint.h"
+#include "ExitPoint.h"
 
 Map::Map() {
 	
@@ -144,6 +146,10 @@ void Map::loadMap(string filename) {
 						continue;
 				}
 
+				int w = 0, h = 0;
+				((TiXmlElement*)object)->QueryIntAttribute("width", &w);
+				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
+
 				Actor* actor;
 				if (type == "pill")
 					actor = new CollectiblePill();
@@ -155,6 +161,10 @@ void Map::loadMap(string filename) {
 					actor = new EnemyWalker();
 				else if (type == "flyer")
 					actor = new EnemyFlyer();
+				else if (type == "start")
+					actor = new StartPoint();
+				else if (type == "exit")
+					actor = new ExitPoint(w, h);
 				else
 				{
 					printf("unrecognised object type %s\n", type.c_str());

@@ -331,5 +331,7 @@
  <objectgroup color="#ffff00" name="specials" width="200" height="50">
   <object type="weaponupgrade" x="800" y="288"/>
   <object x="3540" y="1349"/>
+  <object type="start" x="20" y="251"/>
+  <object type="exit" x="684" y="516" width="252" height="15"/>
  </objectgroup>
 </map>
