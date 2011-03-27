@@ -39,6 +39,7 @@ Widget::Widget(int tp, Widget *par) {
 			parent = ui_base;
 		}
 	}
+
 	if (parent) {
 		if (tp != UI_LABEL && tp != UI_TEXT) {
 			background.SetImage(ui_background);
@@ -314,6 +315,10 @@ int Widget::event(sf::Event &Event)
 			}
 		}
 	}
+
+	if (id == ui_popup->id && Event.Type == sf::Event::KeyPressed)
+		return 1;
+
 	return 0;
 }
 
