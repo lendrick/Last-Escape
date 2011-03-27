@@ -34,6 +34,7 @@ private:
 	int background[MAP_TILES_X][MAP_TILES_Y];
 	int fringe[MAP_TILES_X][MAP_TILES_Y];
 	int foreground[MAP_TILES_X][MAP_TILES_Y];
+	int danger[MAP_TILES_X][MAP_TILES_Y];
 	
 	Actor * cameraFollow;
 	
@@ -50,6 +51,7 @@ public:
 	bool move(Actor &actor, float &move_x, float &move_y);
 	bool isGrounded(Actor &actor);
 	bool isGrounded(float &pos_x, float &pos_y, int size_x);
+	bool isOnInstantdeath(Actor &actor);
 	bool isSolid(int x, int y);
 	void renderLandscape();
 	void renderBackground();

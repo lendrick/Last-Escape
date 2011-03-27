@@ -195,6 +195,10 @@ void Player::update(float dt) {
 	if(isGrounded()) {
 		speed_y = 0;
 	}
+
+	if(game_map->isOnInstantdeath(*this)) {
+		this->die();
+	}
 	
 	int move_direction = FACING_NONE; 
 

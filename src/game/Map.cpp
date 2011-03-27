@@ -113,6 +113,8 @@ void Map::loadMap(string filename) {
 				tiles = &foreground;
 			else if (layerName == "collision")
 				tiles = &collision;
+			else if (layerName == "danger")
+				tiles = &danger;
 			else
 				continue;
 
@@ -415,6 +417,11 @@ bool Map::isGrounded(Actor & actor) {
 // if there is collision directly underfoot, return true
 bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
+}
+
+bool Map::isOnInstantdeath(Actor &actor)
+{
+	return danger[(int)actor.pos_x/TILE_SIZE][(int)actor.pos_y/TILE_SIZE] != 0;
 }
 
 bool Map::isSolid(int x, int y) {
