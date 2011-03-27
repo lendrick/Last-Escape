@@ -38,6 +38,7 @@ public:
 	float shoot_duration;
 	
 	bool crouched;
+	bool walking;
 	
 	int armor;
 	Sound * fireSound;

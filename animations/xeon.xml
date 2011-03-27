@@ -37,17 +37,21 @@
 		</frames>
 	</animation>
 
-	<animation name="crouch">
+	<animation name="walkshoot" doLoop="true">
 		<frames>
-			<frame number="34" time="0.1"/>
+			<frame number="32" time="0.2"/>
+
+			<frame number="33" time="0.2"/>
+			<frame number="34" time="0.2"/>
+			<frame number="35" time="0.2"/>
+			<frame number="36" time="0.2"/>
+		
 		</frames>
 	</animation>
-	
-	<animation name="crouchShoot">
+
+	<animation name="crouch">
 		<frames>
-			<frame number="31" time="0.1"/>
-			<frame number="32" time="0.1"/>
-			<frame number="33" time="0.1"/>
+		<frame number="40" time="0.1"/>
 		</frames>
 	</animation>
 
