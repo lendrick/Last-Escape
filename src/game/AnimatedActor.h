@@ -12,9 +12,9 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(sf::Image&);
+	AnimatedActor(std::string filename);
 	AnimatedActor();
-	void setImage(sf::Image&);
+	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
@@ -23,10 +23,17 @@ public:
 	
 	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
 	void resetCurrentAnimation();
+	std::string animationName();
 	
 	Animation * addAnimation(std::string name);
 	void setFrameSize(int fw, int fh);
 	void updateSpriteFacing();
+	
+	// This event function is called when a specific animation completes.
+	// Use it, for instance, to destroy the actor after it dies.
+	virtual void onAnimationComplete(std::string anim) {};
+	
+	void setFacing(int direction);
 	
 protected:
 	void flipDirection();

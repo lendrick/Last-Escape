@@ -35,15 +35,16 @@ public:
 	
 	// This function takes care of things that happen when the actor dies, if applicable
 	// Start death animation, etc.  destroy() should be called in update() and not in collide()
-	virtual void die() { };
+	virtual void die();
 	
 	virtual void update(float dt) { };
 	virtual void draw();
 	
-	
 	void destroy();
-	
 	bool isDestroyed();
+	bool canCollide();
+	void setCanCollide(bool col);
+	bool isDying();
 
 	// stupid version of dynamic casting
 	virtual bool isPlayer() { return false; }
@@ -60,6 +61,8 @@ public:
 	float pos_x, pos_y;
 	bool destroyed;
 	int xDrawOffset, yDrawOffset;
+	bool collideable;
+	bool dying;
 protected:
 	void checkCollisions();
 };

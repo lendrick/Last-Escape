@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "EnemyWalker.h"
 #include "EnemyFlyer.h"
+#include "EnemyCentipede.h"
 #include "Particles.h"
 #include "StartPoint.h"
 #include "ExitPoint.h"
@@ -120,7 +121,7 @@ void Map::loadMap(string filename) {
 		}
 		else if (childName == "objectgroup")
 		{
-			const char* defaultType;
+			const char* defaultType = NULL;
 
 			// Look for a 'type' property as default for the whole group
 			TiXmlElement* prop = TiXmlHandle(child).FirstChild("properties").FirstChild("property").ToElement();
@@ -163,6 +164,8 @@ void Map::loadMap(string filename) {
 					actor = new EnemyWalker();
 				else if (type == "flyer")
 					actor = new EnemyFlyer();
+				else if (type == "centipede")
+					actor = new EnemyCentipede();
 				else if (type == "start")
 					actor = new StartPoint();
 				else if (type == "exit")
@@ -243,7 +246,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 	float check_x;
 	float check_y;
 	bool impact = false;
-	
+
+	// prevent falling through obstacles when going too fast due to
+	// abnormally low framerates
+	move_x = max(min(move_x, (float)TILE_SIZE), -(float)TILE_SIZE);
+	move_y = max(min(move_y, (float)TILE_SIZE), -(float)TILE_SIZE);
+
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
 	
@@ -369,6 +377,10 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
 }
 
+bool Map::isSolid(int x, int y) {
+	return collision[x/TILE_SIZE][y/TILE_SIZE] != 0;
+}
+
 void Map::renderBackground() {
 	if(cameraFollow != NULL) {
 		game_map->cam_x = (int)cameraFollow->pos_x - 320;
@@ -395,6 +407,7 @@ void Map::renderBackground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!background[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -431,6 +444,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!fringe[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -441,6 +455,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!foreground[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[foreground[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}

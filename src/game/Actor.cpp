@@ -12,6 +12,7 @@ Actor::Actor() {
 	destroyed = false;
 	actors.push_back(this);
 	setDrawOffset(0, 0);
+	collideable = true;
 }
 
 Actor::~Actor() {
@@ -107,15 +108,32 @@ bool Actor::isDestroyed() {
 	return destroyed;
 }
 
+bool Actor::isDying() {
+	return dying;
+}
+
 void Actor::checkCollisions() {
 	list<Actor*>::iterator it2 = actors.begin();
 	
 	for (; it2 != actors.end(); ++it2)
 	{
 		// Don't collide with self. :)
-		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && isColliding(*it2))
+		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && 
+			(*it2)->canCollide() && isColliding(*it2))
 		{
 			collide(**it2);
 		}
 	}
+}
+
+void Actor::die() {
+	destroy();
+}
+
+bool Actor::canCollide() {
+	return collideable;
+}
+
+void Actor::setCanCollide(bool col) {
+	collideable = col;
 }

@@ -15,6 +15,8 @@
 #include "Input.h"
 #include "Sound.h"
 #include "Ui.h"
+#include "ImageCache.h"
+#include "SoundCache.h"
 
 list<Actor *> actors;
 Map * game_map;
@@ -22,16 +24,10 @@ sf::RenderWindow *App;
 Player *g_player;
 Input input;
 
-Sound * backgroundMusic = new Sound("01 Game-Game_0.ogg");
-Sound * fireSound = new Sound("shoot.ogg");
-Sound * damageSound = new Sound();
-Sound * deathSound = new Sound();
-Sound * bulletHitSound = new Sound();
-Sound * enemyDeathSound = new Sound();
+ImageCache imageCache;
+SoundCache soundCache;
 
-sf::Image * xeonImage;
-sf::Image * walkerImage;
-sf::Image * flyerImage;
+bool paused = false;
 
 
 void update(Player& player, float dt) {
@@ -62,17 +58,6 @@ void cleanup() {
 	}
 }
 
-sf::Image * loadImage(std::string filename) 
-{
-	sf::Image * img = new sf::Image;
-	if(!img->LoadFromFile(filename)) {
-		cout << "Failed to load image " << filename << "\n";
-		return NULL;
-	}
-	
-	return img;
-}
-
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -82,7 +67,8 @@ sf::Image * loadImage(std::string filename)
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
-	const char* mapName = "subwaymap.tmx";
+	const char* mapName = "subwaymap-new.tmx";
+	//const char* mapName = "sewer.tmx";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -94,17 +80,13 @@ int main(int argc, char** argv)
 
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
+		(sf::VideoMode::GetDesktopMode().Height/2)-260);
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
 
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
-
-	xeonImage = loadImage("images/xeon.png");
-	walkerImage = loadImage("images/walker.png");
-	flyerImage = loadImage("images/flyer.png");
-	
-	
 
 	// Create game objects
 	game_map = new Map(mapName);
@@ -114,7 +96,7 @@ int main(int argc, char** argv)
 
 
 	if (enableMusic)
-		backgroundMusic->playSound();
+		soundCache["01 Game-Game_0.ogg"]->playSound();
 
 	ui_init();
 
@@ -131,9 +113,16 @@ int main(int argc, char** argv)
 		float ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
+		// Clamp frame update time if worse than 20fps, so it'll slow down instead
+		// of just getting very jerky (which breaks jump heights)
+		float frameTime = std::min(ElapsedTime, 0.05f);
+
 		// Clear screen
 		App->Clear();
-		update(p1, ElapsedTime);
+		
+		if(!paused) 
+			update(p1, frameTime);
+		
 		cleanup();
 
 		game_map->renderLandscape();

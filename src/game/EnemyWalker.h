@@ -8,6 +8,8 @@ public:
 	~EnemyWalker();
 	virtual void update(float dt);
 	virtual void draw();
+	virtual void die();
+	virtual void onAnimationComplete(std::string anim);
 private:
 	float walk_speed;
 	float speed_x;

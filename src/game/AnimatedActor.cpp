@@ -1,10 +1,12 @@
 #include "AnimatedActor.h"
+#include "ImageCache.h"
+#include "globals.h"
 
-AnimatedActor::AnimatedActor(sf::Image& image)
+AnimatedActor::AnimatedActor(std::string filename)
 :Actor()
 {
 	init();
-	setImage(image);
+	setImage(filename);
 }
 
 AnimatedActor::AnimatedActor()
@@ -19,13 +21,14 @@ AnimatedActor::~AnimatedActor()
 
 void AnimatedActor::init() {
 	facing_direction = FACING_RIGHT;
-	this->currentAnimation = NULL;
+	currentAnimation = NULL;
+	dying = false;
 }
 
-void AnimatedActor::setImage(sf::Image & image) 
+void AnimatedActor::setImage(std::string filename) 
 {
 	setFrameSize(0, 0);
-	this->sprite.SetImage(image);
+	this->sprite.SetImage(*(imageCache[filename]));
 	this->currentAnimation = NULL;
 }
 
@@ -63,6 +66,7 @@ void AnimatedActor::draw()
 	 	{
 			//TODO jump to next Animation in queue or idle Animation
 			this->currentAnimation->setIsFinished(false);
+			onAnimationComplete(animationName());
 		}
 		else
 		{
@@ -70,6 +74,14 @@ void AnimatedActor::draw()
 		}
 	}
 	Actor::draw();
+}
+
+std::string AnimatedActor::animationName() {
+	if(currentAnimation == NULL) {
+		return "";
+	} else {
+		return currentAnimation->getName();
+	}
 }
 
 void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
@@ -81,7 +93,7 @@ void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
 		if(reset)
 			this->currentAnimation->reset();
 		
-		cout << name << endl;
+		//cout << name << endl;
 	}
 }
 
@@ -101,8 +113,20 @@ void AnimatedActor::flipDirection() {
 	}
 }
 
+void AnimatedActor::setFacing(int direction) {
+	facing_direction = direction;
+}
+
+
 void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {
+	if(this->sprite.GetImage() == NULL)
+	{
+		cout << "Error: tried to set Animations before an image was set" << endl;
+		cout << "animations/" << filename << " was ignored" << endl;
+		return;
+	}
+
 	TiXmlDocument doc;
 	if (!doc.LoadFile(("animations/" + filename).c_str()))
 	{
@@ -111,52 +135,73 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	}
 
 	TiXmlElement* root = doc.RootElement();
+	int frameWidth, frameHeight;
+	root->QueryIntAttribute("frameWidth",  &frameWidth);
+	root->QueryIntAttribute("frameHeight", &frameHeight);
+	this->setFrameSize(frameWidth, frameHeight);
 
 	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
 	{
 		std::string childName = child->Value();
+		//Create an Animation
 		if (childName == "animation")
 		{
-			Animation *newAnimation = new Animation(this->sprite);
+			//Add to animations map with aName
+			std::string aName = ((TiXmlElement*)child)->Attribute("name");
+			Animation *newAnimation = this->addAnimation(aName);
+			cout << "added Animation with name " << aName << endl;
+	
+			//Set doLoop
+			const char* aDoLoopTmp = ((TiXmlElement*)child)->Attribute("doLoop");
+			if(aDoLoopTmp != NULL)
+			{
+				std::string aDoLoop = aDoLoopTmp;
+				if(aDoLoop.size() > 0)
+				{
+					char valueStartsWith = aDoLoop.at(0);
+					if(valueStartsWith == 't' || valueStartsWith == 'T' || valueStartsWith == '1')
+					{
+						newAnimation->setDoLoop(true);
+					}
+				}
+			}
+		
 			for (TiXmlNode* aChild = child->FirstChild(); aChild; aChild = aChild->NextSibling())
 			{
 				std::string aChildName = aChild->Value();
-				if(aChildName == "name")
-				{
-					std::string aName = ((TiXmlElement*)aChild)->GetText();
-					this->animations[aName] = newAnimation;
-					cout << "added Animation with name" << aName << endl;
-				}
-				else if(aChildName == "doLoop")
-				{
-					stringstream ss( ((TiXmlElement*)aChild)->GetText() );
-					bool aDoLoop;
-					ss >> aDoLoop;
-					newAnimation->setDoLoop(aDoLoop);
-				}
-				else if(aChildName == "frames")
+				if(aChildName == "frames")
 				{
 					for (TiXmlNode* fChild = aChild->FirstChild(); fChild; fChild = fChild->NextSibling())
 					{
-						std::string fChildName = child->Value();
+						std::string fChildName = fChild->Value();
 						if(fChildName == "frame")
 						{
-							Frame frame;
-							int x, y, xw, yh;
-							((TiXmlElement*)fChild)->QueryIntAttribute("x", &x);
-							((TiXmlElement*)fChild)->QueryIntAttribute("y", &y);
-							((TiXmlElement*)fChild)->QueryIntAttribute("xw", &xw);
-							((TiXmlElement*)fChild)->QueryIntAttribute("yh", &yh);
-							((TiXmlElement*)fChild)->QueryFloatAttribute("timeToNextFrame", &frame.timeToNextFrame);
-							newAnimation->addFrame(frame);
+							int number = 0;
+							float timeToNextFrame = 0.f;
+							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
+							((TiXmlElement*)fChild)->QueryFloatAttribute("time", &timeToNextFrame);
+							cout << "parsed" << timeToNextFrame << endl;
+							newAnimation->addFrame(number, timeToNextFrame);
+							cout << "Added " << number << " frame" << endl;
+						} 
+						else
+						{
+							cout << "Unkown Tag:" << aChildName << endl;
+							cout << "Expected 'frame' tag" << endl;
 						}
 					}
+				}
+				else
+				{
+					cout << "Unkown Tag:" << aChildName << endl;
+					cout << "Expected 'frames' tag" << endl;
 				}
 			}
 		}
 		else
 		{
-			cout << "Unkown child name" << childName << endl;
+			cout << "Unkown Tag:" << childName << endl;
+			cout << "Expected 'animation' tag" << endl;
 		}
 	}
 }

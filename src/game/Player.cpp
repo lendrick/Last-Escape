@@ -3,8 +3,10 @@
 #include "PlayerBullet.h"
 #include "Sound.h"
 #include "globals.h"
+#include "ImageCache.h"
+#include "SoundCache.h"
 
-const float energy_cost_jump = 10.f;
+const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
 
 struct WeaponDesc {
@@ -27,7 +29,7 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	this->setImage(*xeonImage);
+	setImage("xeon.png");
 	
 	width = 24;
 	height = 48;
@@ -38,33 +40,10 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
+	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
 	
-	Animation * tmp;
-	
-	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setDoLoop(true);
-	
-	tmp = addAnimation("jump");
-	tmp->addFrame(24, 0.1f);
-	tmp->addFrame(25, 0.1f);
-	tmp->addFrame(26, 0.1f);
-	
-	tmp = addAnimation("fall");
-	tmp->addFrame(27, 0.1f);
-	tmp->addFrame(28, 0.1f);
-	
-	tmp = addAnimation("idle");
-	tmp->addFrame(0, 0.2f);
-	
-	tmp = addAnimation("shoot");
-	tmp->addFrame(16, 0.07f);
-	tmp->addFrame(17, 0.07f);
-	tmp->addFrame(18, 0.07f);
+	fireSound = soundCache["shoot.ogg"];
 
 	init();
 }
@@ -102,16 +81,33 @@ void Player::init() {
 	current_weapon = 0;
 }
 
-void Player::jump() {
+void Player::jump(float dt) {
 	const int jump_speed = 380;
-
-	if (energy < energy_cost_jump)
-		return;
+	const float max_jet_accel = 2000;
+	const float jet_cost = 100;
 
 	if (speed_y == 0 && isGrounded())
 	{
+		if (energy < energy_cost_jump)
+			return;
+
 		speed_y = -jump_speed;
 		energy -= energy_cost_jump;
+
+		last_jump_time = time;
+	}
+	else
+	{
+		// Can't jet immediately after jumping
+		if (time - last_jump_time < 0.5f)
+			return;
+
+		float cost = jet_cost * dt;
+		if (energy < cost)
+			return;
+
+		energy -= cost;
+		speed_y -= max_jet_accel*dt;
 	}
 }
 
@@ -127,7 +123,7 @@ void Player::shoot() {
 		energy -= weapons[current_weapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
-		bullet->setPos(pos_x, pos_y - height/2);
+		bullet->setPos(pos_x, pos_y - 30);
   	setCurrentAnimation("shoot");
 		resetCurrentAnimation();
 	}
@@ -170,7 +166,7 @@ void Player::update(float dt) {
 	}
 
 	if (input.jumping())
-		jump();
+		jump(dt);
 
 	if (input.shooting())
 		shoot();

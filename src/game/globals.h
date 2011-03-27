@@ -16,6 +16,8 @@ class Map;
 class Player;
 class Input;
 class Sound;
+class ImageCache;
+class SoundCache;
 
 extern list<Actor *> actors;
 extern Map *game_map;
@@ -31,13 +33,7 @@ enum Facing {
 	FACING_RIGHT
 };
 
-extern Sound * backgroundMusic;
-extern Sound * fireSound;
-extern Sound * damageSound;
-extern Sound * deathSound;
-extern Sound * bulletHitSound;
-extern Sound * enemyDeathSound;
+extern bool paused;
 
-extern sf::Image * xeonImage;
-extern sf::Image * walkerImage;
-extern sf::Image * flyerImage;
+extern ImageCache imageCache;
+extern SoundCache soundCache;
