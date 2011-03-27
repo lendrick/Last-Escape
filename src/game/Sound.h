@@ -25,6 +25,7 @@ public:
 
 	bool loadSound(string filename);
 	void playSound();
+	void setLoop(bool);
 
 };
 

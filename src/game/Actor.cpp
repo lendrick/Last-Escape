@@ -4,10 +4,15 @@
 #include <list>
 
 Actor::Actor() {
+	xOrigin = 0;
+	yOrigin = 0;
+	width = 0;
+	height = 0;
 	setPos(0, 0);
 	destroyed = false;
 	actors.push_back(this);
 	setDrawOffset(0, 0);
+	collideable = true;
 }
 
 Actor::~Actor() {
@@ -83,7 +88,9 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	sprite.SetPosition(pos_x - game_map->cam_x, pos_y - game_map->cam_y);
+	sprite.SetPosition(
+		0.5f + (int)(pos_x - game_map->cam_x),
+		0.5f + (int)(pos_y - game_map->cam_y));
 	App->Draw(sprite);
 }
 
@@ -101,15 +108,32 @@ bool Actor::isDestroyed() {
 	return destroyed;
 }
 
+bool Actor::isDying() {
+	return dying;
+}
+
 void Actor::checkCollisions() {
 	list<Actor*>::iterator it2 = actors.begin();
 	
 	for (; it2 != actors.end(); ++it2)
 	{
 		// Don't collide with self. :)
-		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && isColliding(*it2))
+		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && 
+			(*it2)->canCollide() && isColliding(*it2))
 		{
 			collide(**it2);
 		}
 	}
+}
+
+void Actor::die() {
+	destroy();
+}
+
+bool Actor::canCollide() {
+	return collideable;
+}
+
+void Actor::setCanCollide(bool col) {
+	collideable = col;
 }

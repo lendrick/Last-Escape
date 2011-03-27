@@ -14,16 +14,15 @@ struct Frame
 class Animation
 {
 public: 
-	Animation(sf::Sprite&);
+	Animation(sf::Sprite&, std::string name = "");
 	virtual ~Animation();
 	void update(); //TODO may return if it finished
 	void updateFrame(); //set's the sprite's subRect to the current Frame
+
 	bool getIsFinished();
 	void setIsFinished(bool);
-	void setFrameSize(int fw, int fh);
-	void addFrame(int num, float duration);
-	void setLoop(bool loop);
-	void reset();
+	void setDoLoop(bool);
+	void addFrame(Frame);
 
 	/// Added for testing purposes.
 	/// TODO read animations from a config file.
@@ -32,6 +31,12 @@ public:
 	void toDefaultXeonJumpAnimation();
 	void toDefaultXeonIdleAnimation();
 
+	void setFrameSize(int fw, int fh);
+	void addFrame(int num, float duration);
+	void reset();
+	
+	int getFrame();
+	std::string getName(); 
 private:
 	vector<Frame> frames;		///< Contains the frames for the Animation.
 	std::string name;

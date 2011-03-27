@@ -38,7 +38,7 @@ private:
 	Actor * cameraFollow;
 	
 public:
-	Map();
+	Map(const char* mapName);
 	~Map();
 
 	void loadMap(string filename);
@@ -50,6 +50,7 @@ public:
 	bool move(Actor &actor, float &move_x, float &move_y);
 	bool isGrounded(Actor &actor);
 	bool isGrounded(float &pos_x, float &pos_y, int size_x);
+	bool isSolid(int x, int y);
 	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
@@ -63,6 +64,8 @@ public:
 	
 	int cam_x;
 	int cam_y;
+
+	std::string currentFilename;
 };
 
 #endif

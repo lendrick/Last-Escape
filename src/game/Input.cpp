@@ -2,6 +2,8 @@
 #include "globals.h"
 #include "Ui.h"
 
+InputItem inputs[5];
+
 Input::Input() {
 	initFrame();
 }
@@ -14,6 +16,7 @@ void Input::initFrame() {
 	inputJump = false;
 	inputShoot = false;
 	inputQuit = false;
+	inputCrouch = false;
 }
 
 void Input::poll() {
@@ -24,28 +27,38 @@ void Input::poll() {
 
 	while (App->GetEvent(Event))
 	{
-		if (ui_event(Event))
-			continue;
 		// Close window : exit
 		if (Event.Type == sf::Event::Closed)
 			inputQuit = true;
 
+		if (ui_event(Event))
+			continue;
+
 		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
 			ui_togglePause();
 
-		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Up)
-			inputJump = true;
+		if (!ui_menuOpen()) {
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == inputs[INPUT_JUMP].key)
+				inputJump = true;
 
-		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Space)
-			inputShoot = true;
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == inputs[INPUT_SHOOT].key)
+				inputShoot = true;
+			
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == inputs[INPUT_CROUCH].key)
+				inputCrouch = true;
+		}
 	}
 
-	const sf::Input& appInput = App->GetInput();
+	if (!ui_menuOpen()) {
+		const sf::Input& appInput = App->GetInput();
 
-	if(appInput.IsKeyDown(sf::Key::Left) && !appInput.IsKeyDown(sf::Key::Right)) {
-		inputDirection = FACING_LEFT;
-	} else if(appInput.IsKeyDown(sf::Key::Right)) {
-		inputDirection = FACING_RIGHT;
+		if(appInput.IsKeyDown(inputs[INPUT_LEFT].key) && !appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
+			inputDirection = FACING_LEFT;
+		} else if(appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
+			inputDirection = FACING_RIGHT;
+		} else if(appInput.IsKeyDown(inputs[INPUT_CROUCH].key)) {
+			inputCrouch = true;
+		}
 	}
 }
 
@@ -69,12 +82,27 @@ bool Input::shoot()
 	return inputShoot;
 }
 
+bool Input::crouch() {
+	return inputCrouch;
+}
+
 bool Input::shooting()
 {
-	return inputShoot || App->GetInput().IsKeyDown(sf::Key::Space);
+	if (ui_menuOpen())
+		return false;
+	return inputShoot || App->GetInput().IsKeyDown(inputs[INPUT_SHOOT].key);
 }
 
 bool Input::jumping()
 {
-	return inputJump || App->GetInput().IsKeyDown(sf::Key::Up);
+	if (ui_menuOpen())
+		return false;
+	return inputJump || App->GetInput().IsKeyDown(inputs[INPUT_JUMP].key);
+}
+
+bool Input::crouching()
+{
+	if (ui_menuOpen())
+		return false;
+	return inputCrouch || App->GetInput().IsKeyDown(inputs[INPUT_CROUCH].key);
 }

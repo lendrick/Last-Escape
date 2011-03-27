@@ -1,5 +1,10 @@
 #pragma once
+
+#include <fstream>
+#include <sstream>
+
 #include "globals.h"
+#include "tinyxml/tinyxml.h"
 #include "Animation.h"
 #include "Actor.h"
 // This class is for all actors with animations (or even still actors).  It inherits Actor.
@@ -7,17 +12,30 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(sf::Image&);
+	AnimatedActor(std::string filename);
 	AnimatedActor();
-	void setImage(sf::Image&);
+	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;
-	void draw();	///< update Animation
+	virtual void draw();	///< update Animation
+	void loadAnimationsFromFile(std::string filepath);
+	
 	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
+	Animation* getCurrentAnimation();
 	void resetCurrentAnimation();
+	std::string animationName();
+	
 	Animation * addAnimation(std::string name);
 	void setFrameSize(int fw, int fh);
+	void updateSpriteFacing();
+	
+	// This event function is called when a specific animation completes.
+	// Use it, for instance, to destroy the actor after it dies.
+	virtual void onAnimationComplete(std::string anim) {};
+	
+	void setFacing(int direction);
+	
 protected:
 	void flipDirection();
 	int facing_direction;

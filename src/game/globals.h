@@ -16,12 +16,15 @@ class Map;
 class Player;
 class Input;
 class Sound;
+class ImageCache;
+class SoundCache;
 
 extern list<Actor *> actors;
 extern Map *game_map;
 extern sf::RenderWindow *App;
 extern Player *g_player;
 extern Input input;
+extern bool godMode;
 
 enum Facing {
 	FACING_NONE,
@@ -31,9 +34,7 @@ enum Facing {
 	FACING_RIGHT
 };
 
-extern Sound * backgroundMusic;
-extern Sound * fireSound;
-extern Sound * damageSound;
-extern Sound * deathSound;
-extern Sound * bulletHitSound;
-extern Sound * enemyDeathSound;
+extern bool paused;
+
+extern ImageCache imageCache;
+extern SoundCache soundCache;

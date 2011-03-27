@@ -10,9 +10,14 @@
 #include "Enemy.h"
 #include "EnemyWalker.h"
 #include "EnemyFlyer.h"
+#include "EnemyCentipede.h"
 #include "Particles.h"
+#include "StartPoint.h"
+#include "SpawnPoint.h"
+#include "ExitPoint.h"
+#include <cstdlib>
 
-Map::Map() {
+Map::Map(const char* mapName) {
 	
 	loadTileset("tileset.png");
 	
@@ -36,13 +41,13 @@ Map::Map() {
 	cam_y = 0;
 	cameraFollow = NULL;
 	
-	loadMap("subwaymap.tmx");
+	loadMap(mapName);
 }
 
 void Map::loadTileset(string filename) {
 
 	tileset.LoadFromFile(("images/" + filename).c_str());
-	
+	tileset.SetSmooth(false);
 }
 
 
@@ -58,7 +63,9 @@ void Map::loadMap(string filename) {
 	int width;
 	int height;
 	unsigned int comma;
-	
+
+	currentFilename = filename;
+
 	// clear level
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
@@ -118,7 +125,7 @@ void Map::loadMap(string filename) {
 		}
 		else if (childName == "objectgroup")
 		{
-			const char* defaultType;
+			const char* defaultType = NULL;
 
 			// Look for a 'type' property as default for the whole group
 			TiXmlElement* prop = TiXmlHandle(child).FirstChild("properties").FirstChild("property").ToElement();
@@ -144,19 +151,43 @@ void Map::loadMap(string filename) {
 						continue;
 				}
 
+				int w = 0, h = 0;
+				((TiXmlElement*)object)->QueryIntAttribute("width", &w);
+				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
+
 				Actor* actor;
-				if (type == "pill")
+				if (type == "pill") {
 					actor = new CollectiblePill();
-				else if (type == "weaponupgrade")
+				} else if (type == "weaponupgrade") {
 					actor = new CollectibleWeaponUpgrade();
-				else if (type == "smoke")
+				} else if (type == "armor") {
+					actor = new CollectibleArmor();
+				} else if (type == "smoke") {
 					actor = new ParticleEmitter();
-				else if (type == "walker")
+				} else if (type == "walker") {
 					actor = new EnemyWalker();
-				else if (type == "flyer")
+				} else if (type == "flyer") {
 					actor = new EnemyFlyer();
-				else
-				{
+				} else if (type == "centipede") {
+					actor = new EnemyCentipede();
+				} else if (type == "start") {
+					actor = new StartPoint();
+				} else if (type == "spawn") {
+					actor = new SpawnPoint();
+				} else if (type == "exit") {
+					actor = new ExitPoint(w, h); 
+					cout << "Exit point\n";
+					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
+					
+					if(prop != NULL) {
+						std::string mapname;
+						std::string attrname = ((TiXmlElement*)prop)->Attribute("name");
+						if(attrname == "map")
+							mapname = ((TiXmlElement*)prop)->Attribute("value");
+						if (!mapname.empty())
+							dynamic_cast<ExitPoint *>(actor)->setMap(mapname);
+					}
+				} else {
 					printf("unrecognised object type %s\n", type.c_str());
 					continue;
 				}
@@ -231,7 +262,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 	float check_x;
 	float check_y;
 	bool impact = false;
-	
+
+	// prevent falling through obstacles when going too fast due to
+	// abnormally low framerates
+	move_x = max(min(move_x, (float)TILE_SIZE), -(float)TILE_SIZE);
+	move_y = max(min(move_y, (float)TILE_SIZE), -(float)TILE_SIZE);
+
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
 	
@@ -357,10 +393,14 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
 }
 
+bool Map::isSolid(int x, int y) {
+	return collision[x/TILE_SIZE][y/TILE_SIZE] != 0;
+}
+
 void Map::renderBackground() {
 	if(cameraFollow != NULL) {
-		game_map->cam_x = (int)cameraFollow->pos_x - 320;
-		game_map->cam_y = (int)cameraFollow->pos_y - 240;
+		game_map->cam_x = std::max(0, (int)cameraFollow->pos_x - (int)App->GetWidth()/2);
+		game_map->cam_y = std::max(0, (int)cameraFollow->pos_y - (int)App->GetHeight()/2);
 	}
 	
 	// which tile is at the topleft corner of the screen?
@@ -383,6 +423,7 @@ void Map::renderBackground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!background[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -419,6 +460,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!fringe[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -429,6 +471,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!foreground[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[foreground[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -436,6 +479,10 @@ void Map::renderForeground() {
 }
 
 void Map::renderLandscape() {
+	// Do nothing if no landscape was specified
+	if (!landscapeImg.GetWidth())
+		return;
+
 	// Draw it four times, aka repeating in X and Y
 	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);

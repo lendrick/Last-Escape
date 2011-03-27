@@ -1,14 +1,17 @@
 #ifndef COLLECTIBLE_H
 #define COLLECTIBLE_H
 
-#include "Actor.h"
+#include "AnimatedActor.h"
 
-class Collectible : public Actor
+class Collectible : public AnimatedActor
 {
 public:
 	Collectible();
 
 	virtual bool isCollectible() { return true; }
+	
+protected:
+	void init();
 };
 
 class CollectiblePill : public Collectible
@@ -22,6 +25,21 @@ class CollectibleWeaponUpgrade : public Collectible
 {
 public:
 	CollectibleWeaponUpgrade();
+	virtual void collide(Actor& otherActor);
+};
+
+
+class CollectibleArmor : public Collectible
+{
+public:
+	CollectibleArmor();
+	virtual void collide(Actor& otherActor);
+};
+
+class CollectibleEnergyBall : public Collectible
+{
+public:
+	CollectibleEnergyBall();
 	virtual void collide(Actor& otherActor);
 };
 

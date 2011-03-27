@@ -3,7 +3,9 @@
 
 #include "Map.h"
 #include "AnimatedActor.h"
+#include "Sound.h"
 #include "globals.h"
+#include "StartPoint.h"
 
 class Player : public AnimatedActor {
 public:
@@ -16,15 +18,21 @@ public:
 	virtual void draw();
 	virtual void die();
 	virtual void collide(Actor & otherActor);
+	
+	StartPoint * findStart();
+	
+	StartPoint * currentStart;
 	void init();
 
-	void jump();
+	void jump(float dt);
 	void shoot();
+	void crouch();
 
 	int current_weapon;
 
 	float time;
 	float last_shoot_time;
+	float last_jump_time;
 
 	float energy;
 	float energy_max;
@@ -32,7 +40,14 @@ public:
 	float speed_x;
 	float speed_y;
 	
-	int shoot_duration;
+	float shoot_duration;
+	
+	bool crouched;
+	bool walking;
+	
+	int armor;
+	int lifes;
+	Sound * fireSound;
 };
 
 

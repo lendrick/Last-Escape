@@ -3,27 +3,14 @@
 #include "PlayerBullet.h"
 #include "Sound.h"
 #include "globals.h"
+#include "ImageCache.h"
+#include "SoundCache.h"
+#include "Ui.h"
+#include "ExitPoint.h"
 
-const int SPRITE_TILE_W = 128;
-const int SPRITE_TILE_H = 128;
-
-const int SPRITE_CENTER_X = 32;
-const int SPRITE_CENTER_Y = 104;
-
-const int SPRITE_IDLE_ROW = 0;
-
-const int SPRITE_WALK_ROW = 0;
-const int SPRITE_WALK_COUNT = 4;
-const float SPRITE_WALK_SPEED = 8.f;
-
-const int SPRITE_JUMP_ROW = 1;
-
-const int SPRITE_SHOOT_ROW = 2;
-const int SPRITE_SHOOT_COUNT = 3;
-const float SPRITE_SHOOT_SPEED = 16.f;
-
-const float energy_cost_jump = 10.f;
+const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
+static const int start_lifes = 3;
 
 struct WeaponDesc {
 	const char* name;
@@ -45,60 +32,23 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	if (!image.LoadFromFile("images/xeon.png"))
-		printf("failed to load images/xeon.png\n");
-	this->setImage(image);
-	
+	setImage("xeon.png");
+
+	lifes = start_lifes;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
 	yOrigin = height;
 	setDrawOffset(64, 104);
 	setFrameSize(128, 128);
-	shoot_duration = 0.6f;
+	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
-	//sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
+	loadAnimationsFromFile("xeon.xml");
+	armor = 0;
 	
-	/*
-	Animation* walkAnimation = new Animation(this->sprite);
-	walkAnimation->toDefaultXeonWalkAnimation();
-	this->animations["walk"] = walkAnimation;
-	
-	Animation* jumpAnimation = new Animation(this->sprite);
-	jumpAnimation->toDefaultXeonJumpAnimation();
-	this->animations["jump"] = jumpAnimation;
-	
-	Animation* idleAnimation = new Animation(this->sprite);
-	idleAnimation->toDefaultXeonIdleAnimation();
-	this->animations["idle"] = idleAnimation;
-	*/
-	
-	Animation * tmp;
-	
-	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setLoop(true);
-	
-	tmp = addAnimation("jump");
-	tmp->addFrame(24, 0.1f);
-	tmp->addFrame(25, 0.1f);
-	tmp->addFrame(26, 0.1f);
-	
-	tmp = addAnimation("fall");
-	tmp->addFrame(27, 0.2f);
-	tmp->addFrame(28, 0.1f);
-	
-	tmp = addAnimation("idle");
-	tmp->addFrame(0, 0.2f);
-	
-	tmp = addAnimation("shoot");
-	tmp->addFrame(16, 0.1f);
-	tmp->addFrame(17, 0.1f);
-	tmp->addFrame(18, 0.1f);
+	fireSound = soundCache["shoot.ogg"];
+	currentStart = NULL;
 
 	init();
 }
@@ -113,9 +63,27 @@ void Player::init() {
 	
 	energy = energy_max = 100.f;
 	
-	pos_x = 64.0f;
-	pos_y = 0.0f;
+	if(currentStart == NULL)
+		currentStart = findStart();
+	
+	float sx, sy;
+	if(currentStart != NULL) {
+		currentStart->getPos(sx, sy);
+		setPos(sx, sy);
+	} 
+	
+	// Find the first start point, and move the player there
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		if ((*it)->isStartPoint())
+		{
+			setPos((*it)->pos_x, (*it)->pos_y);
+			break;
+		}
+	}
+
 	facing_direction = FACING_RIGHT;
+	crouched = false;
 
 	speed_x = 0.0f;
 	speed_y = 0.0f;
@@ -128,16 +96,43 @@ void Player::init() {
 	current_weapon = 0;
 }
 
-void Player::jump() {
-	const int jump_speed = 380;
+StartPoint * Player::findStart() {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+		if((*it)->isStartPoint()) {
+			return static_cast<StartPoint *>(*it);
+		}
+	}
+	
+	return NULL;
+}
 
-	if (energy < energy_cost_jump)
-		return;
+void Player::jump(float dt) {
+	const int jump_speed = 380;
+	const float max_jet_accel = 2000;
+	const float jet_cost = 100;
 
 	if (speed_y == 0 && isGrounded())
 	{
+		if (energy < energy_cost_jump)
+			return;
+
 		speed_y = -jump_speed;
 		energy -= energy_cost_jump;
+
+		last_jump_time = time;
+	}
+	else
+	{
+		// Can't jet immediately after jumping
+		if (time - last_jump_time < 0.5f)
+			return;
+
+		float cost = jet_cost * dt;
+		if (energy < cost)
+			return;
+
+		energy -= cost;
+		speed_y -= max_jet_accel*dt;
 	}
 }
 
@@ -153,10 +148,28 @@ void Player::shoot() {
 		energy -= weapons[current_weapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
-		bullet->setPos(pos_x, pos_y - height/2);
-  	setCurrentAnimation("shoot");
-		resetCurrentAnimation();
+		if(crouched) {
+			bullet->setPos(pos_x, pos_y - 15);
+		} 
+		else {
+			bullet->setPos(pos_x, pos_y - 30);
+		}
+		
+		
+		if(walking) {
+			setCurrentAnimation("walkshoot");
+		}
+		else {
+			setCurrentAnimation("shoot");
+		}
+				
+				
+		//resetCurrentAnimation();
 	}
+}
+
+void Player::crouch() {
+	crouched = true;
 }
 
 void Player::update(float dt) {
@@ -164,6 +177,7 @@ void Player::update(float dt) {
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
+	walking = false;
 	
 	time += dt;
 
@@ -175,7 +189,10 @@ void Player::update(float dt) {
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
-	
+
+	if (godMode)
+		energy = std::max(energy, 10.f);
+
 	// left/right move
 	if (input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
@@ -195,17 +212,20 @@ void Player::update(float dt) {
 		else speed_x = 0.0;
 	}
 	
-
-	
-	// various actions (main() already handles KeyPressed so it doesn't miss
-	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
-	// when held down)
+	if(speed_x !=0) {
+		walking = true;
+	}
 
 	if (input.jumping())
-		jump();
+		jump(dt);
 
 	if (input.shooting())
 		shoot();
+	
+	if(input.crouching())
+		crouched = true;
+	else 
+		crouched = false;
 
 	// gravity
 	speed_y += speed_delta*dt;
@@ -219,9 +239,18 @@ void Player::update(float dt) {
 
 	// Compute animations:
 
-	if(time < last_shoot_time + shoot_duration) {
-		this->setCurrentAnimation("shoot");
-	} else if (!isGrounded() && speed_y != 0)
+	if(time - last_shoot_time < shoot_duration) {
+		if(walking) {
+			this->setCurrentAnimation("walkshoot");
+		}
+		else if(crouched) {
+			this->setCurrentAnimation("crouchshoot");
+		}		
+		else {
+			this->setCurrentAnimation("shoot");
+		}
+	} 
+	else if (!isGrounded() && speed_y != 0)
 	{
 		if(speed_y < 0)
 			this->setCurrentAnimation("jump");
@@ -230,23 +259,21 @@ void Player::update(float dt) {
 	}
 	else if (speed_x != 0)
 	{
-		this->setCurrentAnimation("walk");
+		walking = true;
+	std:cout<< this->getCurrentAnimation()->getIsFinished();
+		if(this->getCurrentAnimation()->getIsFinished()) {
+			this->setCurrentAnimation("walk");
+		}
+	} 
+	else if(crouched) {
+		this->setCurrentAnimation("crouch");
 	}
 	else
 	{
 		this->setCurrentAnimation("idle"); 
 	}
 
-	if (facing_direction == FACING_RIGHT)
-	{
-		sprite.FlipX(false);
-		//sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
-	else if (facing_direction == FACING_LEFT)
-	{
-		sprite.FlipX(true);
-		//sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
+	updateSpriteFacing();
 
 	if (speed_y == terminal_velocity)
 		sprite.Rotate(360.f*dt);
@@ -257,12 +284,7 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
-	/*
-	sprite.SetPosition(
-		0.5f + (int)(pos_x - game_map->cam_x - width/2),
-		0.5f + (int)(pos_y - game_map->cam_y - height));
-//	App->Draw(sprite);
-*/
+
 	AnimatedActor::draw();
 }
 
@@ -273,12 +295,45 @@ void Player::collide(Actor & otherActor)
 		die();
 	}
 	
-	if (otherActor.isCollectible())
+	if(otherActor.isSpawnPoint()) {
+		currentStart = static_cast<StartPoint *>(&otherActor);
+	}
+	
+	if(otherActor.isExitPoint()) {
+		std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
+		if(!mapname.empty()) {
+			game_map->loadMap(mapname);
+		}
+		currentStart = NULL;
+		init();
+	}
+	
+	if (otherActor.isCollectible() || otherActor.isExitPoint())
 	{
 		otherActor.collide(*this);
 	}
 }
 
+void bla()
+{
+	std::cout << "Bla" << std::endl;
+	game_map->loadMap(game_map->currentFilename);
+	g_player->init();
+}
+
 void Player::die() {
-	init();
+	if (godMode)
+		return;
+
+	if(armor == 0)
+	{
+		lifes--;
+		if(lifes >= 0) {
+			std::cout << "life lost. current lifes: " << lifes << std::endl;
+			init();
+		} else {
+			lifes = start_lifes;
+			ui_popupImage("images/game_over.png", bla);
+		}
+	}
 }
