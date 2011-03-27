@@ -34,6 +34,7 @@ Widget::Widget(int tp, Widget *par) {
 	txtPos = 0;
 	sval = 0.f;
 	slide = NULL;
+	
 	if (tp == UI_CONTAINER) {
 		if (ui_base != NULL) {
 			parent = ui_base;
@@ -347,6 +348,7 @@ bool ui_menuOpen()
 void ui_start()
 {
 	g_player->init();
+	ui_base->toggleBg();
 	//const char* mapName = "subwaymap-new.tmx";
 	//game_map->loadMap(mapName);
 	game_map->loadMap(startMap);
@@ -371,6 +373,8 @@ void ui_togglePause()
 
 void ui_showMenu()
 {
+	if (ui_base->toggleBg())
+		ui_base->toggleBg();
 	ui_hud->hide();
 	ui_pause->hide();
 	ui_options->hide();
@@ -581,19 +585,23 @@ void ui_init()
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);
+	ui_base->setBg("images/main_screen_background.png");
 
 	ui_hud = new Widget(UI_CONTAINER,ui_base);
 	ui_hud->toggleBg();
 	ui_hud->hide();
 	ui_menu = new Widget(UI_CONTAINER,ui_base);
+	ui_menu->toggleBg();
 	ui_menu->setPos(220,140);
 	ui_pause = new Widget(UI_CONTAINER,ui_base);
 	ui_pause->setPos(220,140);
 	ui_pause->hide();
 	ui_options = new Widget(UI_CONTAINER,ui_base);
+	ui_options->toggleBg();
 	ui_options->setPos(220,140);
 	ui_options->hide();
 	ui_opctrls = new Widget(UI_CONTAINER,ui_base);
+	ui_opctrls->toggleBg();
 	ui_opctrls->setPos(220,140);
 	ui_opctrls->hide();
 
@@ -608,11 +616,8 @@ void ui_init()
 	ui_popup->hide();
 
 	// main menu
-	Widget *b = new Widget(UI_LABEL,ui_menu);
-	b->setText("Xeon");
-	b->setPos(62,10);
 
-	b = new Widget(UI_BUTTON,ui_menu);
+	Widget *b = new Widget(UI_BUTTON,ui_menu);
 	b->setText("Start");
 	b->setPos(62,60);
 	b->setClick(ui_start);
@@ -648,9 +653,6 @@ void ui_init()
 	b->setClick(ui_quit);
 
 	// options menu
-	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Xeon Options");
-	b->setPos(62,10);
 
 	b = new Widget(UI_LABEL,ui_options);
 	char buf[255];
@@ -676,9 +678,6 @@ void ui_init()
 	b->setClick(ui_showMenu);
 
 	// controls menu
-	b = new Widget(UI_LABEL,ui_opctrls);
-	b->setText("Xeon Controls");
-	b->setPos(62,10);
 
 	b = new Widget(UI_LABEL,ui_opctrls);
 	b->setText("Move Left:");
