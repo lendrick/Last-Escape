@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="150" height="25" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="landscape" value="lab.png"/>
+  <property name="music" value="xeon5.ogg"/>
+ </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
   <image source="../images/tileset.png" width="512" height="2048"/>
  </tileset>
