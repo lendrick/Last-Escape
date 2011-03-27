@@ -3,7 +3,6 @@
 
 #include "AnimatedActor.h"
 #include "Sound.h"
-#include "SoundCache.h"
 
 class Enemy : public AnimatedActor
 {
@@ -15,7 +14,6 @@ public:
 	virtual bool isEnemy() { return true; }
 	
 	Sound* fireSound;
-	SoundCache soundCache;
 	
 	void patrol(float dt);
 protected:

@@ -1,6 +1,7 @@
 #include "EnemyFlyer.h"
 #include "Player.h"
 #include "Map.h"
+#include "SoundCache.h"
 
 EnemyFlyer::EnemyFlyer()
 :Enemy()
