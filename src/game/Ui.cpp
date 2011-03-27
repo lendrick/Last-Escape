@@ -522,6 +522,11 @@ void ui_hidePopup()
 	ui_popup_click = NULL;
 }
 
+void ui_showCredits()
+{
+	ui_popupImage("images/game_over.png",ui_showMenu);
+}
+
 void ui_setJump()
 {
 	char buf[255];
@@ -628,8 +633,13 @@ void ui_init()
 	b->setClick(ui_showOptions);
 
 	b = new Widget(UI_BUTTON,ui_menu);
-	b->setText("Quit");
+	b->setText("Credits");
 	b->setPos(62,120);
+	b->setClick(ui_showCredits);
+
+	b = new Widget(UI_BUTTON,ui_menu);
+	b->setText("Quit");
+	b->setPos(62,150);
 	b->setClick(ui_quit);
 
 	// popup
