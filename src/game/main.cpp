@@ -24,6 +24,7 @@ Map * game_map;
 sf::RenderWindow *App;
 Player *g_player;
 Input input;
+bool godMode = false;
 
 ImageCache imageCache;
 SoundCache soundCache;
@@ -77,6 +78,8 @@ int main(int argc, char** argv)
 			enableMusic = false;
 		else if (strcmp(argv[i], "--map") == 0)
 			mapName = argv[++i];
+		else if (strcmp(argv[i], "--iddqd") == 0)
+			godMode = true;
 	}
 
 	// Create main window
