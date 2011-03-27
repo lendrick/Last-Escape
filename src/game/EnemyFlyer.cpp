@@ -26,6 +26,7 @@ EnemyFlyer::EnemyFlyer()
 	tmp = addAnimation("fly");
 	tmp->addFrame(0, .2f);
 	tmp->addFrame(1, .2f);
+	tmp->addFrame(2, .2f);
 	tmp->setDoLoop(true);
 	
 	setCurrentAnimation("fly");	
