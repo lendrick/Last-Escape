@@ -473,7 +473,11 @@
   <object type="weaponupgrade" x="800" y="288"/>
   <object x="3540" y="1349"/>
   <object type="start" x="20" y="251"/>
-  <object type="exit" x="6321" y="1495"/>
+  <object type="exit" x="6321" y="1495">
+   <properties>
+    <property name="map" value="suburbs.tmx"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="centipedes" width="200" height="75">
   <properties>
