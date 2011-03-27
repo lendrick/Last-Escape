@@ -5,6 +5,7 @@
 #include "globals.h"
 #include "ImageCache.h"
 #include "SoundCache.h"
+#include "Ui.h"
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
@@ -30,7 +31,8 @@ WeaponDesc weapons[] = {
 Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
-	
+
+	lifes = 3;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -275,6 +277,14 @@ void Player::collide(Actor & otherActor)
 }
 
 void Player::die() {
-	if(armor == 0) 
+	if(armor == 0) {
+		lifes--;
+		std::cout << "life lost. current lifes: " << lifes << std::endl;
 		init();
+	}
+
+	if(lifes < 0) {
+		std::cout << "GAME OVER!" << std::endl;
+		ui_showMenu();
+	}
 }

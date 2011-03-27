@@ -41,6 +41,7 @@ public:
 	bool walking;
 	
 	int armor;
+	int lifes;
 	Sound * fireSound;
 };
 
