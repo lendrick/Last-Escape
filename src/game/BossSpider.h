@@ -15,5 +15,6 @@ private:
 	float walk_speed;
 	float shootInterval;
 	float lastShot, time;
+	float patrolInterval, patrolTime;
 }; 
 

@@ -12,7 +12,7 @@ BossSpider::BossSpider()
 :Enemy()
 {	
 	setImage("spider.png");
-	walk_speed = 1.f;
+	walk_speed = 100.0f;
 	
 	speed_x = 0;
 	speed_y = 0;
@@ -28,6 +28,9 @@ BossSpider::BossSpider()
 	lastShot = 0;
 	shootInterval = 0.5f;
 	time = 0;
+	
+	patrolInterval = 1.5f;
+	patrolTime = 0;
 	
 	Animation * tmp;
 	
@@ -64,6 +67,7 @@ BossSpider::BossSpider()
 void BossSpider::update(float dt) {
 	if(!dying) {
 		time += dt;
+		patrolTime += dt;
 		
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
@@ -74,11 +78,20 @@ void BossSpider::update(float dt) {
 		if(isGrounded()) speed_y = 0;
 		
 		if(facing_direction == FACING_LEFT) {
-			speed_x = -walk_speed;
+			speed_x = -walk_speed * dt;
+			if(patrolTime > patrolInterval) {
+				facing_direction = FACING_RIGHT;
+				patrolTime = 0;
+			}
 		} else {
-			speed_x = walk_speed;
+			speed_x = walk_speed * dt;
+			if(patrolTime > patrolInterval) {
+				facing_direction = FACING_LEFT;
+				patrolTime = 0;
+			}
 		}
-		patrol(dt);
+
+		
 		
 		updateSpriteFacing();
 		
