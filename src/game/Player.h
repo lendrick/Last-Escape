@@ -5,6 +5,7 @@
 #include "AnimatedActor.h"
 #include "Sound.h"
 #include "globals.h"
+#include "StartPoint.h"
 
 class Player : public AnimatedActor {
 public:
@@ -17,6 +18,10 @@ public:
 	virtual void draw();
 	virtual void die();
 	virtual void collide(Actor & otherActor);
+	
+	StartPoint * findStart();
+	
+	StartPoint * currentStart;
 	void init();
 
 	void jump(float dt);

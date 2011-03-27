@@ -44,6 +44,7 @@ Player::Player()
 	armor = 0;
 	
 	fireSound = soundCache["shoot.ogg"];
+	currentStart = NULL;
 
 	init();
 }
@@ -57,6 +58,15 @@ void Player::init() {
 	last_shoot_time = -100.f;
 	
 	energy = energy_max = 100.f;
+	
+	if(currentStart == NULL)
+		currentStart = findStart();
+	
+	float sx, sy;
+	if(currentStart != NULL) {
+		currentStart->getPos(sx, sy);
+		setPos(sx, sy);
+	} 
 	
 	// Find the first start point, and move the player there
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -80,6 +90,16 @@ void Player::init() {
 	this->setCurrentAnimation("idle");
 
 	current_weapon = 0;
+}
+
+StartPoint * Player::findStart() {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+		if((*it)->isStartPoint()) {
+			return static_cast<StartPoint *>(*it);
+		}
+	}
+	
+	return NULL;
 }
 
 void Player::jump(float dt) {
@@ -263,6 +283,10 @@ void Player::collide(Actor & otherActor)
 	if(otherActor.isEnemy()) 
 	{
 		die();
+	}
+	
+	if(otherActor.isSpawnPoint()) {
+		currentStart = static_cast<StartPoint *>(&otherActor);
 	}
 	
 	if (otherActor.isCollectible() || otherActor.isExitPoint())

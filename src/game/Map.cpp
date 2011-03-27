@@ -13,6 +13,7 @@
 #include "EnemyCentipede.h"
 #include "Particles.h"
 #include "StartPoint.h"
+#include "SpawnPoint.h"
 #include "ExitPoint.h"
 
 Map::Map(const char* mapName) {
@@ -152,26 +153,27 @@ void Map::loadMap(string filename) {
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
 
 				Actor* actor;
-				if (type == "pill")
+				if (type == "pill") {
 					actor = new CollectiblePill();
-				else if (type == "weaponupgrade")
+				} else if (type == "weaponupgrade") {
 					actor = new CollectibleWeaponUpgrade();
-				else if (type == "armor")
+				} else if (type == "armor") {
 					actor = new CollectibleArmor();
-				else if (type == "smoke")
+				} else if (type == "smoke") {
 					actor = new ParticleEmitter();
-				else if (type == "walker")
+				} else if (type == "walker") {
 					actor = new EnemyWalker();
-				else if (type == "flyer")
+				} else if (type == "flyer") {
 					actor = new EnemyFlyer();
-				else if (type == "centipede")
+				} else if (type == "centipede") {
 					actor = new EnemyCentipede();
-				else if (type == "start")
+				} else if (type == "start") {
 					actor = new StartPoint();
-				else if (type == "exit")
-					actor = new ExitPoint(w, h);
-				else
-				{
+				} else if (type == "spawn") {
+					actor = new SpawnPoint();
+				} else if (type == "exit") {
+					actor = new ExitPoint(w, h); 
+				} else {
 					printf("unrecognised object type %s\n", type.c_str());
 					continue;
 				}
