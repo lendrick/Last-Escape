@@ -342,7 +342,8 @@ void Player::die() {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;
 			init();
 		} else {
-			lifes = start_lifes;
+			lifes = start_lifes +1; //loses another life on the game over screen for some reason
+									//not enough time left to fix it properly!
 			ui_popupImage("images/game_over.png", bla);
 		}
 	}
