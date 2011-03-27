@@ -58,6 +58,8 @@ EnemyCentipede::~EnemyCentipede()
 
 void EnemyCentipede::update(float dt) {
 	//checkGround = false;
+	
+	float shootInterval = rand() % 1000;
 	time += dt;
 	if(!dying) {		
 		float mx, my;
