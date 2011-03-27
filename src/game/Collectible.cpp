@@ -98,8 +98,10 @@ CollectibleEnergyBall::CollectibleEnergyBall()
 void CollectibleEnergyBall::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
-		destroy();
-		soundCache["gmae.ogg"]->playSound();
-		g_player->energyBalls++;
+		if(!g_player->dying) {
+			destroy();
+			soundCache["gmae.ogg"]->playSound();
+			g_player->energyBalls++;
+		}
 	}
 }
