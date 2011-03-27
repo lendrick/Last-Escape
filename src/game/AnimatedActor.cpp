@@ -27,6 +27,7 @@ void AnimatedActor::init() {
 
 void AnimatedActor::setImage(std::string filename) 
 {
+	hasImage = true;
 	setFrameSize(0, 0);
 	this->sprite.SetImage(*(imageCache[filename]));
 	this->currentAnimation = NULL;
