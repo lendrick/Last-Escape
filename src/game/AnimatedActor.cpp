@@ -113,6 +113,9 @@ void AnimatedActor::flipDirection() {
 	}
 }
 
+void AnimatedActor::setFacing(int direction) {
+	facing_direction = direction;
+}
 
 
 void AnimatedActor::loadAnimationsFromFile(std::string filename)

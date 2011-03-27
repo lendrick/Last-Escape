@@ -11,11 +11,27 @@ public:
 	virtual void draw();
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
+	
 private:
+	float shootInterval;
+	float lastShot;
+	float time;
 	float walk_speed;
 	float speed_x;
 	float speed_y;
 	bool checkGround;
-	sf::Sprite debugPixel;
+	//sf::Sprite debugPixel;
 }; 
 
+class EnemyCentipedeProjectile : public Enemy
+{
+public:
+	EnemyCentipedeProjectile(int direction, int start_x, int start_y);
+	~EnemyCentipedeProjectile();
+	virtual void update(float dt);
+	virtual void onAnimationComplete(std::string anim);
+private:
+	float speed_x;
+	float speed_y;
+	float fly_speed;
+};

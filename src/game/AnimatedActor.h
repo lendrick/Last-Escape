@@ -33,6 +33,8 @@ public:
 	// Use it, for instance, to destroy the actor after it dies.
 	virtual void onAnimationComplete(std::string anim) {};
 	
+	void setFacing(int direction);
+	
 protected:
 	void flipDirection();
 	int facing_direction;
