@@ -12,6 +12,4 @@ public:
 	virtual void onAnimationComplete(std::string anim);
 private:
 	float walk_speed;
-	float speed_x;
-	float speed_y;
 }; 

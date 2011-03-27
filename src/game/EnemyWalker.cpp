@@ -24,17 +24,17 @@ EnemyWalker::EnemyWalker()
 	Animation * tmp;
 	
 	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
+	tmp->addFrame(3, .2f);
 	tmp->addFrame(2, .2f);
 	tmp->addFrame(1, .2f);
+	tmp->addFrame(2, .2f);
 	tmp->setDoLoop(true);
 	
 	tmp = addAnimation("die");
-	tmp->addFrame(4, .07f);
-	tmp->addFrame(5, .07f);
-	tmp->addFrame(6, .07f);
 	tmp->addFrame(7, .07f);
+	tmp->addFrame(6, .07f);
+	tmp->addFrame(5, .07f);
+	tmp->addFrame(4, .07f);
 	
 	setCurrentAnimation("walk");
 }
@@ -52,6 +52,7 @@ void EnemyWalker::update(float dt) {
 		speed_y += speed_gravity*dt;
 		if(isGrounded()) speed_y = 0;
 		
+		/*
 		// Chase the player
 		float dx = g_player->pos_x - pos_x;
 		if (-vision_range < dx && dx < -vision_min_range) {
@@ -61,13 +62,15 @@ void EnemyWalker::update(float dt) {
 			speed_x = walk_speed;
 			facing_direction = FACING_LEFT;
 		}
-		updateSpriteFacing();
+		*/
+		if(facing_direction == FACING_LEFT) {
+			speed_x = -60.0f;
+		} else {
+			speed_x = 60.0f;
+		}
+		patrol(dt);
 		
-		float delta_x = speed_x*dt;
-		float delta_y = speed_y*dt;
-		move(delta_x, delta_y);
-		speed_x = delta_x / dt;
-		speed_y = delta_y / dt;
+		updateSpriteFacing();
 	
 		checkCollisions();
 	}

@@ -10,6 +10,4 @@ public:
 private:
 	int patrolCountdown, patrolLength;
 	float fly_speed;
-	float speed_x;
-	float speed_y;
 }; 

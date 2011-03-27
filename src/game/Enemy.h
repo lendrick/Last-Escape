@@ -12,6 +12,10 @@ public:
 	virtual void collide(Actor& otherActor);
 
 	virtual bool isEnemy() { return true; }
+	
+	void patrol(float dt);
+protected:
+	float speed_x, speed_y;
 };
 
 
