@@ -337,7 +337,7 @@ void Player::die() {
 	{
 		dieSound->playSound();
 		lifes--;
-		if(lifes >= 0) {
+		if(lifes > 0) {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;
 			init();
 		} else {
