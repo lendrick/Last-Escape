@@ -253,7 +253,10 @@ void Player::update(float dt) {
 	else if (speed_x != 0)
 	{
 		walking = true;
-		this->setCurrentAnimation("walk");
+	std:cout<< this->getCurrentAnimation()->getIsFinished();
+		if(this->getCurrentAnimation()->getIsFinished()) {
+			this->setCurrentAnimation("walk");
+		}
 	} 
 	else if(crouched) {
 		this->setCurrentAnimation("crouch");

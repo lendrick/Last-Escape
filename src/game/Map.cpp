@@ -46,7 +46,7 @@ Map::Map(const char* mapName) {
 void Map::loadTileset(string filename) {
 
 	tileset.LoadFromFile(("images/" + filename).c_str());
-	
+	tileset.SetSmooth(false);
 }
 
 
