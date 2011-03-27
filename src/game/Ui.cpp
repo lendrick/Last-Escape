@@ -7,9 +7,9 @@ int ui_focused_widget;
 int ui_widget_id = 0;
 int ui_setter = -1;
 
-
 Widget *ui_base = NULL;
 Widget *ui_energy = NULL;
+Widget *ui_sheild = NULL;
 Widget *ui_hud = NULL;
 Widget *ui_menu = NULL;
 Widget *ui_pause = NULL;
@@ -17,10 +17,9 @@ Widget *ui_options = NULL;
 Widget *ui_opctrls = NULL;
 Widget *ui_controls[5];
 Widget *ui_snd = NULL;
+Widget *ui_popup = NULL;
+void (*ui_popup_click)() = NULL;
 sf::Image ui_background;
-
-sf::Sprite teamOgaSprite;
-sf::Image teamOgaImage;
 
 Widget::Widget(int tp, Widget *par) {
 	type = tp;
@@ -186,11 +185,13 @@ bool Widget::toggleBg()
 
 void Widget::setBg(const sf::Unicode::Text &Text)
 {
-	sf::Image img;
-	img.LoadFromFile(Text);
-	background.SetImage(img);
-	sf::Vector2f v = background.GetSize();
-	setSize(v.x,v.y);
+	bgi.LoadFromFile(Text);
+	background.SetImage(bgi);
+	int w = (int)bgi.GetWidth();
+	int h = (int)bgi.GetHeight();
+	background.SetSubRect(sf::IntRect(0,0,w,h));
+	setSize(w,h);
+	setPos(320-(w/2),240-(h/2));
 }
 
 bool Widget::isChecked()
@@ -475,6 +476,26 @@ void ui_setEvent(sf::Event &Event)
 	}
 }
 
+void ui_popupImage(const sf::Unicode::Text &path, void (*func)())
+{
+	ui_popup->setBg(path);
+	int w;
+	int h;
+	ui_popup->getSize(w,h);
+	ui_popup->child->setSize(w,h);
+	ui_popup_click = func;
+	ui_popup->show();
+}
+
+void ui_hidePopup()
+{
+	ui_popup->hide();
+	if (ui_popup_click)
+		ui_popup_click();
+
+	ui_popup_click = NULL;
+}
+
 void ui_setJump()
 {
 	char buf[255];
@@ -535,12 +556,6 @@ void ui_init()
 
 	if (!ui_background.LoadFromFile("images/ui.png"))
 		printf("failed to load ui sprites\n");
-		
-	if (!teamOgaImage.LoadFromFile("images/teamOGA.png"))
-		printf("failed to load teamOga.png sprites\n");
-		
-	teamOgaSprite.SetImage(teamOgaImage);
-	teamOgaSprite.SetPosition(App->GetWidth()-teamOgaImage.GetWidth(), App->GetHeight()-teamOgaImage.GetHeight());
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);
@@ -562,7 +577,14 @@ void ui_init()
 
 	ui_energy = new Widget(UI_LABEL,ui_hud);
 	ui_energy->setSize(200,20);
-	ui_energy->setPos(8,8);
+	ui_energy->setPos(2,2);
+	ui_sheild = new Widget(UI_LABEL,ui_hud);
+	ui_sheild->setSize(200,20);
+	ui_sheild->setPos(2,22);
+
+	ui_popup = new Widget(UI_CONTAINER,ui_base);
+	ui_popup->setPos(220,140);
+	ui_popup->hide();
 
 	// main menu
 	Widget *b = new Widget(UI_LABEL,ui_menu);
@@ -583,6 +605,11 @@ void ui_init()
 	b->setText("Quit");
 	b->setPos(62,120);
 	b->setClick(ui_quit);
+
+	// popup
+	b = new Widget(UI_BUTTON,ui_popup);
+	b->toggleBg();
+	b->setClick(ui_hidePopup);
 
 	// pause menu
 	b = new Widget(UI_LABEL,ui_pause);
@@ -698,24 +725,8 @@ int ui_event(sf::Event &Event)
 	}
 	int r = ui_base->event(Event);
 	if (!r) {
-		if (Event.Type == sf::Event::MouseButtonPressed) {
-			//Check if Oga logo was pressed
-			if(Event.MouseButton.X > teamOgaSprite.GetPosition().x &&
-				Event.MouseButton.Y > teamOgaSprite.GetPosition().y) {
-				cout << "logo pressed"  << endl;
-				#ifdef SFML_SYSTEM_WINDOWS
-					#include <windows.h>
-					ShellExecute(NULL, "open", "http://opengameart.org", NULL, NULL, SW_SHOWNORMAL);
-				#endif
-				#ifdef SFML_SYSTEM_LINUX
-					system("xdg-open http://opengameart.org");
-				#endif
-				#ifdef SFML_SYSTEM_MACOSX
-					system("open http://opengameart.org");
-				#endif
-			}
+		if (Event.Type == sf::Event::MouseButtonPressed)
 			ui_focused_widget = 0;
-		}
 	}
 
 	if (!r && (!ui_menu->isHidden() || !ui_pause->isHidden()))
@@ -735,9 +746,15 @@ void ui_render(Player& player)
 		ui_energy->setTextColor(0x01, 135, 0x00);
 	ui_energy->setText(buf);
 
+	//energy = 100*player.energy/player.energy_max;
+	//sprintf(buf, "Sheild: %.0f%%", energy);
+	//if (energy < 20.f)
+		//ui_sheild->setTextColor(0xef, 0x29, 0x29);
+	//else
+		//ui_sheild->setTextColor(0x01, 135, 0x00);
+	//ui_sheild->setText(buf);
+
 	ui_base->draw();
-	if(ui_menuOpen())
-		App->Draw(teamOgaSprite);
 }
 
 void ui_exit()

@@ -43,14 +43,15 @@ public:
 	void getSize(int &w, int &h);
 
 	int event(sf::Event &Event);
+	Widget *child;
 
 protected:
+	sf::Image bgi;
 	sf::Sprite background;
 	sf::Sprite slider;
 	sf::String text;
 
 	Widget *next;
-	Widget *child;
 	Widget *parent;
 
 	void (*click)();
@@ -78,6 +79,7 @@ extern Widget *ui_pause;
 
 void ui_init(void);
 int ui_event(sf::Event &Event);
+void ui_popupImage(const sf::Unicode::Text &path, void (*func)());
 void ui_render(Player &player);
 void ui_exit(void);
 void ui_start();
