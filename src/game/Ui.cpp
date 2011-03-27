@@ -186,6 +186,7 @@ bool Widget::toggleBg()
 void Widget::setBg(const sf::Unicode::Text &Text)
 {
 	bgi.LoadFromFile(Text);
+	bgi.SetSmooth(false);
 	background.SetImage(bgi);
 	int w = (int)bgi.GetWidth();
 	int h = (int)bgi.GetHeight();
