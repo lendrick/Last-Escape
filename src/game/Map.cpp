@@ -219,7 +219,10 @@ void Map::loadMap(string filename) {
 		}
 	}
 	
-	if(g_player != NULL) g_player->init();
+	if(g_player != NULL) {
+		g_player->init();
+		cameraFollow = g_player;
+	}
 	loaded = true;
 }
 
