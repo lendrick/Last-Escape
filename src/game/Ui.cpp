@@ -13,7 +13,9 @@ Widget *ui_hud = NULL;
 Widget *ui_menu = NULL;
 Widget *ui_pause = NULL;
 Widget *ui_options = NULL;
+Widget *ui_opctrls = NULL;
 Widget *ui_controls[5];
+Widget *ui_snd = NULL;
 sf::Image ui_background;
 
 Widget::Widget(int tp, Widget *par) {
@@ -27,6 +29,8 @@ Widget::Widget(int tp, Widget *par) {
 	checked = false;
 	has_bg = true;
 	txtPos = 0;
+	sval = 0.f;
+	slide = NULL;
 	if (tp == UI_CONTAINER) {
 		if (ui_base != NULL) {
 			parent = ui_base;
@@ -45,6 +49,11 @@ Widget::Widget(int tp, Widget *par) {
 			}else if (tp == UI_CHECK) {
 				setSize(20,20);
 				background.SetSubRect(sf::IntRect(203,40,223,60));
+			}else if (tp == UI_HSLIDE) {
+				setSize(150,3);
+				background.SetSubRect(sf::IntRect(0,203,150,206));
+				slider.SetImage(ui_background);
+				slider.SetSubRect(sf::IntRect(203,40,223,60));
 			}
 		}
 		if (parent->child) {
@@ -125,6 +134,26 @@ void Widget::setClick(void (*func)())
 	click = func;
 }
 
+void Widget::setSlide(void (*func)(float v))
+{
+	slide = func;
+}
+
+void Widget::setSlideValue(float v)
+{
+	if (type != UI_HSLIDE)
+		return;
+
+	sval = v;
+	if (sval > 100.f)
+		sval = 100.f;
+	if (sval < 0.f)
+		sval = 0.f;
+
+	if (slide)
+		slide(sval);
+}
+
 void Widget::show()
 {
 	hidden = false;
@@ -149,6 +178,15 @@ bool Widget::toggleBg()
 		has_bg = true;
 		return false;
 	}
+}
+
+void Widget::setBg(const sf::Unicode::Text &Text)
+{
+	sf::Image img;
+	img.LoadFromFile(Text);
+	background.SetImage(img);
+	sf::Vector2f v = background.GetSize();
+	setSize(v.x,v.y);
 }
 
 bool Widget::isChecked()
@@ -193,6 +231,10 @@ void Widget::draw() {
 		y += pos_y+3;
 		text.SetPosition(x,y);
 		App->Draw(text);
+		if (type == UI_HSLIDE) {
+			slider.SetPosition((x+(150.f*(sval/100.f))-10.f),y-11);
+			App->Draw(slider);
+		}
 	}
 }
 
@@ -200,24 +242,35 @@ int Widget::event(sf::Event &Event)
 {
 	if (hidden)
 		return 0;
+
+	int x = (int)pos_x;
+	int y = (int)pos_y;
+	if (type != UI_CONTAINER) {
+		float fx = 0;
+		float fy = 0;
+		parent->getPos(fx,fy);
+		x += (int)fx;
+		y += (int)fy;
+	}
+	int mx = (int)x+width;
+	int my = (int)y+height;
+	int msx = 0;
+	int msy = 0;
+	if (Event.Type == sf::Event::MouseButtonPressed || Event.Type == sf::Event::MouseButtonReleased) {
+		msx = Event.MouseButton.X;
+		msy = Event.MouseButton.Y;
+	}else if (Event.Type == sf::Event::MouseMoved) {
+		msx = Event.MouseMove.X;
+		msy = Event.MouseMove.Y;
+	}
+
 	if (id != ui_base->getId() && Event.Type != sf::Event::KeyPressed) {
-		if (Event.Type != sf::Event::MouseButtonPressed)
+		if (type == UI_HSLIDE) {
+			if (msx < x || msx > mx || msy < y-10 || msy > my+9)
+				return 0;
+		}else if (msx < x || msx > mx || msy < y || msy > my) {
 			return 0;
-		int x = (int)pos_x;
-		int y = (int)pos_y;
-		if (type != UI_CONTAINER) {
-			float fx = 0;
-			float fy = 0;
-			parent->getPos(fx,fy);
-			x += (int)fx;
-			y += (int)fy;
 		}
-		int mx = (int)x+width;
-		int my = (int)y+height;
-		int msx = Event.MouseButton.X;
-		int msy = Event.MouseButton.Y;
-		if (!(msx > x && msx < mx && msy > y && msy < my))
-			return 0;
 	}
 	if (type == UI_CONTAINER) {
 		Widget *n = child;
@@ -232,6 +285,10 @@ int Widget::event(sf::Event &Event)
 			ui_focused_widget = id;
 			if (click)
 				click();
+			if (type == UI_HSLIDE) {
+				float v = (msx-x)/1.5f;
+				setSlideValue(v);
+			}
 			if (type == UI_CHECK) {
 				if (checked) {
 					checked = false;
@@ -242,13 +299,14 @@ int Widget::event(sf::Event &Event)
 				}
 			}
 			return 1;
-		}else if (id == ui_focused_widget && Event.Type == sf::Event::KeyPressed) {
-			if (type == UI_TEXT) {
-				// Ok, I have nfi here should update the text, somehow
-				//if (Event.Key.Code == sf::Key::Backspace) {
-				//}else if
-				txt[txtPos] = 0;
-				setText(txt);
+		}else if (type == UI_HSLIDE && id == ui_focused_widget) {
+			if (Event.Type == sf::Event::MouseMoved) {
+				float v = (msx-x)/1.5f;
+				setSlideValue(v);
+				//return 1;
+			}else if (Event.Type == sf::Event::MouseButtonReleased) {
+				ui_focused_widget = -1;
+				//return 1;
 			}
 		}
 	}
@@ -257,7 +315,7 @@ int Widget::event(sf::Event &Event)
 
 bool ui_menuOpen()
 {
-	if (!ui_menu->isHidden() || !ui_pause->isHidden() || !ui_options->isHidden())
+	if (!ui_menu->isHidden() || !ui_pause->isHidden() || !ui_options->isHidden() || !ui_opctrls->isHidden())
 		return true;
 
 	return false;
@@ -295,7 +353,14 @@ void ui_showMenu()
 void ui_showOptions()
 {
 	ui_menu->hide();
+	ui_opctrls->hide();
 	ui_options->show();
+}
+
+void ui_showControls()
+{
+	ui_options->hide();
+	ui_opctrls->show();
 }
 
 void ui_quit()
@@ -451,6 +516,14 @@ void ui_setShoot()
 	ui_controls[INPUT_SHOOT]->setText(buf);
 }
 
+void ui_setVol(float v)
+{
+	sf::Listener::SetGlobalVolume(v);
+	char buf[255];
+	sprintf(buf,"Volume: %.0f%%",v);
+	ui_snd->setText(buf);
+}
+
 void ui_init()
 {
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
@@ -464,6 +537,7 @@ void ui_init()
 
 	ui_hud = new Widget(UI_CONTAINER,ui_base);
 	ui_hud->toggleBg();
+	ui_hud->hide();
 	ui_menu = new Widget(UI_CONTAINER,ui_base);
 	ui_menu->setPos(220,140);
 	ui_pause = new Widget(UI_CONTAINER,ui_base);
@@ -472,6 +546,9 @@ void ui_init()
 	ui_options = new Widget(UI_CONTAINER,ui_base);
 	ui_options->setPos(220,140);
 	ui_options->hide();
+	ui_opctrls = new Widget(UI_CONTAINER,ui_base);
+	ui_opctrls->setPos(220,140);
+	ui_opctrls->hide();
 
 	ui_energy = new Widget(UI_LABEL,ui_hud);
 	ui_energy->setSize(200,20);
@@ -513,60 +590,87 @@ void ui_init()
 	b->setClick(ui_showMenu);
 
 	// options menu
-
 	b = new Widget(UI_LABEL,ui_options);
 	b->setText("Xeon Options");
 	b->setPos(62,10);
 
 	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Move Left:");
-	b->setPos(10,40);
-	ui_controls[INPUT_LEFT] = new Widget(UI_BUTTON,ui_options);
-	ui_controls[INPUT_LEFT]->setText("Left Arrow");
-	ui_controls[INPUT_LEFT]->toggleBg();
-	ui_controls[INPUT_LEFT]->setPos(110,40);
-	ui_controls[INPUT_LEFT]->setClick(ui_setLeft);
+	char buf[255];
+	float svol = sf::Listener::GetGlobalVolume()*100.f;
+	sprintf(buf,"Volume: %.0f%%",svol);
+	b->setText(buf);
+	b->setPos(62,50);
+	ui_snd = b;
 
-	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Move Right:");
-	b->setPos(10,65);
-	ui_controls[INPUT_RIGHT] = new Widget(UI_BUTTON,ui_options);
-	ui_controls[INPUT_RIGHT]->setText("Right Arrow");
-	ui_controls[INPUT_RIGHT]->toggleBg();
-	ui_controls[INPUT_RIGHT]->setPos(110,65);
-	ui_controls[INPUT_RIGHT]->setClick(ui_setRight);
+	b = new Widget(UI_HSLIDE,ui_options);
+	b->setSlideValue(svol);
+	b->setPos(28,78);
+	b->setSlide(ui_setVol);
 
-	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Jump:");
-	b->setPos(10,90);
-	ui_controls[INPUT_JUMP] = new Widget(UI_BUTTON,ui_options);
-	ui_controls[INPUT_JUMP]->setText("Up Arrow");
-	ui_controls[INPUT_JUMP]->toggleBg();
-	ui_controls[INPUT_JUMP]->setPos(110,90);
-	ui_controls[INPUT_JUMP]->setClick(ui_setJump);
-
-	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Shoot:");
-	b->setPos(10,115);
-	ui_controls[INPUT_SHOOT] = new Widget(UI_BUTTON,ui_options);
-	ui_controls[INPUT_SHOOT]->setText("Space");
-	ui_controls[INPUT_SHOOT]->toggleBg();
-	ui_controls[INPUT_SHOOT]->setPos(110,115);
-	ui_controls[INPUT_SHOOT]->setClick(ui_setShoot);
-
-	b = new Widget(UI_LABEL,ui_options);
-	b->setText("Crouch:");
-	b->setPos(10,140);
-	ui_controls[INPUT_CROUCH] = new Widget(UI_BUTTON,ui_options);
-	ui_controls[INPUT_CROUCH]->setText("Down Arrow");
-	ui_controls[INPUT_CROUCH]->toggleBg();
-	ui_controls[INPUT_CROUCH]->setPos(110,140);
-	ui_controls[INPUT_CROUCH]->setClick(ui_setCrouch);
+	b = new Widget(UI_BUTTON,ui_options);
+	b->setText("Controls");
+	b->setPos(62,110);
+	b->setClick(ui_showControls);
 
 	b = new Widget(UI_BUTTON,ui_options);
 	b->setText("Back");
 	b->setPos(62,170);
 	b->setClick(ui_showMenu);
+
+	// controls menu
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Xeon Controls");
+	b->setPos(62,10);
+
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Move Left:");
+	b->setPos(10,40);
+	ui_controls[INPUT_LEFT] = new Widget(UI_BUTTON,ui_opctrls);
+	ui_controls[INPUT_LEFT]->setText("Left Arrow");
+	ui_controls[INPUT_LEFT]->toggleBg();
+	ui_controls[INPUT_LEFT]->setPos(110,40);
+	ui_controls[INPUT_LEFT]->setClick(ui_setLeft);
+
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Move Right:");
+	b->setPos(10,65);
+	ui_controls[INPUT_RIGHT] = new Widget(UI_BUTTON,ui_opctrls);
+	ui_controls[INPUT_RIGHT]->setText("Right Arrow");
+	ui_controls[INPUT_RIGHT]->toggleBg();
+	ui_controls[INPUT_RIGHT]->setPos(110,65);
+	ui_controls[INPUT_RIGHT]->setClick(ui_setRight);
+
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Jump:");
+	b->setPos(10,90);
+	ui_controls[INPUT_JUMP] = new Widget(UI_BUTTON,ui_opctrls);
+	ui_controls[INPUT_JUMP]->setText("Up Arrow");
+	ui_controls[INPUT_JUMP]->toggleBg();
+	ui_controls[INPUT_JUMP]->setPos(110,90);
+	ui_controls[INPUT_JUMP]->setClick(ui_setJump);
+
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Shoot:");
+	b->setPos(10,115);
+	ui_controls[INPUT_SHOOT] = new Widget(UI_BUTTON,ui_opctrls);
+	ui_controls[INPUT_SHOOT]->setText("Space");
+	ui_controls[INPUT_SHOOT]->toggleBg();
+	ui_controls[INPUT_SHOOT]->setPos(110,115);
+	ui_controls[INPUT_SHOOT]->setClick(ui_setShoot);
+
+	b = new Widget(UI_LABEL,ui_opctrls);
+	b->setText("Crouch:");
+	b->setPos(10,140);
+	ui_controls[INPUT_CROUCH] = new Widget(UI_BUTTON,ui_opctrls);
+	ui_controls[INPUT_CROUCH]->setText("Down Arrow");
+	ui_controls[INPUT_CROUCH]->toggleBg();
+	ui_controls[INPUT_CROUCH]->setPos(110,140);
+	ui_controls[INPUT_CROUCH]->setClick(ui_setCrouch);
+
+	b = new Widget(UI_BUTTON,ui_opctrls);
+	b->setText("Back");
+	b->setPos(62,170);
+	b->setClick(ui_showOptions);
 
 	// set the default game events
 	inputs[INPUT_JUMP].key = sf::Key::Up;
@@ -602,7 +706,7 @@ void ui_render(Player& player)
 	if (energy < 20.f)
 		ui_energy->setTextColor(0xef, 0x29, 0x29);
 	else
-		ui_energy->setTextColor(0xed, 0xd4, 0x00);
+		ui_energy->setTextColor(0x01, 135, 0x00);
 	ui_energy->setText(buf);
 
 	ui_base->draw();

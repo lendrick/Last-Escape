@@ -8,6 +8,7 @@
 #define UI_LABEL	2
 #define UI_TEXT		3
 #define UI_CHECK	4
+#define UI_HSLIDE	5
 
 class Widget {
 public:
@@ -22,13 +23,17 @@ public:
 	void setTextColor(int r, int g, int b);
 	void setTextSize(int sz);
 
+	bool toggleBg();
+	void setBg(const sf::Unicode::Text &Text);
+
 	void setClick(void (*func)());
+	void setSlide(void (*func)(float v));
+	void setSlideValue(float v);
 
 	void show();
 	void hide();
 	bool isHidden();
 	bool isChecked();
-	bool toggleBg();
 
 	int getId();
 
@@ -41,6 +46,7 @@ public:
 
 protected:
 	sf::Sprite background;
+	sf::Sprite slider;
 	sf::String text;
 
 	Widget *next;
@@ -48,6 +54,7 @@ protected:
 	Widget *parent;
 
 	void (*click)();
+	void (*slide)(float v);
 	char txt[255];
 	int txtPos;
 	int id;
@@ -55,6 +62,7 @@ protected:
 	int size;
 	int height, width;
 	float pos_x, pos_y;
+	float sval;
 	bool checked;
 	bool hidden;
 	bool has_bg;
