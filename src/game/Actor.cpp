@@ -137,3 +137,11 @@ bool Actor::canCollide() {
 void Actor::setCanCollide(bool col) {
 	collideable = col;
 }
+
+void Actor::goToGround() {
+	while(!isGrounded() && pos_y < 32 * 256) {
+		float mov_x = 0;
+		float mov_y = 15;
+		move(mov_x, mov_y);
+	}
+}

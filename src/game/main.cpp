@@ -69,8 +69,7 @@ void cleanup() {
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
-	const char* mapName = "suburbs.tmx";
-	//const char* mapName = "sewer.tmx";
+	char * mapName;
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -127,16 +126,18 @@ int main(int argc, char** argv)
 		// Clear screen
 		App->Clear();
 		
-		if(!paused) 
-			update(p1, frameTime);
+		if(game_map != NULL && game_map->isLoaded()) {
+			if(!paused) 
+				update(p1, frameTime);
+			
+			cleanup();
+
+			game_map->renderLandscape();
+			game_map->renderBackground();
+			renderActors();
+			game_map->renderForeground();
+		}
 		
-		cleanup();
-
-		game_map->renderLandscape();
-		game_map->renderBackground();
-		renderActors();
-		game_map->renderForeground();
-
 		ui_render(p1);
 
 		// Finally, display the rendered frame on screen

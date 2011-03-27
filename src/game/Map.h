@@ -55,6 +55,7 @@ public:
 	void renderBackground();
 	void renderForeground();
 	void clear();
+	bool isLoaded();
 	
 	void actorDestroyed(Actor * actor);
 
@@ -65,6 +66,7 @@ public:
 	
 	int cam_x;
 	int cam_y;
+	bool loaded;
 
 	std::string currentFilename;
 };

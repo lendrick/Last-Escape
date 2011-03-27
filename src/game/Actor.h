@@ -45,6 +45,7 @@ public:
 	bool canCollide();
 	void setCanCollide(bool col);
 	bool isDying();
+	void goToGround();
 
 	// stupid version of dynamic casting
 	virtual bool isPlayer() { return false; }

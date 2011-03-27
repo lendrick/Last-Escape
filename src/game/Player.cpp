@@ -92,7 +92,7 @@ void Player::init() {
 	speed_y = 0.0f;
 
 	// Set Animations
-
+	goToGround();
 
 	this->setCurrentAnimation("idle");
 

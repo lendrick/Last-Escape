@@ -15,12 +15,14 @@
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
+#include "Player.h"
 #include "Actor.h"
 #include <cstdlib>
 
 Map::Map(const char* mapName) {
 	
 	loadTileset("tileset.png");
+	loaded = false;
 	
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
@@ -53,7 +55,7 @@ void Map::loadTileset(string filename) {
 
 
 void Map::loadMap(string filename) {
-
+	loaded = false;
 	ifstream infile;
 	string line;
 	string starts_with;
@@ -73,14 +75,17 @@ void Map::loadMap(string filename) {
 			background[i][j] = 0;
 			foreground[i][j] = 0;
 			fringe[i][j] = 0;
-			collision[i][j] = false;
-			
+			collision[i][j] = false;			
 		}
 	}
 	clear();
 	
 	TiXmlDocument doc;
-	if (!doc.LoadFile(("maps/" + filename).c_str()))
+	
+	if(filename == "") {
+		return;
+	}
+	else if (!doc.LoadFile(("maps/" + filename).c_str()))
 	{
 		printf("failed to open map\n");
 		return;
@@ -213,6 +218,13 @@ void Map::loadMap(string filename) {
 			}
 		}
 	}
+	
+	if(g_player != NULL) g_player->init();
+	loaded = true;
+}
+
+bool Map::isLoaded() {
+	return loaded;
 }
 
 /**
