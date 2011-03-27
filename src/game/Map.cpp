@@ -120,7 +120,7 @@ void Map::loadMap(string filename) {
 		}
 		else if (childName == "objectgroup")
 		{
-			const char* defaultType;
+			const char* defaultType = NULL;
 
 			// Look for a 'type' property as default for the whole group
 			TiXmlElement* prop = TiXmlHandle(child).FirstChild("properties").FirstChild("property").ToElement();
