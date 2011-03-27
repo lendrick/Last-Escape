@@ -29,6 +29,10 @@ Sound * deathSound = new Sound();
 Sound * bulletHitSound = new Sound();
 Sound * enemyDeathSound = new Sound();
 
+sf::Image * xeonImage;
+sf::Image * walkerImage;
+sf::Image * flyerImage;
+
 
 void update(Player& player, float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -58,14 +62,33 @@ void cleanup() {
 	}
 }
 
+sf::Image * loadImage(std::string filename) 
+{
+	sf::Image * img = new sf::Image;
+	if(!img->LoadFromFile(filename)) {
+		cout << "Failed to load image " << filename << "\n";
+		return NULL;
+	}
+	
+	return img;
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
 /// \return Application exit code
 ///
 ////////////////////////////////////////////////////////////
-int main()
+int main(int argc, char** argv)
 {
+	bool enableMusic = true;
+
+	// Parse a few command-line arguments
+	for (int i = 1; i < argc; ++i) {
+		if (strcmp(argv[i], "--disable-music") == 0)
+			enableMusic = false;
+	}
+
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
 	App->SetFramerateLimit(60);
@@ -74,6 +97,11 @@ int main()
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
 
+	xeonImage = loadImage("images/xeon.png");
+	walkerImage = loadImage("images/walker.png");
+	flyerImage = loadImage("images/flyer.png");
+	
+	
 
 	// Create game objects
 	game_map = new Map();
@@ -81,15 +109,14 @@ int main()
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
 
-	sf::Clock Clock;
-
-	// Create Animation test
-	sf::Image xeon;
-	xeon.LoadFromFile("images/xeon.png");
-	backgroundMusic->playSound();
+	if (enableMusic)
+		backgroundMusic->playSound();
 
 	ui_init();
 
+	sf::Clock Clock;
+	Clock.Reset();
+	
 	// Start game loop
 	while (App->IsOpened())
 	{
@@ -105,6 +132,7 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
+		game_map->renderLandscape();
 		game_map->renderBackground();
 		renderActors();
 		game_map->renderForeground();

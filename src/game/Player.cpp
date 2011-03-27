@@ -4,24 +4,6 @@
 #include "Sound.h"
 #include "globals.h"
 
-const int SPRITE_TILE_W = 128;
-const int SPRITE_TILE_H = 128;
-
-const int SPRITE_CENTER_X = 32;
-const int SPRITE_CENTER_Y = 104;
-
-const int SPRITE_IDLE_ROW = 0;
-
-const int SPRITE_WALK_ROW = 0;
-const int SPRITE_WALK_COUNT = 4;
-const float SPRITE_WALK_SPEED = 8.f;
-
-const int SPRITE_JUMP_ROW = 1;
-
-const int SPRITE_SHOOT_ROW = 2;
-const int SPRITE_SHOOT_COUNT = 3;
-const float SPRITE_SHOOT_SPEED = 16.f;
-
 const float energy_cost_jump = 10.f;
 const float energy_recharge_rate = 5.f; // units per second
 
@@ -45,9 +27,7 @@ WeaponDesc weapons[] = {
 
 Player::Player()
 : AnimatedActor() {
-	if (!image.LoadFromFile("images/xeon.png"))
-		printf("failed to load images/xeon.png\n");
-	this->setImage(image);
+	this->setImage(*xeonImage);
 	
 	width = 24;
 	height = 48;
@@ -57,22 +37,6 @@ Player::Player()
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
-	
-	//sprite.SetCenter(SPRITE_CENTER_X - xOrigin, SPRITE_CENTER_Y - yOrigin);
-	
-	/*
-	Animation* walkAnimation = new Animation(this->sprite);
-	walkAnimation->toDefaultXeonWalkAnimation();
-	this->animations["walk"] = walkAnimation;
-	
-	Animation* jumpAnimation = new Animation(this->sprite);
-	jumpAnimation->toDefaultXeonJumpAnimation();
-	this->animations["jump"] = jumpAnimation;
-	
-	Animation* idleAnimation = new Animation(this->sprite);
-	idleAnimation->toDefaultXeonIdleAnimation();
-	this->animations["idle"] = idleAnimation;
-	*/
 	
 	Animation * tmp;
 	
@@ -194,12 +158,6 @@ void Player::update(float dt) {
 		else if (speed_x < -speed_delta_decel*dt) speed_x += speed_delta_decel*dt;
 		else speed_x = 0.0;
 	}
-	
-
-	
-	// various actions (main() already handles KeyPressed so it doesn't miss
-	// any user inputs, but the extra KeyDown checks ensure it'll repeat properly
-	// when held down)
 
 	if (input.jumping())
 		jump();
@@ -238,16 +196,7 @@ void Player::update(float dt) {
 		this->setCurrentAnimation("idle"); 
 	}
 
-	if (facing_direction == FACING_RIGHT)
-	{
-		sprite.FlipX(false);
-		//sprite.SetCenter(SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
-	else if (facing_direction == FACING_LEFT)
-	{
-		sprite.FlipX(true);
-		//sprite.SetCenter(SPRITE_TILE_W - SPRITE_CENTER_X, SPRITE_CENTER_Y);
-	}
+	updateSpriteFacing();
 
 	if (speed_y == terminal_velocity)
 		sprite.Rotate(360.f*dt);
@@ -258,12 +207,7 @@ void Player::update(float dt) {
 }
 
 void Player::draw() {
-	/*
-	sprite.SetPosition(
-		0.5f + (int)(pos_x - game_map->cam_x - width/2),
-		0.5f + (int)(pos_y - game_map->cam_y - height));
-//	App->Draw(sprite);
-*/
+
 	AnimatedActor::draw();
 }
 

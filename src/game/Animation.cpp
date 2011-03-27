@@ -25,19 +25,29 @@ void Animation::addFrame(int num, float duration) {
 	int w = img->GetWidth();
 	int h = img->GetHeight();
 	
-	//std::cout << w << "x" << h << "\n";
+	
+	//std::cout << "*** " << name << "\n";
+	//std::cout << "img dimensions: " << w << "x" << h << "\n";
 	
 	int x_tiles = w / frame_w;
 	int y_tiles = h / frame_h;
-	//std::cout << frame_w << "x" << frame_h << "\n";
-	//std::cout << x_tiles << "x" << y_tiles << "\n";
-	//std::cout << num << "\n";
+	//std::cout << "frame size: " << frame_w << "x" << frame_h << "\n";
+	//std::cout << "image tile grid size: " << x_tiles << "x" << y_tiles << "\n";
+	//std::cout << "frame numnber: " << num << "\n";
 	
-	int column = num % y_tiles;
+	int column = num % x_tiles;
 	int row = (num - column) / x_tiles;
 	
+	//std::cout << "frame location: " << column << ", " << row << "\n";
+	
+	int x1 = column * frame_w;
+	int y1 = row * frame_h;
+	int x2 = x1 + frame_w;
+	int y2 = y1 + frame_h;
+	
+	//std::cout << "rect: (" << x1 << ", " << y1 << ") (" << x2 << ", " << y2 << ")\n";
 	Frame frame;
-	frame.rect = sf::IntRect(column * frame_w, row * frame_h, column * frame_w + frame_w, row * frame_h + frame_h);
+	frame.rect = sf::IntRect(x1, y1, x2, y2);
 	frame.timeToNextFrame = duration;
 	frame.number = num;
 	frames.push_back(frame);	
@@ -47,6 +57,14 @@ void Animation::reset() {
 	frameIterator = 0;
 	updateFrame();
 	this->animationTimer.Reset();
+}
+
+int Animation::getFrame() {
+	return frames.at(frameIterator).number;
+}
+
+std::string Animation::getName() {
+	return name;
 }
 
 bool Animation::getIsFinished()
@@ -105,7 +123,10 @@ void Animation::updateFrame()
 		this->sprite.SetSubRect(frames.at(frameIterator).rect );
 	else
 		cout << "no frames!" << endl;
+	
+	/*
 	cout << name << " " << frameIterator << ":" << frames.at(frameIterator).number << 
 		" (" << frames.at(frameIterator).timeToNextFrame << ")\n";
+		*/
 	
 }

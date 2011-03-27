@@ -37,3 +37,7 @@ extern Sound * damageSound;
 extern Sound * deathSound;
 extern Sound * bulletHitSound;
 extern Sound * enemyDeathSound;
+
+extern sf::Image * xeonImage;
+extern sf::Image * walkerImage;
+extern sf::Image * flyerImage;

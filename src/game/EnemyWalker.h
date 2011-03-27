@@ -7,6 +7,7 @@ public:
 	EnemyWalker();
 	~EnemyWalker();
 	virtual void update(float dt);
+	virtual void draw();
 private:
 	float walk_speed;
 	float speed_x;

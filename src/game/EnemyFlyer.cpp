@@ -5,6 +5,7 @@
 EnemyFlyer::EnemyFlyer()
 :Enemy()
 {
+	setImage(*flyerImage);
 	patrolLength = 100;
 	
 	fly_speed = 200.f;
@@ -14,8 +15,21 @@ EnemyFlyer::EnemyFlyer()
 	patrolCountdown = patrolLength;
 	
 	facing_direction = FACING_LEFT;
+	width = 24;
+	height = 32;
+	xOrigin = width/2;
+	yOrigin = height;
+	setDrawOffset(12, 64);
+	setFrameSize(32, 64);
 	
-	setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
+	Animation * tmp;
+	tmp = addAnimation("fly");
+	tmp->addFrame(0, .2f);
+	tmp->addFrame(1, .2f);
+	tmp->setDoLoop(true);
+	
+	setCurrentAnimation("fly");	
+	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
 
 EnemyFlyer::~EnemyFlyer()
@@ -41,6 +55,8 @@ void EnemyFlyer::update(float dt) {
 		my = 0;
 	}
 	move(mx, my);
+	
+	updateSpriteFacing();
 	
 	checkCollisions();
 }

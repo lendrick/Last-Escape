@@ -62,7 +62,7 @@ void ParticleEmitter::addParticle()
 	p.age = 0;
 	p.maxAge = maxAge * (100 - (rand() % 10)) / 100.f;
 
-	if (particles.size() < maxParticles)
+	if ((int)particles.size() < maxParticles)
 		particles.push_back(p);
 	else
 	{

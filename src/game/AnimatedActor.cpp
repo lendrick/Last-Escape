@@ -29,6 +29,17 @@ void AnimatedActor::setImage(sf::Image & image)
 	this->currentAnimation = NULL;
 }
 
+void AnimatedActor::updateSpriteFacing() {
+	if (facing_direction == FACING_RIGHT)
+	{
+		sprite.FlipX(false);
+	}
+	else if (facing_direction == FACING_LEFT)
+	{
+		sprite.FlipX(true);
+	}
+}
+
 Animation * AnimatedActor::addAnimation(std::string name) {
 	if(frame_w == 0 || frame_h == 0) {
 		cout << "ERROR: Must set frame size before adding animation.\n";
@@ -36,6 +47,7 @@ Animation * AnimatedActor::addAnimation(std::string name) {
 	Animation* a = new Animation(this->sprite, name);
 	this->animations[name] = a;
 	a->setFrameSize(frame_w, frame_h);
+	return a;
 }
 
 void AnimatedActor::setFrameSize(int fw, int fh) {
