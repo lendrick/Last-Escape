@@ -52,6 +52,9 @@ Widget::Widget(int tp, Widget *par) {
 			}else if (tp == UI_CHECK) {
 				setSize(20,20);
 				background.SetSubRect(sf::IntRect(203,40,223,60));
+			}else if (tp == UI_PBAR) {
+				setSize(150,32);
+				background.SetSubRect(sf::IntRect(0,207,150,239));
 			}else if (tp == UI_HSLIDE) {
 				setSize(150,3);
 				background.SetSubRect(sf::IntRect(0,203,150,206));
@@ -144,16 +147,13 @@ void Widget::setSlide(void (*func)(float v))
 
 void Widget::setSlideValue(float v)
 {
-	if (type != UI_HSLIDE)
-		return;
-
 	sval = v;
 	if (sval > 100.f)
 		sval = 100.f;
 	if (sval < 0.f)
 		sval = 0.f;
 
-	if (slide)
+	if (type == UI_HSLIDE && slide)
 		slide(sval);
 }
 
@@ -228,16 +228,30 @@ void Widget::draw() {
 		float y = 0;
 		sf::FloatRect p = text.GetRect();
 		parent->getPos(x,y);
-		if (type == UI_BUTTON) {
+		if (type == UI_BUTTON || type == UI_PBAR) {
 			x += (pos_x+(width/2))-(p.GetWidth()/2);
 		}else{
 			x += pos_x;
 		}
 		y += pos_y+3;
+		if (type == UI_PBAR)
+			y += 3;
 		text.SetPosition(x,y);
+		parent->getPos(x,y);
+		x += pos_x;
+		y += pos_y;
+		if (type == UI_PBAR) {
+			sf::Shape Line;
+			if (sval > 60.f) {
+				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xef, 0x29, 0x29));
+			}else{
+				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xff, 165, 0x0));
+			}
+			App->Draw(Line);
+		}
 		App->Draw(text);
 		if (type == UI_HSLIDE) {
-			slider.SetPosition((x+(150.f*(sval/100.f))-10.f),y-11);
+			slider.SetPosition((x+(150.f*(sval/100.f))-10.f),y-8);
 			App->Draw(slider);
 		}
 	}
@@ -334,6 +348,7 @@ void ui_start()
 {
 	g_player->init();
 	//const char* mapName = "subwaymap-new.tmx";
+	//game_map->loadMap(mapName);
 	game_map->loadMap(startMap);
 	ui_menu->hide();
 	ui_hud->show();
@@ -582,12 +597,11 @@ void ui_init()
 	ui_opctrls->setPos(220,140);
 	ui_opctrls->hide();
 
-	ui_energy = new Widget(UI_LABEL,ui_hud);
-	ui_energy->setSize(200,20);
+	ui_energy = new Widget(UI_PBAR,ui_hud);
 	ui_energy->setPos(2,2);
 	ui_lives = new Widget(UI_LABEL,ui_hud);
 	ui_lives->setSize(200,20);
-	ui_lives->setPos(2,22);
+	ui_lives->setPos(10,30);
 
 	ui_popup = new Widget(UI_CONTAINER,ui_base);
 	ui_popup->setPos(220,140);
@@ -746,11 +760,8 @@ void ui_render(Player& player)
 {
 	char buf[256];
 	float energy = 100*player.energy/player.energy_max;
-	sprintf(buf, "Energy: %.0f%%", energy);
-	if (energy < 20.f)
-		ui_energy->setTextColor(0xef, 0x29, 0x29);
-	else
-		ui_energy->setTextColor(0x01, 135, 0x00);
+	ui_energy->setSlideValue(energy);
+	sprintf(buf, "%.0f%%", energy);
 	ui_energy->setText(buf);
 
 	sprintf(buf, "Lives: %d", player.lifes);

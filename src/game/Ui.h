@@ -9,6 +9,7 @@
 #define UI_TEXT		3
 #define UI_CHECK	4
 #define UI_HSLIDE	5
+#define UI_PBAR		6
 
 class Widget {
 public:
