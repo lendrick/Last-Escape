@@ -10,6 +10,7 @@
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
+static const int start_lifes = 3;
 
 struct WeaponDesc {
 	const char* name;
@@ -36,7 +37,7 @@ Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
 
-	lifes = 3;
+	lifes = start_lifes;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -320,6 +321,13 @@ void Player::collide(Actor & otherActor)
 	}
 }
 
+void bla()
+{
+	std::cout << "Bla" << std::endl;
+	game_map->loadMap(game_map->currentFilename);
+	g_player->init();
+}
+
 void Player::die() {
 	if (godMode)
 		return;
@@ -327,13 +335,12 @@ void Player::die() {
 	if(armor == 0)
 	{
 		lifes--;
-		std::cout << "life lost. current lifes: " << lifes << std::endl;
-		init();
-
-		if(lifes < 0) {
-			std::cout << "GAME OVER!" << std::endl;
-			game_map->loadMap(game_map->currentFilename);
-			ui_showMenu();
+		if(lifes >= 0) {
+			std::cout << "life lost. current lifes: " << lifes << std::endl;
+			init();
+		} else {
+			lifes = start_lifes;
+			ui_popupImage("images/game_over.png", bla);
 		}
 	}
 }
