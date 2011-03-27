@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 		printf("failed to load font\n");
 
 	// Create game objects
-	game_map = new Map(mapName);
+	game_map = new Map("");
 	Player p1;
 	
 	g_player = &p1;
