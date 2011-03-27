@@ -60,5 +60,14 @@
 		</frames>
 	</animation>
 
-	
+	<animation name="die">
+		<frames>
+			<frame number="48" time="0.1"/>
+			<frame number="49" time="0.1"/>
+			<frame number="50" time="0.1"/>
+			<frame number="51" time="0.1"/>
+			<frame number="52" time="0.1"/>
+			<frame number="53" time="0.4"/>
+		</frames>
+	</animation>	
 </animations>

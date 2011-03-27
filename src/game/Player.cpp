@@ -7,6 +7,7 @@
 #include "SoundCache.h"
 #include "Ui.h"
 #include "ExitPoint.h"
+#include "Collectible.h"
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
@@ -54,8 +55,7 @@ Player::Player()
 	jumpSound = soundCache["ambient_techno1.ogg"];
 	dieSound  = soundCache["xeonDies.ogg"];
 	currentStart = NULL;
-	
-
+	dying = false;
 
 	init();
 }
@@ -63,6 +63,7 @@ Player::Player()
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
+	dying = false;
 
 	energy = energy_max = 100.f;
 	
@@ -204,13 +205,13 @@ void Player::update(float dt) {
 		energy = std::max(energy, 10.f);
 
 	// left/right move
-	if (input.direction() == FACING_LEFT) {
+	if (!dying && input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
 		facing_direction = move_direction;
 	}
-	else if (input.direction() == FACING_RIGHT) {
+	else if (!dying && input.direction() == FACING_RIGHT) {
 		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
@@ -226,13 +227,13 @@ void Player::update(float dt) {
 		walking = true;
 	}
 
-	if (input.jumping())
+	if (!dying && input.jumping())
 		jump(dt);
 
-	if (input.shooting())
+	if (!dying && input.shooting())
 		shoot();
 	
-	if(input.crouching())
+	if(!dying && input.crouching())
 		crouched = true;
 	else 
 		crouched = false;
@@ -249,48 +250,50 @@ void Player::update(float dt) {
 
 	// Compute animations:
 
-	if(time - last_shoot_time < shoot_duration) {
-		if(walking) {
-			this->setCurrentAnimation("walkshoot");
+	if(!dying) {
+		if(time - last_shoot_time < shoot_duration) {
+			if(walking) {
+				this->setCurrentAnimation("walkshoot");
+			}
+			else if(crouched) {
+				this->setCurrentAnimation("crouchshoot");
+			}		
+			else {
+				this->setCurrentAnimation("shoot");
+			}
+		} 
+		else if (!isGrounded() && speed_y != 0)
+		{
+			if(speed_y < 0)
+				this->setCurrentAnimation("jump");
+			else
+				this->setCurrentAnimation("fall");
 		}
+		else if (speed_x != 0)
+		{
+			walking = true;
+		std:cout<< this->getCurrentAnimation()->getIsFinished();
+			if(this->getCurrentAnimation()->getIsFinished()) {
+				this->setCurrentAnimation("walk");
+			}
+		} 
 		else if(crouched) {
-			this->setCurrentAnimation("crouchshoot");
-		}		
-		else {
-			this->setCurrentAnimation("shoot");
+			this->setCurrentAnimation("crouch");
 		}
-	} 
-	else if (!isGrounded() && speed_y != 0)
-	{
-		if(speed_y < 0)
-			this->setCurrentAnimation("jump");
 		else
-			this->setCurrentAnimation("fall");
-	}
-	else if (speed_x != 0)
-	{
-		walking = true;
-	std:cout<< this->getCurrentAnimation()->getIsFinished();
-		if(this->getCurrentAnimation()->getIsFinished()) {
-			this->setCurrentAnimation("walk");
+		{
+			this->setCurrentAnimation("idle"); 
 		}
-	} 
-	else if(crouched) {
-		this->setCurrentAnimation("crouch");
-	}
-	else
-	{
-		this->setCurrentAnimation("idle"); 
-	}
 
-	updateSpriteFacing();
+		updateSpriteFacing();
 
-	if (speed_y == terminal_velocity)
-		sprite.Rotate(360.f*dt);
-	else
-		sprite.SetRotation(0);
+		if (speed_y == terminal_velocity)
+			sprite.Rotate(360.f*dt);
+		else
+			sprite.SetRotation(0);
 	
-	checkCollisions();
+		checkCollisions();
+	}
 }
 
 void Player::draw() {
@@ -338,16 +341,26 @@ void Player::die() {
 	{
 		dieSound->playSound();
 		lifes--;
-		if(lifes > 0) {
-			std::cout << "life lost. current lifes: " << lifes << std::endl;
-			init();
-		} else {
-			lifes = start_lifes;
-			ui_popupImage("images/game_over.png", bla);
-		}
+		dying = true;
+		this->setCurrentAnimation("die");
 	}
 }
 
 void Player::onDestroy() {
 	cout << "player destroyed\n";
+}
+
+void Player::onAnimationComplete(std::string anim) {
+	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
+	if(anim == "die") {
+		if(lifes > 0) {
+			std::cout << "life lost. current lifes: " << lifes << std::endl;
+			init();
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall();
+			ball->setPos(pos_x, pos_y-30);
+		} else {
+			lifes = start_lifes;
+			ui_popupImage("images/game_over.png", bla);
+		}
+	}
 }
