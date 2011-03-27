@@ -43,3 +43,8 @@ void Sound::stop()
 {
 	song.Stop();
 }
+
+sf::Sound::Status Sound::getStatus()
+{
+	return song.GetStatus();
+}
