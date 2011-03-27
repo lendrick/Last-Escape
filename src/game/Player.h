@@ -10,7 +10,6 @@
 class Player : public AnimatedActor {
 public:
 	Player();
-	~Player();
 
 	virtual bool isPlayer() { return true; }
 
@@ -18,6 +17,7 @@ public:
 	virtual void draw();
 	virtual void die();
 	virtual void collide(Actor & otherActor);
+	virtual void onDestroy();
 	
 	StartPoint * findStart();
 	

@@ -22,7 +22,7 @@
 list<Actor *> actors;
 Map * game_map;
 sf::RenderWindow *App;
-Player *g_player;
+Player *g_player = 0;
 Input input;
 bool godMode = false;
 
@@ -32,9 +32,10 @@ SoundCache soundCache;
 bool paused = false;
 
 
-void update(Player& player, float dt) {
-	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+void update(float dt) {
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		(*it)->update(dt);
+	}
 }
 
 void renderActors() {
@@ -69,7 +70,7 @@ void cleanup() {
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
-	char * mapName;
+	std::string mapName = "";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -82,22 +83,19 @@ int main(int argc, char** argv)
 	}
 
 	// Create main window
-	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics", sf::Style::Close);
+	App = new sf::RenderWindow(sf::VideoMode(640, 480), "Xeonergy", sf::Style::Close);
 	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
 		(sf::VideoMode::GetDesktopMode().Height/2)-260);
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
-
+	
+	g_player = new Player();
+	
 	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
 		printf("failed to load font\n");
 
 	// Create game objects
-	game_map = new Map("");
-	Player p1;
-	
-	g_player = &p1;
-	game_map->setCameraFollow(g_player);
-
+	game_map = new Map(mapName);
 
 	if (enableMusic)
 	{
@@ -127,8 +125,9 @@ int main(int argc, char** argv)
 		App->Clear();
 		
 		if(game_map != NULL && game_map->isLoaded()) {
-			if(!paused) 
-				update(p1, frameTime);
+			if(!paused) {
+				update(frameTime);
+			}
 			
 			cleanup();
 
@@ -137,8 +136,8 @@ int main(int argc, char** argv)
 			renderActors();
 			game_map->renderForeground();
 		}
-		
-		ui_render(p1);
+
+		ui_render(*g_player);
 
 		// Finally, display the rendered frame on screen
 		App->Display();

@@ -12,6 +12,7 @@
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
 #include "Particles.h"
+#include "Player.h"
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
@@ -19,7 +20,7 @@
 #include "Actor.h"
 #include <cstdlib>
 
-Map::Map(const char* mapName) {
+Map::Map(string mapName) {
 	
 	loadTileset("tileset.png");
 	loaded = false;
@@ -69,7 +70,6 @@ void Map::loadMap(string filename) {
 
 	currentFilename = filename;
 
-	// clear level
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
 			background[i][j] = 0;

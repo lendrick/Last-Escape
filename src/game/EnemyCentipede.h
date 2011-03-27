@@ -6,7 +6,6 @@ class EnemyCentipede : public Enemy
 {
 public:
 	EnemyCentipede();
-	~EnemyCentipede();
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
@@ -27,7 +26,6 @@ class EnemyCentipedeProjectile : public Enemy
 {
 public:
 	EnemyCentipedeProjectile(int direction, int start_x, int start_y);
-	~EnemyCentipedeProjectile();
 	virtual void update(float dt);
 	virtual void onAnimationComplete(std::string anim);
 private:

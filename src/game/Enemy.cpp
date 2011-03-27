@@ -9,9 +9,6 @@ Enemy::Enemy()
 {
 }
 
-Enemy::~Enemy()
-{
-}
 
 void Enemy::collide(Actor& otherActor) {
 	

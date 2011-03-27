@@ -64,10 +64,6 @@ EnemyCentipede::EnemyCentipede()
 	checkGround = false;
 }
 
-EnemyCentipede::~EnemyCentipede()
-{
-}
-
 void EnemyCentipede::update(float dt) {
 	//checkGround = false;
 	float shootInterval = rand() % 1000;
@@ -194,10 +190,6 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	
 	setCurrentAnimation("fly");
 	
-}
-
-EnemyCentipedeProjectile::~EnemyCentipedeProjectile()
-{
 }
 
 void EnemyCentipedeProjectile::update(float dt)

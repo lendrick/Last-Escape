@@ -5,7 +5,6 @@ class Player;
 class Actor {
 public:
 	Actor();
-	~Actor();
 
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
@@ -65,6 +64,7 @@ public:
 	int xDrawOffset, yDrawOffset;
 	bool collideable;
 	bool dying;
+	~Actor();
 protected:
 	void checkCollisions();
 };

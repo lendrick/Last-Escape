@@ -9,7 +9,6 @@ class Enemy : public AnimatedActor
 {
 public:
 	Enemy();
-	~Enemy();
 	
 	virtual void collide(Actor& otherActor);
 

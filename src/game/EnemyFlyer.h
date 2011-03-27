@@ -5,7 +5,6 @@ class EnemyFlyer : public Enemy
 {
 public:
 	EnemyFlyer();
-	~EnemyFlyer();
 	virtual void update(float dt);
 	virtual void die();
 private:

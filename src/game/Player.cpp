@@ -37,6 +37,7 @@ Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
 
+	lifes = start_lifes;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -55,14 +56,9 @@ Player::Player()
 	init();
 }
 	
-Player::~Player() {
-
-}
-
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
-	lifes = start_lifes;
 
 	energy = energy_max = 100.f;
 	
@@ -95,7 +91,7 @@ void Player::init() {
 	goToGround();
 
 	this->setCurrentAnimation("idle");
-
+	
 	current_weapon = 0;
 }
 
@@ -325,7 +321,6 @@ void bla()
 {
 	std::cout << "Bla" << std::endl;
 	game_map->loadMap(game_map->currentFilename);
-	g_player->init();
 }
 
 void Player::die() {
@@ -343,4 +338,8 @@ void Player::die() {
 			ui_popupImage("images/game_over.png", bla);
 		}
 	}
+}
+
+void Player::onDestroy() {
+	cout << "player destroyed\n";
 }

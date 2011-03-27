@@ -38,7 +38,7 @@ private:
 	Actor * cameraFollow;
 	
 public:
-	Map(const char* mapName);
+	Map(string mapName);
 	~Map();
 
 	void loadMap(string filename);

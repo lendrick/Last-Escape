@@ -55,10 +55,6 @@ EnemyWalker::EnemyWalker()
 	setCurrentAnimation("walk");
 }
 
-EnemyWalker::~EnemyWalker()
-{
-}
-
 void EnemyWalker::update(float dt) {
 	if(!dying) {
 		const int speed_gravity = 960;

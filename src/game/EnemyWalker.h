@@ -5,7 +5,6 @@ class EnemyWalker : public Enemy
 {
 public:
 	EnemyWalker();
-	~EnemyWalker();
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();

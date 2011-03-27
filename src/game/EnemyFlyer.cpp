@@ -45,9 +45,6 @@ EnemyFlyer::EnemyFlyer()
 	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
 
-EnemyFlyer::~EnemyFlyer()
-{
-}
 
 void EnemyFlyer::update(float dt) {
 	const float vision_range = 320;
