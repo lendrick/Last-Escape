@@ -7,6 +7,7 @@ int ui_focused_widget;
 int ui_widget_id = 0;
 int ui_setter = -1;
 
+
 Widget *ui_base = NULL;
 Widget *ui_energy = NULL;
 Widget *ui_hud = NULL;
@@ -587,7 +588,7 @@ void ui_init()
 	b = new Widget(UI_BUTTON,ui_pause);
 	b->setText("Quit");
 	b->setPos(62,90);
-	b->setClick(ui_showMenu);
+	b->setClick(ui_quit);
 
 	// options menu
 	b = new Widget(UI_LABEL,ui_options);
