@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
+  <image source="../images/tileset.png" width="512" height="2048"/>
+ </tileset>
+ <layer name="background" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKhAQAEsAAB
+  </data>
+ </layer>
+ <layer name="fringe" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKhAQAEsAAB
+  </data>
+ </layer>
+ <layer name="foreground" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxLYmBgSBrFo3gUj+IhgAEkcnLZ
+  </data>
+ </layer>
+ <layer name="collision" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFIxojg5Fg3igeuhgAsS4BJA==
+  </data>
+ </layer>
+ <objectgroup name="spawn" width="20" height="15">
+  <properties>
+   <property name="type" value="start"/>
+  </properties>
+  <object x="335" y="238"/>
+ </objectgroup>
+</map>
