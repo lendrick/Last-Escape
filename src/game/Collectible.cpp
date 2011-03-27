@@ -70,3 +70,30 @@ void CollectibleArmor::collide(Actor& otherActor) {
 }
 
 
+CollectibleEnergyBall::CollectibleEnergyBall()
+: Collectible() {
+	this->setImage("energyball.png");
+	width = 32;
+	height = 32;
+	xOrigin = width/2;
+	yOrigin = height/2;
+	setDrawOffset(16, 16);
+	setFrameSize(32, 32);
+	
+	Animation * tmp;
+	tmp = addAnimation("anim");
+	tmp->addFrame(0, .2f);
+	tmp->addFrame(1, .2f);
+	tmp->addFrame(2, .2f);
+	tmp->addFrame(3, .2f);
+	tmp->setDoLoop(true);
+	setCurrentAnimation("anim");
+}
+
+void CollectibleEnergyBall::collide(Actor& otherActor) {
+	if (otherActor.isPlayer())
+	{
+		destroy();
+		// TODO: count energy ball
+	}
+}

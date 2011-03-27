@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "globals.h"
+#include "Collectible.h"
 
 EnemyWalker::EnemyWalker()
 :Enemy()
@@ -89,5 +90,7 @@ void EnemyWalker::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x, pos_y-16);
 	}
 }

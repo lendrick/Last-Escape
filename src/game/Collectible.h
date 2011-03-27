@@ -36,5 +36,11 @@ public:
 	virtual void collide(Actor& otherActor);
 };
 
+class CollectibleEnergyBall : public Collectible
+{
+public:
+	CollectibleEnergyBall();
+	virtual void collide(Actor& otherActor);
+};
 
 #endif
