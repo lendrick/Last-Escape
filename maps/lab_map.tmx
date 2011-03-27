@@ -15,12 +15,77 @@
  </layer>
  <layer name="foreground" width="150" height="25">
   <data encoding="base64" compression="zlib">
-   eJztm+2ugjAMhvUSOf7RnxyvQLn/RJfQpGlWaPfluvVJ3hgVZG4PEwusFz3PPf/osWWWb/4i2dAyr/21G1lnI+/j3ITbl+SoXyTb/kW/lsx60QNejQQ33qnOab2gy7tXDnA0J3Fe0nk0tn7JedS9cgCYu6zwS6/u18wPmIiRvOKOg+H1VK+44xfu+PssMzCSV2f08Dtoqa9zcK/aMsu8NbpX8N8l/D/B9SGnLqGvLfXzmVe0/gjHPbi20sO8NTrW+vnMK642F/af956tchud8bzC/oRw9bkWzFyXGM0rCvUMkkPMl8eVT0mOtiNJK0b3qgYxT2m4Ohf+LZbUurhzK0vm89pj7l7ZAXtGr3E4ev5m3q/J0mAbJZnZK0uAx1aAfc7pG2u1X2vtnRVr42StvbNibZystXdWrI1Tj+0N9ayZa6AjAF6VGMtS9UNtW3qrYTq665XpuULunpjUew4k9wlw14JrsiqXd/Ro+hefwwmegAecX9gliTMSb3N8wt8jdT/wuVBGztjErpnhPJGMJXVGO6+UTOo9VtL1JH1mPR+3z0hL
+   eJztm+2ugjAMhvESOf7Rnx6vQLz/5JwlNtZm3Vr2Ie32Jo1hCBvtswFluy163V/2i3572vpvPxF7ov88XmVncsyT7Md2FtYvsZRfJHVr/HpTtuWuOFZ6nlibtAKuPImL917mtP1NEzMpV6Evbctnf6PnxtfMXaPkPJOrdkqNSamY0bFWGu8cV98qn1zZEIwLVvRNri6nwhMMJE9ccc/BUL6XK+75hXv+ztkI8sRVTke4D1rydYkmV301yrjlnSt4dwnvJzg/NNVWwdeW/JzjiuYf4bkH5y2OMG55lzU/57ji8l6h/2zLO1c21VbeuML8BOPycz00cl7CG1dUlDOwEsV4uZ54q6lUPRLrJe9ctVCMU2pcngvfiyW5Lu7bylq43Trmkys7wpzROQ6p7Y3Z31JrhzpqamSuLAk4tiLoc1PHlrXcr7X2jiprcbLW3lFlLU7W2juqrMXpiO0N+ayRc6AeBFzViGWt/KG2LUfLYU7J587Rb804NygxyZoDyToBbi64xjTrT1qP5RenzGv8i7/hBE6AA44vzJKEGQm3JTzh69jbD2qPhVen9/yS2MTmzHCcSGJJmdGOKzVt75pI6XESn2mM8xXM25L+P1YOuf5UH43V8QdAQUmb
   </data>
  </layer>
  <layer name="collision" width="150" height="25">
   <data encoding="base64" compression="zlib">
-   eJztmEEOwzAIBJ3/f7rqsVKbBgcCAzsStzhaLysS+1hrHSpVQFnZXVeZ7B50LCsdc+VBdh+r1a5/4hlofmfmiuRTNp1yFTHnrr43ctYSoe31bj4yoXl9B9peybl6M2Vu0fZo1Tv5W5QJzed/evWPUwOaz8oVA5rPpFyRfPWmW65+Pe+Zq2/rn8ow5Y6je64iNdArkgp9skDT64lyFQdN71RofaLpnQqtTzS9U6H1iaZ3KrQ+0fROhdaninorahI2PM/KXmdw65oK9wDik+y7REIJO/LtHGVvD3lyney5SasXeHMC5Q==
+   eJztmEEOwzAIBJ3/fzrnSq0SXDAM7Ejc4mjNrkjsa611qVQBZWV3XWWyPehYVjrmyoNsH6vVbv/EGWj9zswVqU/ZdMpVxJx7+97IWUuEttd/85FNBQ0nUK7OMmVu0fZo1Tv5W5QJrc9PevWPUwNan5UrBrQ+k3JF6qs33XL163nPXH1bfyrDlDuO7rmK1ECvSCr4ZIGm1xPlKg6a3qnQfKLpnQrNJ5reqdB8oumdCs0nmt6p0HyqqLeiJmHD86zsdQa3rqlwDyA+yb5LJFQkXTPfcU+eRGdPuRLZc5NWN14bAug=
   </data>
  </layer>
+ <objectgroup name="specials" width="150" height="25">
+  <object x="4645" y="670"/>
+ </objectgroup>
+ <objectgroup name="pills" width="150" height="25">
+  <properties>
+   <property name="type" value="pill"/>
+  </properties>
+  <object x="237" y="656"/>
+  <object x="325" y="657"/>
+  <object x="410" y="657"/>
+  <object x="487" y="655"/>
+  <object x="363" y="235"/>
+  <object x="401" y="236"/>
+  <object x="432" y="234"/>
+  <object x="431" y="203"/>
+  <object x="398" y="204"/>
+  <object x="363" y="202"/>
+  <object x="1069" y="79"/>
+  <object x="1164" y="78"/>
+  <object x="1282" y="77"/>
+  <object x="1065" y="115"/>
+  <object x="1159" y="111"/>
+  <object x="1280" y="108"/>
+  <object x="1740" y="595"/>
+  <object x="1795" y="587"/>
+  <object x="1815" y="630"/>
+  <object x="1751" y="635"/>
+  <object x="2422" y="177"/>
+  <object x="2504" y="176"/>
+  <object x="2600" y="175"/>
+  <object x="2691" y="176"/>
+  <object x="2698" y="213"/>
+  <object x="2611" y="207"/>
+  <object x="2500" y="209"/>
+  <object x="2415" y="209"/>
+  <object x="3341" y="111"/>
+  <object x="3345" y="146"/>
+  <object x="3347" y="177"/>
+  <object x="3345" y="210"/>
+  <object x="3341" y="245"/>
+  <object x="3338" y="275"/>
+  <object x="4555" y="107"/>
+  <object x="4631" y="106"/>
+  <object x="4173" y="111"/>
+  <object x="4246" y="112"/>
+  <object x="3790" y="110"/>
+  <object x="3859" y="110"/>
+ </objectgroup>
+ <objectgroup name="centipedes" width="150" height="25">
+  <properties>
+   <property name="type" value="centipede"/>
+  </properties>
+  <object x="1262" y="374"/>
+  <object x="752" y="655"/>
+  <object x="273" y="268"/>
+  <object x="1578" y="208"/>
+ </objectgroup>
+ <objectgroup name="spawns" width="150" height="25">
+  <properties>
+   <property name="type" value="start"/>
+  </properties>
+  <object x="379" y="118"/>
+  <object x="2224" y="367"/>
+  <object x="2445" y="716"/>
+ </objectgroup>
 </map>

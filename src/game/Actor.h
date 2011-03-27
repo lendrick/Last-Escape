@@ -67,6 +67,7 @@ public:
 	int xDrawOffset, yDrawOffset;
 	bool collideable;
 	bool dying;
+	bool hasImage;
 	~Actor();
 protected:
 	void checkCollisions();

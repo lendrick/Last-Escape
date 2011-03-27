@@ -10,6 +10,7 @@ int ui_setter = -1;
 Widget *ui_base = NULL;
 Widget *ui_energy = NULL;
 Widget *ui_lives = NULL;
+Widget *ui_energyballs = NULL;
 Widget *ui_hud = NULL;
 Widget *ui_menu = NULL;
 Widget *ui_pause = NULL;
@@ -524,7 +525,7 @@ void ui_hidePopup()
 void ui_showCredits()
 {
 	ui_menu->hide();
-	ui_popupImage("images/game_over.png",ui_showMenu);
+	ui_popupImage("images/credits.png",ui_showMenu);
 }
 
 void ui_setJump()
@@ -616,6 +617,10 @@ void ui_init()
 	ui_lives->setSize(200,20);
 	ui_lives->setPos(10,30);
 
+	ui_energyballs = new Widget(UI_LABEL,ui_hud);
+	ui_energyballs->setSize(200,20);
+	ui_energyballs->setPos(10,45);
+	
 	ui_popup = new Widget(UI_CONTAINER,ui_base);
 	ui_popup->setPos(220,140);
 	ui_popup->hide();
@@ -779,6 +784,11 @@ void ui_render(Player& player)
 	else
 		ui_lives->setTextColor(0x01, 135, 0x00);
 	ui_lives->setText(buf);
+	
+	
+	sprintf(buf, "Energy Balls: %d", player.energyBalls);
+	ui_energyballs->setTextColor(0x01, 135, 0x00);
+	ui_energyballs->setText(buf);
 
 	ui_base->draw();
 }

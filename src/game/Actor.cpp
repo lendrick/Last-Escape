@@ -13,6 +13,7 @@ Actor::Actor() {
 	actors.push_back(this);
 	setDrawOffset(0, 0);
 	collideable = true;
+	hasImage = false;
 }
 
 Actor::~Actor() {
@@ -88,10 +89,12 @@ bool Actor::isColliding(Actor * otherActor) {
 }
 
 void Actor::draw() {
-	sprite.SetPosition(
-		0.5f + (int)(pos_x - game_map->cam_x),
-		0.5f + (int)(pos_y - game_map->cam_y));
-	App->Draw(sprite);
+	if(hasImage) {
+		sprite.SetPosition(
+			0.5f + (int)(pos_x - game_map->cam_x),
+			0.5f + (int)(pos_y - game_map->cam_y));
+		App->Draw(sprite);
+	}
 }
 
 void Actor::destroy() {

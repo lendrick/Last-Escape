@@ -194,6 +194,7 @@ void Player::update(float dt) {
 	if(energyBalls == 10) {
 		energyBalls = 0;
 		lifes++;
+		soundCache["1up.ogg"]->playSound();
 	}
 	
 	time += dt;
@@ -370,6 +371,7 @@ void Player::onAnimationComplete(std::string anim) {
 			ball->setPos(pos_x, pos_y-30);
 		} else {
 			lifes = start_lifes; 
+			energyBalls = 0;
 			ui_popupImage("images/game_over.png", respawn);
 		}
 	}
