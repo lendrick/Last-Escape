@@ -18,6 +18,7 @@ public:
 	virtual void die();
 	virtual void collide(Actor & otherActor);
 	virtual void onDestroy();
+	virtual void onAnimationComplete(std::string anim);
 	
 	StartPoint * findStart();
 	

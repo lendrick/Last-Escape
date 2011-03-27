@@ -72,7 +72,7 @@ void cleanup() {
 ////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
-	startMap = "subwaymap-new.tmx";
+	startMap = "desert_map.tmx";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
