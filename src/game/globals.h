@@ -4,6 +4,7 @@
 #include <list>
 #include <cstdio>
 #include <iostream>
+#include <string>
 
 #define foreach BOOST_FOREACH
 #define reverse_foreach BOOST_REVERSE_FOREACH
@@ -25,6 +26,9 @@ extern sf::RenderWindow *App;
 extern Player *g_player;
 extern Input input;
 extern bool godMode;
+extern Sound * backgroundMusic;
+extern bool enableMusic;
+extern std::string startMap;
 
 enum Facing {
 	FACING_NONE,

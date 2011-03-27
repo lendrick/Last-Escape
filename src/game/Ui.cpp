@@ -333,8 +333,8 @@ bool ui_menuOpen()
 void ui_start()
 {
 	g_player->init();
-	const char* mapName = "subwaymap-new.tmx";
-	game_map->loadMap(mapName);
+	//const char* mapName = "subwaymap-new.tmx";
+	game_map->loadMap(startMap);
 	ui_menu->hide();
 	ui_hud->show();
 }

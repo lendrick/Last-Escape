@@ -38,3 +38,8 @@ void Sound::setLoop(bool loop)
 {
 	song.SetLoop(loop);
 }
+
+void Sound::stop()
+{
+	song.Stop();
+}

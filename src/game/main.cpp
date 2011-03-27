@@ -25,6 +25,9 @@ sf::RenderWindow *App;
 Player *g_player = 0;
 Input input;
 bool godMode = false;
+Sound * backgroundMusic = NULL;
+bool enableMusic = true;
+std::string startMap;
 
 ImageCache imageCache;
 SoundCache soundCache;
@@ -69,15 +72,14 @@ void cleanup() {
 ////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
-	bool enableMusic = true;
-	std::string mapName = "";
+	startMap = "subwaymap-new.tmx";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
 		if (strcmp(argv[i], "--disable-music") == 0)
 			enableMusic = false;
 		else if (strcmp(argv[i], "--map") == 0)
-			mapName = argv[++i];
+			startMap = argv[++i];
 		else if (strcmp(argv[i], "--iddqd") == 0)
 			godMode = true;
 	}
@@ -95,13 +97,16 @@ int main(int argc, char** argv)
 		printf("failed to load font\n");
 
 	// Create game objects
-	game_map = new Map(mapName);
+	// DON'T LOAD A REAL MAP HERE!  ui_start does that.
+	game_map = new Map("");
 
+	/*
 	if (enableMusic)
 	{
 		soundCache["01 Game-Game_0.ogg"]->setLoop(true);
 		soundCache["01 Game-Game_0.ogg"]->playSound();
 	}
+	*/
 	ui_init();
 
 	sf::Clock Clock;

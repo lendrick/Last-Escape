@@ -214,6 +214,10 @@ void Map::loadMap(string filename) {
 					landscapeImg.LoadFromFile("images/landscapes/" + propval);
 					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
+				} else if(propname == "music" && enableMusic) {
+					if(backgroundMusic != NULL) backgroundMusic->stop();
+					backgroundMusic = soundCache[propval];
+					backgroundMusic->playSound();
 				}
 			}
 		}
