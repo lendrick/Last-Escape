@@ -51,9 +51,11 @@ Player::Player()
 	armor = 0;
 	
 	fireSound = soundCache["shoot.ogg"];
+	jumpSound = soundCache["ambient_techno1.ogg"];
+	dieSound  = soundCache["xeonDies.ogg"];
 	currentStart = NULL;
 	
-	jumpSound = soundCache["ambient_techno1.ogg"];
+
 
 	init();
 }
@@ -333,6 +335,7 @@ void Player::die() {
 
 	if(armor == 0)
 	{
+		dieSound->playSound();
 		lifes--;
 		if(lifes >= 0) {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;

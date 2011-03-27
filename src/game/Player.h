@@ -51,6 +51,7 @@ public:
 	int lifes;
 	Sound * fireSound;
 	Sound * jumpSound;
+	Sound * dieSound;
 };
 
 
