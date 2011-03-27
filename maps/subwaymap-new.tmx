@@ -513,6 +513,7 @@
     <property name="map" value="suburbs.tmx"/>
    </properties>
   </object>
+  <object type="weaponupgrade" x="324" y="447"/>
  </objectgroup>
  <objectgroup name="centipedes" width="200" height="75">
   <properties>

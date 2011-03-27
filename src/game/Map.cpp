@@ -12,6 +12,7 @@
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
 #include "Particles.h"
+#include "Player.h"
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
@@ -67,6 +68,13 @@ void Map::loadMap(string filename) {
 	currentFilename = filename;
 
 	// clear level
+// 	for(std::list< Actor* >::const_iterator i = actors.begin() ; i != actors.end() ; ++i) {
+// 		delete *i;
+// 	}
+	actors.clear();
+
+	delete g_player;
+
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
 			background[i][j] = 0;
@@ -211,6 +219,9 @@ void Map::loadMap(string filename) {
 			}
 		}
 	}
+
+	g_player = new Player();
+	this->setCameraFollow(g_player);
 }
 
 /**
