@@ -149,7 +149,6 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 			//Add to animations map with aName
 			std::string aName = ((TiXmlElement*)child)->Attribute("name");
 			Animation *newAnimation = this->addAnimation(aName);
-			cout << "added Animation with name " << aName << endl;
 	
 			//Set doLoop
 			const char* aDoLoopTmp = ((TiXmlElement*)child)->Attribute("doLoop");
@@ -180,9 +179,7 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 							float timeToNextFrame = 0.f;
 							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
 							((TiXmlElement*)fChild)->QueryFloatAttribute("time", &timeToNextFrame);
-							cout << "parsed" << timeToNextFrame << endl;
 							newAnimation->addFrame(number, timeToNextFrame);
-							cout << "Added " << number << " frame" << endl;
 						} 
 						else
 						{
