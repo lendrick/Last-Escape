@@ -329,7 +329,7 @@ void Player::collide(Actor & otherActor)
 
 void bla()
 {
-	std::cout << "Bla" << std::endl;
+	ui_showMenu();
 	game_map->loadMap(game_map->currentFilename);
 }
 

@@ -16,6 +16,7 @@ EnemyCrawler::EnemyCrawler()
 	speed_x = 0;
 	speed_y = 0;
 	dying = false;
+	life = 2;
 	
 	width = 60;
 	height = 20;

@@ -7,6 +7,8 @@
 Enemy::Enemy()
 :AnimatedActor()
 {
+	//make sure we die in one hit by default
+	life = 0.1f;
 }
 
 
@@ -46,4 +48,13 @@ void Enemy::patrol(float dt) {
 		//checkGround = true;
 		flipDirection();
 	}
+}
+
+void Enemy::doDamage(float damage) {
+	life -= damage;
+	if(life <= 0) die();
+}
+
+void Enemy::onDamage() {
+	//TODO: play a sound
 }

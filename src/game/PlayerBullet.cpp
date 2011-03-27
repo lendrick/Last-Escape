@@ -22,6 +22,7 @@ AnimatedActor()
 	yOrigin = height/2;
 	setDrawOffset(16, 8);
 	setFrameSize(16, 16);
+	damage = 1;
 	
 	Animation * tmp;
 	
@@ -39,7 +40,7 @@ AnimatedActor()
 void PlayerBullet::collide(Actor& otherActor) {
 	if (otherActor.isEnemy())
 	{
-		otherActor.die();
+		dynamic_cast<Enemy * >(&otherActor)->doDamage(damage);
 		die();
 	}
 }

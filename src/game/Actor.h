@@ -31,6 +31,7 @@ public:
 	//TODO: rename collide onCollide
 	virtual void collide(Actor& otherActor) { }
 	virtual void onDestroy() { };
+	virtual void onDamage() { };
 	
 	// This function takes care of things that happen when the actor dies, if applicable
 	// Start death animation, etc.  destroy() should be called in update() and not in collide()
