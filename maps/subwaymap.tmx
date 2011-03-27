@@ -332,4 +332,9 @@
   <object type="weaponupgrade" x="800" y="288"/>
   <object x="3540" y="1349"/>
  </objectgroup>
+ <objectgroup name="armor" width="200" height="50">
+  <object x="1045" y="365"/>
+  <object x="1124" y="333"/>
+  <object x="836" y="366"/>
+ </objectgroup>
 </map>
