@@ -36,5 +36,12 @@
 			<frame number="18" time="0.1"/>
 		</frames>
 	</animation>
+
+	<animation name="crouch">
+		<frames>
+		<frame number="24" time="0.1"/>
+		</frames>
+	</animation>
+
 	
 </animations>

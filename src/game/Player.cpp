@@ -69,6 +69,7 @@ void Player::init() {
 	}
 
 	facing_direction = FACING_RIGHT;
+	crouched = false;
 
 	speed_x = 0.0f;
 	speed_y = 0.0f;
@@ -123,10 +124,19 @@ void Player::shoot() {
 		energy -= weapons[current_weapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
-		bullet->setPos(pos_x, pos_y - 30);
+		if(crouched) {
+			bullet->setPos(pos_x, pos_y - 15);
+		} 
+		else {
+			bullet->setPos(pos_x, pos_y - 30);
+		}
   	setCurrentAnimation("shoot");
 		resetCurrentAnimation();
 	}
+}
+
+void Player::crouch() {
+	crouched = true;
 }
 
 void Player::update(float dt) {
@@ -170,6 +180,11 @@ void Player::update(float dt) {
 
 	if (input.shooting())
 		shoot();
+	
+	if(input.crouching())
+		crouched = true;
+	else 
+		crouched = false;
 
 	// gravity
 	speed_y += speed_delta*dt;
@@ -196,6 +211,9 @@ void Player::update(float dt) {
 	else if (speed_x != 0)
 	{
 		this->setCurrentAnimation("walk");
+	} 
+	else if(crouched) {
+		this->setCurrentAnimation("crouch");
 	}
 	else
 	{

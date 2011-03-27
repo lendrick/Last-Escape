@@ -16,6 +16,7 @@ void Input::initFrame() {
 	inputJump = false;
 	inputShoot = false;
 	inputQuit = false;
+	inputCrouch = false;
 }
 
 void Input::poll() {
@@ -42,6 +43,9 @@ void Input::poll() {
 
 			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == inputs[INPUT_SHOOT].key)
 				inputShoot = true;
+			
+			if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == inputs[INPUT_CROUCH].key)
+				inputCrouch = true;
 		}
 	}
 
@@ -52,6 +56,8 @@ void Input::poll() {
 			inputDirection = FACING_LEFT;
 		} else if(appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
 			inputDirection = FACING_RIGHT;
+		} else if(appInput.IsKeyDown(inputs[INPUT_CROUCH].key)) {
+			inputCrouch = true;
 		}
 	}
 }
@@ -76,6 +82,10 @@ bool Input::shoot()
 	return inputShoot;
 }
 
+bool Input::crouch() {
+	return inputCrouch;
+}
+
 bool Input::shooting()
 {
 	if (ui_menuOpen())
@@ -88,4 +98,11 @@ bool Input::jumping()
 	if (ui_menuOpen())
 		return false;
 	return inputJump || App->GetInput().IsKeyDown(inputs[INPUT_JUMP].key);
+}
+
+bool Input::crouching()
+{
+	if (ui_menuOpen())
+		return false;
+	return inputCrouch || App->GetInput().IsKeyDown(inputs[INPUT_CROUCH].key);
 }
