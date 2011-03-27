@@ -2,11 +2,16 @@
 #define COLLECTIBLE_H
 
 #include "AnimatedActor.h"
+#include "Sound.h"
+#include "SoundCache.h"
 
 class Collectible : public AnimatedActor
 {
 public:
 	Collectible();
+	
+	Sound* fireSound;
+	SoundCache soundCache;
 
 	virtual bool isCollectible() { return true; }
 	

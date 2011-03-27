@@ -33,6 +33,8 @@ CollectiblePill::CollectiblePill()
 void CollectiblePill::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
+		fireSound = soundCache["energyblip.ogg"];
+		fireSound->playSound();
 		destroy();
 		((Player&)otherActor).energy += 5.f;
 	}
