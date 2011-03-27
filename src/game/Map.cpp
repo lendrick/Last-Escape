@@ -11,8 +11,10 @@
 #include "EnemyWalker.h"
 #include "EnemyFlyer.h"
 #include "Particles.h"
+#include "StartPoint.h"
+#include "ExitPoint.h"
 
-Map::Map() {
+Map::Map(const char* mapName) {
 	
 	loadTileset("tileset.png");
 	
@@ -36,7 +38,7 @@ Map::Map() {
 	cam_y = 0;
 	cameraFollow = NULL;
 	
-	loadMap("subwaymap.tmx");
+	loadMap(mapName);
 }
 
 void Map::loadTileset(string filename) {
@@ -144,17 +146,27 @@ void Map::loadMap(string filename) {
 						continue;
 				}
 
+				int w = 0, h = 0;
+				((TiXmlElement*)object)->QueryIntAttribute("width", &w);
+				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
+
 				Actor* actor;
 				if (type == "pill")
 					actor = new CollectiblePill();
 				else if (type == "weaponupgrade")
 					actor = new CollectibleWeaponUpgrade();
+				else if (type == "armor")
+					actor = new CollectibleArmor();
 				else if (type == "smoke")
 					actor = new ParticleEmitter();
 				else if (type == "walker")
 					actor = new EnemyWalker();
 				else if (type == "flyer")
 					actor = new EnemyFlyer();
+				else if (type == "start")
+					actor = new StartPoint();
+				else if (type == "exit")
+					actor = new ExitPoint(w, h);
 				else
 				{
 					printf("unrecognised object type %s\n", type.c_str());
@@ -231,7 +243,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 	float check_x;
 	float check_y;
 	bool impact = false;
-	
+
+	// prevent falling through obstacles when going too fast due to
+	// abnormally low framerates
+	move_x = max(min(move_x, (float)TILE_SIZE), -(float)TILE_SIZE);
+	move_y = max(min(move_y, (float)TILE_SIZE), -(float)TILE_SIZE);
+
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
 	
@@ -436,6 +453,10 @@ void Map::renderForeground() {
 }
 
 void Map::renderLandscape() {
+	// Do nothing if no landscape was specified
+	if (!landscapeImg.GetWidth())
+		return;
+
 	// Draw it four times, aka repeating in X and Y
 	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);

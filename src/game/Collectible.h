@@ -25,4 +25,13 @@ public:
 	virtual void collide(Actor& otherActor);
 };
 
+
+class CollectibleArmor : public Collectible
+{
+public:
+	CollectibleArmor();
+	virtual void collide(Actor& otherActor);
+};
+
+
 #endif

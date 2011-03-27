@@ -4,7 +4,7 @@
 #include "Sound.h"
 #include "globals.h"
 
-const float energy_cost_jump = 10.f;
+const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
 
 struct WeaponDesc {
@@ -39,6 +39,7 @@ Player::Player()
 	last_shoot_time = 0;
 	
 	this->loadAnimationsFromFile("xeon.xml");
+	armor = 0;
 
 	init();
 }
@@ -53,8 +54,16 @@ void Player::init() {
 	
 	energy = energy_max = 100.f;
 	
-	pos_x = 64.0f;
-	pos_y = 0.0f;
+	// Find the first start point, and move the player there
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		if ((*it)->isStartPoint())
+		{
+			setPos((*it)->pos_x, (*it)->pos_y);
+			break;
+		}
+	}
+
 	facing_direction = FACING_RIGHT;
 
 	speed_x = 0.0f;
@@ -68,16 +77,33 @@ void Player::init() {
 	current_weapon = 0;
 }
 
-void Player::jump() {
+void Player::jump(float dt) {
 	const int jump_speed = 380;
-
-	if (energy < energy_cost_jump)
-		return;
+	const float max_jet_accel = 2000;
+	const float jet_cost = 100;
 
 	if (speed_y == 0 && isGrounded())
 	{
+		if (energy < energy_cost_jump)
+			return;
+
 		speed_y = -jump_speed;
 		energy -= energy_cost_jump;
+
+		last_jump_time = time;
+	}
+	else
+	{
+		// Can't jet immediately after jumping
+		if (time - last_jump_time < 0.5f)
+			return;
+
+		float cost = jet_cost * dt;
+		if (energy < cost)
+			return;
+
+		energy -= cost;
+		speed_y -= max_jet_accel*dt;
 	}
 }
 
@@ -136,7 +162,7 @@ void Player::update(float dt) {
 	}
 
 	if (input.jumping())
-		jump();
+		jump(dt);
 
 	if (input.shooting())
 		shoot();
@@ -194,12 +220,13 @@ void Player::collide(Actor & otherActor)
 		die();
 	}
 	
-	if (otherActor.isCollectible())
+	if (otherActor.isCollectible() || otherActor.isExitPoint())
 	{
 		otherActor.collide(*this);
 	}
 }
 
 void Player::die() {
-	init();
+	if(armor == 0) 
+		init();
 }

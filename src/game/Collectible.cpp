@@ -32,3 +32,16 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 }
 
 
+CollectibleArmor::CollectibleArmor() {
+	setPlaceholder(sf::Color(0, 255, 255), 16, 16);
+}
+
+void CollectibleArmor::collide(Actor& otherActor) {
+	if (otherActor.isPlayer())
+	{
+		destroy();
+		((Player&)otherActor).armor += 1;
+	}
+}
+
+

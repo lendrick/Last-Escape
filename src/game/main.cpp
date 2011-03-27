@@ -82,11 +82,14 @@ sf::Image * loadImage(std::string filename)
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
+	const char* mapName = "subwaymap.tmx";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
 		if (strcmp(argv[i], "--disable-music") == 0)
 			enableMusic = false;
+		else if (strcmp(argv[i], "--map") == 0)
+			mapName = argv[++i];
 	}
 
 	// Create main window
@@ -104,10 +107,11 @@ int main(int argc, char** argv)
 	
 
 	// Create game objects
-	game_map = new Map();
+	game_map = new Map(mapName);
 	Player p1;
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
+
 
 	if (enableMusic)
 		backgroundMusic->playSound();
@@ -127,9 +131,13 @@ int main(int argc, char** argv)
 		float ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
+		// Clamp frame update time if worse than 20fps, so it'll slow down instead
+		// of just getting very jerky (which breaks jump heights)
+		float frameTime = std::min(ElapsedTime, 0.05f);
+
 		// Clear screen
 		App->Clear();
-		update(p1, ElapsedTime);
+		update(p1, frameTime);
 		cleanup();
 
 		game_map->renderLandscape();
