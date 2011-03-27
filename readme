@@ -1,2 +1,51 @@
-This is a side-scrolling platformer where you fight alien bugs and collect energy to power your ship..
+================================================================================
+README -- Xeonergy Game Project ------------------------------------------------
+================================================================================
 
+I. LICENSE
+================================================================================
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+II. FAQ
+================================================================================
+
+1. What is Xeonergy?
+--------------------------------------------------------------------------------
+
+This is a side-scrolling platformer where you fight alien bugs and collect 
+energy to power your ship.
+
+
+2. Who created Xeonergy? And why?
+--------------------------------------------------------------------------------
+
+Xeonergy was developed by the opengameart community <http://opengameart.org/>, 
+which aimes to provide high quality art assets suitable for FOSS games.
+It was created as our entry into the Reddit Game Jam March 2011, a game contest
+where you have to create an entire game in just 48 hours.
+
+
+III. BACKGROUND STORY
+================================================================================
+
+Fifty years after humanity has discovered the hyperspace technology, thus
+enabling the colonization of the galaxy, the Interstellar Mining Corporation
+sends a scout team to the lately discovered OGA-1138 solar system located in the 
+BART-1337 sector. You are one of the mercenaries hired to defend and escort the
+expedition. But, due to an energy leak, your transport starship crashes on the
+planet's surface. To survive you have to find enough energy sources to refill
+your ship's energy cells. But it seems you and your team are not the only ones
+wandering through the ruins of an ancient race...
