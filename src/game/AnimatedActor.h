@@ -22,6 +22,7 @@ public:
 	void loadAnimationsFromFile(std::string filepath);
 	
 	void setCurrentAnimation(std::string name, bool reset = true); ///< Set's the current Animation for the given Name
+	Animation* getCurrentAnimation();
 	void resetCurrentAnimation();
 	std::string animationName();
 	
