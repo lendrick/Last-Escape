@@ -12,6 +12,7 @@
 #include "EnemyCrawler.h"
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
+#include "BossSpider.h"
 #include "Particles.h"
 #include "Player.h"
 #include "Teleport.h"
@@ -184,6 +185,8 @@ void Map::loadMap(string filename) {
 					actor = new EnemyFlyer();
 				} else if (type == "centipede") {
 					actor = new EnemyCentipede();
+				} else if (type == "spider") {
+					actor = new BossSpider();
 				} else if (type == "teleportenter") {
 					actor = new TeleportEnter(w, h, name);
 				} else if (type == "teleportexit") {
