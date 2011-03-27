@@ -94,8 +94,6 @@ int main(int argc, char** argv)
 
 	// Create game objects
 	game_map = new Map(mapName);
-	game_map->setCameraFollow(g_player);
-
 
 	if (enableMusic)
 	{
