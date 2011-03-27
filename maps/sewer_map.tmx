@@ -2,6 +2,7 @@
 <map version="1.0" orientation="orthogonal" width="200" height="20" tilewidth="32" tileheight="32">
  <properties>
   <property name="landscape" value="sewer.png"/>
+  <property name="music" value="groovy.ogg"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
   <image source="../images/tileset.png" width="512" height="2048"/>
@@ -128,9 +129,9 @@
  </layer>
  <objectgroup name="specials" width="200" height="20">
   <object name="start" type="start" x="48" y="79"/>
-  <object x="6317" y="364">
+  <object type="exit" x="6317" y="364">
    <properties>
-    <property name="map" value="desert_map.tmx"/>
+    <property name="map" value="lab_map.tmx"/>
    </properties>
   </object>
   <object name="one" type="teleportenter" x="1008" y="368"/>

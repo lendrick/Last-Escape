@@ -68,6 +68,7 @@ public:
 	bool collideable;
 	bool dying;
 	bool hasImage;
+	bool hidden;
 	~Actor();
 protected:
 	void checkCollisions();

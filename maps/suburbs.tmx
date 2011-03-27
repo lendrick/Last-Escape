@@ -2,6 +2,7 @@
 <map version="1.0" orientation="orthogonal" width="200" height="40" tilewidth="32" tileheight="32">
  <properties>
   <property name="landscape" value="planet.png"/>
+  <property name="music" value="theme music.ogg"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
   <image source="../images/tileset.png" width="512" height="2048"/>
@@ -345,7 +346,11 @@
   <properties>
    <property name="type" value="exit"/>
   </properties>
-  <object x="6347" y="492"/>
+  <object type="exit" x="6347" y="492">
+   <properties>
+    <property name="map" value="subwaymap-new.tmx"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="smoke" width="200" height="40">
   <properties>
