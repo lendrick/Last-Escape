@@ -25,7 +25,7 @@ string trim(string s, char c) {
  * parse "[val]"
  */
 string parse_section_title(string s) {
-	unsigned int bracket = s.find_first_of(']');
+	size_t bracket = s.find_first_of(']');
 	if (bracket == string::npos) return ""; // not found
 	return s.substr(1, bracket-1);
 }
@@ -34,7 +34,7 @@ string parse_section_title(string s) {
  * parse "key=val"
  */
 void parse_key_pair(string s, string &key, string &val) {
-	unsigned int separator = s.find_first_of('=');
+	size_t separator = s.find_first_of('=');
 	if (separator == string::npos) {
 		key = "";
 		val = "";
