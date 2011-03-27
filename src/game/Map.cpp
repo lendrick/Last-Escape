@@ -243,7 +243,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 	float check_x;
 	float check_y;
 	bool impact = false;
-	
+
+	// prevent falling through obstacles when going too fast due to
+	// abnormally low framerates
+	move_x = max(min(move_x, (float)TILE_SIZE), -(float)TILE_SIZE);
+	move_y = max(min(move_y, (float)TILE_SIZE), -(float)TILE_SIZE);
+
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
 	

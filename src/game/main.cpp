@@ -131,9 +131,13 @@ int main(int argc, char** argv)
 		float ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
+		// Clamp frame update time if worse than 20fps, so it'll slow down instead
+		// of just getting very jerky (which breaks jump heights)
+		float frameTime = std::min(ElapsedTime, 0.05f);
+
 		// Clear screen
 		App->Clear();
-		update(p1, ElapsedTime);
+		update(p1, frameTime);
 		cleanup();
 
 		game_map->renderLandscape();
