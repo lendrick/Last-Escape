@@ -34,7 +34,6 @@ Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
 
-	lifes = start_lifes;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -60,7 +59,8 @@ Player::~Player() {
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
-	
+	lifes = start_lifes;
+
 	energy = energy_max = 100.f;
 	
 	if(currentStart == NULL)
