@@ -14,6 +14,18 @@ EnemyFlyer::EnemyFlyer()
 	speed_y = 0;
 	patrolCountdown = patrolLength;
 	
+	//pick a random death sound
+	int sound_num = rand() % 19;
+	sound_num += 1;
+	std::string s;
+	std::stringstream out;
+	out << sound_num;
+	s = out.str();
+	
+	std::string sound_file = s + "-BugSplat.ogg";
+	//cout << sound_file;
+	fireSound = soundCache[sound_file];	
+	
 	facing_direction = FACING_LEFT;
 	width = 24;
 	height = 32;
@@ -60,6 +72,16 @@ void EnemyFlyer::update(float dt) {
 	updateSpriteFacing();
 	
 	checkCollisions();
+}
+
+void EnemyFlyer::die() {
+	setCanCollide(false);
+	dying = true;
+	speed_x = 0;
+	speed_y = 0;
+	//setCurrentAnimation("die");
+	fireSound->playSound();
+	destroy();
 }
 
 
