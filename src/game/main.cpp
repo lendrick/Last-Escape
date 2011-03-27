@@ -109,16 +109,6 @@ int main(int argc, char** argv)
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
 
-	// Find the first start point, and move the player there
-	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-	{
-		if ((*it)->isStartPoint())
-		{
-			p1.move((*it)->pos_x, (*it)->pos_y);
-			break;
-		}
-	}
-
 
 	if (enableMusic)
 		backgroundMusic->playSound();

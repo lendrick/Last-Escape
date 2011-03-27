@@ -79,8 +79,16 @@ void Player::init() {
 	
 	energy = energy_max = 100.f;
 	
-	pos_x = 64.0f;
-	pos_y = 0.0f;
+	// Find the first start point, and move the player there
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		if ((*it)->isStartPoint())
+		{
+			setPos((*it)->pos_x, (*it)->pos_y);
+			break;
+		}
+	}
+
 	facing_direction = FACING_RIGHT;
 
 	speed_x = 0.0f;
