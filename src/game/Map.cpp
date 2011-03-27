@@ -400,6 +400,7 @@ void Map::renderBackground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!background[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -436,6 +437,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!fringe[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
@@ -446,6 +448,7 @@ void Map::renderForeground() {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (!foreground[cam_tile_x + i][cam_tile_y + j]) continue;
 			tile_sprites[i][j].SetSubRect(tile_rects[foreground[cam_tile_x + i][cam_tile_y + j]]);
 			App->Draw(tile_sprites[i][j]);
 		}
