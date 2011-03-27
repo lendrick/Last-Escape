@@ -1,3 +1,14 @@
 #pragma once
+#include "Enemy.h"
 
-// This is the Crawler enemy class.  Inherits Enemy.
+class EnemyCrawler : public Enemy
+{
+public:
+	EnemyCrawler();
+	virtual void update(float dt);
+	virtual void draw();
+	virtual void die();
+	virtual void onAnimationComplete(std::string anim);
+private:
+	float walk_speed;
+}; 
