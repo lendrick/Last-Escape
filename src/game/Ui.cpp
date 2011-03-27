@@ -19,6 +19,9 @@ Widget *ui_controls[5];
 Widget *ui_snd = NULL;
 sf::Image ui_background;
 
+sf::Sprite teamOgaSprite;
+sf::Image teamOgaImage;
+
 Widget::Widget(int tp, Widget *par) {
 	type = tp;
 	id = ui_widget_id++;
@@ -532,6 +535,12 @@ void ui_init()
 
 	if (!ui_background.LoadFromFile("images/ui.png"))
 		printf("failed to load ui sprites\n");
+		
+	if (!teamOgaImage.LoadFromFile("images/teamOGA.png"))
+		printf("failed to load teamOga.png sprites\n");
+		
+	teamOgaSprite.SetImage(teamOgaImage);
+	teamOgaSprite.SetPosition(App->GetWidth()-teamOgaImage.GetWidth(), App->GetHeight()-teamOgaImage.GetHeight());
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);
@@ -689,8 +698,24 @@ int ui_event(sf::Event &Event)
 	}
 	int r = ui_base->event(Event);
 	if (!r) {
-		if (Event.Type == sf::Event::MouseButtonPressed)
+		if (Event.Type == sf::Event::MouseButtonPressed) {
+			//Check if Oga logo was pressed
+			if(Event.MouseButton.X > teamOgaSprite.GetPosition().x &&
+				Event.MouseButton.Y > teamOgaSprite.GetPosition().y) {
+				cout << "logo pressed"  << endl;
+				#ifdef SFML_SYSTEM_WINDOWS
+					#include <windows.h>
+					ShellExecute(NULL, "open", "http://opengameart.org", NULL, NULL, SW_SHOWNORMAL);
+				#endif
+				#ifdef SFML_SYSTEM_LINUX
+					system("xdg-open http://opengameart.org");
+				#endif
+				#ifdef SFML_SYSTEM_MACOSX
+					system("open http://opengameart.org");
+				#endif
+			}
 			ui_focused_widget = 0;
+		}
 	}
 
 	if (!r && (!ui_menu->isHidden() || !ui_pause->isHidden()))
@@ -711,6 +736,8 @@ void ui_render(Player& player)
 	ui_energy->setText(buf);
 
 	ui_base->draw();
+	if(ui_menuOpen())
+		App->Draw(teamOgaSprite);
 }
 
 void ui_exit()
