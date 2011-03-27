@@ -141,7 +141,8 @@ void Player::jump(float dt) {
 
 		energy -= cost;
 		speed_y -= max_jet_accel*dt;
-		jumpSound->playSound();
+		if(jumpSound->getStatus() != sf::Sound::Playing)
+			jumpSound->playSound();
 	}
 }
 
@@ -337,7 +338,7 @@ void Player::die() {
 	{
 		dieSound->playSound();
 		lifes--;
-		if(lifes >= 0) {
+		if(lifes > 0) {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;
 			init();
 		} else {
