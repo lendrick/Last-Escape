@@ -319,6 +319,7 @@ void Player::die() {
 
 		if(lifes < 0) {
 			std::cout << "GAME OVER!" << std::endl;
+			game_map->loadMap(game_map->currentFilename);
 			ui_showMenu();
 		}
 	}
