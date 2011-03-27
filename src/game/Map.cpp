@@ -14,6 +14,7 @@
 #include "EnemyCentipede.h"
 #include "Particles.h"
 #include "Player.h"
+#include "Teleport.h"
 #include "StartPoint.h"
 #include "SpawnPoint.h"
 #include "ExitPoint.h"
@@ -164,6 +165,7 @@ void Map::loadMap(string filename) {
 				int w = 0, h = 0;
 				((TiXmlElement*)object)->QueryIntAttribute("width", &w);
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
+				const char* name = ((TiXmlElement*)object)->Attribute("name");
 
 				Actor* actor;
 				if (type == "pill") {
@@ -182,6 +184,10 @@ void Map::loadMap(string filename) {
 					actor = new EnemyFlyer();
 				} else if (type == "centipede") {
 					actor = new EnemyCentipede();
+				} else if (type == "teleportenter") {
+					actor = new TeleportEnter(w, h, name);
+				} else if (type == "teleportexit") {
+					actor = new TeleportExit(name);
 				} else if (type == "start") {
 					actor = new StartPoint();
 				} else if (type == "spawn") {

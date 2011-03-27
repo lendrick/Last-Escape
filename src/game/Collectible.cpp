@@ -1,6 +1,9 @@
 #include "Collectible.h"
 
 #include "Player.h"
+#include "globals.h"
+#include "Sound.h"
+#include "SoundCache.h"
 
 Collectible::Collectible()
 :AnimatedActor()
@@ -96,6 +99,7 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
 		destroy();
+		soundCache["gmae.ogg"]->playSound();
 		g_player->energyBalls++;
 	}
 }

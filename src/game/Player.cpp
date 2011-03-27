@@ -331,7 +331,7 @@ void Player::collide(Actor & otherActor)
 		init();
 	}
 	
-	if (otherActor.isCollectible() || otherActor.isExitPoint())
+	if (otherActor.isCollectible() || otherActor.isExitPoint() || otherActor.isTeleportEnter())
 	{
 		otherActor.collide(*this);
 	}
