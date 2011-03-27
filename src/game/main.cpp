@@ -17,6 +17,7 @@
 #include "Ui.h"
 #include "ImageCache.h"
 #include "SoundCache.h"
+#include "StartPoint.h"
 
 list<Actor *> actors;
 Map * game_map;
@@ -91,6 +92,7 @@ int main(int argc, char** argv)
 	// Create game objects
 	game_map = new Map(mapName);
 	Player p1;
+	
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
 
