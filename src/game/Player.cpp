@@ -119,7 +119,7 @@ void Player::shoot() {
 		energy -= weapons[current_weapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
-		bullet->setPos(pos_x, pos_y - height/2);
+		bullet->setPos(pos_x, pos_y - 30);
   	setCurrentAnimation("shoot");
 		resetCurrentAnimation();
 	}

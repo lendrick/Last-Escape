@@ -32,6 +32,7 @@ Sound * enemyDeathSound = new Sound();
 sf::Image * xeonImage;
 sf::Image * walkerImage;
 sf::Image * flyerImage;
+sf::Image * xeonBulletImage;
 
 
 void update(Player& player, float dt) {
@@ -103,8 +104,7 @@ int main(int argc, char** argv)
 	xeonImage = loadImage("images/xeon.png");
 	walkerImage = loadImage("images/walker.png");
 	flyerImage = loadImage("images/flyer.png");
-	
-	
+	xeonBulletImage = loadImage("images/xeon-bullet.png");
 
 	// Create game objects
 	game_map = new Map(mapName);
