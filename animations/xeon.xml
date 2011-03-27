@@ -39,7 +39,15 @@
 
 	<animation name="crouch">
 		<frames>
-		<frame number="24" time="0.1"/>
+			<frame number="34" time="0.1"/>
+		</frames>
+	</animation>
+	
+	<animation name="crouchShoot">
+		<frames>
+			<frame number="31" time="0.1"/>
+			<frame number="32" time="0.1"/>
+			<frame number="33" time="0.1"/>
 		</frames>
 	</animation>
 
