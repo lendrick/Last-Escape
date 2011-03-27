@@ -1133,4 +1133,10 @@
   <object x="4404" y="474"/>
   <object x="4589" y="580"/>
  </objectgroup>
+ <objectgroup name="Spider Boss" width="1024" height="256">
+  <properties>
+   <property name="type" value="spider"/>
+  </properties>
+  <object x="3603" y="642"/>
+ </objectgroup>
 </map>

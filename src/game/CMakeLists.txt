@@ -1,4 +1,4 @@
-#xeonergy game
+#last escape game
 
 #variable for the loop
 #note that looping isn't recommended, as cmake won't be able to recognize whether it has to update the makefile
@@ -31,9 +31,9 @@ set (game_incs ${game_incs} PARENT_SCOPE)
 include_directories (${game_incs})
 
 #add our executable
-add_executable (xeonergy ${game_srcs})
+add_executable (lastescape ${game_srcs})
 
-set_target_properties (xeonergy PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+set_target_properties (lastescape PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 #linking to libraries
-target_link_libraries (xeonergy ${SFML_LIBRARIES})
+target_link_libraries (lastescape ${SFML_LIBRARIES})

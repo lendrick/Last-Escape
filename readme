@@ -1,5 +1,5 @@
 ================================================================================
-README -- Xeonergy Game Project ------------------------------------------------
+README -- Last Espace Game Project ------------------------------------------------
 ================================================================================
 
 I. LICENSE
@@ -22,17 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 II. FAQ
 ================================================================================
 
-1. What is Xeonergy?
+1. What is Last Escape?
 --------------------------------------------------------------------------------
 
 This is a side-scrolling platformer where you fight alien bugs and collect 
 energy to power your ship.
 
 
-2. Who created Xeonergy? And why?
+2. Who created Last Escape? And why?
 --------------------------------------------------------------------------------
 
-Xeonergy was developed by the opengameart community <http://opengameart.org/>, 
+Last Escape was developed by the opengameart community <http://opengameart.org/>, 
 which aimes to provide high quality art assets suitable for FOSS games.
 It was created as our entry into the Reddit Game Jam March 2011, a game contest
 where you have to create an entire game in just 48 hours.

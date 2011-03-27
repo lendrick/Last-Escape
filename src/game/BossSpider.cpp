@@ -91,7 +91,7 @@ void BossSpider::update(float dt) {
 			}
 		}
 
-		
+		move(speed_x, speed_y);
 		
 		updateSpriteFacing();
 		
