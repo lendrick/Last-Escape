@@ -1,6 +1,8 @@
 #include "Enemy.h"
 
 #include "Player.h"
+#include "Sound.h"
+#include "SoundCache.h"
 
 Enemy::Enemy()
 :AnimatedActor()
