@@ -38,6 +38,8 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
+	armor = 0;
+	
 	Animation * tmp;
 	
 	tmp = addAnimation("walk");
@@ -225,5 +227,6 @@ void Player::collide(Actor & otherActor)
 }
 
 void Player::die() {
-	init();
+	if(armor == 0) 
+		init();
 }

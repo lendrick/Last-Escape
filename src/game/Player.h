@@ -33,6 +33,8 @@ public:
 	float speed_y;
 	
 	float shoot_duration;
+	
+	int armor;
 };
 
 
