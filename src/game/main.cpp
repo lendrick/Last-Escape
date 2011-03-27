@@ -69,7 +69,7 @@ void cleanup() {
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
-	const char* mapName = "subwaymap-new.tmx";
+	const char* mapName = "suburbs.tmx";
 	//const char* mapName = "sewer.tmx";
 
 	// Parse a few command-line arguments
