@@ -2,7 +2,6 @@
 <map version="1.0" orientation="orthogonal" width="200" height="75" tilewidth="32" tileheight="32">
  <properties>
   <property name="landscape" value="subwaylandscape.png"/>
-  <property name="music" value="01 Game-Game_0.ogg"/>
  </properties>
  <tileset firstgid="1" name="Tileset" tilewidth="32" tileheight="32">
   <image source="../images/tileset.png" width="512" height="2048"/>
@@ -511,27 +510,17 @@
   <object type="start" x="20" y="251"/>
   <object type="exit" x="6321" y="1495">
    <properties>
-    <property name="map" value="suburbs.tmx"/>
+    <property name="map" value="sewer_map.tmx"/>
    </properties>
   </object>
-  <object type="weaponupgrade" x="324" y="447"/>
  </objectgroup>
  <objectgroup name="centipedes" width="200" height="75">
   <properties>
    <property name="type" value="centipede"/>
   </properties>
   <object x="854" y="369"/>
-  <object x="559" y="369"/>
   <object x="1586" y="173" width="26" height="46"/>
   <object x="443" y="816" width="1"/>
- </objectgroup>
- <objectgroup name="spawnpoint" width="200" height="75">
-  <properties>
-   <property name="type" value="spawn"/>
-  </properties>
-  <object x="678" y="328"/>
-  <object x="2346" y="570"/>
-  <object x="2431" y="564"/>
  </objectgroup>
  <layer name="Tile Layer 5" width="200" height="75">
   <data encoding="csv">
