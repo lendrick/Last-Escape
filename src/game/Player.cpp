@@ -216,6 +216,9 @@ void Player::update(float dt) {
 		if(walking) {
 			this->setCurrentAnimation("walkshoot");
 		}
+		else if(crouched) {
+			this->setCurrentAnimation("crouchshoot");
+		}		
 		else {
 			this->setCurrentAnimation("shoot");
 		}
