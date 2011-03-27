@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 	
 	g_player = new Player();
 	
-	if (!fontUI.LoadFromFile("fonts/DejaVuSansMono.ttf"))
+	if (!fontUI.LoadFromFile("fonts/orbitron-medium.ttf"))
 		printf("failed to load font\n");
 
 	// Create game objects
