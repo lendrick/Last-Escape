@@ -47,6 +47,7 @@ Player::Player()
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
+	energyBalls = 0;
 	
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -189,6 +190,11 @@ void Player::update(float dt) {
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
 	walking = false;
+	
+	if(energyBalls == 10) {
+		energyBalls = 0;
+		lifes++;
+	}
 	
 	time += dt;
 

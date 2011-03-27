@@ -222,7 +222,9 @@ void Map::loadMap(string filename) {
 				} else if(propname == "music" && enableMusic) {
 					if(backgroundMusic != NULL) backgroundMusic->stop();
 					backgroundMusic = soundCache[propval];
+					backgroundMusic->setLoop(true);
 					backgroundMusic->playSound();
+					
 				}
 			}
 		}
