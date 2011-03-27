@@ -97,6 +97,11 @@ void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
 	}
 }
 
+Animation* AnimatedActor::getCurrentAnimation() {
+	return currentAnimation;
+}
+	
+
 void AnimatedActor::resetCurrentAnimation() {
 	this->currentAnimation->reset();
 }
