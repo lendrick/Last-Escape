@@ -173,6 +173,9 @@ void Map::loadMap(string filename) {
 					actor = new SpawnPoint();
 				} else if (type == "exit") {
 					actor = new ExitPoint(w, h); 
+					cout << "Exit point\n";
+					if (((TiXmlElement*)object)->Attribute("map"))
+						dynamic_cast<ExitPoint *>(actor)->setMap(((TiXmlElement*)object)->Attribute("map"));
 				} else {
 					printf("unrecognised object type %s\n", type.c_str());
 					continue;
