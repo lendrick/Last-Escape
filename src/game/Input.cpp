@@ -24,11 +24,12 @@ void Input::poll() {
 
 	while (App->GetEvent(Event))
 	{
-		if (ui_event(Event))
-			continue;
 		// Close window : exit
 		if (Event.Type == sf::Event::Closed)
 			inputQuit = true;
+
+		if (ui_event(Event))
+			continue;
 
 		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
 			ui_togglePause();
