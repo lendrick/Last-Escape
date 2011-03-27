@@ -79,8 +79,16 @@ sf::Image * loadImage(std::string filename)
 /// \return Application exit code
 ///
 ////////////////////////////////////////////////////////////
-int main()
+int main(int argc, char** argv)
 {
+	bool enableMusic = true;
+
+	// Parse a few command-line arguments
+	for (int i = 1; i < argc; ++i) {
+		if (strcmp(argv[i], "--disable-music") == 0)
+			enableMusic = false;
+	}
+
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
 	App->SetFramerateLimit(60);
@@ -101,11 +109,9 @@ int main()
 	g_player = &p1;
 	game_map->setCameraFollow(g_player);
 
-	
 
-	// Create Animation test
-
-	backgroundMusic->playSound();
+	if (enableMusic)
+		backgroundMusic->playSound();
 
 	ui_init();
 
@@ -127,6 +133,7 @@ int main()
 		update(p1, ElapsedTime);
 		cleanup();
 
+		game_map->renderLandscape();
 		game_map->renderBackground();
 		renderActors();
 		game_map->renderForeground();

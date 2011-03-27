@@ -38,6 +38,8 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
+	armor = 0;
+	
 	Animation * tmp;
 	
 	tmp = addAnimation("walk");
@@ -77,8 +79,16 @@ void Player::init() {
 	
 	energy = energy_max = 100.f;
 	
-	pos_x = 64.0f;
-	pos_y = 0.0f;
+	// Find the first start point, and move the player there
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		if ((*it)->isStartPoint())
+		{
+			setPos((*it)->pos_x, (*it)->pos_y);
+			break;
+		}
+	}
+
 	facing_direction = FACING_RIGHT;
 
 	speed_x = 0.0f;
@@ -218,12 +228,13 @@ void Player::collide(Actor & otherActor)
 		die();
 	}
 	
-	if (otherActor.isCollectible())
+	if (otherActor.isCollectible() || otherActor.isExitPoint())
 	{
 		otherActor.collide(*this);
 	}
 }
 
 void Player::die() {
-	init();
+	if(armor == 0) 
+		init();
 }
