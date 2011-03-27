@@ -9,10 +9,8 @@ set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/"
 #Variables to control the build type
 SET(CMAKE_BUILD_TYPE debug)
 #SET(CMAKE_BUILD_TYPE distribution)
-SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall")
-SET(CMAKE_C_FLAGS_DEBUG "-g3 -Wall")
+SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall -Wextra -Wno-unused")
 SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
-SET(CMAKE_C_FLAGS_DISTRIBUTION "-Wall")
 
 #find the required libraries
 #not sure whether these are required:
