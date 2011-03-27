@@ -1,0 +1,40 @@
+<animations frameWidth="128" frameHeight="128">
+	<animation name="walk" doLoop="true">
+		<frames>
+			<frame number="0" time="0.2f"/>
+			<frame number="1" time="0.2"/>
+			<frame number="2" time="0.2"/>
+			<frame number="3" time="0.2"/>
+		</frames>
+	</animation>
+	
+	<animation name="jump">
+		<frames>
+			<frame number="24" time="0.1"/>
+			<frame number="25" time="0.1"/>
+			<frame number="26" time="0.1"/>
+		</frames>
+	</animation>
+	
+	<animation name="fall">
+		<frames>
+			<frame number="27" time="0.2"/>
+			<frame number="28" time="0.2"/>
+		</frames>
+	</animation>
+	
+	<animation name="idle">
+		<frames>
+			<frame number="0" time="0.1"/>
+		</frames>
+	</animation>
+
+	<animation name="shoot">
+		<frames>
+			<frame number="16" time="0.1"/>
+			<frame number="17" time="0.1"/>
+			<frame number="18" time="0.1"/>
+		</frames>
+	</animation>
+	
+</animations>

@@ -28,7 +28,7 @@ void Animation::addFrame(int num, float duration) {
 	
 	//std::cout << "*** " << name << "\n";
 	//std::cout << "img dimensions: " << w << "x" << h << "\n";
-	
+
 	int x_tiles = w / frame_w;
 	int y_tiles = h / frame_h;
 	//std::cout << "frame size: " << frame_w << "x" << frame_h << "\n";

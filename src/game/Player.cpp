@@ -38,31 +38,7 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	
-	Animation * tmp;
-	
-	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setDoLoop(true);
-	
-	tmp = addAnimation("jump");
-	tmp->addFrame(24, 0.1f);
-	tmp->addFrame(25, 0.1f);
-	tmp->addFrame(26, 0.1f);
-	
-	tmp = addAnimation("fall");
-	tmp->addFrame(27, 0.1f);
-	tmp->addFrame(28, 0.1f);
-	
-	tmp = addAnimation("idle");
-	tmp->addFrame(0, 0.2f);
-	
-	tmp = addAnimation("shoot");
-	tmp->addFrame(16, 0.07f);
-	tmp->addFrame(17, 0.07f);
-	tmp->addFrame(18, 0.07f);
+	this->loadAnimationsFromFile("xeon.xml");
 
 	init();
 }

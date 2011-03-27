@@ -126,49 +126,65 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
 	{
 		std::string childName = child->Value();
+		//Create an Animation
 		if (childName == "animation")
 		{
-			Animation *newAnimation = new Animation(this->sprite);
+			//Add to animations map with aName
+			std::string aName = ((TiXmlElement*)child)->Attribute("name");
+			Animation *newAnimation = this->addAnimation(aName);
+			cout << "added Animation with name " << aName << endl;
+	
+			//Set doLoop
+			const char* aDoLoopTmp = ((TiXmlElement*)child)->Attribute("doLoop");
+			if(aDoLoopTmp != NULL)
+			{
+				std::string aDoLoop = aDoLoopTmp;
+				if(aDoLoop.size() > 0)
+				{
+					char valueStartsWith = aDoLoop.at(0);
+					if(valueStartsWith == 't' || valueStartsWith == 'T' || valueStartsWith == '1')
+					{
+						newAnimation->setDoLoop(true);
+					}
+				}
+			}
+		
 			for (TiXmlNode* aChild = child->FirstChild(); aChild; aChild = aChild->NextSibling())
 			{
 				std::string aChildName = aChild->Value();
-				if(aChildName == "name")
-				{
-					std::string aName = ((TiXmlElement*)aChild)->GetText();
-					this->animations[aName] = newAnimation;
-					cout << "added Animation with name" << aName << endl;
-				}
-				else if(aChildName == "doLoop")
-				{
-					string value = ( ((TiXmlElement*)aChild)->GetText() );
-					if(value.size > 0)
-					{
-						char valueStartsWith = value.at(0);
-						if(valueStartsWith == 't' || valueStartsWith == 'T' || valueStartsWith == '1')
-						{
-							newAnimation->setDoLoop(true);
-						}
-					}
-				}
-				else if(aChildName == "frames")
+				if(aChildName == "frames")
 				{
 					for (TiXmlNode* fChild = aChild->FirstChild(); fChild; fChild = fChild->NextSibling())
 					{
-						std::string fChildName = child->Value();
+						std::string fChildName = fChild->Value();
 						if(fChildName == "frame")
 						{
 							int number = 0;
+							float timeToNextFrame = 0.f;
 							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
-							((TiXmlElement*)fChild)->QueryFloatAttribute("timeToNextFrame", &frame.timeToNextFrame);
-							newAnimation->addFrame(frame);
+							((TiXmlElement*)fChild)->QueryFloatAttribute("time", &timeToNextFrame);
+							cout << "parsed" << timeToNextFrame << endl;
+							newAnimation->addFrame(number, timeToNextFrame);
+							cout << "Added " << number << " frame" << endl;
+						} 
+						else
+						{
+							cout << "Unkown Tag:" << aChildName << endl;
+							cout << "Expected 'frame' tag" << endl;
 						}
 					}
+				}
+				else
+				{
+					cout << "Unkown Tag:" << aChildName << endl;
+					cout << "Expected 'frames' tag" << endl;
 				}
 			}
 		}
 		else
 		{
-			//most propably frameWidth or frameHeight
+			cout << "Unkown Tag:" << childName << endl;
+			cout << "Expected 'animation' tag" << endl;
 		}
 	}
 }
