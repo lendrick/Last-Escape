@@ -77,6 +77,7 @@ void Player::init() {
 		setPos(sx, sy);
 	} 
 	
+	/*
 	// Find the first start point, and move the player there
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
 	{
@@ -86,6 +87,7 @@ void Player::init() {
 			break;
 		}
 	}
+	*/
 
 	facing_direction = FACING_RIGHT;
 	crouched = false;
@@ -103,7 +105,8 @@ void Player::init() {
 
 StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		if((*it)->isStartPoint()) {
+		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
+			cout << "found start at " << (*it)->pos_x << " " << (*it)->pos_y << "\n";
 			return static_cast<StartPoint *>(*it);
 		}
 	}
