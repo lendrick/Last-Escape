@@ -6,6 +6,7 @@
 #include "ImageCache.h"
 #include "SoundCache.h"
 #include "Ui.h"
+#include "ExitPoint.h"
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
@@ -292,6 +293,15 @@ void Player::collide(Actor & otherActor)
 	
 	if(otherActor.isSpawnPoint()) {
 		currentStart = static_cast<StartPoint *>(&otherActor);
+	}
+	
+	if(otherActor.isExitPoint()) {
+		std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
+		if(!mapname.empty()) {
+			game_map->loadMap(mapname);
+		}
+		currentStart = NULL;
+		init();
 	}
 	
 	if (otherActor.isCollectible() || otherActor.isExitPoint())
