@@ -10,6 +10,7 @@
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
+static const int start_lifes = 3;
 
 struct WeaponDesc {
 	const char* name;
@@ -22,10 +23,13 @@ struct WeaponDesc {
 	float sprite_speed;
 };
 
-WeaponDesc weapons[] = {
+const int num_weapon_types = 3;
+WeaponDesc weapons[num_weapon_types] = {
 	{"Blaster", 5.0, 0.5, 0.0,
 		2, 3, 16.0 },
 	{"Overcharged Blaster", 2.5, 0.1, 10.0,
+		2, 3, 32.0 },
+	{"Way Overcharged Blaster", 2.0, 0.01, 5.0,
 		2, 3, 32.0 },
 };
 
@@ -33,7 +37,6 @@ Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
 
-	lifes = 3;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -59,7 +62,8 @@ Player::~Player() {
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
-	
+	lifes = start_lifes;
+
 	energy = energy_max = 100.f;
 	
 	if(currentStart == NULL)
@@ -103,6 +107,10 @@ StartPoint * Player::findStart() {
 	}
 	
 	return NULL;
+}
+
+void Player::upgradeWeapon() {
+	current_weapon = min(current_weapon+1, num_weapon_types-1);
 }
 
 void Player::jump(float dt) {
@@ -313,6 +321,13 @@ void Player::collide(Actor & otherActor)
 	}
 }
 
+void bla()
+{
+	std::cout << "Bla" << std::endl;
+	game_map->loadMap(game_map->currentFilename);
+	g_player->init();
+}
+
 void Player::die() {
 	if (godMode)
 		return;
@@ -320,13 +335,12 @@ void Player::die() {
 	if(armor == 0)
 	{
 		lifes--;
-		std::cout << "life lost. current lifes: " << lifes << std::endl;
-		init();
-
-		if(lifes < 0) {
-			std::cout << "GAME OVER!" << std::endl;
-			game_map->loadMap(game_map->currentFilename);
-			ui_showMenu();
+		if(lifes >= 0) {
+			std::cout << "life lost. current lifes: " << lifes << std::endl;
+			init();
+		} else {
+			lifes = start_lifes;
+			ui_popupImage("images/game_over.png", bla);
 		}
 	}
 }

@@ -9,7 +9,7 @@ int ui_setter = -1;
 
 Widget *ui_base = NULL;
 Widget *ui_energy = NULL;
-Widget *ui_sheild = NULL;
+Widget *ui_lives = NULL;
 Widget *ui_hud = NULL;
 Widget *ui_menu = NULL;
 Widget *ui_pause = NULL;
@@ -39,7 +39,6 @@ Widget::Widget(int tp, Widget *par) {
 			parent = ui_base;
 		}
 	}
-
 	if (parent) {
 		if (tp != UI_LABEL && tp != UI_TEXT) {
 			background.SetImage(ui_background);
@@ -328,6 +327,9 @@ bool ui_menuOpen()
 
 void ui_start()
 {
+	g_player->init();
+	const char* mapName = "subwaymap-new.tmx";
+	game_map->loadMap(mapName);
 	ui_menu->hide();
 	ui_hud->show();
 }
@@ -578,9 +580,9 @@ void ui_init()
 	ui_energy = new Widget(UI_LABEL,ui_hud);
 	ui_energy->setSize(200,20);
 	ui_energy->setPos(2,2);
-	ui_sheild = new Widget(UI_LABEL,ui_hud);
-	ui_sheild->setSize(200,20);
-	ui_sheild->setPos(2,22);
+	ui_lives = new Widget(UI_LABEL,ui_hud);
+	ui_lives->setSize(200,20);
+	ui_lives->setPos(2,22);
 
 	ui_popup = new Widget(UI_CONTAINER,ui_base);
 	ui_popup->setPos(220,140);
@@ -746,13 +748,12 @@ void ui_render(Player& player)
 		ui_energy->setTextColor(0x01, 135, 0x00);
 	ui_energy->setText(buf);
 
-	//energy = 100*player.energy/player.energy_max;
-	//sprintf(buf, "Sheild: %.0f%%", energy);
-	//if (energy < 20.f)
-		//ui_sheild->setTextColor(0xef, 0x29, 0x29);
-	//else
-		//ui_sheild->setTextColor(0x01, 135, 0x00);
-	//ui_sheild->setText(buf);
+	sprintf(buf, "Lives: %d", player.lifes);
+	if (player.lifes < 2)
+		ui_lives->setTextColor(0xef, 0x29, 0x29);
+	else
+		ui_lives->setTextColor(0x01, 135, 0x00);
+	ui_lives->setText(buf);
 
 	ui_base->draw();
 }

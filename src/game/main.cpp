@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 	}
 
 	// Create main window
-	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics", sf::Style::Close);
 	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
 		(sf::VideoMode::GetDesktopMode().Height/2)-260);
 	App->SetFramerateLimit(60);
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 		printf("failed to load font\n");
 
 	// Create game objects
-	game_map = new Map(mapName);
+	game_map = new Map("");
 	Player p1;
 	
 	g_player = &p1;
@@ -101,8 +101,10 @@ int main(int argc, char** argv)
 
 
 	if (enableMusic)
+	{
+		soundCache["01 Game-Game_0.ogg"]->setLoop(true);
 		soundCache["01 Game-Game_0.ogg"]->playSound();
-
+	}
 	ui_init();
 
 	sf::Clock Clock;
