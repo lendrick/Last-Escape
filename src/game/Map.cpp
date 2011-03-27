@@ -9,6 +9,7 @@
 #include "Collectible.h"
 #include "Enemy.h"
 #include "EnemyWalker.h"
+#include "EnemyCrawler.h"
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
 #include "Particles.h"
@@ -173,6 +174,8 @@ void Map::loadMap(string filename) {
 					actor = new ParticleEmitter();
 				} else if (type == "walker") {
 					actor = new EnemyWalker();
+				} else if (type == "crawler") {
+					actor = new EnemyCrawler();
 				} else if (type == "flyer") {
 					actor = new EnemyFlyer();
 				} else if (type == "centipede") {
