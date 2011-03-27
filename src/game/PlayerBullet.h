@@ -12,6 +12,7 @@ public:
 private:
 	float speed_x;
 	float speed_y;
+	float damage;
 };
 
 #endif

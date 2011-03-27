@@ -47,6 +47,7 @@ Player::Player()
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
+	energyBalls = 0;
 	
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -190,6 +191,11 @@ void Player::update(float dt) {
 	const int terminal_velocity = 16.0*60;
 	walking = false;
 	
+	if(energyBalls == 10) {
+		energyBalls = 0;
+		lifes++;
+	}
+	
 	time += dt;
 
 	if(isGrounded()) {
@@ -329,7 +335,7 @@ void Player::collide(Actor & otherActor)
 
 void respawn()
 {
-	//std::cout << "Bla" << std::endl;
+	ui_showMenu();
 	game_map->loadMap(game_map->currentFilename);
 }
 
