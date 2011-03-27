@@ -21,7 +21,8 @@ AnimatedActor::~AnimatedActor()
 
 void AnimatedActor::init() {
 	facing_direction = FACING_RIGHT;
-	this->currentAnimation = NULL;
+	currentAnimation = NULL;
+	dying = false;
 }
 
 void AnimatedActor::setImage(std::string filename) 
@@ -65,6 +66,7 @@ void AnimatedActor::draw()
 	 	{
 			//TODO jump to next Animation in queue or idle Animation
 			this->currentAnimation->setIsFinished(false);
+			onAnimationComplete(animationName());
 		}
 		else
 		{
@@ -72,6 +74,14 @@ void AnimatedActor::draw()
 		}
 	}
 	Actor::draw();
+}
+
+std::string AnimatedActor::animationName() {
+	if(currentAnimation == NULL) {
+		return "";
+	} else {
+		return currentAnimation->getName();
+	}
 }
 
 void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
@@ -83,7 +93,7 @@ void AnimatedActor::setCurrentAnimation(std::string name, bool reset)
 		if(reset)
 			this->currentAnimation->reset();
 		
-		cout << name << endl;
+		//cout << name << endl;
 	}
 }
 
@@ -102,6 +112,8 @@ void AnimatedActor::flipDirection() {
 		facing_direction = FACING_UP;
 	}
 }
+
+
 
 void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {

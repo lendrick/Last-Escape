@@ -39,8 +39,8 @@ AnimatedActor()
 void PlayerBullet::collide(Actor& otherActor) {
 	if (otherActor.isEnemy())
 	{
-		otherActor.destroy();
-		destroy();
+		otherActor.die();
+		die();
 	}
 }
 
