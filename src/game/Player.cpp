@@ -52,6 +52,8 @@ Player::Player()
 	
 	fireSound = soundCache["shoot.ogg"];
 	currentStart = NULL;
+	
+	jumpSound = soundCache["ambient_techno1.ogg"];
 
 	init();
 }
@@ -123,6 +125,7 @@ void Player::jump(float dt) {
 		energy -= energy_cost_jump;
 
 		last_jump_time = time;
+		jumpSound->playSound();
 	}
 	else
 	{
@@ -136,6 +139,7 @@ void Player::jump(float dt) {
 
 		energy -= cost;
 		speed_y -= max_jet_accel*dt;
+		jumpSound->playSound();
 	}
 }
 

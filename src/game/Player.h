@@ -50,6 +50,7 @@ public:
 	int armor;
 	int lifes;
 	Sound * fireSound;
+	Sound * jumpSound;
 };
 
 
