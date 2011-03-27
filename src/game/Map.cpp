@@ -14,7 +14,7 @@
 #include "StartPoint.h"
 #include "ExitPoint.h"
 
-Map::Map() {
+Map::Map(const char* mapName) {
 	
 	loadTileset("tileset.png");
 	
@@ -38,7 +38,7 @@ Map::Map() {
 	cam_y = 0;
 	cameraFollow = NULL;
 	
-	loadMap("subwaymap.tmx");
+	loadMap(mapName);
 }
 
 void Map::loadTileset(string filename) {
