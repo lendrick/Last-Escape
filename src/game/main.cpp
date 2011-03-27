@@ -67,7 +67,8 @@ void cleanup() {
 int main(int argc, char** argv)
 {
 	bool enableMusic = true;
-	const char* mapName = "subwaymap.tmx";
+	const char* mapName = "subwaymap-new.tmx";
+	//const char* mapName = "sewer.tmx";
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -79,6 +80,8 @@ int main(int argc, char** argv)
 
 	// Create main window
 	App = new sf::RenderWindow(sf::VideoMode(640, 480), "SFML Graphics");
+	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
+		(sf::VideoMode::GetDesktopMode().Height/2)-260);
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
 

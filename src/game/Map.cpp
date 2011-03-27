@@ -10,6 +10,7 @@
 #include "Enemy.h"
 #include "EnemyWalker.h"
 #include "EnemyFlyer.h"
+#include "EnemyCentipede.h"
 #include "Particles.h"
 #include "StartPoint.h"
 #include "ExitPoint.h"
@@ -163,6 +164,8 @@ void Map::loadMap(string filename) {
 					actor = new EnemyWalker();
 				else if (type == "flyer")
 					actor = new EnemyFlyer();
+				else if (type == "centipede")
+					actor = new EnemyCentipede();
 				else if (type == "start")
 					actor = new StartPoint();
 				else if (type == "exit")
@@ -375,7 +378,7 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 }
 
 bool Map::isSolid(int x, int y) {
-	return checkVerticalLine(x, y, y);
+	return collision[x/TILE_SIZE][y/TILE_SIZE] != 0;
 }
 
 void Map::renderBackground() {

@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h" 
+#include <SFML/Graphics.hpp>
 
 class EnemyCentipede : public Enemy
 {
@@ -14,5 +15,7 @@ private:
 	float walk_speed;
 	float speed_x;
 	float speed_y;
+	bool checkGround;
+	sf::Sprite debugPixel;
 }; 
 
