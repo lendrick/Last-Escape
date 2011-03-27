@@ -374,6 +374,10 @@ bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
 	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
 }
 
+bool Map::isSolid(int x, int y) {
+	return checkVerticalLine(x, y, y);
+}
+
 void Map::renderBackground() {
 	if(cameraFollow != NULL) {
 		game_map->cam_x = (int)cameraFollow->pos_x - 320;
