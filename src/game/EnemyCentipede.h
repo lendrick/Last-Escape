@@ -31,7 +31,6 @@ public:
 	virtual void update(float dt);
 	virtual void onAnimationComplete(std::string anim);
 private:
-	float speed_x;
-	float speed_y;
+
 	float fly_speed;
 };
