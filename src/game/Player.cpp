@@ -141,7 +141,8 @@ void Player::jump(float dt) {
 
 		energy -= cost;
 		speed_y -= max_jet_accel*dt;
-		jumpSound->playSound();
+		if(jumpSound->getStatus() != sf::Sound::Playing)
+			jumpSound->playSound();
 	}
 }
 
