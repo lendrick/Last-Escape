@@ -48,7 +48,11 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	energyBalls = 0;
-	
+        
+        immunityTime = 0.5f;
+	recoveryTime = 0.2f;
+        recoveryTimer = 0;
+        
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
 	
@@ -193,6 +197,12 @@ void Player::update(float dt) {
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16.0*60;
 	walking = false;
+        
+        if(recoveryTimer > 0) {
+          recoveryTimer -= dt;
+        } else {
+          recoveryTimer = 0;
+        }
 	
 	if(energyBalls == 10) {
 		energyBalls = 0;
@@ -202,7 +212,7 @@ void Player::update(float dt) {
 	
 	time += dt;
 
-	if(isGrounded()) {
+	if(isGrounded() && recoveryTimer <= 0) {
 		speed_y = 0;
 	}
 
@@ -219,13 +229,13 @@ void Player::update(float dt) {
 		energy = std::max(energy, 10.f);
 
 	// left/right move
-	if (!dying && input.direction() == FACING_LEFT) {
+	if (!dying && recoveryTimer <= 0 && input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
 		speed_x -= speed_delta*dt;
 		if (speed_x < -speed_max) speed_x = -speed_max;
 		facing_direction = move_direction;
 	}
-	else if (!dying && input.direction() == FACING_RIGHT) {
+	else if (!dying && recoveryTimer <= 0 && input.direction() == FACING_RIGHT) {
 		move_direction = FACING_RIGHT;
 		speed_x += speed_delta*dt;
 		if (speed_x > speed_max) speed_x = speed_max;
@@ -241,13 +251,13 @@ void Player::update(float dt) {
 		walking = true;
 	}
 
-	if (!dying && input.jumping())
+	if (!dying && recoveryTimer <= 0 && input.jumping())
 		jump(dt);
 
-	if (!dying && input.shooting())
+	if (!dying && recoveryTimer <= 0 && input.shooting())
 		shoot();
 	
-	if(!dying && input.crouching())
+	if(!dying && recoveryTimer <= 0 && input.crouching())
 		crouched = true;
 	else 
 		crouched = false;
@@ -265,7 +275,9 @@ void Player::update(float dt) {
 	// Compute animations:
 
 	if(!dying) {
-		if(time - last_shoot_time < shoot_duration) {
+                if(recoveryTimer > 0) {
+                  this->setCurrentAnimation("damage");
+                } if(time - last_shoot_time < shoot_duration) {
 			if(walking) {
 				this->setCurrentAnimation("walkshoot");
 			}
@@ -319,7 +331,7 @@ void Player::collide(Actor & otherActor)
 {
 	if(otherActor.isEnemy()) 
 	{
-		die();
+		doDamage(1.0f);
 	}
 	
 	if(otherActor.isSpawnPoint()) {
@@ -376,4 +388,26 @@ void Player::onAnimationComplete(std::string anim) {
 			ui_popupImage("images/game_over.png", respawn);
 		}
 	}
+}
+
+void Player::doDamage(float damage) {
+        if(damageTimer <= 0) {
+                energy -= damage * 30;
+                if(energy < 0) die();
+                damageTimer = immunityTime;
+                recoveryTimer = recoveryTime;
+                onDamage();
+                
+                if(facing_direction == FACING_LEFT) {
+                        speed_x = 300;
+                } else {
+                        speed_x = -300;
+                }
+                
+                speed_y = -150;
+        }
+}
+
+void Player::onDamage() {
+        soundCache["grunt.ogg"]->playSound();
 }

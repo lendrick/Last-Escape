@@ -149,3 +149,7 @@ void Actor::goToGround() {
 		move(mov_x, mov_y);
 	}
 }
+
+void Actor::doUpdate(float dt) {
+        update(dt);
+}

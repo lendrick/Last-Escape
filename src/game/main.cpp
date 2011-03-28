@@ -37,7 +37,7 @@ bool paused = false;
 
 void update(float dt) {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		(*it)->update(dt);
+		(*it)->doUpdate(dt);
 	}
 }
 

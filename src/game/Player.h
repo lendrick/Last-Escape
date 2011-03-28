@@ -19,6 +19,8 @@ public:
 	virtual void collide(Actor & otherActor);
 	virtual void onDestroy();
 	virtual void onAnimationComplete(std::string anim);
+        virtual void doDamage(float damage);
+        virtual void onDamage();
 	
 	StartPoint * findStart();
 	
@@ -51,6 +53,8 @@ public:
 	int armor;
 	int lifes;
 	int energyBalls;
+        float recoveryTime;
+        float recoveryTimer;
 	
 	Sound * fireSound;
 	Sound * jumpSound;

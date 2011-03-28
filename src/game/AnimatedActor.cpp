@@ -23,6 +23,8 @@ void AnimatedActor::init() {
 	facing_direction = FACING_RIGHT;
 	currentAnimation = NULL;
 	dying = false;
+        immunityTime = 0.2f;
+        damageTimer = 0.0f;
 }
 
 void AnimatedActor::setImage(std::string filename) 
@@ -74,7 +76,31 @@ void AnimatedActor::draw()
 			this->currentAnimation->update();
 		}
 	}
+	
+	float redness = 0;
+        int alpha = 255; 
+	if(immunityTime > 0) {
+                redness = damageTimer / immunityTime;
+                alpha = 128;
+        }
+        
+        int colorLevel = (int) (127.0f + 128.0f * (1.0f - redness));
+        
+        if(damageTimer > 0)
+                sprite.SetColor(sf::Color(255, colorLevel, colorLevel, alpha));
+        else
+                sprite.SetColor(sf::Color(255, 255, 255, 255));
+        
 	Actor::draw();
+}
+
+void AnimatedActor::doUpdate(float dt) {
+        if(damageTimer > 0.0f)
+          damageTimer -= dt;
+        else
+          damageTimer = 0.0f;
+        
+        update(dt);
 }
 
 std::string AnimatedActor::animationName() {
@@ -207,4 +233,17 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 			cout << "Expected 'animation' tag" << endl;
 		}
 	}
+}
+
+void AnimatedActor::doDamage(float damage) {
+        if(damageTimer <= 0) {
+                life -= damage;
+                if(life <= 0) die();
+                damageTimer = immunityTime;
+                onDamage();
+        }
+}
+
+void AnimatedActor::onDamage() {
+        //TODO: play a sound
 }

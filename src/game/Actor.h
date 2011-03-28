@@ -38,6 +38,7 @@ public:
 	virtual void die();
 	
 	virtual void update(float dt) { };
+        virtual void doUpdate(float dt);
 	virtual void draw();
 	
 	void destroy();

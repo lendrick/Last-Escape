@@ -70,4 +70,10 @@
 			<frame number="53" time="0.4"/>
 		</frames>
 	</animation>	
+        
+        <animation name="damage">
+                <frames>
+                        <frame number="56" time="0.5"/>
+                </frames>
+        </animation>
 </animations>
