@@ -27,14 +27,14 @@ TempPlayer::TempPlayer() {
 	int state = 0;
 	img.Create(24, 48, sf::Color(255, 255, 255));
 }
-	
+
 void TempPlayer::logic() {
 
 	const sf::Input& input = App->GetInput();
-	const int speed_delta = 1.0;
-	const int speed_max = 8.0;
-	const int terminal_velocity = 16.0;
-	
+	const int speed_delta = 1;
+	const int speed_max = 8;
+	const int terminal_velocity = 16;
+
 	// left/right move
 	if (input.IsKeyDown(sf::Key::Left)) {
 		speed_x -= speed_delta;
@@ -49,17 +49,17 @@ void TempPlayer::logic() {
 		else if (speed_x < -speed_delta) speed_x += speed_delta;
 		else speed_x = 0.0;
 	}
-	
+
 	// jumping
 	if (input.IsKeyDown(sf::Key::Up)) {
 		speed_y -= speed_delta;
-		if (speed_y < -speed_max) speed_y = -speed_max; 
+		if (speed_y < -speed_max) speed_y = -speed_max;
 	}
 	else { // gravity
 		speed_y += speed_delta;
 		if (speed_y > terminal_velocity) speed_y = terminal_velocity;
 	}
-	
+
 	game_map->move(pos_x, pos_y, width, height, speed_x, speed_y);
 }
 

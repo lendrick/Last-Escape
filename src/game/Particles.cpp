@@ -30,7 +30,7 @@ ParticleEmitter::ParticleEmitter() {
 	sprite.SetImage(image);
 	sprite.SetCenter(16, 16);
 
-	maxParticles = maxAge*emissionRate;
+	maxParticles = int(maxAge*emissionRate);
 	timeLeft = 0;
 	nextIdx = 0;
 }
@@ -38,7 +38,7 @@ ParticleEmitter::ParticleEmitter() {
 void ParticleEmitter::update(float dt) {
 
 	timeLeft += dt;
-	
+
 	while (timeLeft > 0.f)
 	{
 		timeLeft -= 1.f/emissionRate;
@@ -72,10 +72,10 @@ void ParticleEmitter::addParticle()
 	Particle p;
 	p.x = pos_x;
 	p.y = pos_y;
-	p.xSpeed = (rand() % 20) - 10;
-	p.ySpeed = (rand() % 10) - 50;
-	p.angle = rand() % 360;
-	p.angleSpeed = (rand() % 200) - 100;
+	p.xSpeed = float((rand() % 20) - 10);
+	p.ySpeed = float((rand() % 10) - 50);
+	p.angle = float(rand() % 360);
+	p.angleSpeed = float((rand() % 200) - 100);
 	p.age = 0;
 	p.maxAge = maxAge * (100 - (rand() % 10)) / 100.f;
 

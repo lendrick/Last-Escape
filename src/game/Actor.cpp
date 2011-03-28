@@ -38,12 +38,12 @@ Actor::~Actor() {
 }
 
 void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
-	width = w;
-	height = h;
-	xOrigin = w*xoff;
-	yOrigin = h*yoff;
+	width = (int)w;
+	height = (int)h;
+	xOrigin = int(w*xoff);
+	yOrigin = int(h*yoff);
 	sprite.SetColor(c);
-	sprite.SetScale(width, height);
+	sprite.SetScale((float)width, (float)height);
 	sprite.SetCenter(xoff, yoff);
 }
 
@@ -55,7 +55,7 @@ void Actor::setPos(float px, float py) {
 void Actor::setDrawOffset(int ox, int oy) {
 	xDrawOffset = ox;
 	yDrawOffset = oy;
-	sprite.SetCenter(ox, oy);
+	sprite.SetCenter((float)ox, (float)oy);
 }
 
 // returns true if the actor collided with a map tile
@@ -100,7 +100,7 @@ bool Actor::isColliding(Actor * otherActor) {
 	float ox1, oy1, ox2, oy2;
 	getBoundingBox(x1, y1, x2, y2);
 	otherActor->getBoundingBox(ox1, oy1, ox2, oy2);
-	
+
 	if (x2 < ox1 || ox2 < x1 || y2 < oy1 || oy2 < y1)
 		return false;
 	return true;
@@ -135,11 +135,11 @@ bool Actor::isDying() {
 
 void Actor::checkCollisions() {
 	list<Actor*>::iterator it2 = actors.begin();
-	
+
 	for (; it2 != actors.end(); ++it2)
 	{
 		// Don't collide with self. :)
-		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() && 
+		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() &&
 			(*it2)->canCollide() && isColliding(*it2))
 		{
 			collide(**it2);

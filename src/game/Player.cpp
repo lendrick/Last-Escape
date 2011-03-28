@@ -45,10 +45,10 @@ const int num_weapon_types = 3;
 WeaponDesc weapons[num_weapon_types] = {
 	{"Blaster", 5.0, 0.5, 0.0,
 		2, 3, 16.0 },
-	{"Overcharged Blaster", 2.5, 0.1, 10.0,
-		2, 3, 32.0 },
-	{"Way Overcharged Blaster", 2.0, 0.01, 5.0,
-		2, 3, 32.0 },
+	{"Overcharged Blaster", 2.5f, 0.1f, 10.0f,
+		2, 3, 32.0f },
+	{"Way Overcharged Blaster", 2.0f, 0.01f, 5.0f,
+		2, 3, 32.0f },
 };
 
 Player::Player()
@@ -65,10 +65,10 @@ Player::Player()
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	energyBalls = 0;
-	
+
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
-	
+
 	fireSound = soundCache["shoot.ogg"];
 	jumpSound = soundCache["ambient_techno1.ogg"];
 	dieSound  = soundCache["xeonDies.ogg"];
@@ -77,23 +77,23 @@ Player::Player()
 
 	init();
 }
-	
+
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
 	dying = false;
 
 	energy = energy_max = 100.f;
-	
+
 	if(currentStart == NULL)
 		currentStart = findStart();
-	
+
 	float sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
 		setPos(sx, sy);
-	} 
-	
+	}
+
 	/*
 	// Find the first start point, and move the player there
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -116,7 +116,7 @@ void Player::init() {
 	goToGround();
 
 	this->setCurrentAnimation("idle");
-	
+
 	current_weapon = 0;
 }
 
@@ -127,7 +127,7 @@ StartPoint * Player::findStart() {
 			return static_cast<StartPoint *>(*it);
 		}
 	}
-	
+
 	return NULL;
 }
 
@@ -170,7 +170,7 @@ void Player::jump(float dt) {
 
 void Player::shoot() {
 	const float shoot_reload_timer = 0.5f;
-	
+
 	if (energy < weapons[current_weapon].energy_cost)
 		return;
 
@@ -182,20 +182,20 @@ void Player::shoot() {
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
 		if(crouched) {
 			bullet->setPos(pos_x, pos_y - 15);
-		} 
+		}
 		else {
 			bullet->setPos(pos_x, pos_y - 30);
 		}
-		
-		
+
+
 		if(walking) {
 			setCurrentAnimation("walkshoot");
 		}
 		else {
 			setCurrentAnimation("shoot");
 		}
-				
-				
+
+
 		//resetCurrentAnimation();
 	}
 }
@@ -208,15 +208,15 @@ void Player::update(float dt) {
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
-	const int terminal_velocity = 16.0*60;
+	const int terminal_velocity = 16 * 60;
 	walking = false;
-	
+
 	if(energyBalls == 10) {
 		energyBalls = 0;
 		lifes++;
 		soundCache["1up.ogg"]->playSound();
 	}
-	
+
 	time += dt;
 
 	if(isGrounded()) {
@@ -226,8 +226,8 @@ void Player::update(float dt) {
 	if(game_map->isOnInstantdeath(*this)) {
 		this->die();
 	}
-	
-	int move_direction = FACING_NONE; 
+
+	int move_direction = FACING_NONE;
 
 	// recharge energy
 	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
@@ -253,7 +253,7 @@ void Player::update(float dt) {
 		else if (speed_x < -speed_delta_decel*dt) speed_x += speed_delta_decel*dt;
 		else speed_x = 0.0;
 	}
-	
+
 	if(speed_x !=0) {
 		walking = true;
 	}
@@ -263,16 +263,16 @@ void Player::update(float dt) {
 
 	if (!dying && input.shooting())
 		shoot();
-	
+
 	if(!dying && input.crouching())
 		crouched = true;
-	else 
+	else
 		crouched = false;
 
 	// gravity
 	speed_y += speed_delta*dt;
 	if (speed_y > terminal_velocity) speed_y = terminal_velocity;
-	
+
 	float delta_x = speed_x*dt;
 	float delta_y = speed_y*dt;
 	game_map->move(pos_x, pos_y, width, height, delta_x, delta_y);
@@ -288,11 +288,11 @@ void Player::update(float dt) {
 			}
 			else if(crouched) {
 				this->setCurrentAnimation("crouchshoot");
-			}		
+			}
 			else {
 				this->setCurrentAnimation("shoot");
 			}
-		} 
+		}
 		else if (!isGrounded() && speed_y != 0)
 		{
 			if(speed_y < 0)
@@ -303,17 +303,17 @@ void Player::update(float dt) {
 		else if (speed_x != 0)
 		{
 			walking = true;
-		std:cout<< this->getCurrentAnimation()->getIsFinished();
+			std::cout<< this->getCurrentAnimation()->getIsFinished();
 			if(this->getCurrentAnimation()->getIsFinished()) {
 				this->setCurrentAnimation("walk");
 			}
-		} 
+		}
 		else if(crouched) {
 			this->setCurrentAnimation("crouch");
 		}
 		else
 		{
-			this->setCurrentAnimation("idle"); 
+			this->setCurrentAnimation("idle");
 		}
 
 		updateSpriteFacing();
@@ -322,7 +322,7 @@ void Player::update(float dt) {
 			sprite.Rotate(360.f*dt);
 		else
 			sprite.SetRotation(0);
-	
+
 		checkCollisions();
 	}
 }
@@ -332,17 +332,17 @@ void Player::draw() {
 	AnimatedActor::draw();
 }
 
-void Player::collide(Actor & otherActor) 
+void Player::collide(Actor & otherActor)
 {
-	if(otherActor.isEnemy()) 
+	if(otherActor.isEnemy())
 	{
 		die();
 	}
-	
+
 	if(otherActor.isSpawnPoint()) {
 		currentStart = static_cast<StartPoint *>(&otherActor);
 	}
-	
+
 	if(otherActor.isExitPoint()) {
 		currentStart = NULL;
 		std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
@@ -351,7 +351,7 @@ void Player::collide(Actor & otherActor)
 			game_map->loadMap(mapname);
 		}
 	}
-	
+
 	if (otherActor.isCollectible() || otherActor.isExitPoint() || otherActor.isTeleportEnter())
 	{
 		otherActor.collide(*this);
@@ -388,7 +388,7 @@ void Player::onAnimationComplete(std::string anim) {
 			std::cout << "life lost. current lifes: " << lifes << std::endl;
 			init();
 		} else {
-			lifes = start_lifes; 
+			lifes = start_lifes;
 			energyBalls = 0;
 			ui_popupImage("images/game_over.png", respawn);
 		}
