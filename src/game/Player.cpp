@@ -393,10 +393,13 @@ void Player::onAnimationComplete(std::string anim) {
 void Player::doDamage(float damage) {
         if(damageTimer <= 0) {
                 energy -= damage * 30;
-                if(energy < 0) die();
+                if(energy < 0) {
+                        die();
+                } else {
+                        onDamage();
+                }
                 damageTimer = immunityTime;
                 recoveryTimer = recoveryTime;
-                onDamage();
                 
                 if(facing_direction == FACING_LEFT) {
                         speed_x = 300;

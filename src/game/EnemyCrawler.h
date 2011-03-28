@@ -8,7 +8,7 @@ public:
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
-	virtual void doDamage(float damage);
+	//virtual void doDamage(float damage);
 	virtual void onAnimationComplete(std::string anim);
 private:
 	float walk_speed;

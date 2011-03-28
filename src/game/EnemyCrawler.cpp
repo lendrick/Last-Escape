@@ -98,6 +98,7 @@ void EnemyCrawler::draw() {
 	AnimatedActor::draw();
 }
 
+/*
 void EnemyCrawler::doDamage(float damage) {
 	life -= damage;
 	if(life <= 0) 
@@ -106,6 +107,7 @@ void EnemyCrawler::doDamage(float damage) {
 		setCurrentAnimation("hurt");
 
 }
+*/
 
 void EnemyCrawler::die() {
 	setCanCollide(false);
