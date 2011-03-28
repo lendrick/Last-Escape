@@ -1,6 +1,7 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <list>
 #include <cstdio>
 #include <iostream>
@@ -26,7 +27,7 @@ extern sf::RenderWindow *App;
 extern Player *g_player;
 extern Input input;
 extern bool godMode;
-extern Sound * backgroundMusic;
+extern sf::Music backgroundMusic;
 extern bool enableMusic;
 extern std::string startMap;
 

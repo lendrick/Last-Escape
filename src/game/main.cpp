@@ -25,7 +25,7 @@ sf::RenderWindow *App;
 Player *g_player = 0;
 Input input;
 bool godMode = false;
-Sound * backgroundMusic = NULL;
+sf::Music backgroundMusic;
 bool enableMusic = true;
 std::string startMap;
 
