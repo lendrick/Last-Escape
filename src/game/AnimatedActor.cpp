@@ -66,7 +66,8 @@ void AnimatedActor::updateSpriteFacing() {
 
 Animation * AnimatedActor::addAnimation(std::string name) {
 	if(frame_w == 0 || frame_h == 0) {
-		cout << "ERROR: Must set frame size before adding animation.\n";
+		if (debugMode)
+			cout << "ERROR: Must set frame size before adding animation.\n";
 	}
 	Animation* a = new Animation(this->sprite, name);
 	this->animations[name] = a;
@@ -170,8 +171,11 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {
 	if(this->sprite.GetImage() == NULL)
 	{
-		cout << "Error: tried to set Animations before an image was set" << endl;
-		cout << "animations/" << filename << " was ignored" << endl;
+		if (debugMode)
+		{
+			cout << "Error: tried to set Animations before an image was set" << endl;
+			cout << "animations/" << filename << " was ignored" << endl;
+		}
 		return;
 	}
 
@@ -231,22 +235,31 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 						} 
 						else
 						{
-							cout << "Unkown Tag:" << aChildName << endl;
-							cout << "Expected 'frame' tag" << endl;
+							if (debugMode)
+							{
+								cout << "Unkown Tag:" << aChildName << endl;
+								cout << "Expected 'frame' tag" << endl;
+							}
 						}
 					}
 				}
 				else
 				{
-					cout << "Unkown Tag:" << aChildName << endl;
-					cout << "Expected 'frames' tag" << endl;
+					if (debugMode)
+					{
+						cout << "Unkown Tag:" << aChildName << endl;
+						cout << "Expected 'frames' tag" << endl;
+					}
 				}
 			}
 		}
 		else
 		{
-			cout << "Unkown Tag:" << childName << endl;
-			cout << "Expected 'animation' tag" << endl;
+			if (debugMode)
+			{
+				cout << "Unkown Tag:" << childName << endl;
+				cout << "Expected 'animation' tag" << endl;
+			}
 		}
 	}
 }

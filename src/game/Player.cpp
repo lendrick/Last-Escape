@@ -126,7 +126,8 @@ void Player::init() {
 StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
-			cout << "found start at " << (*it)->pos_x << " " << (*it)->pos_y << "\n";
+			if (debugMode)
+				cout << "found start at " << (*it)->pos_x << " " << (*it)->pos_y << "\n";
 			return static_cast<StartPoint *>(*it);
 		}
 	}
@@ -317,7 +318,8 @@ void Player::update(float dt) {
 		else if (speed_x != 0)
 		{
 			walking = true;
-			std::cout<< this->getCurrentAnimation()->getIsFinished();
+			if (debugMode)
+				std::cout<< this->getCurrentAnimation()->getIsFinished();
 			if(this->getCurrentAnimation()->getIsFinished()) {
 				this->setCurrentAnimation("walk");
 			}
@@ -391,7 +393,8 @@ void Player::die() {
 }
 
 void Player::onDestroy() {
-	cout << "player destroyed\n";
+	if (debugMode)
+		cout << "player destroyed\n";
 }
 
 void Player::onAnimationComplete(std::string anim) {

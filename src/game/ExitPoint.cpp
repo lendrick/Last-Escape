@@ -31,7 +31,8 @@ void ExitPoint::collide(Actor& otherActor) {
 
 void ExitPoint::setMap(std::string filename) {
 	mapname = filename;
-	std::cout << "setting map exit to " << filename << "\n";
+	if (debugMode)
+		std::cout << "setting map exit to " << filename << "\n";
 }
 
 std::string ExitPoint::getMap() {
