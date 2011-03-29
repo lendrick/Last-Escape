@@ -112,6 +112,16 @@ void Actor::draw() {
 			0.5f + (int)(pos_x - game_map->cam_x),
 			0.5f + (int)(pos_y - game_map->cam_y));
 		App->Draw(sprite);
+		if(debugMode)
+        {
+            float bbx1, bby1, bbx2, bby2;
+            bbx1 = sprite.GetPosition().x - xOrigin;
+            bby1 = sprite.GetPosition().y - yOrigin;
+            bbx2 = bbx1 + width;
+            bby2 = bby1 + height;
+            App->Draw(sf::Shape::Rectangle(bbx1, bby1, bbx2, bby2,
+                                           sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0)));
+        }
 	}
 }
 
