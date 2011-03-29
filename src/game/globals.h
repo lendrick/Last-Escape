@@ -47,6 +47,7 @@ extern bool godMode;
 extern sf::Music backgroundMusic;
 extern bool enableMusic;
 extern std::string startMap;
+extern bool debugMode;
 
 enum Facing {
 	FACING_NONE,
