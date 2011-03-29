@@ -46,8 +46,8 @@ sf::Image * ImageCache::getImage(std::string name)
 	if(images.find(name) == images.end()) {
 		sf::Image * img = loadImage(name);
 		images[name] = img;
-	} 
-	
+	}
+
 	return images[name];
 }
 
@@ -58,13 +58,15 @@ void ImageCache::unload(std::string name)
 	delete img;
 }
 
-sf::Image * ImageCache::loadImage(std::string filename) 
+sf::Image * ImageCache::loadImage(std::string filename)
 {
 	sf::Image * img = new sf::Image;
 	if(!img->LoadFromFile("images/" + filename)) {
 		std::cout << "Failed to load image " << filename << "\n";
 		return NULL;
+	} else {
+	    img->SetSmooth(false);
 	}
-	
+
 	return img;
 }

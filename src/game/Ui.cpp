@@ -204,6 +204,7 @@ bool Widget::toggleBg()
 void Widget::setBg(const sf::Unicode::Text &Text)
 {
 	bgi.LoadFromFile(Text);
+	bgi.SetSmooth(false);
 	background.SetImage(bgi);
 	int w = (int)bgi.GetWidth();
 	int h = (int)bgi.GetHeight();
@@ -605,6 +606,8 @@ void ui_init()
 
 	if (!ui_background.LoadFromFile("images/ui.png"))
 		printf("failed to load ui sprites\n");
+    else
+        ui_background.SetSmooth(false);
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);
