@@ -28,7 +28,7 @@ Collectible::Collectible()
 }
 
 
-void Collectible::init() 
+void Collectible::init()
 {
 	width = 32;
 	height = 32;
@@ -36,7 +36,7 @@ void Collectible::init()
 	yOrigin = height/2;
 	setDrawOffset(16, 16);
 	setFrameSize(32, 32);
-	
+
 	Animation * tmp;
 	tmp = addAnimation("image");
 	tmp->addFrame(0, .1f);
@@ -62,7 +62,10 @@ void CollectiblePill::collide(Actor& otherActor) {
 		fireSound->playSound();
 		setCanCollide(false);
 		hidden = true;
-		((Player&)otherActor).energy += 5.f;
+        // give player 5 energy, but only up to max energy + 100
+        if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max + 100) {
+            ((Player&)otherActor).energy = min(((Player&)otherActor).energy_max + 100, ((Player&)otherActor).energy + 5.0f);
+        }
 	}
 }
 
@@ -109,7 +112,7 @@ CollectibleEnergyBall::CollectibleEnergyBall()
 	yOrigin = height/2;
 	setDrawOffset(16, 16);
 	setFrameSize(32, 32);
-	
+
 	Animation * tmp;
 	tmp = addAnimation("anim");
 	tmp->addFrame(0, .2f);
@@ -127,10 +130,10 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 			destroy();
 			soundCache["gmae.ogg"]->playSound();
 			g_player->energyBalls++;
-			
-			// give player 25 energy, but only up to 100
-			if(((Player&)otherActor).energy < 100.f) {
-				((Player&)otherActor).energy = min(100.f, ((Player&)otherActor).energy + 25.f);
+
+			// give player 25 energy, but only up to max energy
+			if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max) {
+				((Player&)otherActor).energy = min(((Player&)otherActor).energy_max, ((Player&)otherActor).energy + 25.f);
 			}
 		}
 	}

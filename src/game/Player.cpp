@@ -218,7 +218,7 @@ void Player::update(float dt) {
 	} else {
 		recoveryTimer = 0;
 	}
-	
+
 	if(energyBalls == 10) {
 		energyBalls = 0;
 		lives++;
@@ -238,7 +238,8 @@ void Player::update(float dt) {
 	int move_direction = FACING_NONE;
 
 	// recharge energy
-	energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
+	if(energy > 0)
+        energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
 
 	if (godMode)
 		energy = std::max(energy, 10.f);
@@ -274,7 +275,7 @@ void Player::update(float dt) {
 
 	if (!dying && recoveryTimer <= 0 && input.shooting())
 		shoot();
-	
+
 	if(!dying && recoveryTimer <= 0 && input.crouching())
 		crouched = true;
 	else
@@ -397,7 +398,7 @@ void Player::onAnimationComplete(std::string anim) {
 	if(anim == "die") {
 		if(lives > 0) {
 			//std::cout << "life lost. current lives: " << lives << std::endl;
-			
+
 			// reset all collectibles
 			for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 				if((*it)->isCollectible()) {
@@ -416,20 +417,21 @@ void Player::onAnimationComplete(std::string anim) {
 void Player::doDamage(float damage) {
         if(damageTimer <= 0) {
                 energy -= damage * 30;
-                if(energy < 0) {
+                if(energy <= 0) {
+                        energy = 0;
                         die();
                 } else {
                         onDamage();
                 }
                 damageTimer = immunityTime;
                 recoveryTimer = recoveryTime;
-                
+
                 if(facing_direction == FACING_LEFT) {
                         speed_x = 300;
                 } else {
                         speed_x = -300;
                 }
-                
+
                 speed_y = -150;
         }
 }
