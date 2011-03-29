@@ -80,6 +80,7 @@ CollectibleWeaponUpgrade::CollectibleWeaponUpgrade()
 void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
+		soundCache["gmae.ogg"]->playSound();
 		setCanCollide(false);
 		hidden = true;
 		((Player&)otherActor).upgradeWeapon();
