@@ -43,6 +43,11 @@ void Collectible::init()
 	setCurrentAnimation("image");
 }
 
+void Collectible::reset() {
+	setCanCollide(true);
+	hidden = false;
+}
+
 CollectiblePill::CollectiblePill()
 :Collectible()
 {
@@ -55,7 +60,8 @@ void CollectiblePill::collide(Actor& otherActor) {
 	{
 		fireSound = soundCache["energyblip.ogg"];
 		fireSound->playSound();
-		destroy();
+		setCanCollide(false);
+		hidden = true;
 		((Player&)otherActor).energy += 5.f;
 	}
 }
@@ -71,7 +77,8 @@ CollectibleWeaponUpgrade::CollectibleWeaponUpgrade()
 void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
-		destroy();
+		setCanCollide(false);
+		hidden = true;
 		((Player&)otherActor).upgradeWeapon();
 	}
 }
@@ -86,7 +93,8 @@ CollectibleArmor::CollectibleArmor()
 void CollectibleArmor::collide(Actor& otherActor) {
 	if (otherActor.isPlayer())
 	{
-		destroy();
+		setCanCollide(false);
+		hidden = true;
 		((Player&)otherActor).armor += 1;
 	}
 }

@@ -34,6 +34,7 @@ void Input::initFrame() {
 	inputShoot = false;
 	inputQuit = false;
 	inputCrouch = false;
+	inputStopJump = false;
 }
 
 void Input::poll() {
@@ -68,6 +69,14 @@ void Input::poll() {
 					inputShoot = true;
 				} else if(Event.JoyButton.Button == 1) {
 					inputJump = true;
+				}
+			} else if(Event.Type == sf::Event::KeyReleased) {
+				if(Event.Key.Code == inputs[INPUT_JUMP].key)
+					inputStopJump = true;
+			} else if (Event.Type == sf::Event::JoyButtonReleased
+				&& Event.JoyButton.JoystickId == 0) {
+				if(Event.JoyButton.Button == 1) {
+					inputStopJump = true;
 				}
 			}
 		}
@@ -150,6 +159,13 @@ bool Input::jumping()
 	if (ui_menuOpen())
 		return false;
 	return inputJump || App->GetInput().IsKeyDown(inputs[INPUT_JUMP].key) || App->GetInput().IsJoystickButtonDown(0, 1);
+}
+
+bool Input::stopJump() {
+	if (ui_menuOpen())
+		return false;
+	
+	return inputStopJump;
 }
 
 bool Input::crouching()

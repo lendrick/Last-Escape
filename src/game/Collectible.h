@@ -31,7 +31,7 @@ public:
 	SoundCache soundCache;
 
 	virtual bool isCollectible() { return true; }
-	
+	virtual void reset();
 protected:
 	void init();
 };

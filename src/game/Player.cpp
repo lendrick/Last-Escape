@@ -139,7 +139,7 @@ void Player::upgradeWeapon() {
 }
 
 void Player::jump(float dt) {
-	const int jump_speed = 380;
+	const int jump_speed = 500;
 	const float max_jet_accel = 2000;
 	const float jet_cost = 100;
 
@@ -243,6 +243,9 @@ void Player::update(float dt) {
 	if (godMode)
 		energy = std::max(energy, 10.f);
 
+	if(!dying && recoveryTimer <= 0 && input.stopJump() && !isGrounded() && speed_y < -50) {
+		speed_y = -50;
+	}
 	// left/right move
 	if (!dying && recoveryTimer <= 0 && input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
@@ -395,7 +398,14 @@ void Player::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		if(lifes > 0) {
-			std::cout << "life lost. current lifes: " << lifes << std::endl;
+			//std::cout << "life lost. current lifes: " << lifes << std::endl;
+			
+			// reset all collectibles
+			for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+				if((*it)->isCollectible()) {
+					static_cast<Collectible *>(*it)->reset();
+				}
+			}
 			init();
 		} else {
 			lifes = start_lifes;

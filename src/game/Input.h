@@ -31,6 +31,7 @@ public:
 	bool shooting();
 	bool jumping();
 	bool crouching();
+	bool stopJump();
 
 private:
 	void initFrame();
@@ -40,6 +41,7 @@ private:
 	bool inputShoot;
 	bool inputJump;
 	bool inputCrouch;
+	bool inputStopJump;
 };
 
 typedef struct InputItem {
