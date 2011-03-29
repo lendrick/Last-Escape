@@ -90,7 +90,8 @@ void cleanup() {
 int main(int argc, char** argv)
 {
 	startMap = "desert_map.tmx";
-
+	bool fullScreen = false;
+	
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
 		if (strcmp(argv[i], "--disable-music") == 0)
@@ -99,12 +100,18 @@ int main(int argc, char** argv)
 			startMap = argv[++i];
 		else if (strcmp(argv[i], "--iddqd") == 0)
 			godMode = true;
+		else if (strcmp(argv[i], "--fullscreen") == 0)
+			fullScreen = true;
 	}
 
 	// Create main window
-	App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", sf::Style::Close);
-	App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, 
-		(sf::VideoMode::GetDesktopMode().Height/2)-260);
+	if(fullScreen) {
+		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Fullscreen|sf::Style::Close);
+	} else {
+		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Close);
+		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
+	}
+		
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
 	

@@ -71,11 +71,12 @@ void Input::poll() {
 				}
 			}
 		}
-		
+		/*
 		if(Event.Type == sf::Event::JoyButtonPressed) {
 			cout << "Button: " << Event.JoyButton.JoystickId << 
 				": " << Event.JoyButton.Button << "\n";
 		}
+		*/
 	}
 
 	if (!ui_menuOpen()) {
