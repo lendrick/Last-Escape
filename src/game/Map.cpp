@@ -214,7 +214,8 @@ void Map::loadMap(string filename) {
 					actor = new SpawnPoint();
 				} else if (type == "exit") {
 					actor = new ExitPoint(w, h);
-					cout << "Exit point\n";
+					if (debugMode)
+						cout << "Exit point\n";
 					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
 
 					if(prop != NULL) {
