@@ -382,6 +382,7 @@ void Player::die() {
 	if (godMode || dying)
 		return;
 
+    energy = 0;
 	dieSound->playSound();
 	lives--;
 	dying = true;
@@ -418,7 +419,6 @@ void Player::doDamage(float damage) {
         if(damageTimer <= 0) {
                 energy -= damage * 30;
                 if(energy <= 0) {
-                        energy = 0;
                         die();
                 } else {
                         onDamage();
