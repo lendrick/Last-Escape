@@ -409,6 +409,10 @@ void Player::onAnimationComplete(std::string anim) {
 					static_cast<Collectible *>(*it)->reset();
 				}
 			}
+			
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall();
+			ball->setPos(pos_x - 16, pos_y - 48);
+				
 			init();
 		} else {
 			lives = start_lives;
