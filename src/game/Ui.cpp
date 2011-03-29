@@ -601,7 +601,7 @@ void ui_setVol(float v)
 
 void ui_init()
 {
-	if (!fontUI.LoadFromFile("fonts/orbitron-medium.ttf"))
+	if (!fontUI.LoadFromFile("fonts/orbitron-medium.otf"))
 		printf("failed to load font\n");
 
 	if (!ui_background.LoadFromFile("images/ui.png"))

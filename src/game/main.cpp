@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 	
 	g_player = new Player();
 	
-	if (!fontUI.LoadFromFile("fonts/orbitron-medium.ttf"))
+	if (!fontUI.LoadFromFile("fonts/orbitron-medium.otf"))
 		printf("failed to load font\n");
 
 	// Create game objects
