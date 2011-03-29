@@ -73,8 +73,11 @@ BossSpider::BossSpider()
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(0, .07f);
-
+	tmp->addFrame(8, .2f);
+	tmp->addFrame(9, .2f);
+	tmp->addFrame(10, .2f);
+	tmp->addFrame(11, .2f);
+	
 	tmp = addAnimation("hurt");
 	tmp->addFrame(0, 0.07f);
 
@@ -149,8 +152,19 @@ void BossSpider::onAnimationComplete(std::string anim) {
 	//cout << "BossSpider::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x-16, pos_y-16);
+		CollectibleEnergyBall * ball = NULL;
+		
+		ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x-32, pos_y-16);
+		
+		ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x, pos_y-16);
+
+  	ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x-32, pos_y-48);
+
+		ball = new CollectibleEnergyBall();
+		ball->setPos(pos_x, pos_y-48);
 	}
 
 	if(anim == "hurt") {
