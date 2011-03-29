@@ -45,6 +45,7 @@ bool godMode = false;
 sf::Music backgroundMusic;
 bool enableMusic = true;
 std::string startMap;
+bool debugMode = false;
 
 ImageCache imageCache;
 SoundCache soundCache;
@@ -102,6 +103,8 @@ int main(int argc, char** argv)
 			godMode = true;
 		else if (strcmp(argv[i], "--fullscreen") == 0)
 			fullScreen = true;
+		else if (strcmp(argv[i], "--debug") == 0)
+			debugMode = true;
 	}
 
 	// Create main window
