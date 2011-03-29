@@ -1,0 +1,40 @@
+FILE(REMOVE_RECURSE
+  "CMakeFiles/lastescape.dir/Utils.cpp.o"
+  "CMakeFiles/lastescape.dir/StartPoint.cpp.o"
+  "CMakeFiles/lastescape.dir/TempPlayer.cpp.o"
+  "CMakeFiles/lastescape.dir/Input.cpp.o"
+  "CMakeFiles/lastescape.dir/EnemyShooter.cpp.o"
+  "CMakeFiles/lastescape.dir/Player.cpp.o"
+  "CMakeFiles/lastescape.dir/Animation.cpp.o"
+  "CMakeFiles/lastescape.dir/SpawnPoint.cpp.o"
+  "CMakeFiles/lastescape.dir/Enemy.cpp.o"
+  "CMakeFiles/lastescape.dir/SoundCache.cpp.o"
+  "CMakeFiles/lastescape.dir/PlayerBullet.cpp.o"
+  "CMakeFiles/lastescape.dir/EnemyWalker.cpp.o"
+  "CMakeFiles/lastescape.dir/main.cpp.o"
+  "CMakeFiles/lastescape.dir/Map.cpp.o"
+  "CMakeFiles/lastescape.dir/Sound.cpp.o"
+  "CMakeFiles/lastescape.dir/Particles.cpp.o"
+  "CMakeFiles/lastescape.dir/Ui.cpp.o"
+  "CMakeFiles/lastescape.dir/EnemyCentipede.cpp.o"
+  "CMakeFiles/lastescape.dir/Teleport.cpp.o"
+  "CMakeFiles/lastescape.dir/EnemyFlyer.cpp.o"
+  "CMakeFiles/lastescape.dir/EnemyCrawler.cpp.o"
+  "CMakeFiles/lastescape.dir/BossSpider.cpp.o"
+  "CMakeFiles/lastescape.dir/Collectible.cpp.o"
+  "CMakeFiles/lastescape.dir/AnimatedActor.cpp.o"
+  "CMakeFiles/lastescape.dir/ImageCache.cpp.o"
+  "CMakeFiles/lastescape.dir/ExitPoint.cpp.o"
+  "CMakeFiles/lastescape.dir/Actor.cpp.o"
+  "CMakeFiles/lastescape.dir/tinyxml/tinyxml.cpp.o"
+  "CMakeFiles/lastescape.dir/tinyxml/tinyxmlparser.cpp.o"
+  "CMakeFiles/lastescape.dir/tinyxml/tinyxmlerror.cpp.o"
+  "CMakeFiles/lastescape.dir/tinyxml/tinystr.cpp.o"
+  "/home/poss/game/lastescape.pdb"
+  "/home/poss/game/lastescape"
+)
+
+# Per-language clean rules from dependency scanning.
+FOREACH(lang CXX)
+  INCLUDE(CMakeFiles/lastescape.dir/cmake_clean_${lang}.cmake OPTIONAL)
+ENDFOREACH(lang)
