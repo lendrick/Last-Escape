@@ -795,8 +795,8 @@ void ui_render(Player& player)
 	sprintf(buf, "%.0f%%", energy);
 	ui_energy->setText(buf);
 
-	sprintf(buf, "Lives: %d", player.lifes);
-	if (player.lifes < 2)
+	sprintf(buf, "Lives: %d", player.lives);
+	if (player.lives < 2)
 		ui_lives->setTextColor(0xef, 0x29, 0x29);
 	else
 		ui_lives->setTextColor(0x01, 135, 0x00);

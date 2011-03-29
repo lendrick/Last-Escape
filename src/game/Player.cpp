@@ -28,7 +28,7 @@
 
 const float energy_cost_jump = 0.f;
 const float energy_recharge_rate = 5.f; // units per second
-static const int start_lifes = 3;
+static const int start_lives = 3;
 
 struct WeaponDesc {
 	const char* name;
@@ -55,7 +55,7 @@ Player::Player()
 : AnimatedActor() {
 	setImage("xeon.png");
 
-	lifes = start_lifes;
+	lives = start_lives;
 	width = 24;
 	height = 48;
 	xOrigin = width/2;
@@ -68,6 +68,7 @@ Player::Player()
 	immunityTime = 0.5f;
 	recoveryTime = 0.2f;
 	recoveryTimer = 0;
+	currentWeapon = 0;
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -120,7 +121,6 @@ void Player::init() {
 
 	this->setCurrentAnimation("idle");
 
-	current_weapon = 0;
 }
 
 StartPoint * Player::findStart() {
@@ -135,7 +135,7 @@ StartPoint * Player::findStart() {
 }
 
 void Player::upgradeWeapon() {
-	current_weapon = min(current_weapon+1, num_weapon_types-1);
+	currentWeapon = min(currentWeapon+1, num_weapon_types-1);
 }
 
 void Player::jump(float dt) {
@@ -174,15 +174,15 @@ void Player::jump(float dt) {
 void Player::shoot() {
 	const float shoot_reload_timer = 0.5f;
 
-	if (energy < weapons[current_weapon].energy_cost)
+	if (energy < weapons[currentWeapon].energy_cost)
 		return;
 
-	if (time - last_shoot_time > weapons[current_weapon].reload_time) {
+	if (time - last_shoot_time > weapons[currentWeapon].reload_time) {
 		last_shoot_time = time;
 		fireSound->playSound();
-		energy -= weapons[current_weapon].energy_cost;
+		energy -= weapons[currentWeapon].energy_cost;
 
-		Actor* bullet = new PlayerBullet(facing_direction, weapons[current_weapon].angle_variation);
+		Actor* bullet = new PlayerBullet(facing_direction, weapons[currentWeapon].angle_variation);
 		if(crouched) {
 			bullet->setPos(pos_x, pos_y - 15);
 		}
@@ -221,7 +221,7 @@ void Player::update(float dt) {
 	
 	if(energyBalls == 10) {
 		energyBalls = 0;
-		lifes++;
+		lives++;
 		soundCache["1up.ogg"]->playSound();
 	}
 
@@ -381,13 +381,11 @@ void Player::die() {
 	if (godMode || dying)
 		return;
 
-	if(armor == 0)
-	{
-		dieSound->playSound();
-		lifes--;
-		dying = true;
-		this->setCurrentAnimation("die");
-	}
+	dieSound->playSound();
+	lives--;
+	dying = true;
+	this->setCurrentAnimation("die");
+	currentWeapon = 0;
 }
 
 void Player::onDestroy() {
@@ -397,8 +395,8 @@ void Player::onDestroy() {
 void Player::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
-		if(lifes > 0) {
-			//std::cout << "life lost. current lifes: " << lifes << std::endl;
+		if(lives > 0) {
+			//std::cout << "life lost. current lives: " << lives << std::endl;
 			
 			// reset all collectibles
 			for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
@@ -408,7 +406,7 @@ void Player::onAnimationComplete(std::string anim) {
 			}
 			init();
 		} else {
-			lifes = start_lifes;
+			lives = start_lives;
 			energyBalls = 0;
 			ui_popupImage("images/game_over.png", respawn);
 		}

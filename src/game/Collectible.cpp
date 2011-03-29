@@ -127,6 +127,7 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 			destroy();
 			soundCache["gmae.ogg"]->playSound();
 			g_player->energyBalls++;
+			((Player&)otherActor).energy += 25.f;
 		}
 	}
 }

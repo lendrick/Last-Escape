@@ -50,7 +50,7 @@ public:
 
 	void upgradeWeapon();
 
-	int current_weapon;
+	int currentWeapon;
 
 	float time;
 	float last_shoot_time;
@@ -68,7 +68,7 @@ public:
 	bool walking;
 	
 	int armor;
-	int lifes;
+	int lives;
 	int energyBalls;
         float recoveryTime;
         float recoveryTimer;
