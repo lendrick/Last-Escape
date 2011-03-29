@@ -542,7 +542,7 @@ void ui_hidePopup()
 void ui_showCredits()
 {
 	ui_menu->hide();
-	ui_popupImage("images/credits.png",ui_showMenu);
+	ui_popupImage("images/landscapes/credits.png",ui_showMenu);
 }
 
 void ui_setJump()
