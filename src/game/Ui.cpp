@@ -209,7 +209,7 @@ void Widget::setBg(const sf::Unicode::Text &Text)
 	int h = (int)bgi.GetHeight();
 	background.SetSubRect(sf::IntRect(0,0,w,h));
 	setSize(w,h);
-	setPos(320-(w/2),240-(h/2));
+	setPos(320.0f - (w / 2.0f), 240.0f - (h / 2.0f));
 }
 
 bool Widget::isChecked()
@@ -637,7 +637,7 @@ void ui_init()
 	ui_energyballs = new Widget(UI_LABEL,ui_hud);
 	ui_energyballs->setSize(200,20);
 	ui_energyballs->setPos(10,45);
-	
+
 	ui_popup = new Widget(UI_CONTAINER,ui_base);
 	ui_popup->setPos(220,140);
 	ui_popup->hide();
@@ -801,8 +801,8 @@ void ui_render(Player& player)
 	else
 		ui_lives->setTextColor(0x01, 135, 0x00);
 	ui_lives->setText(buf);
-	
-	
+
+
 	sprintf(buf, "Energy Balls: %d", player.energyBalls);
 	ui_energyballs->setTextColor(0x01, 135, 0x00);
 	ui_energyballs->setText(buf);

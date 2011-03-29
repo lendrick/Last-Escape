@@ -18,7 +18,7 @@
 /**
  *  Map
  */
- 
+
 #include "Map.h"
 
 #include "tinyxml/tinyxml.h"
@@ -41,30 +41,30 @@
 #include <cstdlib>
 
 Map::Map(string mapName) {
-	
+
 	loadTileset("tileset.png");
 	loaded = false;
-	
+
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			tile_sprites[i][j].SetImage(tileset);
 		}
 	}
-	
+
 	// prep the rects for each tile
 	for (int i=0; i<TILE_COUNT-1; i++) {
-	
+
 		// assumes tileset is 512px wide
 		tile_rects[i+1].Left = (i % 16) * TILE_SIZE;
 		tile_rects[i+1].Top = (i / 16) * TILE_SIZE;
 		tile_rects[i+1].Right = tile_rects[i+1].Left + TILE_SIZE;
 		tile_rects[i+1].Bottom = tile_rects[i+1].Top + TILE_SIZE;
 	}
-	
+
 	cam_x = 0;
 	cam_y = 0;
 	cameraFollow = NULL;
-	
+
 	loadMap(mapName);
 }
 
@@ -86,7 +86,7 @@ void Map::loadMap(string filename) {
 	string cur_layer;
 	int width;
 	int height;
-	unsigned int comma;
+	//unsigned int comma; // Unreferenced local variable
 
 	currentFilename = filename;
 
@@ -95,13 +95,13 @@ void Map::loadMap(string filename) {
 			background[i][j] = 0;
 			foreground[i][j] = 0;
 			fringe[i][j] = 0;
-			collision[i][j] = false;			
+			collision[i][j] = false;
 		}
 	}
 	clear();
-	
+
 	TiXmlDocument doc;
-	
+
 	if(filename == "") {
 		return;
 	}
@@ -213,10 +213,10 @@ void Map::loadMap(string filename) {
 				} else if (type == "spawn") {
 					actor = new SpawnPoint();
 				} else if (type == "exit") {
-					actor = new ExitPoint(w, h); 
+					actor = new ExitPoint(w, h);
 					cout << "Exit point\n";
 					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
-					
+
 					if(prop != NULL) {
 						std::string mapname;
 						std::string attrname = ((TiXmlElement*)prop)->Attribute("name");
@@ -232,7 +232,7 @@ void Map::loadMap(string filename) {
 				int x = 0, y = 0;
 				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
 				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
-				actor->setPos(x, y);
+				actor->setPos((float)x, (float)y);
 			}
 		}
 		else if(childName == "properties")
@@ -254,7 +254,7 @@ void Map::loadMap(string filename) {
 			}
 		}
 	}
-	
+
 	if(g_player != NULL) {
 		g_player->init();
 		cameraFollow = g_player;
@@ -273,13 +273,13 @@ bool Map::checkHorizontalLine(int x1, int x2, int y) {
 	int check_x1 = x1 >> TILE_SHIFT;
 	int check_x2 = x2 >> TILE_SHIFT;
 	int check_y = y >> TILE_SHIFT;
-	
+
 	if (check_y < 0 || check_y >= MAP_TILES_Y) return false; // outside map
 	for (int check_x=check_x1; check_x<=check_x2; check_x++) {
 		if (check_x < 0 || check_x >= MAP_TILES_X) return false; // outside map
 		if (collision[check_x][check_y]) return false; // solid tile
 	}
-	return true;	
+	return true;
 }
 
 /**
@@ -289,7 +289,7 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 	int check_x = x >> TILE_SHIFT;
 	int check_y1 = y1 >> TILE_SHIFT;
 	int check_y2 = y2 >> TILE_SHIFT;
-	
+
 	if (check_x < 0 || check_x >= MAP_TILES_X) return false; // outside map
 	for (int check_y=check_y1; check_y<=check_y2; check_y++) {
 		if (check_y < 0 || check_y >= MAP_TILES_Y) return false; // outside map
@@ -323,113 +323,113 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 
 	// horizontal movement first
 	if (move_x > 0.0) { // if moving right
-	
+
 		// start at top-right corner
 		check_x = pos_x + size_x/2;
 		check_y = pos_y - size_y;
-		
+
 		current_tile = (int)check_x >> TILE_SHIFT;
-		
+
 		check_x += move_x + 1;
 		if (current_tile != (int)check_x >> TILE_SHIFT) {
-		
+
 			// crossed into a new tile, so check all points on this edge
 			if (checkVerticalLine((int)check_x, (int)check_y, (int)check_y + size_y)) {
 				pos_x = check_x - size_x/2;
 			}
 			else { // move to the tile edge
-				pos_x = ((int)check_x >> TILE_SHIFT) * TILE_SIZE - size_x/2 - 1;
+				pos_x = float(((int)check_x >> TILE_SHIFT) * (float)TILE_SIZE - size_x / 2.0f - 1.0f);
 				move_x = pos_x - orig_x;
 				impact = true;
 			}
-		
+
 		}
 		else { // didn't cross into a new tile, so simply move
-			pos_x = check_x - size_x/2; 
+			pos_x = check_x - size_x/2;
 		}
-	
+
 	}
 	else if (move_x < 0.0) { // if moving left
-	
+
 		// start at top-left corner
 		check_x = pos_x - size_x/2;
 		check_y = pos_y - size_y;
-		
+
 		current_tile = (int)check_x >> TILE_SHIFT;
-		
+
 		check_x += move_x - 1;
 		if (current_tile != (int)check_x >> TILE_SHIFT) {
-		
+
 			// crossed into a new tile, so check all points on this edge
 			if (checkVerticalLine((int)check_x, (int)check_y, (int)check_y + size_y)) {
 				pos_x = check_x + size_x/2;
 			}
 			else { // move to the tile edge
-				pos_x = (((int)check_x >> TILE_SHIFT)+1) * TILE_SIZE + size_x/2 + 1;
+				pos_x = float((((int)check_x >> TILE_SHIFT)+1) * (float)TILE_SIZE + size_x / 2.0f + 1.0f);
 				move_x = pos_x - orig_x;
 				impact = true;
 			}
-		
+
 		}
 		else { // didn't cross into a new tile, so simply move
-			pos_x = check_x + size_x/2; 
+			pos_x = check_x + size_x/2;
 		}
 	}
-	
+
 	// vertical movement second
 	if (move_y > 0) { // if moving down
 
 		// start at bottom-left corner
 		check_x = pos_x - size_x/2;
 		check_y = pos_y;
-		
+
 		current_tile = (int)check_y >> TILE_SHIFT;
-		
+
 		check_y += move_y + 1;
 		if (current_tile != (int)check_y >> TILE_SHIFT) {
-		
+
 			// crossed into a new tile, so check all points on this edge
 			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {
 				pos_y = check_y;
 			}
 			else { // move to the tile edge
-				pos_y = ((int)check_y >> TILE_SHIFT) * TILE_SIZE -1;
+				pos_y = float(((int)check_y >> TILE_SHIFT) * TILE_SIZE - 1);
 				move_y = pos_y - orig_y;
 				impact = true;
 			}
-		
+
 		}
 		else { // didn't cross into a new tile, so simply move
-			pos_y = check_y; 
+			pos_y = check_y;
 		}
 	}
 	else if (move_y < 0) { // if moving up
-	
+
 		// start at top-left corner
 		check_x = pos_x - size_x/2;
 		check_y = pos_y - size_y;
-		
+
 		current_tile = (int)check_y >> TILE_SHIFT;
-		
+
 		check_y += move_y;
 		if (current_tile != (int)check_y >> TILE_SHIFT) {
-		
+
 			// crossed into a new tile, so check all points on this edge
 			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {
 				pos_y = check_y + size_y;
 			}
 			else { // move to the tile edge
-				pos_y = (((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE +1 + size_y;
+				pos_y = float((((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE + 1 + size_y);
 				move_y = pos_y - orig_y;
 				impact = true;
 			}
-		
+
 		}
 		else { // didn't cross into a new tile, so simply move
-			pos_y = check_y + size_y; 
+			pos_y = check_y + size_y;
 		}
-	}	
-	
+	}
+
 	return impact;
 }
 
@@ -443,7 +443,7 @@ bool Map::isGrounded(Actor & actor) {
 
 // if there is collision directly underfoot, return true
 bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
-	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), pos_y+1);
+	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), int(pos_y+1.0f));
 }
 
 bool Map::isOnInstantdeath(Actor &actor)
@@ -460,11 +460,11 @@ void Map::renderBackground() {
 		game_map->cam_x = std::max(0, (int)cameraFollow->pos_x - (int)App->GetWidth()/2);
 		game_map->cam_y = std::max(0, (int)cameraFollow->pos_y - (int)App->GetHeight()/2);
 	}
-	
+
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
 	int cam_tile_y = cam_y / TILE_SIZE;
-	
+
 	// how far offset is this tile (and each subsequent tiles)?
 	int cam_off_x = cam_x % TILE_SIZE;
 	int cam_off_y = cam_y % TILE_SIZE;
@@ -512,7 +512,7 @@ void Map::renderForeground() {
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
 	int cam_tile_y = cam_y / TILE_SIZE;
-	
+
 	// how far offset is this tile (and each subsequent tiles)?
 	int cam_off_x = cam_x % TILE_SIZE;
 	int cam_off_y = cam_y % TILE_SIZE;
