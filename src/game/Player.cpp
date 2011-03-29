@@ -157,7 +157,7 @@ void Player::jump(float dt) {
 	else
 	{
 		// Can't jet immediately after jumping
-		if (time - last_jump_time < 0.5f)
+		if (time - last_jump_time < 0.55f)
 			return;
 
 		float cost = jet_cost * dt;

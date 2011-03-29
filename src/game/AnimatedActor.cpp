@@ -41,7 +41,7 @@ void AnimatedActor::init() {
 	facing_direction = FACING_RIGHT;
 	currentAnimation = NULL;
 	dying = false;
-        immunityTime = 0.2f;
+        immunityTime = 0.05f;
         damageTimer = 0.0f;
 }
 
@@ -100,7 +100,7 @@ void AnimatedActor::draw()
                 redness = damageTimer / immunityTime;
         }
         
-        int colorLevel = (int) (127.0f + 128.0f * (1.0f - redness));
+        int colorLevel = (int) (255.0f * (1.0f - redness));
         
         if(damageTimer > 0)
                 sprite.SetColor(sf::Color(255, colorLevel, colorLevel, 128));
