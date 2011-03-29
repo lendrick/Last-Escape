@@ -671,8 +671,8 @@ void ui_init()
 
 	// pause menu
 	b = new Widget(UI_LABEL,ui_pause);
-	b->setText("Xeon (Paused)");
-	b->setPos(62,10);
+	b->setText("Last Escape (Paused)");
+	b->setPos(26,10);
 
 	b = new Widget(UI_BUTTON,ui_pause);
 	b->setText("Continue");
