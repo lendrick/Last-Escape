@@ -16,7 +16,7 @@
  */
 
 #include "PlayerBullet.h"
-
+#include "Player.h"
 #include "Enemy.h"
 #include "globals.h"
 
@@ -60,6 +60,9 @@ void PlayerBullet::collide(Actor& otherActor) {
 	if (otherActor.isEnemy())
 	{
 		dynamic_cast<Enemy * >(&otherActor)->doDamage(damage);
+		//if(dynamic_cast<Enemy * >(&otherActor)->doDamage(damage)) {
+			//g_player->addExperience(otherActor.getExperienceValue());
+		//}
 		die();
 	}
 }

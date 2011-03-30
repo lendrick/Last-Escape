@@ -22,7 +22,8 @@ class Player;
 class Actor {
 public:
 	Actor(float x, float y);
-
+	~Actor();
+	
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
 	void setPos(float px, float py);
@@ -74,6 +75,14 @@ public:
 	virtual bool isSpawnPoint() { return false; }
 	virtual bool isTeleportEnter() { return false; }
 	virtual bool isTeleportExit() { return false; }
+	
+	virtual void setLevel(int newLevel);
+	virtual int getLevel();
+	virtual void incrementLevel();
+	virtual void onLevelUp(int newLevel) {}
+	
+	int getExperienceValue();
+	void setExperienceValue(int exp);
 
 	sf::Image image;
 	sf::Sprite sprite;
@@ -87,7 +96,9 @@ public:
 	bool dying;
 	bool hasImage;
 	bool hidden;
-	~Actor();
+	int currentLevel;
+	int experienceValue;
+	
 protected:
 	void checkCollisions();
 };

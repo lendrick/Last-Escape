@@ -296,16 +296,18 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	}
 }
 
-void AnimatedActor::doDamage(float damage) {
+bool AnimatedActor::doDamage(float damage) {
         if(damageTimer <= 0) {
                 life -= damage;
                 if(life <= 0) {
                         die();
+												return true;
                 } else {
                         onDamage();
                 }
                 damageTimer = immunityTime;
         }
+        return false;
 }
 
 void AnimatedActor::onDamage() {

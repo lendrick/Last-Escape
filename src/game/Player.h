@@ -36,8 +36,12 @@ public:
 	virtual void collide(Actor & otherActor);
 	virtual void onDestroy();
 	virtual void onAnimationComplete(std::string anim);
-        virtual void doDamage(float damage);
-        virtual void onDamage();
+	virtual bool doDamage(float damage);
+	virtual void onDamage();
+	virtual void onLevelUp(int newLevel);
+	
+	void addExperience(int exp);
+	int getCurrentExperience();
 	
 	StartPoint * findStart();
 	
@@ -70,12 +74,17 @@ public:
 	int armor;
 	int lives;
 	int energyBalls;
-        float recoveryTime;
-        float recoveryTimer;
+	float recoveryTime;
+	float recoveryTimer;
+	
+	float baseMaxEnergy;
+	float energyPerLevel;
 	
 	Sound * fireSound;
 	Sound * jumpSound;
 	Sound * dieSound;
+	
+	int currentExperience;
 };
 
 

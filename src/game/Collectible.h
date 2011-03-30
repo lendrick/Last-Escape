@@ -61,7 +61,7 @@ public:
 class CollectibleEnergyBall : public Collectible
 {
 public:
-	CollectibleEnergyBall(float x, float y);
+	CollectibleEnergyBall(float x, float y, int expValue = 1);
 	virtual void collide(Actor& otherActor);
 };
 

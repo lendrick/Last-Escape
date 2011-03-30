@@ -36,7 +36,7 @@ Widget *ui_opctrls = NULL;
 Widget *ui_controls[5];
 Widget *ui_snd = NULL;
 Widget *ui_popup = NULL;
-void (*ui_popup_click)() = NULL;
+void (*ui_popup_close)() = NULL;
 sf::Image ui_background;
 
 Widget::Widget(int tp, Widget *par) {
@@ -47,6 +47,7 @@ Widget::Widget(int tp, Widget *par) {
 	parent = par;
 	next = NULL;
 	click = NULL;
+	anyKey = NULL;
 	checked = false;
 	has_bg = true;
 	txtPos = 0;
@@ -156,6 +157,11 @@ void Widget::setTextSize(int sz)
 void Widget::setClick(void (*func)())
 {
 	click = func;
+}
+
+void Widget::setAnyKey(void (*func)())
+{
+	anyKey = func;
 }
 
 void Widget::setSlide(void (*func)(float v))
@@ -348,6 +354,9 @@ int Widget::event(sf::Event &Event)
 			}
 		}
 	}
+	
+	if (Event.Type == sf::Event::KeyPressed && anyKey)
+		this->anyKey();
 
 	if (id == ui_popup->id && Event.Type == sf::Event::KeyPressed)
 		return 1;
@@ -527,17 +536,17 @@ void ui_popupImage(const sf::Unicode::Text &path, void (*func)())
 	int h;
 	ui_popup->getSize(w,h);
 	ui_popup->child->setSize(w,h);
-	ui_popup_click = func;
+	ui_popup_close = func;
 	ui_popup->show();
 }
 
 void ui_hidePopup()
 {
 	ui_popup->hide();
-	if (ui_popup_click)
-		ui_popup_click();
+	if (ui_popup_close)
+		ui_popup_close();
 
-	ui_popup_click = NULL;
+	ui_popup_close = NULL;
 }
 
 void ui_showCredits()
@@ -671,6 +680,7 @@ void ui_init()
 	b = new Widget(UI_BUTTON,ui_popup);
 	b->toggleBg();
 	b->setClick(ui_hidePopup);
+	b->setAnyKey(ui_hidePopup);
 
 	// pause menu
 	b = new Widget(UI_LABEL,ui_pause);
@@ -795,7 +805,8 @@ void ui_render(Player& player)
 	char buf[256];
 	float energy = 100*player.energy/player.energy_max;
 	ui_energy->setSlideValue(energy);
-	sprintf(buf, "%.0f%%", energy);
+	//sprintf(buf, "%.0f%%", energy);
+	sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
 	ui_energy->setText(buf);
 
 	sprintf(buf, "Lives: %d", player.lives);
