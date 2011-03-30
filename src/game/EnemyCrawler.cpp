@@ -26,24 +26,24 @@
 
 EnemyCrawler::EnemyCrawler()
 :Enemy()
-{	
+{
 	setImage("crawler.png");
 	walk_speed = 1.f;
-	
+
 	speed_x = 0;
 	speed_y = 0;
 	dying = false;
 	life = 2;
-	
-	width = 60;
-	height = 20;
+
+	width = 40;
+	height = 16;
 	xOrigin = width/2;
 	yOrigin = height;
-	setDrawOffset(45, 30);
+	setDrawOffset(33, 30);
 	setFrameSize(64, 32);
-	
+
 	Animation * tmp;
-	
+
 	//pick a random death sound
 	int sound_num = rand() % 19;
 	sound_num += 1;
@@ -51,41 +51,41 @@ EnemyCrawler::EnemyCrawler()
 	std::stringstream out;
 	out << sound_num;
 	s = out.str();
-	
+
 	std::string sound_file = s + "-BugSplat.ogg";
 	//cout << sound_file;
-	fireSound = soundCache[sound_file];	
-	
-	
+	fireSound = soundCache[sound_file];
+
+
 	tmp = addAnimation("walk");
 	tmp->addFrame(2, .2f);
 	tmp->addFrame(3, .2f);
 	tmp->setDoLoop(true);
-	
+
 	tmp = addAnimation("die");
 	tmp->addFrame(8, .07f);
 	tmp->addFrame(7, .07f);
 	tmp->addFrame(6, .07f);
 	tmp->addFrame(5, .07f);
-	
+
 	tmp = addAnimation("hurt");
 	tmp->addFrame(4, 0.07f);
 
-	
+
 	setCurrentAnimation("walk");
 }
 
 void EnemyCrawler::update(float dt) {
 	if(!dying) {
-		
+
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
 		const float vision_range = 320;
 		const float vision_min_range = 32;
-		
+
 		speed_y += speed_gravity*dt;
 		if(isGrounded()) speed_y = 0;
-		
+
 		/*
 		 // Chase the player
 		 float dx = g_player->pos_x - pos_x;
@@ -103,9 +103,9 @@ void EnemyCrawler::update(float dt) {
 			speed_x = walk_speed;
 		}
 		patrol(dt);
-		
+
 		updateSpriteFacing();
-		
+
 		checkCollisions();
 	}
 }
@@ -118,9 +118,9 @@ void EnemyCrawler::draw() {
 /*
 void EnemyCrawler::doDamage(float damage) {
 	life -= damage;
-	if(life <= 0) 
+	if(life <= 0)
 		die();
-	else 
+	else
 		setCurrentAnimation("hurt");
 
 }
@@ -142,7 +142,7 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
 		ball->setPos(pos_x-16, pos_y-16);
 	}
-	
+
 	if(anim == "hurt") {
 		setCurrentAnimation("walk");
 	}
