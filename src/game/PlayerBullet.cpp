@@ -26,7 +26,7 @@ AnimatedActor()
 	this->setImage("xeon-bullet.png");
 	this->lifetime = lifetime;
 	bulletTime = 0;
-	
+
 	facing_direction = facing;
 
 	float speed = 480.f;
@@ -34,17 +34,17 @@ AnimatedActor()
 	float angle = ((facing_direction == FACING_RIGHT) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
 	speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
 	speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
-	
-	width = 16;
-	height = 20;
+
+	width = 15;
+	height = 7;
 	xOrigin = width/2;
 	yOrigin = height/2;
-	setDrawOffset(16, 8);
+	setDrawOffset(8, 9);
 	setFrameSize(16, 16);
 	damage = 1;
-	
+
 	Animation * tmp;
-	
+
 	tmp = addAnimation("bullet");
 	tmp->addFrame(0, .1f);
 	tmp->addFrame(1, .1f);
@@ -52,7 +52,7 @@ AnimatedActor()
 	tmp->addFrame(3, .1f);
 	tmp->addFrame(4, .1f);
 	tmp->setDoLoop(true);
-	
+
 	setCurrentAnimation("bullet");
 }
 
