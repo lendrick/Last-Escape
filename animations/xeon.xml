@@ -67,7 +67,8 @@
 			<frame number="50" time="0.1"/>
 			<frame number="51" time="0.1"/>
 			<frame number="52" time="0.1"/>
-			<frame number="53" time="0.4"/>
+			<frame number="53" time="0.1"/>
+			<frame number="54" time="0.3"/>
 		</frames>
 	</animation>	
         
