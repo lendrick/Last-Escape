@@ -21,7 +21,7 @@
 
 class TeleportEnter : public Actor {
 public:
-	TeleportEnter(int w, int h, std::string name);
+	TeleportEnter(float x, float y, int w, int h, std::string name);
 
 	virtual bool isTeleportEnter() { return true; }
 
@@ -32,7 +32,7 @@ private:
 
 class TeleportExit : public Actor {
 public:
-	TeleportExit(std::string name);
+	TeleportExit(float x, float y, std::string name);
 
 	virtual bool isTeleportExit() { return true; }
 

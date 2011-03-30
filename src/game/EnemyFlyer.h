@@ -21,7 +21,7 @@
 class EnemyFlyer : public Enemy
 {
 public:
-	EnemyFlyer();
+	EnemyFlyer(float x, float y);
 	virtual void update(float dt);
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);

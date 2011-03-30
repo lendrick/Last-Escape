@@ -29,7 +29,7 @@ struct Particle
 class ParticleEmitter : public Actor
 {
 public:
-	ParticleEmitter();
+	ParticleEmitter(float x, float y);
 	virtual void draw();
 	virtual void update(float dt);
 private:

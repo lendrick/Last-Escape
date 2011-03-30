@@ -26,7 +26,7 @@
 
 class Player : public AnimatedActor {
 public:
-	Player();
+	Player(float x, float y);
 
 	virtual bool isPlayer() { return true; }
 

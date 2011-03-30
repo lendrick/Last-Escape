@@ -18,7 +18,9 @@
 #include "ExitPoint.h"
 #include <iostream>
 
-ExitPoint::ExitPoint(int w, int h) {
+ExitPoint::ExitPoint(float x, float y, int w, int h)
+:Actor(x, y)
+{
 	setSize(w, h);
 }
 

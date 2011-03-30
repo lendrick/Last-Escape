@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include <chipmunk/chipmunk.h>
+
 #include <fstream>
 #include <sstream>
 
@@ -29,8 +31,8 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(std::string filename);
-	AnimatedActor();
+	AnimatedActor(float x, float y, std::string filename);
+	AnimatedActor(float x, float y);
 	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
@@ -55,7 +57,10 @@ public:
         virtual void doDamage(float damage);
         virtual void onDamage();
         virtual void doUpdate(float dt);
-        
+
+	void resetPhysics();
+	cpBody* body;
+	cpShape* shape;
 protected:
 	void flipDirection();
 	int facing_direction;

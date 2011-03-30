@@ -23,8 +23,8 @@
 #include "ImageCache.h"
 #include <SFML/Graphics.hpp>
 
-EnemyCentipede::EnemyCentipede()
-:Enemy()
+EnemyCentipede::EnemyCentipede(float x, float y)
+:Enemy(x, y)
 {
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
 	setImage("centipede.png");
@@ -156,8 +156,7 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 	//cout << "EnemyCentipede::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
 	} else if(anim == "shoot") {
 		//shoot a projectile
 		setCurrentAnimation("walk");
@@ -169,10 +168,9 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 
 
 EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, int start_y)
+	: Enemy(start_x, start_y)
 {
 	setImage("centipedeprojectile.png");
-	pos_x = (float)start_x;
-	pos_y = (float)start_y;
 	fly_speed = 300.0f;
 	speed_y = -200.0f;
 	dying = false;

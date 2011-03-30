@@ -20,8 +20,8 @@
 #include "Enemy.h"
 #include "globals.h"
 
-PlayerBullet::PlayerBullet(int facing, float angleVariation, float lifetime):
-AnimatedActor()
+PlayerBullet::PlayerBullet(float x, float y, int facing, float angleVariation, float lifetime):
+AnimatedActor(x, y)
 {
 	this->setImage("xeon-bullet.png");
 	this->lifetime = lifetime;

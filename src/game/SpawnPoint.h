@@ -17,6 +17,11 @@
 
 #pragma once
 
+#include "StartPoint.h"
+
 class SpawnPoint : public StartPoint {
+public:
+    SpawnPoint(float x, float y) : StartPoint(x, y) {};
+private:
 	virtual bool isSpawnPoint() { return true; }
 };

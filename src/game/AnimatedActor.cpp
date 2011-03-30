@@ -19,17 +19,21 @@
 #include "ImageCache.h"
 #include "SoundCache.h"
 #include "globals.h"
+#include "Map.h"
 
-AnimatedActor::AnimatedActor(std::string filename)
-:Actor()
+AnimatedActor::AnimatedActor(float x, float y, std::string filename)
+:Actor(x, y)
 {
 	init();
 	setImage(filename);
+	resetPhysics();
 }
 
-AnimatedActor::AnimatedActor()
-:Actor()
+AnimatedActor::AnimatedActor(float x, float y)
+:Actor(x, y)
 {
+	body = NULL;
+	shape = NULL;
 	init();
 }
 
@@ -51,6 +55,23 @@ void AnimatedActor::setImage(std::string filename)
 	setFrameSize(0, 0);
 	this->sprite.SetImage(*(imageCache[filename]));
 	this->currentAnimation = NULL;
+}
+
+void AnimatedActor::resetPhysics()
+{
+	// No map -> no physics
+	if(!game_map || !game_map->physSpace) {
+		return;
+	}
+
+	body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
+	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y));
+// 	body->velocity_func = playerUpdateVelocity;
+
+	shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
+	shape->e = 0.0f; shape->u = 2.0f;
+// 	shape->collision_type = 1;
+// 	shape->data = this;
 }
 
 void AnimatedActor::updateSpriteFacing() {
@@ -118,6 +139,11 @@ void AnimatedActor::doUpdate(float dt) {
           damageTimer = 0.0f;
         
         update(dt);
+
+		if(body && game_map) {
+			sf::Vector2f pos = game_map->cp2sfml(body->p);
+			setPos(pos.x, pos.y);
+		}
 }
 
 std::string AnimatedActor::animationName() {

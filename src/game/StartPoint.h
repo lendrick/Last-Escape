@@ -19,7 +19,10 @@
 
 // Use this actor to signify where on the map the player starts.
 
+#include "Actor.h"
+
 class StartPoint : public Actor {
 public:
+	StartPoint(float x, float y) : Actor(x, y) {};
 	virtual bool isStartPoint() { return true; }
 };

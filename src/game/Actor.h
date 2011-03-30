@@ -21,7 +21,7 @@ class Player;
 
 class Actor {
 public:
-	Actor();
+	Actor(float x, float y);
 
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 

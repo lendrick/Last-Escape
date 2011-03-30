@@ -21,7 +21,7 @@
 class EnemyWalker : public Enemy
 {
 public:
-	EnemyWalker();
+	EnemyWalker(float x, float y);
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();

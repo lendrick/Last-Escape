@@ -24,7 +24,7 @@
 class Enemy : public AnimatedActor
 {
 public:
-	Enemy();
+	Enemy(float x, float y);
 	
 	virtual void collide(Actor& otherActor);
 

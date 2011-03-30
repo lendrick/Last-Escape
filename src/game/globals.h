@@ -57,6 +57,12 @@ enum Facing {
 	FACING_RIGHT
 };
 
+namespace PhysicLayers {
+	enum Enum {
+		MapFloor = 1,
+	};
+};
+
 extern bool paused;
 
 extern ImageCache imageCache;

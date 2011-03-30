@@ -25,8 +25,8 @@
 #include "EnemyCentipede.h"
 
 
-BossSpider::BossSpider()
-:Enemy()
+BossSpider::BossSpider(float x, float y)
+:Enemy(x, y)
 {
 	setImage("spider.png");
 	walk_speed = 100.0f;
@@ -153,18 +153,10 @@ void BossSpider::onAnimationComplete(std::string anim) {
 	if(anim == "die") {
 		destroy();
 		CollectibleEnergyBall * ball = NULL;
-
-		ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x-32, pos_y-16);
-
-		ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-16);
-
-  	ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x-32, pos_y-48);
-
-		ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-48);
+		ball = new CollectibleEnergyBall(pos_x-32, pos_y-16);
+		ball = new CollectibleEnergyBall(pos_x, pos_y-16);
+		ball = new CollectibleEnergyBall(pos_x-32, pos_y-48);
+		ball = new CollectibleEnergyBall(pos_x, pos_y-48);
 	}
 
 	if(anim == "hurt") {

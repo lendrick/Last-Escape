@@ -36,4 +36,4 @@ add_executable (lastescape ${game_srcs})
 set_target_properties (lastescape PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 #linking to libraries
-target_link_libraries (lastescape ${SFML_LIBRARIES})
+target_link_libraries (lastescape ${SFML_LIBRARIES} chipmunk_static)

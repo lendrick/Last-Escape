@@ -22,7 +22,7 @@
 class EnemyCentipede : public Enemy
 {
 public:
-	EnemyCentipede();
+	EnemyCentipede(float x, float y);
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();

@@ -24,8 +24,8 @@
 #include "SoundCache.h"
 
 
-EnemyWalker::EnemyWalker()
-:Enemy()
+EnemyWalker::EnemyWalker(float x, float y)
+:Enemy(x, y)
 {
 	setImage("walker.png");
 	walk_speed = 120.f;
@@ -123,7 +123,6 @@ void EnemyWalker::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
 	}
 }

@@ -22,8 +22,8 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-Collectible::Collectible()
-:AnimatedActor()
+Collectible::Collectible(float x, float y)
+:AnimatedActor(x, y)
 {
 }
 
@@ -48,8 +48,8 @@ void Collectible::reset() {
 	hidden = false;
 }
 
-CollectiblePill::CollectiblePill()
-:Collectible()
+CollectiblePill::CollectiblePill(float x, float y)
+:Collectible(x, y)
 {
 	this->setImage("smallenergy.png");
 	init();
@@ -70,8 +70,8 @@ void CollectiblePill::collide(Actor& otherActor) {
 }
 
 
-CollectibleWeaponUpgrade::CollectibleWeaponUpgrade()
-:Collectible()
+CollectibleWeaponUpgrade::CollectibleWeaponUpgrade(float x, float y)
+:Collectible(x, y)
 {
 	this->setImage("plasmaball.png");
 	init();
@@ -88,8 +88,8 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 }
 
 
-CollectibleArmor::CollectibleArmor()
-:Collectible() {
+CollectibleArmor::CollectibleArmor(float x, float y)
+:Collectible(x, y) {
 	this->setImage("shield.png");
 	init();
 }
@@ -104,8 +104,8 @@ void CollectibleArmor::collide(Actor& otherActor) {
 }
 
 
-CollectibleEnergyBall::CollectibleEnergyBall()
-: Collectible() {
+CollectibleEnergyBall::CollectibleEnergyBall(float x, float y)
+: Collectible(x, y) {
 	this->setImage("energyball.png");
 	width = 32;
 	height = 32;

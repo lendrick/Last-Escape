@@ -21,8 +21,8 @@
 #include "SoundCache.h"
 #include "Collectible.h"
 
-EnemyFlyer::EnemyFlyer()
-:Enemy()
+EnemyFlyer::EnemyFlyer(float x, float y)
+:Enemy(x, y)
 {
 	setImage("flyer.png");
 	patrolLength = 100;
@@ -109,8 +109,7 @@ void EnemyFlyer::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x, pos_y-30);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-30);
 	}
 }
 

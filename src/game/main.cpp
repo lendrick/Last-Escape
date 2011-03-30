@@ -20,6 +20,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics.hpp>
+#include <chipmunk/chipmunk.h>
 #include <cstdlib>
 #include <list>
 //#include <boost/foreach.hpp>
@@ -54,6 +55,12 @@ bool paused = false;
 
 
 void update(float dt) {
+	// Update the physics
+	static const int steps = 3;
+	for(int i=0; i<steps; i++){
+		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
+	}
+
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		(*it)->doUpdate(dt);
 	}
@@ -118,10 +125,12 @@ int main(int argc, char** argv)
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
 
-	g_player = new Player();
+	cpInitChipmunk();
 
 	if (!fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
+
+	g_player = new Player(0,0);
 
 	// Create game objects
 	// DON'T LOAD A REAL MAP HERE!  ui_start does that.

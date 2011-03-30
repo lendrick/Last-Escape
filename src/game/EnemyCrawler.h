@@ -21,7 +21,7 @@
 class EnemyCrawler : public Enemy
 {
 public:
-	EnemyCrawler();
+	EnemyCrawler(float x, float y);
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();

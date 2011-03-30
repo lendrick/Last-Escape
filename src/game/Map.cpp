@@ -42,6 +42,8 @@
 
 Map::Map(string mapName) {
 
+	physSpace = NULL;
+
 	loadTileset("tileset.png");
 	loaded = false;
 
@@ -185,35 +187,39 @@ void Map::loadMap(string filename) {
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
 				const char* name = ((TiXmlElement*)object)->Attribute("name");
 
+				int x = 0, y = 0;
+				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
+				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
+
 				Actor* actor;
 				if (type == "pill") {
-					actor = new CollectiblePill();
+					actor = new CollectiblePill((float)x, (float)y);
 				} else if (type == "weaponupgrade") {
-					actor = new CollectibleWeaponUpgrade();
+					actor = new CollectibleWeaponUpgrade((float)x, (float)y);
 				} else if (type == "armor") {
-					actor = new CollectibleArmor();
+					actor = new CollectibleArmor((float)x, (float)y);
 				} else if (type == "smoke") {
-					actor = new ParticleEmitter();
+					actor = new ParticleEmitter((float)x, (float)y);
 				} else if (type == "walker") {
-					actor = new EnemyWalker();
+					actor = new EnemyWalker((float)x, (float)y);
 				} else if (type == "crawler") {
-					actor = new EnemyCrawler();
+					actor = new EnemyCrawler((float)x, (float)y);
 				} else if (type == "flyer") {
-					actor = new EnemyFlyer();
+					actor = new EnemyFlyer((float)x, (float)y);
 				} else if (type == "centipede") {
-					actor = new EnemyCentipede();
+					actor = new EnemyCentipede((float)x, (float)y);
 				} else if (type == "spider") {
-					actor = new BossSpider();
+					actor = new BossSpider((float)x, (float)y);
 				} else if (type == "teleportenter") {
-					actor = new TeleportEnter(w, h, name);
+					actor = new TeleportEnter((float)x, (float)y, w, h, name);
 				} else if (type == "teleportexit") {
-					actor = new TeleportExit(name);
+					actor = new TeleportExit((float)x, (float)y, name);
 				} else if (type == "start") {
-					actor = new StartPoint();
+					actor = new StartPoint((float)x, (float)y);
 				} else if (type == "spawn") {
-					actor = new SpawnPoint();
+					actor = new SpawnPoint((float)x, (float)y);
 				} else if (type == "exit") {
-					actor = new ExitPoint(w, h);
+					actor = new ExitPoint((float)x, (float)y, w, h);
 					if (debugMode)
 						cout << "Exit point\n";
 					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
@@ -230,10 +236,6 @@ void Map::loadMap(string filename) {
 					printf("unrecognised object type %s\n", type.c_str());
 					continue;
 				}
-				int x = 0, y = 0;
-				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
-				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
-				actor->setPos((float)x, (float)y);
 			}
 		}
 		else if(childName == "properties")
@@ -256,6 +258,8 @@ void Map::loadMap(string filename) {
 		}
 	}
 
+	this->setupPhysics();
+
 	if(g_player != NULL) {
 		g_player->init();
 		cameraFollow = g_player;
@@ -263,8 +267,70 @@ void Map::loadMap(string filename) {
 	loaded = true;
 }
 
+bool Map::setupPhysics()
+{
+	// Possibly reset the physics.
+	if(physSpace) {
+		cpSpaceFreeChildren(physSpace);
+		cpSpaceFree(physSpace);
+	}
+	cpResetShapeIdCounter();
+
+	physSpace = cpSpaceNew();
+	physSpace->iterations = 10;
+	physSpace->gravity = cpv(0, -1500);
+
+	// Ah, come on...
+	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+		Actor * actor = *it;
+		if(actor->isPlayer()) {
+			Player* p = dynamic_cast<Player*>(actor);
+			p->resetPhysics();
+		}
+	}
+
+
+	// Create a physics collision box for each collision tile.
+	// If PROFILING SHOWS that this is slow, try to replace them by "floor lines".
+	for (int i=0; i<MAP_TILES_X; i++) {
+		for (int j=0; j<MAP_TILES_Y; j++) {
+			if(collision[i][j]) {
+				// Tile box around 0,0
+				cpVect verts[] = {
+					cpv(-TILE_SIZE/2.0f, -TILE_SIZE/2.0f),
+					cpv(-TILE_SIZE/2.0f,  TILE_SIZE/2.0f),
+					cpv( TILE_SIZE/2.0f,  TILE_SIZE/2.0f),
+					cpv( TILE_SIZE/2.0f, -TILE_SIZE/2.0f),
+				};
+				// Move to center of the tile.
+				cpVect offs = sfml2cp(sf::Vector2f(TILE_SIZE*i + TILE_SIZE/2.0f, TILE_SIZE*j - TILE_SIZE/2.0f));
+				cpShape *shape = cpSpaceAddShape(physSpace, cpPolyShapeNew(&physSpace->staticBody, 4, verts, offs));
+				shape->e = 1.0f; shape->u = 1.0f;
+// 				shape->layers = PhysLayer::MapGround;
+// 				shape->collision_type = PhysType::MapFloor;
+			}
+		}
+	}
+
+	return true;
+}
+
 bool Map::isLoaded() {
 	return loaded;
+}
+
+// Convert SFML 0,0 = top left csys and y down
+// to cp 0,0 = bottom left csys and y up.
+cpVect Map::sfml2cp(const sf::Vector2f& v) const
+{
+	return cpv(v.x, MAP_TILES_Y*TILE_SIZE - v.y);
+}
+
+// Convert cp 0,0 = bottom left csys and y up
+// to SFML 0,0 = top left csys and y down.
+sf::Vector2f Map::cp2sfml(const cpVect& v) const
+{
+	return sf::Vector2f(v.x, MAP_TILES_Y*TILE_SIZE - v.y);
 }
 
 /**
@@ -330,7 +396,6 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		check_y = pos_y - size_y;
 
 		current_tile = (int)check_x >> TILE_SHIFT;
-
 		check_x += move_x + 1;
 		if (current_tile != (int)check_x >> TILE_SHIFT) {
 
@@ -387,7 +452,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		current_tile = (int)check_y >> TILE_SHIFT;
 
 		check_y += move_y + 1;
+#define NO_MANUAL_GROUND_COLLISION
+#ifdef NO_MANUAL_GROUND_COLLISION
+		if (false) {
+#else
 		if (current_tile != (int)check_y >> TILE_SHIFT) {
+#endif
 
 			// crossed into a new tile, so check all points on this edge
 			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {
@@ -413,7 +483,12 @@ bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x
 		current_tile = (int)check_y >> TILE_SHIFT;
 
 		check_y += move_y;
+#define NO_MANUAL_GROUND_COLLISION
+#ifdef NO_MANUAL_GROUND_COLLISION
+		if (false) {
+#else
 		if (current_tile != (int)check_y >> TILE_SHIFT) {
+#endif
 
 			// crossed into a new tile, so check all points on this edge
 			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {

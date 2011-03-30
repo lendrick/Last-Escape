@@ -23,6 +23,7 @@
 #define MAP_H
 
 #include <SFML/Graphics.hpp>
+#include <chipmunk/chipmunk.h>
 #include <string>
 #include <fstream>
 #include "Utils.h"
@@ -54,6 +55,9 @@ private:
 	int danger[MAP_TILES_X][MAP_TILES_Y];
 	
 	Actor * cameraFollow;
+
+protected:
+	bool setupPhysics();
 	
 public:
 	Map(string mapName);
@@ -75,7 +79,10 @@ public:
 	void renderForeground();
 	void clear();
 	bool isLoaded();
-	
+
+	cpVect sfml2cp(const sf::Vector2f& v) const;
+	sf::Vector2f cp2sfml(const cpVect& v) const;
+
 	void actorDestroyed(Actor * actor);
 
 	// collision layer
@@ -88,6 +95,9 @@ public:
 	bool loaded;
 
 	std::string currentFilename;
+
+	// Physics of the map.
+	cpSpace *physSpace;
 };
 
 #endif

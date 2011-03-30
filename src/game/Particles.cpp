@@ -19,7 +19,9 @@
 
 #include "Map.h"
 
-ParticleEmitter::ParticleEmitter() {
+ParticleEmitter::ParticleEmitter(float x, float y)
+:Actor(x, y)
+{
 
 	emissionRate = 5.f;
 	maxAge = 3.f;

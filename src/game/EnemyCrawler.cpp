@@ -24,8 +24,8 @@
 #include "SoundCache.h"
 
 
-EnemyCrawler::EnemyCrawler()
-:Enemy()
+EnemyCrawler::EnemyCrawler(float x, float y)
+:Enemy(x, y)
 {
 	setImage("crawler.png");
 	walk_speed = 1.f;
@@ -139,8 +139,7 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 	//cout << "EnemyCrawler::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-		ball->setPos(pos_x-16, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x-16, pos_y-16);
 	}
 
 	if(anim == "hurt") {

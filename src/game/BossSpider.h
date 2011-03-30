@@ -21,7 +21,7 @@
 class BossSpider : public Enemy
 {
 public:
-	BossSpider();
+	BossSpider(float x, float y);
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();

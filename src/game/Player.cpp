@@ -51,8 +51,8 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 };
 
-Player::Player()
-: AnimatedActor() {
+Player::Player(float x, float y)
+: AnimatedActor(x, y) {
 	setImage("xeon.png");
 
 	lives = start_lives;
@@ -97,6 +97,8 @@ void Player::init() {
 		currentStart->getPos(sx, sy);
 		setPos(sx, sy);
 	}
+
+	this->resetPhysics();
 
 	/*
 	// Find the first start point, and move the player there
@@ -183,19 +185,18 @@ void Player::shoot() {
 		fireSound->playSound();
 		energy -= weapons[currentWeapon].energy_cost;
 
-		Actor* bullet = new PlayerBullet(facing_direction, weapons[currentWeapon].angle_variation);
-		
-		float bulletX = pos_x + 30;
+		float bulletX = pos_x + 30.0f, bulletY = 0.0f;
 		if(facing_direction == FACING_LEFT)
-			bulletX = pos_x - 30;
-		
+			bulletX = pos_x - 30.0f;
+
 		if(crouched) {
-			bullet->setPos(bulletX, pos_y - 15);
+			bulletY = pos_y - 15.0f;
 		}
 		else {
-			bullet->setPos(bulletX, pos_y - 30);
+			bulletY = pos_y - 30.0f;
 		}
 
+		Actor* bullet = new PlayerBullet(bulletX, bulletY, facing_direction, weapons[currentWeapon].angle_variation);
 
 		if(walking) {
 			setCurrentAnimation("walkshoot");
@@ -415,8 +416,7 @@ void Player::onAnimationComplete(std::string anim) {
 				}
 			}
 			
-			CollectibleEnergyBall * ball = new CollectibleEnergyBall();
-			ball->setPos(pos_x - 16, pos_y - 48);
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x - 16, pos_y - 48);
 				
 			init();
 		} else {

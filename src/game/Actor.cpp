@@ -20,12 +20,14 @@
 #include "globals.h"
 #include <list>
 
-Actor::Actor() {
+Actor::Actor(float x, float y) {
 	xOrigin = 0;
 	yOrigin = 0;
 	width = 0;
 	height = 0;
-	setPos(0, 0);
+// 	setPos(0, 0);
+	pos_x = x;
+	pos_y = y;
 	destroyed = false;
 	actors.push_back(this);
 	setDrawOffset(0, 0);

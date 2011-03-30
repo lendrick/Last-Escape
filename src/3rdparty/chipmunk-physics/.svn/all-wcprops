@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 23
+/svn/!svn/ver/712/trunk
+END
+LICENSE.txt
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/634/trunk/LICENSE.txt
+END
+TODO.txt
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/634/trunk/TODO.txt
+END
+BuildReleaseArchive.rb
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/634/trunk/BuildReleaseArchive.rb
+END
+ReleaseChecklist.txt
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/634/trunk/ReleaseChecklist.txt
+END
+UploadArchive.rb
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/634/trunk/UploadArchive.rb
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/664/trunk/README.txt
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/678/trunk/CMakeLists.txt
+END

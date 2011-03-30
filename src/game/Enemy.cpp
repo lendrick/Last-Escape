@@ -21,8 +21,8 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-Enemy::Enemy()
-:AnimatedActor()
+Enemy::Enemy(float x, float y)
+:AnimatedActor(x, y)
 {
 	//make sure we die in one hit by default
 	life = 0.1f;

@@ -16,5 +16,9 @@ SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
 find_package (SFML 1.6 COMPONENTS system window graphics audio REQUIRED)
 include_directories (${SFML_INCLUDE_DIR})
 
+#adding the physics library
+add_subdirectory (3rdparty/chipmunk-physics)
+include_directories (3rdparty/chipmunk-physics/include)
+
 #adding the game subdirectory
 add_subdirectory (game)

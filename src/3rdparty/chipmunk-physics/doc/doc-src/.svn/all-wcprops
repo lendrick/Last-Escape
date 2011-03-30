@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/680/trunk/doc/doc-src
+END
+chipmunk-docs.textile
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/680/trunk/doc/doc-src/chipmunk-docs.textile
+END
+upload_docs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/634/trunk/doc/doc-src/upload_docs.sh
+END
+make_docs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/634/trunk/doc/doc-src/make_docs.rb
+END
