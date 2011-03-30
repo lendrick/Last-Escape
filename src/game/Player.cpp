@@ -184,11 +184,16 @@ void Player::shoot() {
 		energy -= weapons[currentWeapon].energy_cost;
 
 		Actor* bullet = new PlayerBullet(facing_direction, weapons[currentWeapon].angle_variation);
+		
+		float bulletX = pos_x + 30;
+		if(facing_direction == FACING_LEFT)
+			bulletX = pos_x - 30;
+		
 		if(crouched) {
-			bullet->setPos(pos_x, pos_y - 15);
+			bullet->setPos(bulletX, pos_y - 15);
 		}
 		else {
-			bullet->setPos(pos_x, pos_y - 30);
+			bullet->setPos(bulletX, pos_y - 30);
 		}
 
 
@@ -277,7 +282,7 @@ void Player::update(float dt) {
 	if (!dying && recoveryTimer <= 0 && input.shooting())
 		shoot();
 
-	if(!dying && recoveryTimer <= 0 && input.crouching())
+	if(!dying && recoveryTimer <= 0 && input.crouching() && input.direction() != FACING_LEFT && input.direction() != FACING_RIGHT)
 		crouched = true;
 	else
 		crouched = false;

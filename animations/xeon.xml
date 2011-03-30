@@ -31,17 +31,17 @@
 
 	<animation name="shoot">
 		<frames>
-			<frame number="16" time="0.1"/>
-			<frame number="17" time="0.1"/>
-			<frame number="18" time="0.1"/>
+			<frame number="16" time="0.04"/>
+			<frame number="17" time="0.04"/>
+			<frame number="18" time="0.04"/>
 		</frames>
 	</animation>
 
 	<animation name="walkshoot">
 		<frames>
-			<frame number="34" time="0.1"/>
-			<frame number="35" time="0.1"/>
-			<frame number="36" time="0.1"/>
+			<frame number="34" time="0.04"/>
+			<frame number="35" time="0.04"/>
+			<frame number="36" time="0.04"/>
 		
 		</frames>
 	</animation>
@@ -54,9 +54,9 @@
 	
 	<animation name="crouchshoot">
 		<frames>
-			<frame number="41" time="0.1"/>
-			<frame number="42" time="0.1"/>
-			<frame number="43" time="0.1"/>
+			<frame number="41" time="0.04"/>
+			<frame number="42" time="0.04"/>
+			<frame number="43" time="0.04"/>
 		</frames>
 	</animation>
 
