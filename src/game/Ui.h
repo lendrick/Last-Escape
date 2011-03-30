@@ -47,6 +47,7 @@ public:
 	void setClick(void (*func)());
 	void setSlide(void (*func)(float v));
 	void setSlideValue(float v);
+	void setAnyKey(void (*func)());
 
 	void show();
 	void hide();
@@ -74,6 +75,7 @@ protected:
 
 	void (*click)();
 	void (*slide)(float v);
+	void (*anyKey)();
 	char txt[255];
 	int txtPos;
 	int id;

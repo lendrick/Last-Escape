@@ -47,6 +47,7 @@ Widget::Widget(int tp, Widget *par) {
 	parent = par;
 	next = NULL;
 	click = NULL;
+	anyKey = NULL;
 	checked = false;
 	has_bg = true;
 	txtPos = 0;
@@ -156,6 +157,11 @@ void Widget::setTextSize(int sz)
 void Widget::setClick(void (*func)())
 {
 	click = func;
+}
+
+void Widget::setAnyKey(void (*func)())
+{
+	anyKey = func;
 }
 
 void Widget::setSlide(void (*func)(float v))
@@ -348,6 +354,9 @@ int Widget::event(sf::Event &Event)
 			}
 		}
 	}
+	
+	if (Event.Type == sf::Event::KeyPressed && anyKey)
+		this->anyKey();
 
 	if (id == ui_popup->id && Event.Type == sf::Event::KeyPressed)
 		return 1;
@@ -671,6 +680,7 @@ void ui_init()
 	b = new Widget(UI_BUTTON,ui_popup);
 	b->toggleBg();
 	b->setClick(ui_hidePopup);
+	b->setAnyKey(ui_hidePopup);
 
 	// pause menu
 	b = new Widget(UI_LABEL,ui_pause);
