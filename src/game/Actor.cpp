@@ -32,6 +32,8 @@ Actor::Actor() {
 	collideable = true;
 	hasImage = false;
 	hidden = false;
+	currentLevel = 1;
+	experienceValue = 0;
 }
 
 Actor::~Actor() {
@@ -189,3 +191,25 @@ void Actor::goToGround() {
 void Actor::doUpdate(float dt) {
         update(dt);
 }
+
+void Actor::setLevel(int newLevel) {
+	currentLevel = newLevel;
+}
+
+int Actor::getLevel() {
+	return currentLevel;
+}
+
+void Actor::incrementLevel() {
+	currentLevel++;
+	onLevelUp(currentLevel);
+}
+
+int Actor::getExperienceValue() {
+	return experienceValue;
+}
+	
+void Actor::setExperienceValue(int exp) {
+	experienceValue = exp;
+}
+	

@@ -130,13 +130,16 @@ void BossSpider::draw() {
 	AnimatedActor::draw();
 }
 
-void BossSpider::doDamage(float damage) {
+bool BossSpider::doDamage(float damage) {
 	life -= damage;
-	if(life <= 0)
+	if(life <= 0) {
 		die();
-	else
+		return true;	
+	} else {
 		setCurrentAnimation("hurt");
+	}
 
+	return false;
 }
 
 void BossSpider::die() {

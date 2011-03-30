@@ -69,6 +69,10 @@ Player::Player()
 	recoveryTime = 0.2f;
 	recoveryTimer = 0;
 	currentWeapon = 0;
+	baseMaxEnergy = 100.0f;
+	energyPerLevel = 10.0f;
+	energy_max = baseMaxEnergy;
+	currentExperience = 0;
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -87,7 +91,7 @@ void Player::init() {
 	last_shoot_time = -100.f;
 	dying = false;
 
-	energy = energy_max = 100.f;
+	energy = energy_max;
 
 	if(currentStart == NULL)
 		currentStart = findStart();
@@ -427,10 +431,12 @@ void Player::onAnimationComplete(std::string anim) {
 	}
 }
 
-void Player::doDamage(float damage) {
+bool Player::doDamage(float damage) {
+	bool dead = false;
         if(damageTimer <= 0) {
                 energy -= damage * 30;
-                if(energy <= 0) {
+                if(energy <= 0) {			
+												dead = true;
                         die();
                 } else {
                         onDamage();
@@ -446,8 +452,35 @@ void Player::doDamage(float damage) {
 
                 speed_y = -150;
         }
+  return dead;
 }
 
 void Player::onDamage() {
         soundCache["grunt.ogg"]->playSound();
+}
+
+void Player::addExperience(int exp) {
+	cout << "Received " << exp << " experience\n";
+	int oldLevel = currentLevel;
+	currentExperience += exp;
+	
+	/* 
+	 * TODO: This is just a quick and dirty leveling system.  It should be easy
+	 * enough to drop in a better replacement. 
+	 */
+	const int exp_per_level = 3;
+	int newLevel = currentExperience / exp_per_level + 1;
+	while(currentLevel < newLevel) {
+		incrementLevel();  // Calls onlevelUp
+	}
+}
+
+void Player::onLevelUp(int newLevel) {
+	cout << "Reached level " << newLevel << "!\n";
+	// Play a sound and indicate a level up graphically
+	energy_max = baseMaxEnergy + (newLevel - 1) * energyPerLevel;
+}
+
+int Player::getCurrentExperience() {
+	return currentExperience;
 }

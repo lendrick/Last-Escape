@@ -805,7 +805,8 @@ void ui_render(Player& player)
 	char buf[256];
 	float energy = 100*player.energy/player.energy_max;
 	ui_energy->setSlideValue(energy);
-	sprintf(buf, "%.0f%%", energy);
+	//sprintf(buf, "%.0f%%", energy);
+	sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
 	ui_energy->setText(buf);
 
 	sprintf(buf, "Lives: %d", player.lives);

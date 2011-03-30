@@ -104,7 +104,7 @@ void CollectibleArmor::collide(Actor& otherActor) {
 }
 
 
-CollectibleEnergyBall::CollectibleEnergyBall()
+CollectibleEnergyBall::CollectibleEnergyBall(int expValue)
 : Collectible() {
 	this->setImage("energyball.png");
 	width = 32;
@@ -113,6 +113,7 @@ CollectibleEnergyBall::CollectibleEnergyBall()
 	yOrigin = height/2;
 	setDrawOffset(16, 16);
 	setFrameSize(32, 32);
+	experienceValue = expValue;
 
 	Animation * tmp;
 	tmp = addAnimation("anim");
@@ -131,7 +132,8 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 			destroy();
 			soundCache["gmae.ogg"]->playSound();
 			g_player->energyBalls++;
-
+			
+			g_player->addExperience(experienceValue);
 			// give player 25 energy, but only up to max energy
 			if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max) {
 				((Player&)otherActor).energy = min(((Player&)otherActor).energy_max, ((Player&)otherActor).energy + 25.f);
