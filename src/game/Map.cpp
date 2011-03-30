@@ -267,6 +267,11 @@ void Map::loadMap(string filename) {
 	loaded = true;
 }
 
+/*
+ * TODO: "Trace" polygons around map for physics engine, instead of having a 
+ * bunch of individual squares
+ */
+
 bool Map::setupPhysics()
 {
 	// Possibly reset the physics.
@@ -369,9 +374,17 @@ bool Map::checkVerticalLine(int x, int y1, int y2) {
 }
 
 
+/*
+ * TODO: REMOVE THIS FUNCTION AND RELY ON PHYSICS ENGINE FOR MOVEMENT
+ */
+
 bool Map::move(Actor &actor, float &move_x, float &move_y) {
 	return move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
 }
+
+/*
+ * TODO: REMOVE THIS FUNCTION AND RELY ON PHYSICS ENGINE FOR MOVEMENT
+ */
 
 /**
  * Attempt to move object at pos(x,y), of size(x,y), desired delta (x,y)
