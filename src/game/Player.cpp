@@ -140,7 +140,7 @@ void Player::upgradeWeapon() {
 }
 
 void Player::jump(float dt) {
-	const int jump_speed = 500;
+	const int jump_speed = 525;
 	const float max_jet_accel = 2000;
 	const float jet_cost = 100;
 
