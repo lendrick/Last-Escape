@@ -36,7 +36,7 @@ Widget *ui_opctrls = NULL;
 Widget *ui_controls[5];
 Widget *ui_snd = NULL;
 Widget *ui_popup = NULL;
-void (*ui_popup_click)() = NULL;
+void (*ui_popup_close)() = NULL;
 sf::Image ui_background;
 
 Widget::Widget(int tp, Widget *par) {
@@ -536,17 +536,17 @@ void ui_popupImage(const sf::Unicode::Text &path, void (*func)())
 	int h;
 	ui_popup->getSize(w,h);
 	ui_popup->child->setSize(w,h);
-	ui_popup_click = func;
+	ui_popup_close = func;
 	ui_popup->show();
 }
 
 void ui_hidePopup()
 {
 	ui_popup->hide();
-	if (ui_popup_click)
-		ui_popup_click();
+	if (ui_popup_close)
+		ui_popup_close();
 
-	ui_popup_click = NULL;
+	ui_popup_close = NULL;
 }
 
 void ui_showCredits()
