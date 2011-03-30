@@ -12,6 +12,10 @@ SET(CMAKE_BUILD_TYPE debug)
 SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall -Wextra -Wno-unused")
 SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
 
+if(UNIX)
+  link_libraries(m)
+endif(UNIX)
+
 #find the required libraries
 find_package (SFML 1.6 COMPONENTS system window graphics audio REQUIRED)
 include_directories (${SFML_INCLUDE_DIR})
