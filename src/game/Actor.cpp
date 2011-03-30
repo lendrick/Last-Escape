@@ -114,13 +114,22 @@ void Actor::draw() {
 		App->Draw(sprite);
 		if(debugMode)
         {
+						float px = sprite.GetPosition().x;
+						float py = sprite.GetPosition().y;
+						
             float bbx1, bby1, bbx2, bby2;
-            bbx1 = sprite.GetPosition().x - xOrigin;
-            bby1 = sprite.GetPosition().y - yOrigin;
+            bbx1 = px - xOrigin;
+            bby1 = py - yOrigin;
             bbx2 = bbx1 + width;
             bby2 = bby1 + height;
             App->Draw(sf::Shape::Rectangle(bbx1, bby1, bbx2, bby2,
                                            sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0)));
+						
+						// Draw a crosshair at the actor's position
+						App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f, 
+																					 sf::Color(0, 0, 255)));
+						App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
+																					 sf::Color(0, 0, 255)));
         }
 	}
 }
