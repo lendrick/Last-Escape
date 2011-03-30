@@ -26,23 +26,23 @@
 
 EnemyWalker::EnemyWalker()
 :Enemy()
-{	
+{
 	setImage("walker.png");
 	walk_speed = 120.f;
-	
+
 	speed_x = 0;
 	speed_y = 0;
 	dying = false;
-	
-	width = 24;
-	height = 20;
+
+	width = 28;
+	height = 19;
 	xOrigin = width/2;
 	yOrigin = height;
 	setDrawOffset(16, 30);
 	setFrameSize(32, 32);
-	
+
 	Animation * tmp;
-	
+
 	//pick a random death sound
 	int sound_num = rand() % 19;
 	sound_num += 1;
@@ -50,25 +50,25 @@ EnemyWalker::EnemyWalker()
 	std::stringstream out;
 	out << sound_num;
 	s = out.str();
-	
+
 	std::string sound_file = s + "-BugSplat.ogg";
 	//cout << sound_file;
-	fireSound = soundCache[sound_file];	
-	
-	
+	fireSound = soundCache[sound_file];
+
+
 	tmp = addAnimation("walk");
 	tmp->addFrame(3, .2f);
 	tmp->addFrame(2, .2f);
 	tmp->addFrame(1, .2f);
 	tmp->addFrame(2, .2f);
 	tmp->setDoLoop(true);
-	
+
 	tmp = addAnimation("die");
 	tmp->addFrame(7, .07f);
 	tmp->addFrame(6, .07f);
 	tmp->addFrame(5, .07f);
 	tmp->addFrame(4, .07f);
-	
+
 	setCurrentAnimation("walk");
 }
 
@@ -77,10 +77,10 @@ void EnemyWalker::update(float dt) {
 		const int speed_gravity = 960;
 		const float vision_range = 320;
 		const float vision_min_range = 32;
-		
+
 		speed_y += speed_gravity*dt;
 		if(isGrounded()) speed_y = 0;
-		
+
 		/*
 		// Chase the player
 		float dx = g_player->pos_x - pos_x;
@@ -98,9 +98,9 @@ void EnemyWalker::update(float dt) {
 			speed_x = 60.0f;
 		}
 		patrol(dt);
-		
+
 		updateSpriteFacing();
-	
+
 		checkCollisions();
 	}
 }
