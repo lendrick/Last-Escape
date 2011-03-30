@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 {
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
-	
+
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
 		if (strcmp(argv[i], "--disable-music") == 0)
@@ -114,12 +114,12 @@ int main(int argc, char** argv)
 		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Close);
 		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
 	}
-		
+
 	App->SetFramerateLimit(60);
 	App->UseVerticalSync(true);
-	
+
 	g_player = new Player();
-	
+
 	if (!fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
 
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
 
 	sf::Clock Clock;
 	Clock.Reset();
-	
+
 	// Start game loop
 	while (App->IsOpened())
 	{
@@ -154,13 +154,13 @@ int main(int argc, char** argv)
 		float frameTime = std::min(ElapsedTime, 0.05f);
 
 		// Clear screen
-		App->Clear();
-		
+		//App->Clear();
+
 		if(game_map != NULL && game_map->isLoaded()) {
 			if(!paused) {
 				update(frameTime);
 			}
-			
+
 			cleanup();
 
 			game_map->renderLandscape();
