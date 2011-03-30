@@ -1,10 +1,10 @@
 <animations frameWidth="128" frameHeight="128">
 	<animation name="walk" doLoop="true">
 		<frames>
-			<frame number="0" time="0.2f"/>
 			<frame number="1" time="0.2"/>
 			<frame number="2" time="0.2"/>
 			<frame number="3" time="0.2"/>
+			<frame number="0" time="0.2"/>
 		</frames>
 	</animation>
 	

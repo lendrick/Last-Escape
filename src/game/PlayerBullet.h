@@ -28,7 +28,7 @@ public:
 	virtual void update(float dt);
 private:
 	float lifetime;
-	float time;
+	float bulletTime;
 	float speed_x;
 	float speed_y;
 	float damage;

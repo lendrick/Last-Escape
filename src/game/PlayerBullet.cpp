@@ -25,7 +25,7 @@ AnimatedActor()
 {
 	this->setImage("xeon-bullet.png");
 	this->lifetime = lifetime;
-	float time = 0;
+	float bulletTime = 0;
 	
 	facing_direction = facing;
 
@@ -65,11 +65,11 @@ void PlayerBullet::collide(Actor& otherActor) {
 }
 
 void PlayerBullet::update(float dt) {
-	time += dt;
+	bulletTime += dt;
 	float mx = speed_x*dt;
 	float my = speed_y*dt;
 	bool impact = move(mx, my);
 	updateSpriteFacing();
 	checkCollisions();
-	if(impact || time > lifetime) destroy();
+	if(impact || bulletTime > lifetime) destroy();
 }
