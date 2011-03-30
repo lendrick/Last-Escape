@@ -20,10 +20,12 @@
 #include "Enemy.h"
 #include "globals.h"
 
-PlayerBullet::PlayerBullet(int facing, float angleVariation):
+PlayerBullet::PlayerBullet(int facing, float angleVariation, float lifetime):
 AnimatedActor()
 {
 	this->setImage("xeon-bullet.png");
+	this->lifetime = lifetime;
+	float time = 0;
 	
 	facing_direction = facing;
 
@@ -63,10 +65,11 @@ void PlayerBullet::collide(Actor& otherActor) {
 }
 
 void PlayerBullet::update(float dt) {
+	time += dt;
 	float mx = speed_x*dt;
 	float my = speed_y*dt;
 	bool impact = move(mx, my);
 	updateSpriteFacing();
 	checkCollisions();
-	if(impact) destroy();
+	if(impact || time > lifetime) destroy();
 }
