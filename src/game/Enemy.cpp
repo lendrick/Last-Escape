@@ -27,6 +27,7 @@ Enemy::Enemy(float x, float y)
 	//make sure we die in one hit by default
 	life = 0.1f;
 	experienceValue = 1;
+	actorName = "Enemy";
 }
 
 

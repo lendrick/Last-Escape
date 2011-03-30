@@ -36,6 +36,7 @@ Actor::Actor(float x, float y) {
 	hidden = false;
 	currentLevel = 1;
 	experienceValue = 0;
+	actorName = "Unnamed Actor";
 }
 
 Actor::~Actor() {

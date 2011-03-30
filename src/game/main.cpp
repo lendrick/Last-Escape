@@ -52,12 +52,14 @@ ImageCache imageCache;
 SoundCache soundCache;
 
 bool paused = false;
+const double time_step = 1.0f/60.0f;
 
 
 void update(float dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
+		//cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
 		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
 	}
 
@@ -121,8 +123,8 @@ int main(int argc, char** argv)
 		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Close);
 		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
 	}
-
-	App->SetFramerateLimit(60);
+	
+	App->SetFramerateLimit(1.0f/time_step);
 	App->UseVerticalSync(true);
 
 	cpInitChipmunk();
@@ -167,7 +169,8 @@ int main(int argc, char** argv)
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			if(!paused) {
-				update(frameTime);
+				//update(frameTime);
+				update(time_step);
 			}
 
 			cleanup();

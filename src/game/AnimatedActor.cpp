@@ -144,9 +144,11 @@ void AnimatedActor::doUpdate(float dt) {
 		if(body && game_map) {
 			// pos is the center of the actor.
 			sf::Vector2f pos = game_map->cp2sfml(body->p);
+			/*
 			if(this->isPlayer()) {
 				std::cout << "player at SFML " << pos.x << ", " << pos.y << " that is cp " << body->p.x << ", " << body->p.y << std::endl;
 			}
+			*/
 			// but we want the center of his feet, right?
 			setPos(pos.x, pos.y+height/2);
 		}
@@ -312,4 +314,15 @@ bool AnimatedActor::doDamage(float damage) {
 
 void AnimatedActor::onDamage() {
         soundCache["hit1.ogg"]->playSound();
+}
+
+bool AnimatedActor::move(float mx, float my) {
+	if(body != NULL) {
+		cout << actorName << " moving " << mx << " " << my << "\n";
+		cpBodySlew(body, cpv(mx, my), time_step);
+		return false;
+	} else {
+		//cout << actorName << " has no physics body\n";
+		return Actor::move(mx, my);
+	}
 }

@@ -54,9 +54,11 @@ public:
 	virtual void onAnimationComplete(std::string anim) {};
 	
 	void setFacing(int direction);
-        virtual bool doDamage(float damage);
-        virtual void onDamage();
-        virtual void doUpdate(float dt);
+	virtual bool doDamage(float damage);
+	virtual void onDamage();
+	virtual void doUpdate(float dt);
+	
+	virtual bool move(float dx, float dy);
 
 	void resetPhysics();
 	cpBody* body;

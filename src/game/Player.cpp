@@ -73,6 +73,7 @@ Player::Player(float x, float y)
 	energyPerLevel = 10.0f;
 	energy_max = baseMaxEnergy;
 	currentExperience = 0;
+	actorName = "Player";
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -126,7 +127,7 @@ void Player::init() {
 	speed_y = 0.0f;
 
 	// Set Animations
-	goToGround();
+	//goToGround();
 
 	this->setCurrentAnimation("idle");
 
@@ -153,11 +154,12 @@ void Player::jump(float dt) {
 	const float max_jet_accel = 2000;
 	const float jet_cost = 100;
 
-	if (speed_y == 0 && isGrounded())
+	if (body->v.y == 0 && isGrounded())
 	{
 		if (energy < energy_cost_jump)
 			return;
 
+	  cpBodyApplyImpulse(body, cpv(0, 6000), cpv(0, 0));
 		speed_y = -jump_speed;
 		energy -= energy_cost_jump;
 
@@ -262,17 +264,26 @@ void Player::update(float dt) {
 		speed_y = -50;
 	}
 	// left/right move
+	shape->u = 2.0f;
 	if (!dying && recoveryTimer <= 0 && input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
-		speed_x -= speed_delta*dt;
-		if (speed_x < -speed_max) speed_x = -speed_max;
+		//speed_x -= speed_delta*dt;
+		//if (speed_x < -speed_max) speed_x = -speed_max;
+		if(body->v.x > -speed_max)
+			cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
 		facing_direction = move_direction;
+		walking = true;
+		shape->u = 0.1f;
 	}
 	else if (!dying && recoveryTimer <= 0 && input.direction() == FACING_RIGHT) {
 		move_direction = FACING_RIGHT;
-		speed_x += speed_delta*dt;
-		if (speed_x > speed_max) speed_x = speed_max;
+		//speed_x += speed_delta*dt;
+		//if (speed_x > speed_max) speed_x = speed_max;
+		if(body->v.x < speed_max)
+			cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
 		facing_direction = move_direction;
+		walking = true;
+		shape->u = 0.1f;
 	}
 	else {
 		if (speed_x > speed_delta_decel*dt) speed_x -= speed_delta_decel*dt;
@@ -280,9 +291,9 @@ void Player::update(float dt) {
 		else speed_x = 0.0;
 	}
 
-	if(speed_x !=0) {
-		walking = true;
-	}
+	//if(speed_x !=0) {
+		//walking = true;
+	//}
 
 	if (!dying && recoveryTimer <= 0 && input.jumping())
 		jump(dt);
@@ -301,7 +312,8 @@ void Player::update(float dt) {
 
 	float delta_x = speed_x*dt;
 	float delta_y = speed_y*dt;
-	game_map->move(pos_x, pos_y, width, height, delta_x, delta_y);
+	//game_map->move(pos_x, pos_y, width, height, delta_x, delta_y);
+	//move(delta_x, delta_y);
 	speed_x = delta_x / dt;
 	speed_y = delta_y / dt;
 
@@ -328,9 +340,8 @@ void Player::update(float dt) {
 			else
 				this->setCurrentAnimation("fall");
 		}
-		else if (speed_x != 0)
+		else if (walking)
 		{
-			walking = true;
 			if (debugMode)
 				std::cout<< this->getCurrentAnimation()->getIsFinished();
 			if(this->getCurrentAnimation()->getIsFinished()) {

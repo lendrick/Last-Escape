@@ -17,6 +17,7 @@
 
 #pragma once
 #include "globals.h"
+#include <string>
 class Player;
 
 class Actor {
@@ -30,7 +31,7 @@ public:
 	void setDrawOffset(int ox, int oy);
 	
 	// returns true if the actor collided with a map tile
-	bool move(float &mx, float &my);
+	virtual bool move(float &mx, float &my);
 	
 	void getPos(float &px, float &py);
 	
@@ -98,6 +99,7 @@ public:
 	bool hidden;
 	int currentLevel;
 	int experienceValue;
+	std::string actorName;
 	
 protected:
 	void checkCollisions();
