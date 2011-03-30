@@ -303,11 +303,13 @@ bool Map::setupPhysics()
 					cpv( TILE_SIZE/2.0f, -TILE_SIZE/2.0f),
 				};
 				// Move to center of the tile.
-				cpVect offs = sfml2cp(sf::Vector2f(TILE_SIZE*i + TILE_SIZE/2.0f, TILE_SIZE*j - TILE_SIZE/2.0f));
+				sf::Vector2f sfTileCenter = sf::Vector2f(TILE_SIZE*i + TILE_SIZE/2.0f, TILE_SIZE*j + TILE_SIZE/2.0f);
+				cpVect offs = sfml2cp(sfTileCenter);
 				cpShape *shape = cpSpaceAddShape(physSpace, cpPolyShapeNew(&physSpace->staticBody, 4, verts, offs));
 				shape->e = 1.0f; shape->u = 1.0f;
 // 				shape->layers = PhysLayer::MapGround;
 // 				shape->collision_type = PhysType::MapFloor;
+				std::cout << "Added block at SFML " << sfTileCenter.x << ", " << sfTileCenter.y << " that's cp " << offs.x << ", " << offs.y << std::endl;
 			}
 		}
 	}

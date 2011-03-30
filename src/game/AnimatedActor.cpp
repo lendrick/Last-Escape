@@ -64,8 +64,9 @@ void AnimatedActor::resetPhysics()
 		return;
 	}
 
+	// chipmunk wants the center of the actor. You said pos_x/y is the center of his feet.
 	body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
-	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y));
+	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
 // 	body->velocity_func = playerUpdateVelocity;
 
 	shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
@@ -141,8 +142,13 @@ void AnimatedActor::doUpdate(float dt) {
         update(dt);
 
 		if(body && game_map) {
+			// pos is the center of the actor.
 			sf::Vector2f pos = game_map->cp2sfml(body->p);
-			setPos(pos.x, pos.y);
+			if(this->isPlayer()) {
+				std::cout << "player at SFML " << pos.x << ", " << pos.y << " that is cp " << body->p.x << ", " << body->p.y << std::endl;
+			}
+			// but we want the center of his feet, right?
+			setPos(pos.x, pos.y+height/2);
 		}
 }
 

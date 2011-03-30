@@ -95,8 +95,11 @@ void Player::init() {
 	float sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
+// 		sy -= 100;
 		setPos(sx, sy);
 	}
+
+	std::cout << "Init player at " << sx << ", " << sy << std::endl;
 
 	this->resetPhysics();
 
