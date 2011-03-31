@@ -25,7 +25,7 @@
 
 
 EnemyCrawler::EnemyCrawler(float x, float y)
-:Enemy(x, y)
+:Enemy(x, y, 40.0f, 16.0f)
 {
 	setImage("crawler.png");
 	walk_speed = 1.f;
@@ -35,10 +35,6 @@ EnemyCrawler::EnemyCrawler(float x, float y)
 	dying = false;
 	life = 2;
 
-	width = 40;
-	height = 16;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(33, 30);
 	setFrameSize(64, 32);
 
@@ -106,7 +102,7 @@ void EnemyCrawler::update(float dt) {
 
 		updateSpriteFacing();
 
-		checkCollisions();
+		//checkcollisions();
 	}
 }
 

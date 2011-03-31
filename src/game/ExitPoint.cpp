@@ -18,10 +18,9 @@
 #include "ExitPoint.h"
 #include <iostream>
 
-ExitPoint::ExitPoint(float x, float y, int w, int h)
-:Actor(x, y)
+ExitPoint::ExitPoint(float x, float y, float w, float h)
+:Sensor(x, y, w, h)
 {
-	setSize(w, h);
 }
 
 void ExitPoint::collide(Actor& otherActor) {

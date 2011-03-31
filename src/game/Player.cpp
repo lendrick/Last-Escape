@@ -52,14 +52,10 @@ WeaponDesc weapons[num_weapon_types] = {
 };
 
 Player::Player(float x, float y)
-: AnimatedActor(x, y) {
+: AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
 	lives = start_lives;
-	width = 24;
-	height = 48;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(64, 104);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
@@ -105,19 +101,14 @@ void Player::init() {
 
 	std::cout << "Init player at " << sx << ", " << sy << std::endl;
 
-	this->resetPhysics();
-
 	facing_direction = FACING_RIGHT;
 	crouched = false;
 
-	speed_x = 0.0f;
-	speed_y = 0.0f;
-
-	// Set Animations
-	//goToGround();
-
 	this->setCurrentAnimation("idle");
-
+	resetPhysics();
+	
+	if(shape)
+		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy;
 }
 
 StartPoint * Player::findStart() {
@@ -213,6 +204,7 @@ void Player::crouch() {
 }
 
 void Player::update(float dt) {
+	if(!body) return;
 	const int speed_max = 240; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
@@ -275,12 +267,12 @@ void Player::update(float dt) {
 
 	if(!dying && recoveryTimer <= 0 && isGrounded() && input.crouching() && input.direction() != FACING_LEFT && input.direction() != FACING_RIGHT)
     {
-        //yOrigin = height = 32;
+        //height = 32;
 		crouched = true;
     }
 	else
     {
-        //yOrigin = height = 48;
+        //height = 48;
 		crouched = false;
     }
 
@@ -336,7 +328,7 @@ void Player::update(float dt) {
 			sprite.SetRotation(0);
 		*/
 		
-		checkCollisions();
+		//checkcollisions();
 	}
 }
 

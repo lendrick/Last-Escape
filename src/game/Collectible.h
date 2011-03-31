@@ -25,7 +25,7 @@
 class Collectible : public AnimatedActor
 {
 public:
-	Collectible(float x, float y);
+	Collectible(float x, float y, float w, float h);
 	
 	Sound* fireSound;
 	SoundCache soundCache;

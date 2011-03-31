@@ -20,11 +20,9 @@
 #include "globals.h"
 #include <list>
 
-Actor::Actor(float x, float y) {
-	xOrigin = 0;
-	yOrigin = 0;
-	width = 0;
-	height = 0;
+Actor::Actor(float x, float y, float w, float h, bool staticBody) {
+	width = w;
+	height = h;
 // 	setPos(0, 0);
 	pos_x = x;
 	pos_y = y;
@@ -39,6 +37,8 @@ Actor::Actor(float x, float y) {
 	body = NULL;
 	shape = NULL;
 	actorName = "Unnamed Actor";
+	this->staticBody = staticBody;
+	resetPhysics();
 }
 
 Actor::~Actor() {
@@ -48,8 +48,6 @@ Actor::~Actor() {
 void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
 	width = (int)w;
 	height = (int)h;
-	xOrigin = int(w*xoff);
-	yOrigin = int(h*yoff);
 	sprite.SetColor(c);
 	sprite.SetScale((float)width, (float)height);
 	sprite.SetCenter(xoff, yoff);
@@ -87,16 +85,7 @@ void Actor::getSize(int &w, int &h) {
 	w = width;
 }
 
-void Actor::setOrigin(int ox, int oy) {
-	xOrigin = ox;
-	yOrigin = oy;
-}
-
-void Actor::getOrigin(int &ox, int &oy) {
-	ox = xOrigin;
-	oy = yOrigin;
-}
-
+/*
 void Actor::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
 	x1 = pos_x - xOrigin;
 	y1 = pos_y - yOrigin;
@@ -114,6 +103,7 @@ bool Actor::isColliding(Actor * otherActor) {
 		return false;
 	return true;
 }
+*/
 
 void Actor::draw() {
 	if(!hidden && hasImage) {
@@ -121,6 +111,8 @@ void Actor::draw() {
 			0.5f + (int)(pos_x - game_map->cam_x),
 			0.5f + (int)(pos_y - game_map->cam_y));
 		App->Draw(sprite);
+		
+		/*
 		if(debugMode)
         {
 						float px = sprite.GetPosition().x;
@@ -140,6 +132,7 @@ void Actor::draw() {
 						App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
 																					 sf::Color(0, 0, 255)));
         }
+    */
 	}
 }
 
@@ -161,6 +154,7 @@ bool Actor::isDying() {
 	return dying;
 }
 
+/*
 void Actor::checkCollisions() {
 	list<Actor*>::iterator it2 = actors.begin();
 
@@ -174,6 +168,7 @@ void Actor::checkCollisions() {
 		}
 	}
 }
+*/
 
 void Actor::die() {
 	destroy();
@@ -228,15 +223,24 @@ void Actor::resetPhysics()
 	}
 
 	destroyPhysics();
-	// chipmunk wants the center of the actor. You said pos_x/y is the center of his feet.
-	body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
-	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
-// 	body->velocity_func = playerUpdateVelocity;
+	
+	if(!staticBody) {
+		body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
+		body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
 
-	shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
-	shape->e = 0.0f; shape->u = 2.0f;
-// 	shape->collision_type = 1;
-// 	shape->data = this;
+		shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
+		shape->e = 0.0f; shape->u = 2.0f;
+	} else {
+		
+		cpVect verts[] = {
+			cpv(0, 0),			
+			cpv(0, height),			
+			cpv(width, height),
+			cpv(width, 0)
+		};
+		
+		shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2))));
+	}
 }
 
 void Actor::destroyPhysics() {

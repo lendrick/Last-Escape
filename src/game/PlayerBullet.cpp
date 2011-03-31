@@ -21,7 +21,7 @@
 #include "globals.h"
 
 PlayerBullet::PlayerBullet(float x, float y, int facing, float angleVariation, float lifetime):
-AnimatedActor(x, y)
+AnimatedActor(x, y, 15.0f, 7.0f)
 {
 	this->setImage("xeon-bullet.png");
 	this->lifetime = lifetime;
@@ -35,10 +35,6 @@ AnimatedActor(x, y)
 	speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
 	speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
 
-	width = 15;
-	height = 7;
-	xOrigin = width/2;
-	yOrigin = height/2;
 	setDrawOffset(8, 9);
 	setFrameSize(16, 16);
 	damage = 1;
@@ -54,6 +50,7 @@ AnimatedActor(x, y)
 	tmp->setDoLoop(true);
 
 	setCurrentAnimation("bullet");
+	shape->layers = PhysicsLayer::Map|PhysicsLayer::Enemy;
 }
 
 void PlayerBullet::collide(Actor& otherActor) {
@@ -73,7 +70,7 @@ void PlayerBullet::update(float dt) {
 	float my = speed_y*dt;
 	bool impact = move(mx, my);
 	updateSpriteFacing();
-	checkCollisions();
+	//checkcollisions();
 	if(impact || bulletTime > lifetime) {
 		destroy();
 	}

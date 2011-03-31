@@ -24,7 +24,7 @@
 #include <SFML/Graphics.hpp>
 
 EnemyCentipede::EnemyCentipede(float x, float y)
-:Enemy(x, y)
+:Enemy(x, y, 32.0f, 25.0f)
 {
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
 	setImage("centipede.png");
@@ -37,10 +37,6 @@ EnemyCentipede::EnemyCentipede(float x, float y)
 	speed_y = 0;
 	dying = false;
 
-	width = 32;
-	height = 25;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(32, 30);
 	setFrameSize(64, 32);
 
@@ -107,7 +103,12 @@ void EnemyCentipede::update(float dt) {
 				// Turn around if you run into something.
 				//cout << "obstructed\n";
 				flipDirection();
-			} else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
+			} 
+			
+			
+			/* TODO: Fix this to work with physics */
+			/*
+			else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
 				// Turn around if there's a pit up ahead.
 				//cout << "pit\n";
 				//debugPixel.SetPosition(
@@ -115,7 +116,7 @@ void EnemyCentipede::update(float dt) {
 				//											 0.5f + (int)(pos_y - game_map->cam_y));
 				//checkGround = true;
 				flipDirection();
-			}
+			}*/
 
 			if(lastShot + shootInterval < time) {
 				lastShot = time;
@@ -132,7 +133,7 @@ void EnemyCentipede::update(float dt) {
 
 		updateSpriteFacing();
 
-		checkCollisions();
+		//checkcollisions();
 	}
 }
 
@@ -168,17 +169,13 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 
 
 EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, int start_y)
-	: Enemy(start_x, start_y)
+	: Enemy(start_x, start_y, 8.0f, 4.0f)
 {
 	setImage("centipedeprojectile.png");
 	fly_speed = 300.0f;
 	speed_y = -200.0f;
 	dying = false;
 
-	width = 8;
-	height = 4;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(16, 11);
 	setFrameSize(32, 16);
 	facing_direction = direction;

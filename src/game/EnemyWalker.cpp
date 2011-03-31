@@ -25,7 +25,7 @@
 
 
 EnemyWalker::EnemyWalker(float x, float y)
-:Enemy(x, y)
+:Enemy(x, y, 28.0f, 19.0f)
 {
 	setImage("walker.png");
 	walk_speed = 120.f;
@@ -34,10 +34,6 @@ EnemyWalker::EnemyWalker(float x, float y)
 	speed_y = 0;
 	dying = false;
 
-	width = 28;
-	height = 19;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(16, 30);
 	setFrameSize(32, 32);
 
@@ -101,7 +97,7 @@ void EnemyWalker::update(float dt) {
 
 		updateSpriteFacing();
 
-		checkCollisions();
+		////checkcollisions();
 	}
 }
 

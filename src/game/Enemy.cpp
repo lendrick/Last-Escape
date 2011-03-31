@@ -21,13 +21,14 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-Enemy::Enemy(float x, float y)
-:AnimatedActor(x, y)
+Enemy::Enemy(float x, float y, float w, float h)
+:AnimatedActor(x, y, w, h)
 {
 	//make sure we die in one hit by default
 	life = 0.1f;
 	experienceValue = 1;
 	actorName = "Enemy";
+	shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy;
 }
 
 
@@ -58,7 +59,7 @@ void Enemy::patrol(float dt) {
 		// Turn around if you run into something.
 		//cout << "obstructed\n";
 		flipDirection();
-	} else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
+	} /*else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
 		// Turn around if there's a pit up ahead.
 		//cout << "pit\n";
 		//debugPixel.SetPosition(
@@ -66,5 +67,5 @@ void Enemy::patrol(float dt) {
 		//											 0.5f + (int)(pos_y - game_map->cam_y));
 		//checkGround = true;
 		flipDirection();
-	}
+	}*/
 }

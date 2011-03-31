@@ -22,7 +22,7 @@
 #include "Collectible.h"
 
 EnemyFlyer::EnemyFlyer(float x, float y)
-:Enemy(x, y)
+:Enemy(x, y, 27.0f, 31.0f)
 {
 	setImage("flyer.png");
 	patrolLength = 100;
@@ -46,10 +46,6 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 	fireSound = soundCache[sound_file];
 
 	facing_direction = FACING_LEFT;
-	width = 27;
-	height = 31;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(15, 64);
 	setFrameSize(32, 64);
 
@@ -93,7 +89,7 @@ void EnemyFlyer::update(float dt) {
 
 	updateSpriteFacing();
 
-	checkCollisions();
+	//checkcollisions();
 }
 
 void EnemyFlyer::die() {

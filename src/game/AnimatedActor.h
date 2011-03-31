@@ -29,8 +29,8 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(float x, float y, std::string filename);
-	AnimatedActor(float x, float y);
+	AnimatedActor(float x, float y, float w, float h, std::string filename, bool staticBody = false);
+	AnimatedActor(float x, float y, float w, float h, bool staticBody = false);
 	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();

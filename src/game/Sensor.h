@@ -17,22 +17,12 @@
 
 #pragma once
 
-#include "Sensor.h"
 #include "Actor.h"
 
-// Use this actor to signify an map exit.  When the player collides with it,
-// go to the next map.
-
-class ExitPoint : public Sensor {
+class Sensor : public Actor {
 public:
-	ExitPoint(float x, float y, float w, float h);
-	
-	virtual bool isExitPoint() { return true; }
-
-	void collide(Actor& otherActor);
-	void setMap(std::string filename);
-	std::string getMap();
+	Sensor(float x, float y, float w, float h);
 private:
-	std::string mapname;
 };
 
+ 

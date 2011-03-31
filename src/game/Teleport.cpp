@@ -18,10 +18,9 @@
 #include "Teleport.h"
 #include "Player.h"
 
-TeleportEnter::TeleportEnter(float x, float y, int w, int h, std::string teleName)
-:Actor(x, y)
+TeleportEnter::TeleportEnter(float x, float y, float w, float h, std::string teleName)
+:Sensor(x, y, w, h)
 {
-	setSize(w, h);
 	name = teleName;
 }
 
@@ -43,7 +42,7 @@ void TeleportEnter::collide(Actor& otherActor) {
 }
 
 TeleportExit::TeleportExit(float x, float y, std::string teleName)
-:Actor(x, y)
+:Sensor(x, y, 32.0f, 32.0f)
 {
 	name = teleName;
 }

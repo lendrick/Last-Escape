@@ -26,7 +26,7 @@
 
 
 BossSpider::BossSpider(float x, float y)
-:Enemy(x, y)
+:Enemy(x, y, 56.0f, 41.0f)
 {
 	setImage("spider.png");
 	walk_speed = 100.0f;
@@ -36,10 +36,6 @@ BossSpider::BossSpider(float x, float y)
 	dying = false;
 	life = 5;
 
-	width = 56;
-	height = 41;
-	xOrigin = width/2;
-	yOrigin = height;
 	setDrawOffset(32, 63);
 	setFrameSize(64, 64);
 	lastShot = 0;
@@ -121,7 +117,7 @@ void BossSpider::update(float dt) {
 				new EnemyCentipedeProjectile(facing_direction, (int)pos_x, int(pos_y - 20.0f));
 		}
 
-		checkCollisions();
+		//checkcollisions();
 	}
 }
 

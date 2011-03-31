@@ -57,6 +57,7 @@ private:
 	Actor * cameraFollow;
 
 protected:
+	void initPhysics();
 	bool setupPhysics();
 	
 public:
@@ -79,6 +80,8 @@ public:
 	void renderForeground();
 	void clear();
 	bool isLoaded();
+	
+	void createSegment(cpVect &p1, cpVect &p2, bool ground);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;
 	sf::Vector2f cp2sfml(const cpVect& v) const;

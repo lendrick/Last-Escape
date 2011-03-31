@@ -21,16 +21,15 @@
 #include "globals.h"
 #include "Map.h"
 
-AnimatedActor::AnimatedActor(float x, float y, std::string filename)
-:Actor(x, y)
+AnimatedActor::AnimatedActor(float x, float y, float w, float h, std::string filename,  bool staticBody)
+:Actor(x, y, w, h, staticBody)
 {
 	init();
 	setImage(filename);
-	resetPhysics();
 }
 
-AnimatedActor::AnimatedActor(float x, float y)
-:Actor(x, y)
+AnimatedActor::AnimatedActor(float x, float y, float w, float h, bool staticBody)
+:Actor(x, y, w, h, staticBody)
 {
 	init();
 }
@@ -297,6 +296,7 @@ void AnimatedActor::onDamage() {
 }
 
 bool AnimatedActor::move(float mx, float my) {
+	/*
 	if(body != NULL) {
 		cout << actorName << " moving " << mx << " " << my << "\n";
 		cpBodySlew(body, cpv(mx, my), time_step);
@@ -305,4 +305,6 @@ bool AnimatedActor::move(float mx, float my) {
 		//cout << actorName << " has no physics body\n";
 		return Actor::move(mx, my);
 	}
+	*/
+	return true;
 }

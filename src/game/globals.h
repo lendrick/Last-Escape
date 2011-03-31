@@ -58,9 +58,23 @@ enum Facing {
 	FACING_RIGHT
 };
 
-namespace PhysicLayers {
+namespace PhysicsLayer {
 	enum Enum {
-		MapFloor = 1,
+		Map = 1,
+		Player = 2,
+		Enemy = 4,
+		PlayerBullet = 8,
+		EnemyBullet = 16
+	};
+};
+
+namespace PhysicsType {
+	enum Enum {
+		Player = 1,
+		Enemy = 2,
+		Ground = 3,
+		Sensor = 4,
+		Wall = 5
 	};
 };
 

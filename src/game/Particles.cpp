@@ -20,7 +20,7 @@
 #include "Map.h"
 
 ParticleEmitter::ParticleEmitter(float x, float y)
-:Actor(x, y)
+:Actor(x, y, 32.0f, 32.0f)
 {
 
 	emissionRate = 5.f;

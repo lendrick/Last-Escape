@@ -27,7 +27,7 @@ class Player;
 
 class Actor {
 public:
-	Actor(float x, float y);
+	Actor(float x, float y, float w, float h, bool staticBody = false);
 	~Actor();
 	
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
@@ -43,12 +43,12 @@ public:
 	void setSize(int w, int h);
 	void getSize(int &w, int &h);
 	
-	void setOrigin(int ox, int oy);
-	void getOrigin(int &ox, int &oy);
+	//void setOrigin(int ox, int oy);
+	//void getOrigin(int &ox, int &oy);
 	
-	void getBoundingBox(float &x1, float &y1, float &x2, float &y2);
+	//void getBoundingBox(float &x1, float &y1, float &x2, float &y2);
 	
-	bool isColliding(Actor * otherActor);
+	//bool isColliding(Actor * otherActor);
 	bool isGrounded();
 	
 	// Event functions
@@ -86,6 +86,7 @@ public:
 	virtual int getLevel();
 	virtual void incrementLevel();
 	virtual void onLevelUp(int newLevel) {}
+	bool isStaticBody() { return staticBody; }
 	
 	int getExperienceValue();
 	void setExperienceValue(int exp);
@@ -99,7 +100,6 @@ public:
 	sf::Image image;
 	sf::Sprite sprite;
 
-	int xOrigin, yOrigin;
 	int height, width;
 	float pos_x, pos_y;
 	bool destroyed;
@@ -108,10 +108,14 @@ public:
 	bool dying;
 	bool hasImage;
 	bool hidden;
+	
 	int currentLevel;
 	int experienceValue;
 	std::string actorName;
 	
 protected:
-	void checkCollisions();
+	//void //checkcollisions();
+
+private:
+	bool staticBody;
 };

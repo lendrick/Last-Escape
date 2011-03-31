@@ -18,10 +18,11 @@
 #pragma once
 
 #include "Actor.h"
+#include "Sensor.h"
 
-class TeleportEnter : public Actor {
+class TeleportEnter : public Sensor {
 public:
-	TeleportEnter(float x, float y, int w, int h, std::string name);
+	TeleportEnter(float x, float y, float w, float h, std::string name);
 
 	virtual bool isTeleportEnter() { return true; }
 
@@ -30,7 +31,7 @@ private:
 	std::string name;
 };
 
-class TeleportExit : public Actor {
+class TeleportExit : public Sensor {
 public:
 	TeleportExit(float x, float y, std::string name);
 
