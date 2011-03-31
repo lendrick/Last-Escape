@@ -233,14 +233,16 @@ void Actor::resetPhysics()
 	} else {
 		
 		cpVect verts[] = {
-			cpv(0, 0),			
-			cpv(0, height),			
-			cpv(width, height),
-			cpv(width, 0)
+			cpv(-width/2, -height/2),			
+			cpv(-width/2, height/2),			
+			cpv(width/2, height/2),
+			cpv(width/2, -height/2)
 		};
 		
-		shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2))));
+		shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, game_map->sfml2cp(sf::Vector2f(pos_x, pos_y))));
 	}
+	
+	shape->data = (void *) this;
 }
 
 void Actor::destroyPhysics() {
