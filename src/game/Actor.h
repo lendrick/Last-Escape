@@ -139,3 +139,4 @@ private:
 };
 
 void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt);
+void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt);

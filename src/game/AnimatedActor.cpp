@@ -117,8 +117,8 @@ void AnimatedActor::doUpdate(float dt) {
 		damageTimer -= dt;
 	else
 		damageTimer = 0.0f;
-	
-	update(dt);
+
+	Actor::doUpdate(dt);
 }
 
 std::string AnimatedActor::animationName() {

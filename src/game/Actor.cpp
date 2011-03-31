@@ -308,7 +308,7 @@ void Actor::setShapeLayers(cpLayers l) {
 void Actor::freeze() {
 	if(body) {
 		body->v = cpv(0, 0);
-		body->velocity_func = no_gravity;
+		body->velocity_func = no_gravity_stop;
 	}
 }
 
@@ -320,4 +320,8 @@ void Actor::unFreeze() {
 
 void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
 	cpBodyUpdateVelocity(body, cpv(0, 0), 1, dt);
+}
+
+void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
+	cpBodyUpdateVelocity(body, cpv(0, 0), .05, dt);
 }
