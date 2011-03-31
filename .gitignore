@@ -5,3 +5,6 @@ build/
 lastescape
 *.exe
 *.dll
+*.o
+*.a
+
