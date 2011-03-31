@@ -131,8 +131,9 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 		if(!g_player->dying) {
 			destroy();
 			soundCache["gmae.ogg"]->playSound();
-			g_player->energyBalls++;
-			
+			if(g_player->energyBalls < 10)
+                g_player->energyBalls++;
+
 			g_player->addExperience(experienceValue);
 			// give player 25 energy, but only up to max energy
 			if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max) {

@@ -18,6 +18,7 @@
 #pragma once
 
 #include <chipmunk/chipmunk.h>
+#include <chipmunk/chipmunk_unsafe.h>
 
 #include <fstream>
 #include <sstream>
