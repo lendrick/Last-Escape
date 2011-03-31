@@ -198,6 +198,14 @@ void Actor::goToGround() {
 	}
 }
 
+void Actor::collideGround() {
+	grounded++;
+}
+
+void Actor::leaveGround() {
+	grounded--;
+}
+
 void Actor::doUpdate(float dt) {
         update(dt);
 }
@@ -265,12 +273,20 @@ void Actor::destroyPhysics() {
 		
 		cpBodyFree(body);
 
-		shape = NULL;
-		body = NULL;
+	} else if(shape) {
+		// Static things like collectibles have no body.
+		cpSpaceRemoveShape(game_map->physSpace, shape);
+		cpShapeFree(shape);		
 	}
+	shape = NULL;
+	body = NULL;
 }
 
 void Actor::setShapeLayers(cpLayers l) {
 	shapeLayers = l;
 	if(collideable) shape->layers = shapeLayers;
+}
+
+void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
+	cpBodyUpdateVelocity(body, cpv(0, 0), 1, dt);
 }

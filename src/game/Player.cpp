@@ -175,16 +175,18 @@ void Player::shoot() {
 		last_shoot_time = time;
 		fireSound->playSound();
 		energy -= weapons[currentWeapon].energy_cost;
+		
+		sf::Vector2f pos = game_map->cp2sfml(body->p);
 
-		float bulletX = pos_x + 30.0f, bulletY = 0.0f;
+		float bulletX = pos.x + 30.0f, bulletY = 0.0f;
 		if(facing_direction == Facing::Left)
-			bulletX = pos_x - 30.0f;
+			bulletX = pos.x - 30.0f;
 
 		if(crouched) {
-			bulletY = pos_y - 15.0f;
+			bulletY = pos.y + 9.0f;
 		}
 		else {
-			bulletY = pos_y - 30.0f;
+			bulletY = pos.y -6.0f;
 		}
 
 		Actor* bullet = new PlayerBullet(bulletX, bulletY, facing_direction, weapons[currentWeapon].angle_variation);

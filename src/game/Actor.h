@@ -88,6 +88,10 @@ public:
 	virtual int getLevel();
 	virtual void incrementLevel();
 	virtual void onLevelUp(int newLevel) {}
+	
+	virtual void collideGround();
+	virtual void leaveGround();
+	
 	bool isStaticBody() { return staticBody; }
 	
 	int getExperienceValue();
@@ -95,11 +99,10 @@ public:
 	cpLayers getShapeLayers() { return shapeLayers; }
 	void setShapeLayers(cpLayers l);
 	
-	void resetPhysics();
-	void destroyPhysics();
+	virtual void resetPhysics();
+	virtual void destroyPhysics();
 	cpBody* body;
 	cpShape* shape;
-
 
 	sf::Image image;
 	sf::Sprite sprite;
@@ -115,7 +118,6 @@ public:
 	
 	int currentLevel;
 	int experienceValue;
-	int grounded;
 	std::string actorName;
 	
 protected:
@@ -124,4 +126,7 @@ protected:
 private:
 	bool staticBody;
 	cpLayers shapeLayers;
+	int grounded;
 };
+
+void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt);

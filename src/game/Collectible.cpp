@@ -118,6 +118,8 @@ CollectibleEnergyBall::CollectibleEnergyBall(float x, float y, int expValue)
 	tmp->addFrame(3, .2f);
 	tmp->setDoLoop(true);
 	setCurrentAnimation("anim");
+	shape->collision_type = PhysicsType::Item;
+	setShapeLayers(PhysicsLayer::Player);
 }
 
 void CollectibleEnergyBall::collide(Actor& otherActor) {

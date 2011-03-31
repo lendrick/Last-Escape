@@ -392,6 +392,16 @@ bool Map::setupPhysics()
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
+		PhysicsType::PlayerBullet, PhysicsType::Enemy, //types of objects
+		map_begin_collide, // callback on initial collision
+		map_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
 		PhysicsType::Player, PhysicsType::Ground, //types of objects
 		map_begin_ground_collide, // callback on initial collision
 		NULL, // any time the shapes are touching
@@ -413,6 +423,26 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Neutral, PhysicsType::Ground, //types of objects
+		map_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::PlayerBullet, PhysicsType::Ground, //types of objects
+		map_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::PlayerBullet, PhysicsType::Wall, //types of objects
 		map_begin_ground_collide, // callback on initial collision
 		NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
@@ -468,7 +498,7 @@ static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) 
 	Actor *actor1 = (Actor *) a->data;
 	
 	//cout << "Ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
-	actor1->grounded++;
+	actor1->collideGround();
 	return 1;
 }
 
@@ -479,7 +509,7 @@ static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	Actor *actor1 = (Actor *) a->data;
 	
 	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
-	actor1->grounded--;
+	actor1->leaveGround();
 }
 
 bool Map::isLoaded() {

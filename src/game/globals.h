@@ -78,7 +78,15 @@ namespace PhysicsType {
 		Sensor,
 		Wall,
 		Item,
-		Neutral
+		Neutral,
+		PlayerBullet
+	};
+};
+
+namespace PhysicsGroup {
+	enum Enum {
+		PlayerBullets = 1,
+		EnemyBullets = 2
 	};
 };
 

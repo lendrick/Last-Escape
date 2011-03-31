@@ -29,12 +29,21 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 
 	facing_direction = facing;
 
-	float speed = 480.f;
+	float speed = 500.f;
 
 	float angle = ((facing_direction == Facing::Right) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
-	speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
-	speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
-
+	float speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
+	float speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
+	
+	body->v.x = speed_x;
+	body->v.y = speed_y;
+	body->velocity_func = no_gravity;
+	
+	// Put it in the PLayerBullets group so it doesn't collide with other PlayerBullets
+	shape->group = PhysicsGroup::PlayerBullets;
+	shape->layers = PhysicsLayer::Map|PhysicsLayer::PlayerBullet;
+	shape->collision_type = PhysicsType::PlayerBullet;
+	
 	setDrawOffset(8, 9);
 	setFrameSize(16, 16);
 	damage = 1;
@@ -50,7 +59,6 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	tmp->setDoLoop(true);
 
 	setCurrentAnimation("bullet");
-	shape->layers = PhysicsLayer::Map|PhysicsLayer::Enemy;
 }
 
 void PlayerBullet::collide(Actor& otherActor) {
@@ -65,13 +73,16 @@ void PlayerBullet::collide(Actor& otherActor) {
 }
 
 void PlayerBullet::update(float dt) {
+	//cout << "bullet " << body->p.x << " " << body->p.y << "\n";
 	bulletTime += dt;
-	float mx = speed_x*dt;
-	float my = speed_y*dt;
-	bool impact = move(mx, my);
+
 	updateSpriteFacing();
 	//checkcollisions();
-	if(impact || bulletTime > lifetime) {
+	if(bulletTime > lifetime) {
 		destroy();
 	}
+}
+
+void PlayerBullet::collideGround() {
+	destroy();
 }

@@ -23,9 +23,10 @@
 class PlayerBullet  : public AnimatedActor
 {
 public:
-	PlayerBullet(float x, float y, int facing, float angleVariation, float lifetime = 3.0f);
+	PlayerBullet(float x, float y, int facing, float angleVariation, float lifetime = 1.5f);
 	virtual void collide(Actor& otherActor);
 	virtual void update(float dt);
+	virtual void collideGround();
 private:
 	float lifetime;
 	float bulletTime;
