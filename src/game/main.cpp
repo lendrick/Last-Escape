@@ -163,6 +163,8 @@ int main(int argc, char** argv)
 
 			cleanup();
 
+			App->Clear(sf::Color(200, 0, 0));
+
 			game_map->renderLandscape();
 			game_map->renderBackground();
 			renderActors();
