@@ -72,11 +72,12 @@ namespace PhysicsLayer {
 
 namespace PhysicsType {
 	enum Enum {
-		Player = 1,
-		Enemy = 2,
-		Ground = 3,
-		Sensor = 4,
-		Wall = 5
+		Player,
+		Enemy,
+		Ground,
+		Sensor,
+		Wall,
+		Item 
 	};
 };
 

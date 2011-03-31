@@ -37,6 +37,7 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	body = NULL;
 	shape = NULL;
 	actorName = "Unnamed Actor";
+	shapeLayers = CP_ALL_LAYERS;
 	this->staticBody = staticBody;
 	resetPhysics();
 }
@@ -180,6 +181,11 @@ bool Actor::canCollide() {
 
 void Actor::setCanCollide(bool col) {
 	collideable = col;
+	if(col) {
+		shape->layers = shapeLayers;
+	} else {
+		shape->layers = 0;
+	}
 }
 
 void Actor::goToGround() {
@@ -260,4 +266,9 @@ void Actor::destroyPhysics() {
 		shape = NULL;
 		body = NULL;
 	}
+}
+
+void Actor::setShapeLayers(cpLayers l) {
+	shapeLayers = l;
+	if(collideable) shape->layers = shapeLayers;
 }

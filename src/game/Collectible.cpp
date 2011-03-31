@@ -38,6 +38,8 @@ void Collectible::init()
 	tmp = addAnimation("image");
 	tmp->addFrame(0, .1f);
 	setCurrentAnimation("image");
+	shape->collision_type = PhysicsType::Item;
+	setShapeLayers(PhysicsLayer::Player);
 }
 
 void Collectible::reset() {

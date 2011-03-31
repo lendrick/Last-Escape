@@ -52,7 +52,7 @@ public:
 	virtual void onAnimationComplete(std::string anim) {};
 	
 	void setFacing(int direction);
-	virtual bool doDamage(float damage);
+	virtual bool doDamage(float damage, bool knockback = false);
 	virtual void onDamage();
 	virtual void doUpdate(float dt);
 	

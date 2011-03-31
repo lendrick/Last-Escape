@@ -33,10 +33,11 @@ public:
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
-	virtual void collide(Actor & otherActor);
+	//virtual void collide(Actor & otherActor);
+	virtual void onColliding(Actor & otherActor);
 	virtual void onDestroy();
 	virtual void onAnimationComplete(std::string anim);
-	virtual bool doDamage(float damage);
+	virtual bool doDamage(float damage, bool knockback = true);
 	virtual void onDamage();
 	virtual void onLevelUp(int newLevel);
 	

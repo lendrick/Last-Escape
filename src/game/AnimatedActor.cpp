@@ -277,7 +277,7 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	}
 }
 
-bool AnimatedActor::doDamage(float damage) {
+bool AnimatedActor::doDamage(float damage, bool knockback) {
         if(damageTimer <= 0) {
                 life -= damage;
                 if(life <= 0) {

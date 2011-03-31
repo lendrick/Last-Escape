@@ -98,10 +98,15 @@ public:
 	bool loaded;
 
 	std::string currentFilename;
+	
 
 	// Physics of the map.
 	cpSpace *physSpace;
 };
+
+
+static int map_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
+static int map_colliding(cpArbiter *arb, cpSpace *space, void *data);
 
 #endif
 

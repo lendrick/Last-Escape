@@ -28,7 +28,8 @@ Enemy::Enemy(float x, float y, float w, float h)
 	life = 0.1f;
 	experienceValue = 1;
 	actorName = "Enemy";
-	shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy;
+	shape->layers = PhysicsLayer::Map|PhysicsLayer::Enemy;
+	shape->collision_type = PhysicsType::Enemy;
 }
 
 

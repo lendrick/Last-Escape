@@ -53,7 +53,9 @@ public:
 	
 	// Event functions
 	//TODO: rename collide onCollide
-	virtual void collide(Actor& otherActor) { }
+	virtual void collide(Actor& otherActor) { };
+	virtual void onColliding(Actor & otherActor) { };
+	virtual void onEndCollide(Actor & otherActor) { };
 	virtual void onDestroy() { };
 	virtual void onDamage() { };
 	
@@ -90,6 +92,8 @@ public:
 	
 	int getExperienceValue();
 	void setExperienceValue(int exp);
+	cpLayers getShapeLayers() { return shapeLayers; }
+	void setShapeLayers(cpLayers l);
 	
 	void resetPhysics();
 	void destroyPhysics();
@@ -118,4 +122,5 @@ protected:
 
 private:
 	bool staticBody;
+	cpLayers shapeLayers;
 };

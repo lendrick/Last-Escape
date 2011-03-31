@@ -368,7 +368,55 @@ bool Map::setupPhysics()
 	
 	//TODO: Diagonal pass once we have diagonal tiles
 	
+	
+	// Set up collision handlers
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Player, PhysicsType::Item, //types of objects
+		map_begin_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		NULL, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Player, PhysicsType::Enemy, //types of objects
+		map_begin_collide, // callback on initial collision
+		map_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		NULL, // after the shapes separate
+		NULL // data pointer
+	);
+	
 	return true;
+}
+
+static int map_begin_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	Actor *actor2 = (Actor *) b->data;
+	
+	//cout << "Collision: " << actor1->actorName << " " << actor2->actorName << "\n"; 
+	actor1->collide(*actor2);
+	actor2->collide(*actor1);
+	return 1;
+}
+
+static int map_colliding(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	Actor *actor2 = (Actor *) b->data;
+	
+	//cout << "Collision: " << actor1->actorName << " " << actor2->actorName << "\n"; 
+	actor1->onColliding(*actor2);
+	actor2->onColliding(*actor1);
+	return 1;
 }
 
 bool Map::isLoaded() {

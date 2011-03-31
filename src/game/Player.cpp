@@ -337,7 +337,7 @@ void Player::draw() {
 	AnimatedActor::draw();
 }
 
-void Player::collide(Actor & otherActor)
+void Player::onColliding(Actor & otherActor)
 {
 	if(otherActor.isEnemy())
 	{
@@ -355,11 +355,6 @@ void Player::collide(Actor & otherActor)
 		if(!mapname.empty()) {
 			game_map->loadMap(mapname);
 		}
-	}
-
-	if (otherActor.isCollectible() || otherActor.isExitPoint() || otherActor.isTeleportEnter())
-	{
-		otherActor.collide(*this);
 	}
 }
 
@@ -409,27 +404,41 @@ void Player::onAnimationComplete(std::string anim) {
 	}
 }
 
-bool Player::doDamage(float damage) {
+bool Player::doDamage(float damage, bool knockback) {
 	bool dead = false;
-        if(damageTimer <= 0) {
-                energy -= damage * 30;
-                if(energy <= 0) {
-												dead = true;
-                        die();
-                } else {
-                        onDamage();
-                }
-                damageTimer = immunityTime;
-                recoveryTimer = recoveryTime;
+	if(damageTimer <= 0) {
+		energy -= damage * 30;
+		if(energy <= 0) {
+			dead = true;
+			die();
+		} else {
+				onDamage();
+		}
+		damageTimer = immunityTime;
+		recoveryTimer = recoveryTime;
 
-                if(facing_direction == Facing::Left) {
-                        speed_x = 300;
-                } else {
-                        speed_x = -300;
-                }
-
-                speed_y = -150;
-        }
+		if(knockback) {
+			int knockback_direction = Facing::None;
+			
+			if(body->v.x < 0) {
+				knockback_direction = Facing::Right;
+			} else if(body->v.x > 0) {
+				knockback_direction = Facing::Left;
+			} else {
+				if(facing_direction == Facing::Left) {
+					knockback_direction = Facing::Right;
+				} else {
+					knockback_direction = Facing::Left;
+				}
+			}
+			if(knockback_direction == Facing::Left) {
+				body->v.x = -300;
+			} else {
+				body->v.x = 300;
+			}
+			body->v.y = 150;
+		}
+	}
   return dead;
 }
 
