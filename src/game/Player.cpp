@@ -152,7 +152,9 @@ void Player::upgradeWeapon() {
 void Player::jump(float dt) {
 	const int jump_speed = 525;
 	const float max_jet_accel = 2000;
-	const float jet_cost = 100;
+	const float jet_cost = 60;
+	const float jet_speed_max = 450;
+	const float jet_wait = 0.4f;
 
 	if (body->v.y == 0 && isGrounded())
 	{
@@ -160,16 +162,13 @@ void Player::jump(float dt) {
 			return;
 
 	  cpBodyApplyImpulse(body, cpv(0, 6000), cpv(0, 0));
-		speed_y = -jump_speed;
-		energy -= energy_cost_jump;
-
 		last_jump_time = time;
 		jumpSound->playSound();
 	}
 	else
 	{
 		// Can't jet immediately after jumping
-		if (time - last_jump_time < 0.55f)
+		if (time - last_jump_time < jet_wait)
 			return;
 
 		float cost = jet_cost * dt;
@@ -177,7 +176,10 @@ void Player::jump(float dt) {
 			return;
 
 		energy -= cost;
-		speed_y -= max_jet_accel*dt;
+		
+		if(body->v.y < jet_speed_max)
+			cpBodyApplyImpulse(body, cpv(0, 400), cpv(0, 0));
+			
 		if(jumpSound->getStatus() != sf::Sound::Playing)
 			jumpSound->playSound();
 	}
@@ -243,10 +245,6 @@ void Player::update(float dt) {
 
 	time += dt;
 
-	if(isGrounded() && recoveryTimer <= 0) {
-		speed_y = 0;
-	}
-
 	if(game_map->isOnInstantdeath(*this)) {
 		this->die();
 	}
@@ -260,15 +258,10 @@ void Player::update(float dt) {
 	if (godMode)
 		energy = std::max(energy, 10.f);
 
-	if(!dying && recoveryTimer <= 0 && input.stopJump() && !isGrounded() && speed_y < -50) {
-		speed_y = -50;
-	}
 	// left/right move
 	shape->u = 2.0f;
 	if (!dying && recoveryTimer <= 0 && input.direction() == FACING_LEFT) {
 		move_direction = FACING_LEFT;
-		//speed_x -= speed_delta*dt;
-		//if (speed_x < -speed_max) speed_x = -speed_max;
 		if(body->v.x > -speed_max)
 			cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
 		facing_direction = move_direction;
@@ -277,26 +270,18 @@ void Player::update(float dt) {
 	}
 	else if (!dying && recoveryTimer <= 0 && input.direction() == FACING_RIGHT) {
 		move_direction = FACING_RIGHT;
-		//speed_x += speed_delta*dt;
-		//if (speed_x > speed_max) speed_x = speed_max;
 		if(body->v.x < speed_max)
 			cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
 		shape->u = 0.1f;
 	}
-	else {
-		if (speed_x > speed_delta_decel*dt) speed_x -= speed_delta_decel*dt;
-		else if (speed_x < -speed_delta_decel*dt) speed_x += speed_delta_decel*dt;
-		else speed_x = 0.0;
-	}
-
-	//if(speed_x !=0) {
-		//walking = true;
-	//}
 
 	if (!dying && recoveryTimer <= 0 && input.jumping())
 		jump(dt);
+	else if(!dying && recoveryTimer <= 0 && !input.jumping() && body->v.y > 0) {
+		cpBodyApplyImpulse(body, cpv(0, -220), cpv(0, 0));
+	}
 
 	if (!dying && recoveryTimer <= 0 && input.shooting())
 		shoot();
@@ -306,36 +291,24 @@ void Player::update(float dt) {
 	else
 		crouched = false;
 
-	// gravity
-	speed_y += speed_delta*dt;
-	if (speed_y > terminal_velocity) speed_y = terminal_velocity;
-
-	float delta_x = speed_x*dt;
-	float delta_y = speed_y*dt;
-	//game_map->move(pos_x, pos_y, width, height, delta_x, delta_y);
-	//move(delta_x, delta_y);
-	speed_x = delta_x / dt;
-	speed_y = delta_y / dt;
-
 	// Compute animations:
 
 	if(!dying) {
-                if(recoveryTimer > 0) {
-                  this->setCurrentAnimation("damage");
-                } if(time - last_shoot_time < shoot_duration) {
+		if(recoveryTimer > 0) {
+			this->setCurrentAnimation("damage");
+		}
+		if(time - last_shoot_time < shoot_duration) {
 			if(walking) {
 				this->setCurrentAnimation("walkshoot");
-			}
-			else if(crouched) {
+			} else if(crouched) {
 				this->setCurrentAnimation("crouchshoot");
-			}
-			else {
+			} else {
 				this->setCurrentAnimation("shoot");
 			}
 		}
-		else if (!isGrounded() && speed_y != 0)
+		else if (!isGrounded() && body->v.y != 0)
 		{
-			if(speed_y < 0)
+			if(body->v.y > 0)
 				this->setCurrentAnimation("jump");
 			else
 				this->setCurrentAnimation("fall");
@@ -358,11 +331,13 @@ void Player::update(float dt) {
 
 		updateSpriteFacing();
 
+		/*
 		if (speed_y == terminal_velocity)
 			sprite.Rotate(360.f*dt);
 		else
 			sprite.SetRotation(0);
-
+		*/
+		
 		checkCollisions();
 	}
 }
