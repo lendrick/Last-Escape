@@ -62,9 +62,21 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 	
 	x1 = body->p.x - 100;
 	x2 = body->p.x + 100;
-	y1 = body->p.y - 40;
+	y1 = body->p.y - 20;
 	y2 = body->p.y + 40;
+	
+	shape->u = 0.1f;
+	
+  timeUntilDive = 0;
+	timeUntilEndDive = 0;
+	
+	minDiveTime = 0.1f;
+	maxDiveTime = 0.3f;
+	minTimeBetweenDives = .8f;
+	maxTimeBetweenDives = 2.5f;
 
+	diving = false;
+	
 	setCurrentAnimation("fly");
 	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
 }
@@ -72,6 +84,14 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 
 void EnemyFlyer::update(float dt) {
 	cpVect force = cpv(0, 0);
+	
+  if(diving && timeUntilEndDive <= 0) {
+		diving = false;
+		timeUntilDive = frand(minTimeBetweenDives, minTimeBetweenDives);
+	} else if(!diving && timeUntilDive <= 0) {
+		diving = true;
+		timeUntilEndDive = frand(minDiveTime, maxDiveTime);
+	}
 	
 	if(facing_direction == Facing::Left) {
 	  if(body->p.x < x1) {
@@ -86,8 +106,13 @@ void EnemyFlyer::update(float dt) {
 			force.x = 75;
 		}
 	}
+	
+	
+	// Doesn't matter if they go below zero.
+	timeUntilEndDive -= dt;
+	timeUntilDive -= dt;
 
-	if(body->p.y < y1 && body->v.y < fly_speed) {
+	if(!diving && body->p.y < y1 && body->v.y < fly_speed) {
 		force.y = 500;
 	}
 	

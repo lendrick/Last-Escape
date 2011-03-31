@@ -31,4 +31,12 @@ private:
 	
 	// Limits that the flyer should attempt to stay inside.
 	float x1, y1, x2, y2;
+	
+	float timeUntilDive;
+	float timeUntilEndDive;
+	float minDiveTime;
+	float maxDiveTime;
+	float minTimeBetweenDives;
+	float maxTimeBetweenDives;
+	bool diving;
 }; 

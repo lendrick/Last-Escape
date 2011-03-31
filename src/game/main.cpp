@@ -22,6 +22,7 @@
 #include <SFML/Graphics.hpp>
 #include <chipmunk/chipmunk.h>
 #include <cstdlib>
+#include <ctime>
 #include <list>
 //#include <boost/foreach.hpp>
 #include "globals.h"
@@ -91,6 +92,10 @@ void cleanup() {
 	}
 }
 
+float frand(float lower, float upper) {
+	return ((upper-lower)*((float)rand()/RAND_MAX))+lower;
+}
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -99,6 +104,7 @@ void cleanup() {
 ////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
+  srand((unsigned)time(0));
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
 

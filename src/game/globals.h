@@ -85,3 +85,5 @@ extern bool paused;
 
 extern ImageCache imageCache;
 extern SoundCache soundCache;
+
+float frand(float lower, float upper);

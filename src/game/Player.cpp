@@ -339,21 +339,23 @@ void Player::draw() {
 
 void Player::onColliding(Actor & otherActor)
 {
-	if(otherActor.isEnemy())
-	{
-		doDamage(1.0f);
-	}
+	if(!dying) {
+		if(otherActor.isEnemy())
+		{
+			doDamage(1.0f);
+		}
 
-	if(otherActor.isSpawnPoint()) {
-		currentStart = static_cast<StartPoint *>(&otherActor);
-	}
+		if(otherActor.isSpawnPoint()) {
+			currentStart = static_cast<StartPoint *>(&otherActor);
+		}
 
-	if(otherActor.isExitPoint()) {
-		currentStart = NULL;
-		std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
-		if(mapname == "credits_map.tmx") hidden = true;
-		if(!mapname.empty()) {
-			game_map->loadMap(mapname);
+		if(otherActor.isExitPoint()) {
+			currentStart = NULL;
+			std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
+			if(mapname == "credits_map.tmx") hidden = true;
+			if(!mapname.empty()) {
+				game_map->loadMap(mapname);
+			}
 		}
 	}
 }
