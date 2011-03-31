@@ -19,6 +19,7 @@
 #include "Map.h"
 #include "globals.h"
 #include <list>
+#include <cmath>
 
 Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	width = w;
@@ -40,6 +41,7 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	actorName = "Unnamed Actor";
 	shapeLayers = CP_ALL_LAYERS;
 	this->staticBody = staticBody;
+	defaultVelocityFunc = cpBodyUpdateVelocity;
 	resetPhysics();
 }
 
@@ -53,6 +55,12 @@ void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff
 	sprite.SetColor(c);
 	sprite.SetScale((float)width, (float)height);
 	sprite.SetCenter(xoff, yoff);
+}
+
+void Actor::setVelocityFunc(cpBodyVelocityFunc f) {
+	if(body)
+		body->velocity_func = f;
+	defaultVelocityFunc = f;
 }
 
 void Actor::setPos(float px, float py) {
@@ -109,6 +117,12 @@ bool Actor::isColliding(Actor * otherActor) {
 
 void Actor::draw() {
 	if(!hidden && hasImage) {
+		if(body && body->a) {
+			sprite.SetRotation(-rad2deg(body->a));
+		} else {
+			sprite.SetRotation(0);
+		}
+		
 		sprite.SetPosition(
 			0.5f + (int)(pos_x - game_map->cam_x),
 			0.5f + (int)(pos_y - game_map->cam_y));
@@ -207,7 +221,11 @@ void Actor::leaveGround() {
 }
 
 void Actor::doUpdate(float dt) {
-        update(dt);
+	update(dt);
+	if(body && game_map) {
+		sf::Vector2f pos = game_map->cp2sfml(body->p);
+		setPos(pos.x, pos.y+height/2);
+	}
 }
 
 void Actor::setLevel(int newLevel) {
@@ -285,6 +303,19 @@ void Actor::destroyPhysics() {
 void Actor::setShapeLayers(cpLayers l) {
 	shapeLayers = l;
 	if(collideable) shape->layers = shapeLayers;
+}
+
+void Actor::freeze() {
+	if(body) {
+		body->v = cpv(0, 0);
+		body->velocity_func = no_gravity;
+	}
+}
+
+void Actor::unFreeze() {
+	if(body) {
+		body->velocity_func = defaultVelocityFunc;
+	}
 }
 
 void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {

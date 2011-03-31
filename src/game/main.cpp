@@ -23,6 +23,7 @@
 #include <chipmunk/chipmunk.h>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include <list>
 //#include <boost/foreach.hpp>
 #include "globals.h"
@@ -94,6 +95,14 @@ void cleanup() {
 
 float frand(float lower, float upper) {
 	return ((upper-lower)*((float)rand()/RAND_MAX))+lower;
+}
+
+float deg2rad(float deg) {
+	return deg * 180.0f / M_PI;
+}
+
+float rad2deg(float rad) {
+  return rad * M_PI / 180.0f;
 }
 
 ////////////////////////////////////////////////////////////

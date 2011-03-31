@@ -99,6 +99,14 @@ public:
 	cpLayers getShapeLayers() { return shapeLayers; }
 	void setShapeLayers(cpLayers l);
 	
+	void setVelocityFunc(cpBodyVelocityFunc f);
+
+	// Set the velocity function to ignore gravity, and set motion to zero
+	void freeze();
+	
+	// Set the velocity function to the default
+	void unFreeze();
+	
 	virtual void resetPhysics();
 	virtual void destroyPhysics();
 	cpBody* body;
@@ -122,6 +130,7 @@ public:
 	
 protected:
 	//void //checkcollisions();
+	cpBodyVelocityFunc defaultVelocityFunc;
 
 private:
 	bool staticBody;

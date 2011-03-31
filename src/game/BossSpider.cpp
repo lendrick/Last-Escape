@@ -141,8 +141,7 @@ bool BossSpider::doDamage(float damage) {
 void BossSpider::die() {
 	setCanCollide(false);
 	dying = true;
-	speed_x = 0;
-	speed_y = 0;
+	freeze();
 	setCurrentAnimation("die");
 	fireSound->playSound();
 }

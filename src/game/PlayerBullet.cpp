@@ -37,7 +37,9 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	
 	body->v.x = speed_x;
 	body->v.y = speed_y;
-	body->velocity_func = no_gravity;
+	body->a = deg2rad(angle - 90);
+	
+	setVelocityFunc(no_gravity);
 	
 	// Put it in the PLayerBullets group so it doesn't collide with other PlayerBullets
 	shape->group = PhysicsGroup::PlayerBullets;
@@ -75,6 +77,7 @@ void PlayerBullet::collide(Actor& otherActor) {
 void PlayerBullet::update(float dt) {
 	//cout << "bullet " << body->p.x << " " << body->p.y << "\n";
 	bulletTime += dt;
+	//cout << "angle " << rad2deg(body->a) << "\n";
 
 	updateSpriteFacing();
 	//checkcollisions();

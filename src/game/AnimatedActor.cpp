@@ -113,24 +113,12 @@ void AnimatedActor::draw()
 }
 
 void AnimatedActor::doUpdate(float dt) {
-        if(damageTimer > 0.0f)
-          damageTimer -= dt;
-        else
-          damageTimer = 0.0f;
-        
-        update(dt);
-
-		if(body && game_map) {
-			// pos is the center of the actor.
-			sf::Vector2f pos = game_map->cp2sfml(body->p);
-			/*
-			if(this->isPlayer()) {
-				std::cout << "player at SFML " << pos.x << ", " << pos.y << " that is cp " << body->p.x << ", " << body->p.y << std::endl;
-			}
-			*/
-			// but we want the center of his feet, right?
-			setPos(pos.x, pos.y+height/2);
-		}
+	if(damageTimer > 0.0f)
+		damageTimer -= dt;
+	else
+		damageTimer = 0.0f;
+	
+	update(dt);
 }
 
 std::string AnimatedActor::animationName() {
