@@ -36,6 +36,7 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	experienceValue = 0;
 	body = NULL;
 	shape = NULL;
+	grounded = 0;
 	actorName = "Unnamed Actor";
 	shapeLayers = CP_ALL_LAYERS;
 	this->staticBody = staticBody;
@@ -144,7 +145,8 @@ void Actor::destroy() {
 }
 
 bool Actor::isGrounded() {
-	return game_map->isGrounded(*this);
+	//return game_map->isGrounded(*this);
+	return(grounded > 0);
 }
 
 bool Actor::isDestroyed() {

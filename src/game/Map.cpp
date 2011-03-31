@@ -386,10 +386,40 @@ bool Map::setupPhysics()
 		map_begin_collide, // callback on initial collision
 		map_colliding, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		NULL, // after the shapes separate
+		map_end_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Player, PhysicsType::Ground, //types of objects
+		map_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);
+
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Enemy, PhysicsType::Ground, //types of objects
+		map_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Neutral, PhysicsType::Ground, //types of objects
+		map_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);
+		
 	return true;
 }
 
@@ -417,6 +447,39 @@ static int map_colliding(cpArbiter *arb, cpSpace *space, void *data) {
 	actor1->onColliding(*actor2);
 	actor2->onColliding(*actor1);
 	return 1;
+}
+
+static void map_end_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	Actor *actor2 = (Actor *) b->data;
+	
+	//cout << "Collision: " << actor1->actorName << " " << actor2->actorName << "\n"; 
+	actor1->onColliding(*actor2);
+	actor2->onColliding(*actor1);
+}
+
+static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	
+	//cout << "Ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	actor1->grounded++;
+	return 1;
+}
+
+static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	
+	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	actor1->grounded--;
 }
 
 bool Map::isLoaded() {

@@ -115,6 +115,7 @@ public:
 	
 	int currentLevel;
 	int experienceValue;
+	int grounded;
 	std::string actorName;
 	
 protected:

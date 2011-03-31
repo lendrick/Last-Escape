@@ -107,8 +107,10 @@ void Player::init() {
 	this->setCurrentAnimation("idle");
 	resetPhysics();
 	
-	if(shape)
+	if(shape) {
 		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy;
+		shape->collision_type = PhysicsType::Player;
+	}
 }
 
 StartPoint * Player::findStart() {
