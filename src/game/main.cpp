@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 		float frameTime = std::min(ElapsedTime, 0.05f);
 
 		// Clear screen
-		//App->Clear();
+		App->Clear();
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			if(!paused) {
@@ -162,8 +162,6 @@ int main(int argc, char** argv)
 			}
 
 			cleanup();
-
-			App->Clear(sf::Color(200, 0, 0));
 
 			game_map->renderLandscape();
 			game_map->renderBackground();
