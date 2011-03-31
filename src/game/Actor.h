@@ -18,6 +18,11 @@
 #pragma once
 #include "globals.h"
 #include <string>
+
+#include <chipmunk/chipmunk.h>
+#include <chipmunk/chipmunk_unsafe.h>
+
+
 class Player;
 
 class Actor {
@@ -84,6 +89,12 @@ public:
 	
 	int getExperienceValue();
 	void setExperienceValue(int exp);
+	
+	void resetPhysics();
+	void destroyPhysics();
+	cpBody* body;
+	cpShape* shape;
+
 
 	sf::Image image;
 	sf::Sprite sprite;

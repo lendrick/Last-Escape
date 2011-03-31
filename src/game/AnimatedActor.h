@@ -17,9 +17,6 @@
 
 #pragma once
 
-#include <chipmunk/chipmunk.h>
-#include <chipmunk/chipmunk_unsafe.h>
-
 #include <fstream>
 #include <sstream>
 
@@ -61,9 +58,6 @@ public:
 	
 	virtual bool move(float dx, float dy);
 
-	void resetPhysics();
-	cpBody* body;
-	cpShape* shape;
 protected:
 	void flipDirection();
 	int facing_direction;
@@ -71,8 +65,8 @@ protected:
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
 	int frame_h, frame_w;
         
-        float life;
-        float immunityTime;
+	float life;
+	float immunityTime;
 	float damageTimer;
 private:
 	void init();

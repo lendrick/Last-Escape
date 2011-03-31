@@ -36,10 +36,13 @@ Actor::Actor(float x, float y) {
 	hidden = false;
 	currentLevel = 1;
 	experienceValue = 0;
+	body = NULL;
+	shape = NULL;
 	actorName = "Unnamed Actor";
 }
 
 Actor::~Actor() {
+	destroyPhysics();
 }
 
 void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
@@ -76,6 +79,7 @@ void Actor::getPos(float &px, float &py) {
 void Actor::setSize(int w, int h) {
 	height = h;
 	width = w;
+	resetPhysics();
 }
 
 void Actor::getSize(int &w, int &h) {
@@ -216,3 +220,38 @@ void Actor::setExperienceValue(int exp) {
 	experienceValue = exp;
 }
 	
+void Actor::resetPhysics()
+{
+	// No map -> no physics
+	if(!game_map || !game_map->physSpace) {
+		return;
+	}
+
+	destroyPhysics();
+	// chipmunk wants the center of the actor. You said pos_x/y is the center of his feet.
+	body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
+	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
+// 	body->velocity_func = playerUpdateVelocity;
+
+	shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
+	shape->e = 0.0f; shape->u = 2.0f;
+// 	shape->collision_type = 1;
+// 	shape->data = this;
+}
+
+void Actor::destroyPhysics() {
+	if(body) {
+		if(shape) 
+			cpSpaceRemoveShape(game_map->physSpace, shape);
+		
+		cpSpaceRemoveBody(game_map->physSpace, body);
+		
+		if(shape)
+			cpShapeFree(shape);
+		
+		cpBodyFree(body);
+
+		shape = NULL;
+		body = NULL;
+	}
+}
