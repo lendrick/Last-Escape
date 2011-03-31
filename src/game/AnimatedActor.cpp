@@ -39,7 +39,7 @@ AnimatedActor::~AnimatedActor()
 }
 
 void AnimatedActor::init() {
-	facing_direction = FACING_RIGHT;
+	facing_direction = Facing::Right;
 	currentAnimation = NULL;
 	dying = false;
 	immunityTime = 0.05f;
@@ -55,11 +55,11 @@ void AnimatedActor::setImage(std::string filename)
 }
 
 void AnimatedActor::updateSpriteFacing() {
-	if (facing_direction == FACING_RIGHT)
+	if (facing_direction == Facing::Right)
 	{
 		sprite.FlipX(false);
 	}
-	else if (facing_direction == FACING_LEFT)
+	else if (facing_direction == Facing::Left)
 	{
 		sprite.FlipX(true);
 	}
@@ -164,14 +164,14 @@ void AnimatedActor::resetCurrentAnimation() {
 }
 
 void AnimatedActor::flipDirection() {
-	if(facing_direction == FACING_LEFT) {
-		facing_direction = FACING_RIGHT;
-	} else if(facing_direction == FACING_RIGHT) {
-		facing_direction = FACING_LEFT;
-	} else if(facing_direction == FACING_UP) {
-		facing_direction = FACING_DOWN;
-	} else if(facing_direction == FACING_DOWN) {
-		facing_direction = FACING_UP;
+	if(facing_direction == Facing::Left) {
+		facing_direction = Facing::Right;
+	} else if(facing_direction == Facing::Right) {
+		facing_direction = Facing::Left;
+	} else if(facing_direction == Facing::Up) {
+		facing_direction = Facing::Down;
+	} else if(facing_direction == Facing::Down) {
+		facing_direction = Facing::Up;
 	}
 }
 

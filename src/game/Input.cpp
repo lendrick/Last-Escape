@@ -29,7 +29,7 @@ Input::~Input() {
 }
 
 void Input::initFrame() {
-	inputDirection = FACING_NONE;
+	inputDirection = Facing::None;
 	inputJump = false;
 	inputShoot = false;
 	inputQuit = false;
@@ -92,18 +92,18 @@ void Input::poll() {
 		const sf::Input& appInput = App->GetInput();
 
 		if(appInput.IsKeyDown(inputs[INPUT_LEFT].key) && !appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
-			inputDirection = FACING_LEFT;
+			inputDirection = Facing::Left;
 		} else if(appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
-			inputDirection = FACING_RIGHT;
+			inputDirection = Facing::Right;
 		} 
 		
 		float xAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisX);
 		float yAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisY);
 		
 		if(xAxis > 50) 
-			inputDirection = FACING_RIGHT;
+			inputDirection = Facing::Right;
 		else if(xAxis < -50)
-			inputDirection = FACING_LEFT;
+			inputDirection = Facing::Left;
 		
 		if(yAxis > 50)
 			inputCrouch = true;

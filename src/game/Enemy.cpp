@@ -54,7 +54,7 @@ void Enemy::patrol(float dt) {
 	float delta_y = speed_y * dt;
 
 	int check_pos = 12;
-	if(facing_direction == FACING_LEFT) check_pos = -check_pos;
+	if(facing_direction == Facing::Left) check_pos = -check_pos;
 	if(move(delta_x, delta_y)) {
 		// Turn around if you run into something.
 		//cout << "obstructed\n";

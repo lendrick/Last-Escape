@@ -43,7 +43,7 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 	//cout << sound_file;
 	fireSound = soundCache[sound_file];
 
-	facing_direction = FACING_LEFT;
+	facing_direction = Facing::Left;
 	setDrawOffset(15, 64);
 	setFrameSize(32, 64);
 
@@ -73,15 +73,15 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 void EnemyFlyer::update(float dt) {
 	cpVect force = cpv(0, 0);
 	
-	if(facing_direction == FACING_LEFT) {
+	if(facing_direction == Facing::Left) {
 	  if(body->p.x < x1) {
-			facing_direction = FACING_RIGHT;
+			facing_direction = Facing::Right;
 		} else if(body->v.x > -fly_speed) {
 			force.x = -75;
 		}
-	} else if(facing_direction == FACING_RIGHT) {
+	} else if(facing_direction == Facing::Right) {
 	  if(body->p.x > x2) {
-			facing_direction = FACING_LEFT;
+			facing_direction = Facing::Left;
 		} else if(body->v.x < fly_speed) {
 			force.x = 75;
 		}

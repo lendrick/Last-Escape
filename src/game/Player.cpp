@@ -101,7 +101,7 @@ void Player::init() {
 
 	std::cout << "Init player at " << sx << ", " << sy << std::endl;
 
-	facing_direction = FACING_RIGHT;
+	facing_direction = Facing::Right;
 	crouched = false;
 
 	this->setCurrentAnimation("idle");
@@ -175,7 +175,7 @@ void Player::shoot() {
 		energy -= weapons[currentWeapon].energy_cost;
 
 		float bulletX = pos_x + 30.0f, bulletY = 0.0f;
-		if(facing_direction == FACING_LEFT)
+		if(facing_direction == Facing::Left)
 			bulletX = pos_x - 30.0f;
 
 		if(crouched) {
@@ -228,7 +228,7 @@ void Player::update(float dt) {
 		this->die();
 	}
 
-	int move_direction = FACING_NONE;
+	int move_direction = Facing::None;
 
 	// recharge energy
 	if(energy > 0)
@@ -239,16 +239,16 @@ void Player::update(float dt) {
 
 	// left/right move
 	shape->u = 2.0f;
-	if (!dying && recoveryTimer <= 0 && input.direction() == FACING_LEFT) {
-		move_direction = FACING_LEFT;
+	if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Left) {
+		move_direction = Facing::Left;
 		if(body->v.x > -speed_max)
 			cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
 		shape->u = 0.1f;
 	}
-	else if (!dying && recoveryTimer <= 0 && input.direction() == FACING_RIGHT) {
-		move_direction = FACING_RIGHT;
+	else if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Right) {
+		move_direction = Facing::Right;
 		if(body->v.x < speed_max)
 			cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
 		facing_direction = move_direction;
@@ -265,7 +265,7 @@ void Player::update(float dt) {
 	if (!dying && recoveryTimer <= 0 && input.shooting())
 		shoot();
 
-	if(!dying && recoveryTimer <= 0 && isGrounded() && input.crouching() && input.direction() != FACING_LEFT && input.direction() != FACING_RIGHT)
+	if(!dying && recoveryTimer <= 0 && isGrounded() && input.crouching() && input.direction() != Facing::Left && input.direction() != Facing::Right)
     {
         //height = 32;
 		crouched = true;
@@ -422,7 +422,7 @@ bool Player::doDamage(float damage) {
                 damageTimer = immunityTime;
                 recoveryTimer = recoveryTime;
 
-                if(facing_direction == FACING_LEFT) {
+                if(facing_direction == Facing::Left) {
                         speed_x = 300;
                 } else {
                         speed_x = -300;

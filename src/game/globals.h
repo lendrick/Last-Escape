@@ -50,12 +50,14 @@ extern std::string startMap;
 extern bool debugMode;
 extern const double time_step;
 
-enum Facing {
-	FACING_NONE,
-	FACING_UP,
-	FACING_DOWN,
-	FACING_LEFT,
-	FACING_RIGHT
+namespace Facing {
+	enum Enum {
+		None,
+		Up,
+		Down,
+		Left,
+		Right
+	};
 };
 
 namespace PhysicsLayer {

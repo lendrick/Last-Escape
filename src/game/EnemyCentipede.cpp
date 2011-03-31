@@ -84,16 +84,16 @@ void EnemyCentipede::update(float dt) {
 	time += dt;
 	if(!dying) {
 		float mx, my;
-		if(facing_direction == FACING_LEFT) {
+		if(facing_direction == Facing::Left) {
 			mx = -1;
 			my = 0;
-		} else if(facing_direction == FACING_RIGHT) {
+		} else if(facing_direction == Facing::Right) {
 			mx = 1;
 			my = 0;
 		}
 
 		int check_pos = 12;
-		if(facing_direction == FACING_LEFT) {
+		if(facing_direction == Facing::Left) {
 			check_pos = -12;
 		}
 
@@ -179,7 +179,7 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	setDrawOffset(16, 11);
 	setFrameSize(32, 16);
 	facing_direction = direction;
-	if(facing_direction == FACING_LEFT) {
+	if(facing_direction == Facing::Left) {
 		speed_x = -fly_speed;
 		pos_x -= 8;
 	} else {

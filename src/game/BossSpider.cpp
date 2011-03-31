@@ -93,16 +93,16 @@ void BossSpider::update(float dt) {
 		speed_y += speed_gravity*dt;
 		if(isGrounded()) speed_y = 0;
 
-		if(facing_direction == FACING_LEFT) {
+		if(facing_direction == Facing::Left) {
 			speed_x = -walk_speed * dt;
 			if(patrolTime > patrolInterval) {
-				facing_direction = FACING_RIGHT;
+				facing_direction = Facing::Right;
 				patrolTime = 0;
 			}
 		} else {
 			speed_x = walk_speed * dt;
 			if(patrolTime > patrolInterval) {
-				facing_direction = FACING_LEFT;
+				facing_direction = Facing::Left;
 				patrolTime = 0;
 			}
 		}

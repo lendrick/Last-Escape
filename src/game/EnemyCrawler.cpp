@@ -87,13 +87,13 @@ void EnemyCrawler::update(float dt) {
 		 float dx = g_player->pos_x - pos_x;
 		 if (-vision_range < dx && dx < -vision_min_range) {
 		 speed_x = -walk_speed;
-		 facing_direction = FACING_RIGHT;
+		 facing_direction = Facing::Right;
 		 } else if (vision_min_range < dx && dx < vision_range) {
 		 speed_x = walk_speed;
-		 facing_direction = FACING_LEFT;
+		 facing_direction = Facing::Left;
 		 }
 		 */
-		if(facing_direction == FACING_LEFT) {
+		if(facing_direction == Facing::Left) {
 			speed_x = -walk_speed;
 		} else {
 			speed_x = walk_speed;
