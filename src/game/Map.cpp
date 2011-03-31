@@ -311,7 +311,7 @@ bool Map::setupPhysics()
 		for (int j=0; j<MAP_TILES_Y; j++) {
 			if(collision[i][j] == collision[i+1][j]) {
 				if(prev_different) {
-					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j));
+					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					prev_different = false;
 					cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 0);
 					seg->e = 0.0f;
@@ -320,14 +320,14 @@ bool Map::setupPhysics()
 				}
 			} else {
 				if(!prev_different) {
-					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j));
+					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
 					prev_different = true;
 				}
 			}
 		}
 		
 		if(prev_different) {
-			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y));
+			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 			seg->e = 0.0f;
 			seg->u = 1.0f;
@@ -342,7 +342,7 @@ bool Map::setupPhysics()
 		for (int i=0; i<MAP_TILES_X; i++) {	
 			if(collision[i][j] == collision[i][j + 1]) {
 				if(prev_different) {
-					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * (j + 1)));
+					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					prev_different = false;
 					cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 0);
 					seg->e = 0.0f;
@@ -351,14 +351,14 @@ bool Map::setupPhysics()
 				}
 			} else {
 				if(!prev_different) {
-					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * (j + 1)));
+					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
 					prev_different = true;
 				}
 			}
 		}
 			
 		if(prev_different) {
-			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X, TILE_SIZE * (j + 1)));
+			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 			seg->e = 0.0f;
 			seg->u = 1.0f;
