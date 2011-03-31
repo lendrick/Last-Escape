@@ -298,8 +298,76 @@ bool Map::setupPhysics()
 
 	// Create a physics collision box for each collision tile.
 	// If PROFILING SHOWS that this is slow, try to replace them by "floor lines".
-	for (int i=0; i<MAP_TILES_X; i++) {
+	
+	// Vertical Pass
+	/* This only accounts for on and off collision tiles now, but would be easy
+	 * enough to expand to working with diagonals as well, if we do a diagonal
+	 * pass and account for multiple tile types.
+	 */
+	for (int i=0; i<MAP_TILES_X - 1; i++) {
+		bool prev_different = false;
+		cpVect p1, p2;
+		
 		for (int j=0; j<MAP_TILES_Y; j++) {
+			if(collision[i][j] == collision[i+1][j]) {
+				if(prev_different) {
+					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j));
+					prev_different = false;
+					cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 0);
+					seg->e = 0.0f;
+					seg->u = 1.0f;
+					cpSpaceAddShape(physSpace, seg);
+				}
+			} else {
+				if(!prev_different) {
+					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j));
+					prev_different = true;
+				}
+			}
+		}
+		
+		if(prev_different) {
+			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y));
+			cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
+			seg->e = 0.0f;
+			seg->u = 1.0f;
+			cpSpaceAddShape(physSpace, seg);
+		}
+		prev_different = false;
+	}
+	
+	for (int j=0; j<MAP_TILES_Y - 1; j++) {
+		bool prev_different = false;
+		cpVect p1, p2;
+		for (int i=0; i<MAP_TILES_X; i++) {	
+			if(collision[i][j] == collision[i][j + 1]) {
+				if(prev_different) {
+					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * (j + 1)));
+					prev_different = false;
+					cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 0);
+					seg->e = 0.0f;
+					seg->u = 1.0f;
+					cpSpaceAddShape(physSpace, seg);
+				}
+			} else {
+				if(!prev_different) {
+					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * (j + 1)));
+					prev_different = true;
+				}
+			}
+		}
+			
+		if(prev_different) {
+			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X, TILE_SIZE * (j + 1)));
+			cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
+			seg->e = 0.0f;
+			seg->u = 1.0f;
+			cpSpaceAddShape(physSpace, seg);
+		}
+		prev_different = false;
+	}
+
+			/*
 			int current_tile = collision[i][j];
 			int above = 0;
 			int left = 0;
@@ -311,8 +379,8 @@ bool Map::setupPhysics()
 				above = collision[i][j-1];
 			
 			cpVect topleft = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * j));
-			cpVect topright = sfml2cp(sf::Vector2f((TILE_SIZE + 1)* i, TILE_SIZE * j));
-			cpVect bottomleft = sfml2cp(sf::Vector2f(TILE_SIZE * i, (TILE_SIZE + 1) * j));
+			cpVect topright = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j));
+			cpVect bottomleft = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE  * (j + 1)));
 			
 			if((current_tile == 0 && above != 0) || 
 				 (current_tile != 0 && above == 0))
@@ -331,7 +399,7 @@ bool Map::setupPhysics()
 				seg->u = 1.0f;
 				cpSpaceAddShape(physSpace, seg);				
 			}
-			
+			*/
 			
 			/*
 			if(collision[i][j]) {
@@ -353,8 +421,8 @@ bool Map::setupPhysics()
 				std::cout << "Added block at SFML " << sfTileCenter.x << ", " << sfTileCenter.y << " that's cp " << offs.x << ", " << offs.y << std::endl;
 			}
 			*/
-		}
-	}
+		//}
+	//}
 
 	return true;
 }
