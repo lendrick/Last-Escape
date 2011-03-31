@@ -29,8 +29,6 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 
 	fly_speed = 200.f;
 
-	speed_x = 0;
-	speed_y = 0;
 	patrolCountdown = patrolLength;
 
 	//pick a random death sound
@@ -61,6 +59,11 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 	tmp->addFrame(5, .1f);
 	tmp->addFrame(6, .1f);
 	tmp->addFrame(7, .1f);
+	
+	x1 = body->p.x - 100;
+	x2 = body->p.x + 100;
+	y1 = body->p.y - 40;
+	y2 = body->p.y + 40;
 
 	setCurrentAnimation("fly");
 	//setPlaceholder(sf::Color(255, 0, 0), 16, 32, 0.5f, 1.0f);
@@ -68,25 +71,28 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 
 
 void EnemyFlyer::update(float dt) {
-	const float vision_range = 320;
-
-	patrolCountdown--;
-
-	if(patrolCountdown == 0) {
-		flipDirection();
-		patrolCountdown = patrolLength;
-	}
-
-	float mx, my;
+	cpVect force = cpv(0, 0);
+	
 	if(facing_direction == FACING_LEFT) {
-		mx = -1;
-		my = 0;
+	  if(body->p.x < x1) {
+			facing_direction = FACING_RIGHT;
+		} else if(body->v.x > -fly_speed) {
+			force.x = -75;
+		}
 	} else if(facing_direction == FACING_RIGHT) {
-		mx = 1;
-		my = 0;
+	  if(body->p.x > x2) {
+			facing_direction = FACING_LEFT;
+		} else if(body->v.x < fly_speed) {
+			force.x = 75;
+		}
 	}
-	if(!dying) move(mx, my);
 
+	if(body->p.y < y1 && body->v.y < fly_speed) {
+		force.y = 500;
+	}
+	
+	cpBodyApplyImpulse(body, force, cpv(0, 0));
+	
 	updateSpriteFacing();
 
 	//checkcollisions();

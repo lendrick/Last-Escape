@@ -28,4 +28,7 @@ public:
 private:
 	int patrolCountdown, patrolLength;
 	float fly_speed;
+	
+	// Limits that the flyer should attempt to stay inside.
+	float x1, y1, x2, y2;
 }; 
