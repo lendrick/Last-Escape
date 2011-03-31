@@ -300,6 +300,40 @@ bool Map::setupPhysics()
 	// If PROFILING SHOWS that this is slow, try to replace them by "floor lines".
 	for (int i=0; i<MAP_TILES_X; i++) {
 		for (int j=0; j<MAP_TILES_Y; j++) {
+			int current_tile = collision[i][j];
+			int above = 0;
+			int left = 0;
+			
+			if(i > 0)
+				left = collision[i-1][j];
+			
+			if(j > 0)
+				above = collision[i][j-1];
+			
+			cpVect topleft = sfml2cp(sf::Vector2f(TILE_SIZE * i, TILE_SIZE * j));
+			cpVect topright = sfml2cp(sf::Vector2f((TILE_SIZE + 1)* i, TILE_SIZE * j));
+			cpVect bottomleft = sfml2cp(sf::Vector2f(TILE_SIZE * i, (TILE_SIZE + 1) * j));
+			
+			if((current_tile == 0 && above != 0) || 
+				 (current_tile != 0 && above == 0))
+			{
+				cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, topleft, topright, 1);
+				seg->e = 0.0f;
+				seg->u = 1.0f;
+				cpSpaceAddShape(physSpace, seg);
+			}
+				
+			if((current_tile == 0 && left != 0) || 
+				 (current_tile != 0 && left == 0))
+			{
+				cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, topleft, bottomleft, 1);
+				seg->e = 0.0f;
+				seg->u = 1.0f;
+				cpSpaceAddShape(physSpace, seg);				
+			}
+			
+			
+			/*
 			if(collision[i][j]) {
 				// Tile box around 0,0
 				cpVect verts[] = {
@@ -308,6 +342,7 @@ bool Map::setupPhysics()
 					cpv( TILE_SIZE/2.0f,  TILE_SIZE/2.0f),
 					cpv( TILE_SIZE/2.0f, -TILE_SIZE/2.0f),
 				};
+				
 				// Move to center of the tile.
 				sf::Vector2f sfTileCenter = sf::Vector2f(TILE_SIZE*i + TILE_SIZE/2.0f, TILE_SIZE*j + TILE_SIZE/2.0f);
 				cpVect offs = sfml2cp(sfTileCenter);
@@ -317,6 +352,7 @@ bool Map::setupPhysics()
 // 				shape->collision_type = PhysType::MapFloor;
 				std::cout << "Added block at SFML " << sfTileCenter.x << ", " << sfTileCenter.y << " that's cp " << offs.x << ", " << offs.y << std::endl;
 			}
+			*/
 		}
 	}
 

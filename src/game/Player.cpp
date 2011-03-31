@@ -100,25 +100,12 @@ void Player::init() {
 	float sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
-// 		sy -= 100;
 		setPos(sx, sy);
 	}
 
 	std::cout << "Init player at " << sx << ", " << sy << std::endl;
 
 	this->resetPhysics();
-
-	/*
-	// Find the first start point, and move the player there
-	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-	{
-		if ((*it)->isStartPoint())
-		{
-			setPos((*it)->pos_x, (*it)->pos_y);
-			break;
-		}
-	}
-	*/
 
 	facing_direction = FACING_RIGHT;
 	crouched = false;
