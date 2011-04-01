@@ -4,6 +4,7 @@
 			<frame number="1" time="0.2"/>
 			<frame number="2" time="0.2"/>
 			<frame number="3" time="0.2"/>
+			<frame number="4" time="0.2"/>
 			<frame number="0" time="0.2"/>
 		</frames>
 	</animation>
