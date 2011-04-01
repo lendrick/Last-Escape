@@ -181,8 +181,12 @@ int main(int argc, char** argv)
 
 		// Clear screen
 		//App->Clear();
-
+		
 		if(game_map != NULL && game_map->isLoaded()) {
+			// This function loads a new map if one has been set with SetNextMap.
+			// Due to physics functions, we can't switch maps mid-loop.
+			game_map->loadNextMap();
+			
 			if(!paused) {
 				//update(frameTime);
 				update(time_step);

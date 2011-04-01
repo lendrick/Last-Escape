@@ -108,7 +108,7 @@ void Player::init() {
 	resetPhysics();
 	
 	if(shape) {
-		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy;
+		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy|PhysicsLayer::EnemyBullet;
 		shape->collision_type = PhysicsType::Player;
 	}
 }
@@ -358,7 +358,7 @@ void Player::onColliding(Actor & otherActor)
 			std::string mapname = static_cast<ExitPoint *>(&otherActor)->getMap();
 			if(mapname == "credits_map.tmx") hidden = true;
 			if(!mapname.empty()) {
-				game_map->loadMap(mapname);
+				game_map->setNextMap(mapname);
 			}
 		}
 	}
@@ -367,7 +367,7 @@ void Player::onColliding(Actor & otherActor)
 void respawn()
 {
 	ui_showMenu();
-	game_map->loadMap(game_map->currentFilename);
+	game_map->setNextMap(game_map->currentFilename);
 }
 
 void Player::die() {

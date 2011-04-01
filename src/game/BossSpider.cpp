@@ -31,8 +31,6 @@ BossSpider::BossSpider(float x, float y)
 	setImage("spider.png");
 	walk_speed = 100.0f;
 
-	speed_x = 0;
-	speed_y = 0;
 	dying = false;
 	life = 5;
 
@@ -58,7 +56,7 @@ BossSpider::BossSpider(float x, float y)
 	std::string sound_file = s + "-BugSplat.ogg";
 	//cout << sound_file;
 	fireSound = soundCache[sound_file];
-
+	shape->u = 0.1f;
 
 	tmp = addAnimation("walk");
 	tmp->addFrame(0, .2f);
@@ -90,24 +88,23 @@ void BossSpider::update(float dt) {
 		const float vision_range = 320;
 		const float vision_min_range = 32;
 
-		speed_y += speed_gravity*dt;
-		if(isGrounded()) speed_y = 0;
-
 		if(facing_direction == Facing::Left) {
-			speed_x = -walk_speed * dt;
+			if(body->v.x > -walk_speed)
+				cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
+			
 			if(patrolTime > patrolInterval) {
 				facing_direction = Facing::Right;
 				patrolTime = 0;
 			}
 		} else {
-			speed_x = walk_speed * dt;
+			if(body->v.x < walk_speed)
+					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
+			
 			if(patrolTime > patrolInterval) {
 				facing_direction = Facing::Left;
 				patrolTime = 0;
 			}
 		}
-
-		move(speed_x, speed_y);
 
 		updateSpriteFacing();
 

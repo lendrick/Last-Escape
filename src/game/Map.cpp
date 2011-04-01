@@ -269,6 +269,17 @@ void Map::loadMap(string filename) {
 	loaded = true;
 }
 
+void Map::setNextMap(string filename) {
+	nextMap = filename;
+}
+
+void Map::loadNextMap() {
+	if(nextMap != "") {
+		loadMap(nextMap);
+		nextMap = "";
+	}
+}
+
 void Map::initPhysics()
 {
 	if(physSpace) {
@@ -383,6 +394,16 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Player, PhysicsType::Enemy, //types of objects
+		map_begin_collide, // callback on initial collision
+		map_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Player, PhysicsType::Sensor, //types of objects
 		map_begin_collide, // callback on initial collision
 		map_colliding, // any time the shapes are touching
 		NULL, // after the collision has been processed
@@ -614,7 +635,7 @@ void Map::createSegment(cpVect &p1, cpVect &p2, bool ground) {
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 	seg->e = 0.0f;
 	seg->u = 1.0f;
-	seg->layers = PhysicsLayer::Map;
+	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
 	if(ground)
 		seg->collision_type = PhysicsType::Ground;
 	else

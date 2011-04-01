@@ -50,6 +50,7 @@ Bumper::Bumper(Actor * actor, int facing_direction, float thickness) {
 	
 	shape->data = (void *) this;
 	shape->sensor = true;
+	shape->layers = PhysicsLayer::Map|PhysicsLayer::Enemy;
 	shape->collision_type = PhysicsType::Bumper;
 	shape->group = PhysicsGroup::Bumpers;
 	grounded = 0;

@@ -80,6 +80,7 @@ namespace PhysicsType {
 		Item,
 		Neutral,
 		PlayerBullet,
+		CentipedeBullet,
 		Bumper
 	};
 };

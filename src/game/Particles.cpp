@@ -35,6 +35,8 @@ ParticleEmitter::ParticleEmitter(float x, float y)
 	maxParticles = int(maxAge*emissionRate);
 	timeLeft = 0;
 	nextIdx = 0;
+	setVelocityFunc(no_gravity);
+	setCanCollide(false);
 }
 
 void ParticleEmitter::update(float dt) {

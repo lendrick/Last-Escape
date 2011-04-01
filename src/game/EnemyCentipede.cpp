@@ -24,17 +24,15 @@
 #include <SFML/Graphics.hpp>
 
 EnemyCentipede::EnemyCentipede(float x, float y)
-:Enemy(x, y, 32.0f, 25.0f)
+:EnemyPatroller(x, y, 32.0f, 25.0f)
 {
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
 	setImage("centipede.png");
-	walk_speed = 120.f;
+	walk_speed = 90.f;
 	shootInterval = 2.5f;
 	lastShot = 0;
 	time = 0;
 
-	speed_x = 0;
-	speed_y = 0;
 	dying = false;
 
 	setDrawOffset(32, 30);
@@ -73,83 +71,21 @@ EnemyCentipede::EnemyCentipede(float x, float y)
 	tmp->addFrame(9, .1f);
 
 	setCurrentAnimation("walk");
-
-	checkGround = false;
 }
 
 void EnemyCentipede::update(float dt) {
-	//checkGround = false;
-	float shootInterval = float(rand() % 1000);
-
-	time += dt;
 	if(!dying) {
-		float mx, my;
-		if(facing_direction == Facing::Left) {
-			mx = -1;
-			my = 0;
-		} else if(facing_direction == Facing::Right) {
-			mx = 1;
-			my = 0;
+		time += dt;
+		if(lastShot + shootInterval <= time && animationName() != "shoot") {
+			setCurrentAnimation("shoot");
+			shape->u = 1.0f;
+		} else {
+			shape->u = 0.1f;
 		}
-
-		int check_pos = 12;
-		if(facing_direction == Facing::Left) {
-			check_pos = -12;
-		}
-
-		if(isGrounded() && animationName() != "shoot") {
-			speed_y = 0;
-			if(move(mx, my)) {
-				// Turn around if you run into something.
-				//cout << "obstructed\n";
-				flipDirection();
-			} 
-			
-			
-			/* TODO: Fix this to work with physics */
-			/*
-			else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
-				// Turn around if there's a pit up ahead.
-				//cout << "pit\n";
-				//debugPixel.SetPosition(
-				//	0.5f + (int)(pos_x - game_map->cam_x),
-				//											 0.5f + (int)(pos_y - game_map->cam_y));
-				//checkGround = true;
-				flipDirection();
-			}*/
-
-			if(lastShot + shootInterval < time) {
-				lastShot = time;
-				setCurrentAnimation("shoot");
-			}
-		} else if(!isGrounded()) {
-			const int speed_gravity = 960;
-			speed_y += speed_gravity*dt;
-
-			float delta_x = speed_x*dt;
-			float delta_y = speed_y*dt;
-			move(delta_x, delta_y);
-		}
-
-		updateSpriteFacing();
-
-		//checkcollisions();
+		
+		if(animationName() != "shoot")
+			EnemyPatroller::update(dt);
 	}
-}
-
-void EnemyCentipede::draw() {
-	//cout << "centipede frame " << currentAnimation->getFrame() << "\n";
-	AnimatedActor::draw();
-
-	//if(checkGround) App->Draw(debugPixel);
-}
-
-void EnemyCentipede::die() {
-	setCanCollide(false);
-	dying = true;
-	freeze();
-	setCurrentAnimation("die");
-	fireSound->playSound();
 }
 
 void EnemyCentipede::onAnimationComplete(std::string anim) {
@@ -159,20 +95,21 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
 	} else if(anim == "shoot") {
 		//shoot a projectile
+		lastShot = time;
 		setCurrentAnimation("walk");
+		int px = pos_x + 8;
+		if(facing_direction == Facing::Left) px -= 16;
 		EnemyCentipedeProjectile * projectile =
-			new EnemyCentipedeProjectile(facing_direction, (int)pos_x, int(pos_y - 20.0f));
+			new EnemyCentipedeProjectile(facing_direction, px, int(pos_y - 20.0f));
 	}
 }
-
-
 
 EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, int start_y)
 	: Enemy(start_x, start_y, 8.0f, 4.0f)
 {
 	setImage("centipedeprojectile.png");
-	fly_speed = 300.0f;
-	speed_y = -200.0f;
+	fly_speed = 400.0f;
+	speed_y = 200.0f;
 	dying = false;
 
 	setDrawOffset(16, 11);
@@ -180,10 +117,8 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	facing_direction = direction;
 	if(facing_direction == Facing::Left) {
 		speed_x = -fly_speed;
-		pos_x -= 8;
 	} else {
 		speed_x = fly_speed;
-		pos_x += 8;
 	}
 
 	Animation * tmp;
@@ -200,26 +135,22 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	tmp->addFrame(13, .5f);
 
 	setCurrentAnimation("fly");
+	
+	body->v = cpv(speed_x, speed_y);
 
+	shape->layers = PhysicsLayer::EnemyBullet;
+	shape->group = PhysicsGroup::EnemyBullets;
 }
 
 void EnemyCentipedeProjectile::update(float dt)
 {
-	if(!isGrounded()) {
-		const int speed_gravity = 960;
-		speed_y += speed_gravity*dt;
-
-		float delta_x = speed_x*dt;
-		float delta_y = speed_y*dt;
-
-		//cout << "fly " << delta_x << " " << delta_y << "\n";
-		if(move(delta_x, delta_y)) {
-			//cout << "impact\n";
-		}
-	} else {
-		//cout << "splat\n";
+	if(isGrounded()) {
 		setCurrentAnimation("splat");
 	}
+}
+
+void EnemyCentipedeProjectile::collide(Actor &otherActor) {
+	destroy();
 }
 
 void EnemyCentipedeProjectile::onAnimationComplete(std::string anim)

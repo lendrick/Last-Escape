@@ -66,6 +66,8 @@ public:
 
 	void loadMap(string filename);
 	void loadTileset(string filename);
+	void setNextMap(string filename);
+	void loadNextMap();
 	bool checkHorizontalLine(int x1, int x2, int y);
 	bool checkVerticalLine(int x, int y1, int y2);
 	void setCameraFollow(Actor * actor);
@@ -98,6 +100,7 @@ public:
 	bool loaded;
 
 	std::string currentFilename;
+	std::string nextMap;
 	
 
 	// Physics of the map.
