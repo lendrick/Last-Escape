@@ -14,7 +14,7 @@ project(chipmunk)
 # other options for the build, you can i.e. activate the ruby bindings by passing
 #   -D BUILD_RUBY_EXT=ON
 # to cmake. Other options analog
-option(BUILD_DEMOS "Build the demo applications" ON)
+option(BUILD_DEMOS "Build the demo applications" OFF)
 option(INSTALL_DEMOS "Install the demo applications" OFF)
 option(BUILD_SHARED "Build and install the shared library" OFF)
 option(BUILD_STATIC "Build as static library" ON)
@@ -35,10 +35,6 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ffast-math") # extend relea
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall") # extend debug-profile with -Wall
 
 add_subdirectory(src)
-
-if(BUILD_DEMOS)
-  add_subdirectory(Demo)
-endif(BUILD_DEMOS)
 
 if(BUILD_RUBY_EXT)
   add_subdirectory(ruby)
