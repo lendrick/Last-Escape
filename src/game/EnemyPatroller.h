@@ -16,26 +16,22 @@
  */
 
 #pragma once
-#include "EnemyPatroller.h"
+#include "Enemy.h"
+#include "Bumper.h"
 
-class EnemyCrawler : public EnemyPatroller
+class EnemyPatroller : public Enemy 
 {
 public:
-	EnemyCrawler(float x, float y);
-	virtual ~EnemyCrawler();
-	/*
-	virtual ~EnemyCrawler();
+	EnemyPatroller(float x, float y, float w, float h);
+	virtual ~EnemyPatroller();
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
-	//virtual void doDamage(float damage);
 	virtual void onAnimationComplete(std::string anim);
-	//virtual void resetPhysics();
-	//virtual void destroyPhysics();
 	virtual void onBumperCollide(int facing);
 protected:
 	float walk_speed;
 	Bumper* leftBumper;
 	Bumper* rightBumper;
-	*/
-}; 
+};
+

@@ -28,7 +28,6 @@ public:
 	Collectible(float x, float y, float w, float h);
 	
 	Sound* fireSound;
-	SoundCache soundCache;
 
 	virtual bool isCollectible() { return true; }
 	virtual void reset();

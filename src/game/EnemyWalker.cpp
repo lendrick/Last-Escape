@@ -23,15 +23,13 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-
 EnemyWalker::EnemyWalker(float x, float y)
-:Enemy(x, y, 28.0f, 19.0f)
+:EnemyPatroller(x, y, 28.0f, 19.0f)
 {
 	setImage("walker.png");
 	walk_speed = 120.f;
+	shape->u = 0.1f;
 
-	speed_x = 0;
-	speed_y = 0;
 	dying = false;
 
 	setDrawOffset(16, 30);
@@ -51,7 +49,6 @@ EnemyWalker::EnemyWalker(float x, float y)
 	//cout << sound_file;
 	fireSound = soundCache[sound_file];
 
-
 	tmp = addAnimation("walk");
 	tmp->addFrame(3, .2f);
 	tmp->addFrame(2, .2f);
@@ -68,56 +65,5 @@ EnemyWalker::EnemyWalker(float x, float y)
 	setCurrentAnimation("walk");
 }
 
-void EnemyWalker::update(float dt) {
-	if(!dying) {
-		const int speed_gravity = 960;
-		const float vision_range = 320;
-		const float vision_min_range = 32;
-
-		speed_y += speed_gravity*dt;
-		if(isGrounded()) speed_y = 0;
-
-		/*
-		// Chase the player
-		float dx = g_player->pos_x - pos_x;
-		if (-vision_range < dx && dx < -vision_min_range) {
-			speed_x = -walk_speed;
-			facing_direction = Facing::Right;
-		} else if (vision_min_range < dx && dx < vision_range) {
-			speed_x = walk_speed;
-			facing_direction = Facing::Left;
-		}
-		*/
-		if(facing_direction == Facing::Left) {
-			speed_x = -60.0f;
-		} else {
-			speed_x = 60.0f;
-		}
-		patrol(dt);
-
-		updateSpriteFacing();
-
-		////checkcollisions();
-	}
-}
-
-void EnemyWalker::draw() {
-	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
-	AnimatedActor::draw();
-}
-
-void EnemyWalker::die() {
-	setCanCollide(false);
-	dying = true;
-	freeze();
-	setCurrentAnimation("die");
-	fireSound->playSound();
-}
-
-void EnemyWalker::onAnimationComplete(std::string anim) {
-	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
-	if(anim == "die") {
-		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
-	}
+EnemyWalker::~EnemyWalker() {
 }

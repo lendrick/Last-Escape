@@ -20,9 +20,17 @@
 #include <map>
 #include <iostream>
 #include "Sound.h"
+#include "globals.h"
+
+bool soundCacheLoaded = false;
 
 SoundCache::SoundCache()
 {
+	if(soundCacheLoaded)
+		cout << "SOUNDCACHE IS INTENDED TO BE USED AS A SINGLE GLOBAL VARIABLE AND\n"
+		     << "SHOULD NOT BE A MEMBER OF ANY CLASS\n";
+	
+	soundCacheLoaded = true;
 }
 
 SoundCache::~SoundCache()
@@ -65,6 +73,6 @@ Sound * SoundCache::load(std::string filename)
 		std::cout << "Failed to load sound " << filename << "\n";
 		return NULL;
 	}
-	
+	//std::cout << "Loaded sound " << filename << "\n";
 	return snd;
 }

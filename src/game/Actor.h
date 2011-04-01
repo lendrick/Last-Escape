@@ -28,7 +28,7 @@ class Player;
 class Actor {
 public:
 	Actor(float x, float y, float w, float h, bool staticBody = false);
-	~Actor();
+	virtual ~Actor();
 	
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 

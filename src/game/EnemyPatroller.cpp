@@ -15,7 +15,7 @@
  *  along with Last Escape.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "EnemyCrawler.h"
+#include "EnemyPatroller.h"
 #include "Player.h"
 #include "Map.h"
 #include "globals.h"
@@ -26,64 +26,26 @@
 #include "Bumper.h"
 
 
-EnemyCrawler::EnemyCrawler(float x, float y)
-:EnemyPatroller(x, y, 40.0f, 16.0f)
+EnemyPatroller::EnemyPatroller(float x, float y, float w, float h)
+:Enemy(x, y, w, h)
 {
-	setImage("crawler.png");
-	walk_speed = 70.f;
+	walk_speed = 0;
 	shape->u = 0.1f;
 
 	dying = false;
-	life = 2;
-
-	setDrawOffset(33, 30);
-	setFrameSize(64, 32);
-
-	Animation * tmp;
-	actorName = "Crawler";
-	
-	//pick a random death sound
-	int sound_num = rand() % 19;
-	sound_num += 1;
-	std::string s;
-	std::stringstream out;
-	out << sound_num;
-	s = out.str();
-
-	std::string sound_file = s + "-BugSplat.ogg";
-	//cout << sound_file;
-	fireSound = soundCache[sound_file];
+	leftBumper = rightBumper = NULL;
 	facing_direction = Facing::Left;
-
-	tmp = addAnimation("walk");
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setDoLoop(true);
-
-	tmp = addAnimation("die");
-	tmp->addFrame(8, .07f);
-	tmp->addFrame(7, .07f);
-	tmp->addFrame(6, .07f);
-	tmp->addFrame(5, .07f);
-
-	tmp = addAnimation("hurt");
-	tmp->addFrame(4, 0.07f);
-
-	setCurrentAnimation("walk");
+	leftBumper = new Bumper(this, Facing::Left);
+	rightBumper = new Bumper(this, Facing::Right);
 }
 
-EnemyCrawler::~EnemyCrawler() {
-}
-
-
-/*
-EnemyCrawler::~EnemyCrawler() {
-	//cout << "delete crawler " << actorName << "\n";
+EnemyPatroller::~EnemyPatroller() {
+	//cout << "delete patroller " << actorName << "\n";
 	delete leftBumper;
 	delete rightBumper;
 }
 
-void EnemyCrawler::update(float dt) {
+void EnemyPatroller::update(float dt) {
 	if(!dying) {
 
 		//setCurrentAnimation("walk");
@@ -111,12 +73,12 @@ void EnemyCrawler::update(float dt) {
 	}
 }
 
-void EnemyCrawler::draw() {
+void EnemyPatroller::draw() {
 	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
 	AnimatedActor::draw();
 }
 
-void EnemyCrawler::die() {
+void EnemyPatroller::die() {
 	setCanCollide(false);
 	dying = true;
 	freeze();
@@ -124,8 +86,8 @@ void EnemyCrawler::die() {
 	fireSound->playSound();
 }
 
-void EnemyCrawler::onAnimationComplete(std::string anim) {
-	//cout << "EnemyCrawler::onAnimationComplete(\"" << anim << "\")\n";
+void EnemyPatroller::onAnimationComplete(std::string anim) {
+	//cout << "EnemyPatroller::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x-16, pos_y-16);
@@ -136,12 +98,11 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 	}
 }
 
-void EnemyCrawler::onBumperCollide(int facing) {
+void EnemyPatroller::onBumperCollide(int facing) {
 	//cout << "Bumper collide " << actorName << "\n";
 	if(facing == Facing::Left) {
 		facing_direction = Facing::Right;
 	} else if(facing == Facing::Right) {
 		facing_direction = Facing::Left;
 	}
-}
-*/
+} 

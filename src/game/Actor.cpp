@@ -46,6 +46,7 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 }
 
 Actor::~Actor() {
+	//cout << "delete actor " << actorName << "\n";
 	destroyPhysics();
 }
 
@@ -94,26 +95,6 @@ void Actor::getSize(int &w, int &h) {
 	h = height;
 	w = width;
 }
-
-/*
-void Actor::getBoundingBox(float &x1, float &y1, float &x2, float &y2) {
-	x1 = pos_x - xOrigin;
-	y1 = pos_y - yOrigin;
-	x2 = x1 + width;
-	y2 = y1 + height;
-}
-
-bool Actor::isColliding(Actor * otherActor) {
-	float x1, y1, x2, y2;
-	float ox1, oy1, ox2, oy2;
-	getBoundingBox(x1, y1, x2, y2);
-	otherActor->getBoundingBox(ox1, oy1, ox2, oy2);
-
-	if (x2 < ox1 || ox2 < x1 || y2 < oy1 || oy2 < y1)
-		return false;
-	return true;
-}
-*/
 
 void Actor::draw() {
 	if(!hidden && hasImage) {
@@ -170,22 +151,6 @@ bool Actor::isDestroyed() {
 bool Actor::isDying() {
 	return dying;
 }
-
-/*
-void Actor::checkCollisions() {
-	list<Actor*>::iterator it2 = actors.begin();
-
-	for (; it2 != actors.end(); ++it2)
-	{
-		// Don't collide with self. :)
-		if (*it2 != this && !isDestroyed() && !(*it2)->isDestroyed() &&
-			(*it2)->canCollide() && isColliding(*it2))
-		{
-			collide(**it2);
-		}
-	}
-}
-*/
 
 void Actor::die() {
 	destroy();

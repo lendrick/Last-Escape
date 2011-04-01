@@ -132,8 +132,8 @@ void Player::upgradeWeapon() {
 void Player::jump(float dt) {
 	const int jump_speed = 525;
 	const float max_jet_accel = 2000;
-	const float jet_cost = 60;
-	const float jet_speed_max = 450;
+	const float jet_cost = 35;
+	const float jet_speed_max = 250;
 	const float jet_wait = 0.4f;
 
 	if (body->v.y == 0 && isGrounded())

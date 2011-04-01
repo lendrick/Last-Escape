@@ -16,16 +16,21 @@
  */
 
 #pragma once
-#include "Enemy.h"
+#include "EnemyPatroller.h"
 
-class EnemyWalker : public Enemy
+class EnemyWalker : public EnemyPatroller
 {
 public:
 	EnemyWalker(float x, float y);
+	virtual ~EnemyWalker();
+/*
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
-private:
+protected:
 	float walk_speed;
+	Bumper* leftBumper;
+	Bumper* rightBumper;
+	*/
 }; 

@@ -105,6 +105,7 @@ void CollectibleArmor::collide(Actor& otherActor) {
 
 CollectibleEnergyBall::CollectibleEnergyBall(float x, float y, int expValue)
 : Collectible(x, y, 32.0f, 32.0f) {
+	actorName = "EnergyBall";
 	this->setImage("energyball.png");
 	setDrawOffset(16, 16);
 	setFrameSize(32, 32);
