@@ -15,29 +15,23 @@
  *  along with Last Escape.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
+#include "globals.h"
+#include <chipmunk/chipmunk.h> 
 
-#include <string>
-#include <chipmunk/chipmunk.h>
-#include <SFML/Graphics.hpp>
+class Actor;
 
-using namespace std;
-
-struct Point {
-	int x;
-	int y;
-	Point() {
-		x=0;
-		y=0;
-	}
+class Bumper {
+public:
+	Bumper(Actor * actor, int facing_direction, float thickness = 2.0f);
+	~Bumper();
+	
+	int isGrounded();
+	void collideGround();
+	void leaveGround();
+	
+	Actor * actor;
+	cpShape * shape;
+	int facing_direction;
+	int grounded;
 };
-
-string trim(string s, char c);
-string parse_section_title(string s);
-void parse_key_pair(string s, string &key, string &val);
-
-cpShape * boxWithOffset(cpBody * body, float width, float height, sf::Vector2f offset);
-cpShape * boxWithOffset(cpBody * body, float width, float height, cpVect offset);
-
-#endif

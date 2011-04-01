@@ -16,7 +16,8 @@
  */
 
 #include "Utils.h"
-
+#include "globals.h"
+#include "Map.h"
 
 
 /**
@@ -59,4 +60,20 @@ void parse_key_pair(string s, string &key, string &val) {
 	}
 	key = s.substr(0, separator);
 	val = s.substr(separator+1, s.length());
+}
+
+cpShape * boxWithOffset(cpBody * body, float width, float height, sf::Vector2f offset) {
+	return boxWithOffset(body, width, height, game_map->sfml2cp(offset));
+}
+
+cpShape * boxWithOffset(cpBody * body, float width, float height, cpVect offset) {
+	//cout << "new box with offset " << width << "x" << height << "(" << offset.x << ", " << offset.y << ")\n";
+	cpVect verts[] = {
+		cpv(-width/2, -height/2),			
+		cpv(-width/2, height/2),			
+		cpv(width/2, height/2),
+		cpv(width/2, -height/2)
+	};
+		
+	return cpPolyShapeNew(body, 4, verts, offset);
 }

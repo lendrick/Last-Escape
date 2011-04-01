@@ -79,14 +79,16 @@ namespace PhysicsType {
 		Wall,
 		Item,
 		Neutral,
-		PlayerBullet
+		PlayerBullet,
+		Bumper
 	};
 };
 
 namespace PhysicsGroup {
 	enum Enum {
 		PlayerBullets = 1,
-		EnemyBullets = 2
+		EnemyBullets = 2,
+		Bumpers = 3
 	};
 };
 

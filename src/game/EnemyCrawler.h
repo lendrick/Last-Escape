@@ -17,16 +17,23 @@
 
 #pragma once
 #include "Enemy.h"
+#include "Bumper.h"
 
 class EnemyCrawler : public Enemy
 {
 public:
 	EnemyCrawler(float x, float y);
+	~EnemyCrawler();
 	virtual void update(float dt);
 	virtual void draw();
 	virtual void die();
 	//virtual void doDamage(float damage);
 	virtual void onAnimationComplete(std::string anim);
+	//virtual void resetPhysics();
+	//virtual void destroyPhysics();
+	virtual void onBumperCollide(int facing);
 private:
 	float walk_speed;
+	Bumper* leftBumper;
+	Bumper* rightBumper;
 }; 

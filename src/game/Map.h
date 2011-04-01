@@ -111,5 +111,13 @@ static void map_end_collide(cpArbiter *arb, cpSpace *space, void *data);
 
 static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+
+static int map_bumper_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
+static int map_bumper_colliding(cpArbiter *arb, cpSpace *space, void *data);
+static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data);
+
+static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+static void map_bumper_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+
 #endif
 

@@ -449,7 +449,39 @@ bool Map::setupPhysics()
 		map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
+	
+	
+	// BUMPERS
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Bumper, PhysicsType::Wall, //types of objects
+		map_bumper_begin_collide, // callback on initial collision
+		map_bumper_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_bumper_end_collide, // after the shapes separate
+		NULL // data pointer
+	);
+	
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Bumper, PhysicsType::Enemy, //types of objects
+		map_bumper_begin_collide, // callback on initial collision
+		map_bumper_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_bumper_end_collide, // after the shapes separate
+		NULL // data pointer
+	);
 		
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Bumper, PhysicsType::Ground, //types of objects
+		map_bumper_begin_ground_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_bumper_end_ground_collide, // after the shapes separate
+		NULL // data pointer
+	);	
+	
 	return true;
 }
 
@@ -491,6 +523,45 @@ static void map_end_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	actor2->onColliding(*actor1);
 }
 
+
+// Bumper collisions
+static int map_bumper_begin_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Bumper *bumper = (Bumper *) a->data;
+	Actor *actor = bumper->actor;
+	
+	//cout << "Bumper collision: " << actor->actorName << "\n"; 
+	actor->onBumperCollide(bumper->facing_direction);
+	return 1;
+}
+
+static int map_bumper_colliding(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Bumper *bumper = (Bumper *) a->data;
+	Actor *actor = bumper->actor;
+	
+	//cout << "Collision: " << actor1->actorName << " " << actor2->actorName << "\n"; 
+	actor->onBumperColliding(bumper->facing_direction);
+	return 1;
+}
+
+static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Bumper *bumper = (Bumper *) a->data;
+	Actor *actor = bumper->actor;
+	
+	//cout << "Collision: " << actor1->actorName << " " << actor2->actorName << "\n"; 
+	actor->onBumperEndCollide(bumper->facing_direction);
+}
+
+
+// Ground collisions
 static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	cpShape *a, *b; 
 	cpArbiterGetShapes(arb, &a, &b);
@@ -510,6 +581,28 @@ static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	
 	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
 	actor1->leaveGround();
+}
+
+// Bumper ground collisions
+static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Bumper *bumper = (Bumper *) a->data;
+	
+	//cout << "Bumper ground collision: " << bumper->actor->actorName << "\n"; 
+	bumper->collideGround();
+	return 1;
+}
+
+static void map_bumper_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Bumper *bumper = (Bumper *) a->data;
+	
+	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	bumper->leaveGround();
 }
 
 bool Map::isLoaded() {

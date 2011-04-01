@@ -22,16 +22,17 @@
 #include "Collectible.h"
 #include "Sound.h"
 #include "SoundCache.h"
+#include "Utils.h"
+#include "Bumper.h"
 
 
 EnemyCrawler::EnemyCrawler(float x, float y)
 :Enemy(x, y, 40.0f, 16.0f)
 {
 	setImage("crawler.png");
-	walk_speed = 1.f;
+	walk_speed = 70.f;
+	shape->u = 0.1f;
 
-	speed_x = 0;
-	speed_y = 0;
 	dying = false;
 	life = 2;
 
@@ -39,7 +40,8 @@ EnemyCrawler::EnemyCrawler(float x, float y)
 	setFrameSize(64, 32);
 
 	Animation * tmp;
-
+	actorName = "Crawler";
+	
 	//pick a random death sound
 	int sound_num = rand() % 19;
 	sound_num += 1;
@@ -51,7 +53,8 @@ EnemyCrawler::EnemyCrawler(float x, float y)
 	std::string sound_file = s + "-BugSplat.ogg";
 	//cout << sound_file;
 	fireSound = soundCache[sound_file];
-
+	leftBumper = rightBumper = NULL;
+	facing_direction = Facing::Left;
 
 	tmp = addAnimation("walk");
 	tmp->addFrame(2, .2f);
@@ -67,8 +70,15 @@ EnemyCrawler::EnemyCrawler(float x, float y)
 	tmp = addAnimation("hurt");
 	tmp->addFrame(4, 0.07f);
 
-
+	leftBumper = new Bumper(this, Facing::Left);
+	rightBumper = new Bumper(this, Facing::Right);
+	
 	setCurrentAnimation("walk");
+}
+
+EnemyCrawler::~EnemyCrawler() {
+	delete leftBumper;
+	delete rightBumper;
 }
 
 void EnemyCrawler::update(float dt) {
@@ -79,30 +89,23 @@ void EnemyCrawler::update(float dt) {
 		const float vision_range = 320;
 		const float vision_min_range = 32;
 
-		speed_y += speed_gravity*dt;
-		if(isGrounded()) speed_y = 0;
-
-		/*
-		 // Chase the player
-		 float dx = g_player->pos_x - pos_x;
-		 if (-vision_range < dx && dx < -vision_min_range) {
-		 speed_x = -walk_speed;
-		 facing_direction = Facing::Right;
-		 } else if (vision_min_range < dx && dx < vision_range) {
-		 speed_x = walk_speed;
-		 facing_direction = Facing::Left;
-		 }
-		 */
-		if(facing_direction == Facing::Left) {
-			speed_x = -walk_speed;
-		} else {
-			speed_x = walk_speed;
+		if(isGrounded()) {
+			if (facing_direction == Facing::Left) {
+				if(body->v.x > -walk_speed)
+					cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
+				
+				if(!leftBumper->isGrounded())
+					facing_direction = Facing::Right;
+			} else if (facing_direction  == Facing::Right) {
+				if(body->v.x < walk_speed)
+					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
+				
+				if(!rightBumper->isGrounded())
+					facing_direction = Facing::Left;
+			}
 		}
-		patrol(dt);
-
+		
 		updateSpriteFacing();
-
-		//checkcollisions();
 	}
 }
 
@@ -110,17 +113,6 @@ void EnemyCrawler::draw() {
 	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
 	AnimatedActor::draw();
 }
-
-/*
-void EnemyCrawler::doDamage(float damage) {
-	life -= damage;
-	if(life <= 0)
-		die();
-	else
-		setCurrentAnimation("hurt");
-
-}
-*/
 
 void EnemyCrawler::die() {
 	setCanCollide(false);
@@ -142,3 +134,45 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 	}
 }
 
+/*
+void EnemyCrawler::resetPhysics()
+{
+	// No map -> no physics
+	if(!game_map || !game_map->physSpace) {
+		return;
+	}
+
+	destroyPhysics();
+	
+	body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
+	body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
+
+	shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
+	shape->e = 0.0f; shape->u = 2.0f;
+	
+	shape->data = (void *) this;
+	
+
+}
+
+void EnemyCrawler::destroyPhysics() {
+	if(body) {
+		cpSpaceRemoveShape(game_map->physSpace, shape);
+		cpSpaceRemoveBody(game_map->physSpace, body);
+		
+		cpShapeFree(shape);
+		cpBodyFree(body);
+	}
+	shape = NULL;
+	body = NULL;
+}
+*/
+
+void EnemyCrawler::onBumperCollide(int facing) {
+	//cout << "Bumper collide " << actorName << "\n";
+	if(facing == Facing::Left) {
+		facing_direction = Facing::Right;
+	} else if(facing == Facing::Right) {
+		facing_direction = Facing::Left;
+	}
+}

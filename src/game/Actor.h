@@ -54,6 +54,9 @@ public:
 	// Event functions
 	//TODO: rename collide onCollide
 	virtual void collide(Actor& otherActor) { };
+	virtual void onBumperCollide(int facing) { };
+	virtual void onBumperColliding(int facing) { };
+	virtual void onBumperEndCollide(int facing) { };
 	virtual void onColliding(Actor & otherActor) { };
 	virtual void onEndCollide(Actor & otherActor) { };
 	virtual void onDestroy() { };
@@ -64,7 +67,7 @@ public:
 	virtual void die();
 	
 	virtual void update(float dt) { };
-        virtual void doUpdate(float dt);
+	virtual	void doUpdate(float dt);
 	virtual void draw();
 	
 	void destroy();
