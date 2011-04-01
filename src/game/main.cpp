@@ -180,8 +180,8 @@ int main(int argc, char** argv)
 		float frameTime = std::min(ElapsedTime, 0.05f);
 
 		// Clear screen
-		//App->Clear();
-		
+		App->Clear();
+
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
 			// Due to physics functions, we can't switch maps mid-loop.
