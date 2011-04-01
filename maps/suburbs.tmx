@@ -217,7 +217,6 @@
   <properties>
    <property name="type" value="start"/>
   </properties>
-  <object x="27" y="445"/>
  </objectgroup>
  <objectgroup name="flyers" width="200" height="40">
   <properties>
@@ -297,6 +296,7 @@
  </objectgroup>
  <objectgroup name="specials" width="200" height="40">
   <object type="weaponupgrade" x="920" y="510"/>
+  <object name="start" type="start" x="27" y="445"/>
  </objectgroup>
  <layer name="Tile Layer 5" width="200" height="40">
   <data encoding="csv">
