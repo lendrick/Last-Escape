@@ -228,7 +228,7 @@
 </data>
  </layer>
  <objectgroup name="specials" width="200" height="40">
-  <object name="start" type="start" x="48" y="399"/>
+  <object name="start" type="start" x="50" y="454"/>
   <object type="exit" x="6317" y="684">
    <properties>
     <property name="map" value="lab_map.tmx"/>
