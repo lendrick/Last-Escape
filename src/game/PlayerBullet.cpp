@@ -46,7 +46,7 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	shape->layers = PhysicsLayer::Map|PhysicsLayer::PlayerBullet;
 	shape->collision_type = PhysicsType::PlayerBullet;
 	
-	setDrawOffset(8, 9);
+	setDrawOffset(8, 13);
 	setFrameSize(16, 16);
 	damage = 1;
 

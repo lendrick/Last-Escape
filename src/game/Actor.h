@@ -32,12 +32,7 @@ public:
 	
 	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
 
-	void setPos(float px, float py);
 	void setDrawOffset(int ox, int oy);
-	
-	// returns true if the actor collided with a map tile
-	virtual bool move(float &mx, float &my);
-	
 	void getPos(float &px, float &py);
 	
 	void setSize(int w, int h);
@@ -110,7 +105,7 @@ public:
 	// Set the velocity function to the default
 	void unFreeze();
 	
-	virtual void resetPhysics();
+	virtual void resetPhysics(float start_x, float start_y);
 	virtual void destroyPhysics();
 	cpBody* body;
 	cpShape* shape;
@@ -119,7 +114,6 @@ public:
 	sf::Sprite sprite;
 
 	int height, width;
-	float pos_x, pos_y;
 	bool destroyed;
 	int xDrawOffset, yDrawOffset;
 	bool collideable;
@@ -134,11 +128,13 @@ public:
 protected:
 	//void //checkcollisions();
 	cpBodyVelocityFunc defaultVelocityFunc;
-
+	float static_x, static_y;
+	
 private:
 	bool staticBody;
 	cpLayers shapeLayers;
 	int grounded;
+
 };
 
 void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt);

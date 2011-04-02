@@ -68,15 +68,9 @@ public:
 	void loadTileset(string filename);
 	void setNextMap(string filename);
 	void loadNextMap();
-	bool checkHorizontalLine(int x1, int x2, int y);
-	bool checkVerticalLine(int x, int y1, int y2);
 	void setCameraFollow(Actor * actor);
-	bool move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
-	bool move(Actor &actor, float &move_x, float &move_y);
-	bool isGrounded(Actor &actor);
-	bool isGrounded(float &pos_x, float &pos_y, int size_x);
 	bool isOnInstantdeath(Actor &actor);
-	bool isSolid(int x, int y);
+	//bool isSolid(int x, int y);
 	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
@@ -93,7 +87,8 @@ public:
 	// collision layer
 	int collision[MAP_TILES_X][MAP_TILES_Y];
 
-	sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
+	//sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
+	sf::Sprite tile_sprite;
 	
 	int cam_x;
 	int cam_y;

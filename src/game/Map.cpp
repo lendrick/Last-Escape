@@ -46,12 +46,17 @@ Map::Map(string mapName) {
 
 	loadTileset("tileset.png");
 	loaded = false;
-
+	
+	tile_sprite.SetImage(tileset);
+	tile_sprite.FlipY(true);
+	
+	/*
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
 			tile_sprites[i][j].SetImage(tileset);
 		}
 	}
+	*/
 
 	// prep the rects for each tile
 	for (int i=0; i<TILE_COUNT-1; i++) {
@@ -119,6 +124,7 @@ void Map::loadMap(string filename) {
 	root->QueryIntAttribute("width", &width);
 	root->QueryIntAttribute("height", &height);
 
+	
 	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
 	{
 		std::string childName = child->Value();
@@ -189,9 +195,15 @@ void Map::loadMap(string filename) {
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
 				const char* name = ((TiXmlElement*)object)->Attribute("name");
 
-				int x = 0, y = 0;
-				((TiXmlElement*)object)->QueryIntAttribute("x", &x);
-				((TiXmlElement*)object)->QueryIntAttribute("y", &y);
+				float x = 0, y = 0;
+				int temp_x, temp_y;
+				((TiXmlElement*)object)->QueryIntAttribute("x", &temp_x);
+				((TiXmlElement*)object)->QueryIntAttribute("y", &temp_y);
+				
+				// Convert to chipmunk coords
+				cpVect pos = sfml2cp(sf::Vector2f(temp_x, temp_y));
+				x = pos.x;
+				y = pos.y;
 
 				Actor* actor;
 				if (type == "pill") {
@@ -262,10 +274,12 @@ void Map::loadMap(string filename) {
 
 	this->setupPhysics();
 
-	if(g_player != NULL) {
-		g_player->init();
-		cameraFollow = g_player;
+	if(g_player == NULL) {
+		g_player = new Player(0, 0);
 	}
+	g_player->init();
+	cameraFollow = g_player;
+	
 	loaded = true;
 }
 
@@ -307,15 +321,18 @@ bool Map::setupPhysics()
 
 
 	// Ah, come on...
+	/*
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		Actor * actor = *it;
 		//actor->resetPhysics();
 		
 		if(actor->isPlayer()) {
 			Player* p = dynamic_cast<Player*>(actor);
-			p->resetPhysics();
+			//p->resetPhysics();
+			p->init();
 		}
 	}
+	*/
 	
 	// Vertical Pass
 	/* This only accounts for on and off collision tiles now, but would be easy
@@ -327,22 +344,25 @@ bool Map::setupPhysics()
 		cpVect p1, p2;
 		
 		for (int j=0; j<MAP_TILES_Y; j++) {
-			if(collision[i][j] == collision[i+1][j]) {
+			if(collision[i][MAP_TILES_Y - 1 - j] == collision[i+1][MAP_TILES_Y - 1 - j]) {
 				if(prev_different) {
-					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
+					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
+					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 					prev_different = false;
 					createSegment(p1, p2, false);
 				}
 			} else {
 				if(!prev_different) {
-					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
+					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
+					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
 					prev_different = true;
 				}
 			}
 		}
 		
 		if(prev_different) {
-			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
+			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
+			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
 			createSegment(p1, p2, false);
 		}
 		prev_different = false;
@@ -356,22 +376,25 @@ bool Map::setupPhysics()
 		bool prev_different = false;
 		cpVect p1, p2;
 		for (int i=0; i<MAP_TILES_X; i++) {	
-			if(collision[i][j] == collision[i][j + 1]) {
+			if(collision[i][MAP_TILES_Y - 1 - j] == collision[i][MAP_TILES_Y - j - 2]) {
 				if(prev_different) {
-					p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
+					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
+					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 					prev_different = false;
 					createSegment(p1, p2, true);
 				}
 			} else {
 				if(!prev_different) {
-					p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
+					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
+					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
 					prev_different = true;
 				}
 			}
 		}
 			
 		if(prev_different) {
-			p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
+			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
+			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
 			createSegment(p1, p2, true);
 		}
 		prev_different = false;
@@ -632,6 +655,7 @@ bool Map::isLoaded() {
 
 
 void Map::createSegment(cpVect &p1, cpVect &p2, bool ground) {
+	if(debugMode) cout << "new segment (" << p1.x << ", " << p1.y << ") to (" << p2.x << ", " << p2.y << ")\n";
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 	seg->e = 0.0f;
 	seg->u = 1.0f;
@@ -658,230 +682,40 @@ sf::Vector2f Map::cp2sfml(const cpVect& v) const
 	return sf::Vector2f(v.x, MAP_TILES_Y*TILE_SIZE - v.y);
 }
 
-/**
- * check horizontal line for collision at any point
- */
-bool Map::checkHorizontalLine(int x1, int x2, int y) {
-	int check_x1 = x1 >> TILE_SHIFT;
-	int check_x2 = x2 >> TILE_SHIFT;
-	int check_y = y >> TILE_SHIFT;
-
-	if (check_y < 0 || check_y >= MAP_TILES_Y) return false; // outside map
-	for (int check_x=check_x1; check_x<=check_x2; check_x++) {
-		if (check_x < 0 || check_x >= MAP_TILES_X) return false; // outside map
-		if (collision[check_x][check_y]) return false; // solid tile
-	}
-	return true;
-}
-
-/**
- * check vertical line for collision at any point
- */
-bool Map::checkVerticalLine(int x, int y1, int y2) {
-	int check_x = x >> TILE_SHIFT;
-	int check_y1 = y1 >> TILE_SHIFT;
-	int check_y2 = y2 >> TILE_SHIFT;
-
-	if (check_x < 0 || check_x >= MAP_TILES_X) return false; // outside map
-	for (int check_y=check_y1; check_y<=check_y2; check_y++) {
-		if (check_y < 0 || check_y >= MAP_TILES_Y) return false; // outside map
-		if (collision[check_x][check_y]) return false; // solid tile
-	}
-	return true;
-}
-
-
-/*
- * TODO: REMOVE THIS FUNCTION AND RELY ON PHYSICS ENGINE FOR MOVEMENT
- */
-
-bool Map::move(Actor &actor, float &move_x, float &move_y) {
-	return move(actor.pos_x, actor.pos_y, actor.width, actor.height, move_x, move_y);
-}
-
-/*
- * TODO: REMOVE THIS FUNCTION AND RELY ON PHYSICS ENGINE FOR MOVEMENT
- */
-
-/**
- * Attempt to move object at pos(x,y), of size(x,y), desired delta (x,y)
- * Assumes maximum move is tile size!
- * If unable to do so, move as much as possible and set the new pos(x,y)
- */
-bool Map::move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y) {
-	float orig_x = pos_x;
-	float orig_y = pos_y;
-	int current_tile;
-	float check_x;
-	float check_y;
-	bool impact = false;
-
-	// prevent falling through obstacles when going too fast due to
-	// abnormally low framerates
-	move_x = max(min(move_x, (float)TILE_SIZE), -(float)TILE_SIZE);
-	move_y = max(min(move_y, (float)TILE_SIZE), -(float)TILE_SIZE);
-
-	// horizontal movement first
-	if (move_x > 0.0) { // if moving right
-
-		// start at top-right corner
-		check_x = pos_x + size_x/2;
-		check_y = pos_y - size_y;
-
-		current_tile = (int)check_x >> TILE_SHIFT;
-		check_x += move_x + 1;
-		if (current_tile != (int)check_x >> TILE_SHIFT) {
-
-			// crossed into a new tile, so check all points on this edge
-			if (checkVerticalLine((int)check_x, (int)check_y, (int)check_y + size_y)) {
-				pos_x = check_x - size_x/2;
-			}
-			else { // move to the tile edge
-				pos_x = float(((int)check_x >> TILE_SHIFT) * (float)TILE_SIZE - size_x / 2.0f - 1.0f);
-				move_x = pos_x - orig_x;
-				impact = true;
-			}
-
-		}
-		else { // didn't cross into a new tile, so simply move
-			pos_x = check_x - size_x/2;
-		}
-
-	}
-	else if (move_x < 0.0) { // if moving left
-
-		// start at top-left corner
-		check_x = pos_x - size_x/2;
-		check_y = pos_y - size_y;
-
-		current_tile = (int)check_x >> TILE_SHIFT;
-
-		check_x += move_x - 1;
-		if (current_tile != (int)check_x >> TILE_SHIFT) {
-
-			// crossed into a new tile, so check all points on this edge
-			if (checkVerticalLine((int)check_x, (int)check_y, (int)check_y + size_y)) {
-				pos_x = check_x + size_x/2;
-			}
-			else { // move to the tile edge
-				pos_x = float((((int)check_x >> TILE_SHIFT)+1) * (float)TILE_SIZE + size_x / 2.0f + 1.0f);
-				move_x = pos_x - orig_x;
-				impact = true;
-			}
-
-		}
-		else { // didn't cross into a new tile, so simply move
-			pos_x = check_x + size_x/2;
-		}
-	}
-
-	// vertical movement second
-	if (move_y > 0) { // if moving down
-
-		// start at bottom-left corner
-		check_x = pos_x - size_x/2;
-		check_y = pos_y;
-
-		current_tile = (int)check_y >> TILE_SHIFT;
-
-		check_y += move_y + 1;
-#define NO_MANUAL_GROUND_COLLISION
-#ifdef NO_MANUAL_GROUND_COLLISION
-		if (false) {
-#else
-		if (current_tile != (int)check_y >> TILE_SHIFT) {
-#endif
-
-			// crossed into a new tile, so check all points on this edge
-			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {
-				pos_y = check_y;
-			}
-			else { // move to the tile edge
-				pos_y = float(((int)check_y >> TILE_SHIFT) * TILE_SIZE - 1);
-				move_y = pos_y - orig_y;
-				impact = true;
-			}
-
-		}
-		else { // didn't cross into a new tile, so simply move
-			pos_y = check_y;
-		}
-	}
-	else if (move_y < 0) { // if moving up
-
-		// start at top-left corner
-		check_x = pos_x - size_x/2;
-		check_y = pos_y - size_y;
-
-		current_tile = (int)check_y >> TILE_SHIFT;
-
-		check_y += move_y;
-#define NO_MANUAL_GROUND_COLLISION
-#ifdef NO_MANUAL_GROUND_COLLISION
-		if (false) {
-#else
-		if (current_tile != (int)check_y >> TILE_SHIFT) {
-#endif
-
-			// crossed into a new tile, so check all points on this edge
-			if (checkHorizontalLine((int)check_x, (int)check_x + size_x, (int)check_y)) {
-				pos_y = check_y + size_y;
-			}
-			else { // move to the tile edge
-				pos_y = float((((int)check_y >> TILE_SHIFT)+1) * TILE_SIZE + 1 + size_y);
-				move_y = pos_y - orig_y;
-				impact = true;
-			}
-
-		}
-		else { // didn't cross into a new tile, so simply move
-			pos_y = check_y + size_y;
-		}
-	}
-
-	return impact;
-}
-
 void Map::setCameraFollow(Actor * actor) {
 	cameraFollow = actor;
 }
 
-bool Map::isGrounded(Actor & actor) {
-	return isGrounded(actor.pos_x, actor.pos_y, actor.width);
-}
-
-// if there is collision directly underfoot, return true
-bool Map::isGrounded(float &pos_x, float &pos_y, int size_x) {
-	return !checkHorizontalLine((int)(pos_x-size_x/2), (int)(pos_x+size_x/2), int(pos_y+1.0f));
-}
-
 bool Map::isOnInstantdeath(Actor &actor)
 {
-	return danger[(int)actor.pos_x/TILE_SIZE][(int)actor.pos_y/TILE_SIZE] != 0;
+	//return danger[(int)actor.pos_x/TILE_SIZE][(int)actor.pos_y/TILE_SIZE] != 0;
+	return false;
 }
 
+/*
 bool Map::isSolid(int x, int y) {
 	return collision[x/TILE_SIZE][y/TILE_SIZE] != 0;
 }
+*/
 
 void Map::renderBackground() {
-	if(cameraFollow != NULL) {
-		game_map->cam_x = std::max(0, (int)cameraFollow->pos_x - (int)App->GetWidth()/2);
-		game_map->cam_y = std::max(0, (int)cameraFollow->pos_y - (int)App->GetHeight()/2);
+	int cam_x, cam_y;
+	if(cameraFollow != NULL && cameraFollow->body) {	
+		gameView.SetCenter(cameraFollow->body->p.x, cameraFollow->body->p.y);
 	}
 
-	// which tile is at the topleft corner of the screen?
-	int cam_tile_x = cam_x / TILE_SIZE;
-	int cam_tile_y = cam_y / TILE_SIZE;
-
+	
+	// which tile is at the bottom left corner of the screen?
+	//cout << cam_tile_x << ", " << cam_tile_y << "\n";
+	/*
 	// how far offset is this tile (and each subsequent tiles)?
-	int cam_off_x = cam_x % TILE_SIZE;
-	int cam_off_y = cam_y % TILE_SIZE;
+	int cam_off_x = (int)(gameView.GetRect().GetWidth()) % TILE_SIZE;
+	int cam_off_y = (int)(gameView.GetRect().GetHeight()) % TILE_SIZE;
 
 	// apply camera
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
-			tile_sprites[i][j].SetPosition(i*32 - cam_off_x + 0.5f, j*32 - cam_off_y + 0.5f);
+		+ cam_off_y	tile_sprites[i][j].SetPosition((cam_tile_x + i)*TILE_SIZE, (cam_tile_y + j)*TILE_SIZE);
 		}
 	}
 
@@ -889,9 +723,9 @@ void Map::renderBackground() {
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
-			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (MAP_TILES_Y - cam_tile_y - j - 1 < 0 || MAP_TILES_Y - cam_tile_y - j - 1 >= MAP_TILES_Y) continue;
 			if (!background[cam_tile_x + i][cam_tile_y + j]) continue;
-			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][cam_tile_y + j]]);
+			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][MAP_TILES_Y - cam_tile_y - j - 1]]);
 			App->Draw(tile_sprites[i][j]);
 		}
 	}
@@ -900,13 +734,33 @@ void Map::renderBackground() {
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
 		for (int j=0; j<VIEW_TILES_Y; j++) {
-			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
+			if (MAP_TILES_Y - cam_tile_y - j - 1 < 0 || MAP_TILES_Y - cam_tile_y - j - 1 >= MAP_TILES_Y) continue;
 			if (!fringe[cam_tile_x + i][cam_tile_y + j]) continue;
-			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][cam_tile_y + j]]);
+			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][MAP_TILES_Y - cam_tile_y - j - 1]]);
 			App->Draw(tile_sprites[i][j]);
 		}
 	}
+	*/
 
+	sf::FloatRect rect = gameView.GetRect();
+	
+	int cam_tile_x = rect.Left / TILE_SIZE;
+	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	cam_tile_y = MAP_TILES_Y - cam_tile_y;
+	
+	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
+	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
+	
+	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
+		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
+			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
+			
+			tile_sprite.SetSubRect(tile_rects[background[i][j]]);
+			App->Draw(tile_sprite);
+			tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
+			App->Draw(tile_sprite);
+		}
+	}
 }
 
 void Map::actorDestroyed(Actor * actor) {
@@ -917,7 +771,7 @@ void Map::actorDestroyed(Actor * actor) {
 
 // and fringe
 void Map::renderForeground() {
-
+	/*
 	// which tile is at the topleft corner of the screen?
 	int cam_tile_x = cam_x / TILE_SIZE;
 	int cam_tile_y = cam_y / TILE_SIZE;
@@ -943,13 +797,36 @@ void Map::renderForeground() {
 			App->Draw(tile_sprites[i][j]);
 		}
 	}
+	*/
+	
+	sf::FloatRect rect = gameView.GetRect();
+	
+	int cam_tile_x = rect.Left / TILE_SIZE;
+	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	cam_tile_y = MAP_TILES_Y - cam_tile_y;
+	
+	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
+	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
+	
+	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
+		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
+			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
+			
+			tile_sprite.SetSubRect(tile_rects[foreground[i][j]]);
+			App->Draw(tile_sprite);
+		}
+	}
 }
 
 void Map::renderLandscape() {
 	// Do nothing if no landscape was specified
 	if (!landscapeImg.GetWidth())
 		return;
-
+	
+	sf::Vector2f cam = gameView.GetCenter();
+	cam_x = cam.x;
+	cam_y = MAP_TILES_Y * TILE_SIZE - cam.y;
+	
 	// Draw it four times, aka repeating in X and Y
 	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);

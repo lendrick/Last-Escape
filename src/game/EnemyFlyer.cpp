@@ -44,7 +44,7 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 	fireSound = soundCache[sound_file];
 
 	facing_direction = Facing::Left;
-	setDrawOffset(15, 64);
+	setDrawOffset(15, 52);
 	setFrameSize(32, 64);
 
 	Animation * tmp;
@@ -135,7 +135,7 @@ void EnemyFlyer::onAnimationComplete(std::string anim) {
 	//cout << "EnemyWalker::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-30);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x, body->p.y+8);
 	}
 }
 

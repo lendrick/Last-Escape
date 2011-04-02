@@ -90,7 +90,7 @@ void EnemyPatroller::onAnimationComplete(std::string anim) {
 	//cout << "EnemyPatroller::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x-16, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x, body->p.y+8);
 	}
 
 	if(anim == "hurt") {

@@ -100,7 +100,7 @@ extern Widget *ui_pause;
 void ui_init(void);
 int ui_event(sf::Event &Event);
 void ui_popupImage(const sf::Unicode::Text &path, void (*func)());
-void ui_render(Player &player);
+void ui_render(Player * p);
 void ui_exit(void);
 void ui_start();
 void ui_togglePause();

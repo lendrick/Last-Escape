@@ -56,7 +56,7 @@ Player::Player(float x, float y)
 	setImage("xeon.png");
 
 	lives = start_lives;
-	setDrawOffset(64, 104);
+	setDrawOffset(64, 96);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
@@ -96,7 +96,7 @@ void Player::init() {
 	float sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
-		setPos(sx, sy);
+		//setPos(sx, sy);
 	}
 
 	std::cout << "Init player at " << sx << ", " << sy << std::endl;
@@ -105,7 +105,7 @@ void Player::init() {
 	crouched = false;
 
 	this->setCurrentAnimation("idle");
-	resetPhysics();
+	resetPhysics(sx, sy);
 	
 	if(shape) {
 		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy|PhysicsLayer::EnemyBullet;
@@ -116,8 +116,10 @@ void Player::init() {
 StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
-			if (debugMode)
-				cout << "found start at " << (*it)->pos_x << " " << (*it)->pos_y << "\n";
+			//if (debugMode)
+				float px, py;
+				(*it)->getPos(px, py);
+				cout << "found start at " << px << " " << py << "\n";
 			return static_cast<StartPoint *>(*it);
 		}
 	}
@@ -176,17 +178,17 @@ void Player::shoot() {
 		fireSound->playSound();
 		energy -= weapons[currentWeapon].energy_cost;
 		
-		sf::Vector2f pos = game_map->cp2sfml(body->p);
+		//sf::Vector2f pos = body->p;
 
-		float bulletX = pos.x + 30.0f, bulletY = 0.0f;
+		float bulletX = body->p.x + 30.0f, bulletY = 0.0f;
 		if(facing_direction == Facing::Left)
-			bulletX = pos.x - 30.0f;
+			bulletX = body->p.x - 30.0f;
 
 		if(crouched) {
-			bulletY = pos.y + 9.0f;
+			bulletY = body->p.y - 9.0f;
 		}
 		else {
-			bulletY = pos.y -6.0f;
+			bulletY = body->p.y + 6.0f;
 		}
 
 		Actor* bullet = new PlayerBullet(bulletX, bulletY, facing_direction, weapons[currentWeapon].angle_variation);
@@ -399,7 +401,7 @@ void Player::onAnimationComplete(std::string anim) {
 					static_cast<Collectible *>(*it)->reset();
 				}
 			}
-			CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x - 16, pos_y - 48);
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x - 16, body->p.y - 48);
 
 			init();
 		} else {

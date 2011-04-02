@@ -62,11 +62,12 @@ void ParticleEmitter::draw() {
 
 	for (size_t i = 0; i < particles.size(); ++i)
 	{
-        sprite.SetPosition(particles[i].x - game_map->cam_x, particles[i].y - game_map->cam_y);
-        sprite.SetRotation(particles[i].angle);
-        float a = std::min(1.0f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
-        sprite.SetColor(sf::Color(255, 255, 255, std::min(255, std::max(0, (int)(a*255)))));
-        App->Draw(sprite);
+		sf::Vector2f pos = game_map->cp2sfml(cpv(particles[i].x, particles[i].y));
+		sprite.SetPosition(pos.x - game_map->cam_x, pos.y - game_map->cam_y);
+		sprite.SetRotation(particles[i].angle);
+		float a = std::min(1.0f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
+		sprite.SetColor(sf::Color(255, 255, 255, std::min(255, std::max(0, (int)(a*255)))));
+		App->Draw(sprite);
 	}
 }
 
@@ -74,10 +75,10 @@ void ParticleEmitter::draw() {
 void ParticleEmitter::addParticle()
 {
 	Particle p;
-	p.x = pos_x;
-	p.y = pos_y;
+	p.x = body->p.x;
+	p.y = body->p.y;
 	p.xSpeed = float((rand() % 20) - 10);
-	p.ySpeed = float((rand() % 10) - 50);
+	p.ySpeed = -float((rand() % 10) - 50);
 	p.angle = float(rand() % 360);
 	p.angleSpeed = float((rand() % 200) - 100);
 	p.age = 0;

@@ -374,6 +374,7 @@ bool ui_menuOpen()
 
 void ui_start()
 {
+	if(!g_player) g_player = new Player(0, 0);
 	g_player->init();
 	ui_base->toggleBg();
 	//const char* mapName = "subwaymap-new.tmx";
@@ -800,27 +801,30 @@ int ui_event(sf::Event &Event)
 	return r;
 }
 
-void ui_render(Player& player)
+void ui_render(Player * p)
 {
-	char buf[256];
-	float energy = 100*player.energy/player.energy_max;
-	ui_energy->setSlideValue(energy);
-	//sprintf(buf, "%.0f%%", energy);
-	sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
-	ui_energy->setText(buf);
+	if(p) {
+		Player & player = *p;
+		char buf[256];
+		float energy = 100*player.energy/player.energy_max;
+		ui_energy->setSlideValue(energy);
+		//sprintf(buf, "%.0f%%", energy);
+		sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
+		ui_energy->setText(buf);
 
-	sprintf(buf, "Lives: %d", player.lives);
-	if (player.lives < 2)
-		ui_lives->setTextColor(0xef, 0x29, 0x29);
-	else
-		ui_lives->setTextColor(0x01, 135, 0x00);
-	ui_lives->setText(buf);
+		sprintf(buf, "Lives: %d", player.lives);
+		if (player.lives < 2)
+			ui_lives->setTextColor(0xef, 0x29, 0x29);
+		else
+			ui_lives->setTextColor(0x01, 135, 0x00);
+		ui_lives->setText(buf);
 
 
-	sprintf(buf, "Energy Balls: %d", player.energyBalls);
-	ui_energyballs->setTextColor(0x01, 135, 0x00);
-	ui_energyballs->setText(buf);
-
+		sprintf(buf, "Energy Balls: %d", player.energyBalls);
+		ui_energyballs->setTextColor(0x01, 135, 0x00);
+		ui_energyballs->setText(buf);
+	}
+	
 	ui_base->draw();
 }
 

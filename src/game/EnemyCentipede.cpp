@@ -92,15 +92,15 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 	//cout << "EnemyCentipede::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x, body->p.y-16);
 	} else if(anim == "shoot") {
 		//shoot a projectile
 		lastShot = time;
 		setCurrentAnimation("walk");
-		int px = pos_x + 8;
+		int px = body->p.x + 8;
 		if(facing_direction == Facing::Left) px -= 16;
 		EnemyCentipedeProjectile * projectile =
-			new EnemyCentipedeProjectile(facing_direction, px, int(pos_y - 20.0f));
+			new EnemyCentipedeProjectile(facing_direction, px, int(body->p.y - 20.0f));
 	}
 }
 

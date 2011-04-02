@@ -50,6 +50,9 @@ bool enableMusic = true;
 std::string startMap;
 bool debugMode = false;
 
+sf::View uiView(sf::FloatRect(0, 0, 640, 480));
+sf::View gameView(sf::FloatRect(0, 480, 640, 0));
+
 ImageCache imageCache;
 SoundCache soundCache;
 
@@ -147,7 +150,7 @@ int main(int argc, char** argv)
 	if (!fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
 
-	g_player = new Player(0,0);
+	//g_player = new Player(0,0);
 
 	// Create game objects
 	// DON'T LOAD A REAL MAP HERE!  ui_start does that.
@@ -193,14 +196,18 @@ int main(int argc, char** argv)
 			}
 
 			cleanup();
-
+			
+			App->SetView(uiView);
 			game_map->renderLandscape();
+			App->SetView(gameView);
 			game_map->renderBackground();
 			renderActors();
 			game_map->renderForeground();
 		}
-
-		ui_render(*g_player);
+		
+		App->SetView(uiView);
+		
+		ui_render(g_player);
 
 		// Finally, display the rendered frame on screen
 		App->Display();

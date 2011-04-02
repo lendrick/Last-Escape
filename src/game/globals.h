@@ -102,3 +102,6 @@ float frand(float lower, float upper);
 
 float deg2rad(float deg);
 float rad2deg(float rad);
+
+extern sf::View uiView;
+extern sf::View gameView;
