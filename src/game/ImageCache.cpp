@@ -65,7 +65,7 @@ sf::Image * ImageCache::loadImage(std::string filename)
 		std::cout << "Failed to load image " << filename << "\n";
 		return NULL;
 	} else {
-	    //img->SetSmooth(false);
+	  img->SetSmooth(false);
 	}
 
 	return img;

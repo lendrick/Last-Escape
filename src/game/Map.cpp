@@ -78,7 +78,7 @@ Map::Map(string mapName) {
 void Map::loadTileset(string filename) {
 
 	tileset.LoadFromFile(("images/" + filename).c_str());
-	//tileset.SetSmooth(false);
+	tileset.SetSmooth(false);
 }
 
 
@@ -265,7 +265,7 @@ void Map::loadMap(string filename) {
 				if(propname == "landscape") {
 					landscapeImg = sf::Image();
 					landscapeImg.LoadFromFile("images/landscapes/" + propval);
-					//landscapeImg.SetSmooth(false);
+					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
 				} else if(propname == "music" && enableMusic) {
                                         backgroundMusic.Stop();
