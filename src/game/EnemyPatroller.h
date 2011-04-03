@@ -33,5 +33,6 @@ protected:
 	float walk_speed;
 	Bumper* leftBumper;
 	Bumper* rightBumper;
+	float drop_offset_x, drop_offset_y;
 };
 

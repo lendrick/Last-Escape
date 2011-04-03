@@ -746,7 +746,7 @@ void Map::renderBackground() {
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;
 	int cam_tile_y = rect.Bottom / TILE_SIZE;
-	cam_tile_y = MAP_TILES_Y - cam_tile_y;
+	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
 	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
 	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
@@ -803,7 +803,7 @@ void Map::renderForeground() {
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;
 	int cam_tile_y = rect.Bottom / TILE_SIZE;
-	cam_tile_y = MAP_TILES_Y - cam_tile_y;
+	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
 	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
 	int tile_h = rect.GetHeight() / TILE_SIZE + 2;

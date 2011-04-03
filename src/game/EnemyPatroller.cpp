@@ -32,6 +32,7 @@ EnemyPatroller::EnemyPatroller(float x, float y, float w, float h)
 	walk_speed = 0;
 	shape->u = 0.1f;
 
+	drop_offset_x = drop_offset_y = 0;
 	dying = false;
 	leftBumper = rightBumper = NULL;
 	facing_direction = Facing::Left;
@@ -90,7 +91,7 @@ void EnemyPatroller::onAnimationComplete(std::string anim) {
 	//cout << "EnemyPatroller::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x, body->p.y+8);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x + drop_offset_x, body->p.y+drop_offset_y);
 	}
 
 	if(anim == "hurt") {

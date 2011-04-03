@@ -111,7 +111,7 @@ void BossSpider::update(float dt) {
 		if(lastShot + shootInterval < time) {
 			lastShot = time;
 			EnemyCentipedeProjectile * projectile =
-				new EnemyCentipedeProjectile(facing_direction, body->p.x, int(body->p.y - 20.0f));
+				new EnemyCentipedeProjectile(facing_direction, body->p.x, int(body->p.y + 20.0f));
 		}
 
 		//checkcollisions();
@@ -150,10 +150,10 @@ void BossSpider::onAnimationComplete(std::string anim) {
 		float pos_y = body->p.y;
 		destroy();
 		CollectibleEnergyBall * ball = NULL;
-		ball = new CollectibleEnergyBall(pos_x-32, pos_y-16);
-		ball = new CollectibleEnergyBall(pos_x, pos_y-16);
-		ball = new CollectibleEnergyBall(pos_x-32, pos_y-48);
-		ball = new CollectibleEnergyBall(pos_x, pos_y-48);
+		ball = new CollectibleEnergyBall(pos_x-16, pos_y-10);
+		ball = new CollectibleEnergyBall(pos_x+16, pos_y-10);
+		ball = new CollectibleEnergyBall(pos_x-16, pos_y+22);
+		ball = new CollectibleEnergyBall(pos_x+16, pos_y+22);
 	}
 
 	if(anim == "hurt") {
