@@ -334,6 +334,10 @@ int Map::vBetween(int t1, int t2) {
 		return 1;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
 		return 2;
+	} else if(t1 == Collision::Danger && t2 == Collision::None) {
+		return 2;
+	} else if(t1 == Collision::None && t2 == Collision::Danger ) {
+		return 1;
 	}
 	
 	return 0;
@@ -352,6 +356,10 @@ int Map::hBetween(int t1, int t2) {
 		return 2;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
 		return 2;
+	} else if(t1 == Collision::Danger && t2 == Collision::None) {
+		return 2;
+	} else if(t1 == Collision::None && t2 == Collision::Danger ) {
+		return 1;
 	}
 	
 	return 0;
@@ -398,7 +406,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 					prev_different = false;
-					createSegment(p1, p2, false);
+					createSegment(p1, p2, PhysicsType::Wall);
 				}
 			} else {
 				if(!prev_different) {
@@ -412,7 +420,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
-			createSegment(p1, p2, false);
+			createSegment(p1, p2, PhysicsType::Wall);
 		}
 		prev_different = false;
 	}
@@ -430,7 +438,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 					prev_different = false;
-					createSegment(p1, p2, true);
+					createSegment(p1, p2, PhysicsType::Ground);
 				}
 			} else {
 				if(!prev_different) {
@@ -444,7 +452,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
-			createSegment(p1, p2, true);
+			createSegment(p1, p2, PhysicsType::Ground);
 		}
 		prev_different = false;
 	}
@@ -466,7 +474,7 @@ bool Map::setupPhysics()
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
 					cout << "End Slant Up " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, true);
+					createSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
@@ -490,11 +498,74 @@ bool Map::setupPhysics()
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
 					cout << "End Slant Down " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, true);
+					createSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
 		}
+	}
+	
+	
+	// Danger tiles
+	for (int i=0; i<MAP_TILES_X - 1; i++) {
+		bool prev_different = false;
+		cpVect p1, p2;
+		
+		for (int j=0; j<MAP_TILES_Y; j++) {
+			if(hBetween(danger[i][MAP_TILES_Y - 1 - j], danger[i+1][MAP_TILES_Y - 1 - j]) == 0) {
+				if(prev_different) {
+					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
+					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
+					prev_different = false;
+					createSegment(p1, p2, PhysicsType::Death);
+				}
+			} else {
+				if(!prev_different) {
+					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
+					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
+					prev_different = true;
+				}
+			}
+		}
+		
+		if(prev_different) {
+			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
+			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
+			createSegment(p1, p2, PhysicsType::Death);
+		}
+		prev_different = false;
+	}
+	
+	// Horizontal pass
+	
+	//TODO: Only set ground for top borders.
+	
+	for (int j=0; j<MAP_TILES_Y - 1; j++) {
+		bool prev_different = false;
+		cpVect p1, p2;
+		for (int i=0; i<MAP_TILES_X; i++) {	
+			if(vBetween(danger[i][MAP_TILES_Y - 1 - j], danger[i][MAP_TILES_Y - j - 2]) == 0) {
+				if(prev_different) {
+					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
+					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
+					prev_different = false;
+					createSegment(p1, p2, PhysicsType::Death);
+				}
+			} else {
+				if(!prev_different) {
+					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
+					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
+					prev_different = true;
+				}
+			}
+		}
+		
+		if(prev_different) {
+			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
+			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
+			createSegment(p1, p2, PhysicsType::Death);
+		}
+		prev_different = false;
 	}
 	
 	// Set up collision handlers
@@ -548,6 +619,16 @@ bool Map::setupPhysics()
 		NULL // data pointer
 	);
 
+	cpSpaceAddCollisionHandler(
+		physSpace, 
+		PhysicsType::Player, PhysicsType::Death, //types of objects
+		map_begin_death_collide, // callback on initial collision
+		NULL, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		NULL, // after the shapes separate
+		NULL // data pointer
+	);
+	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Enemy, PhysicsType::Ground, //types of objects
@@ -698,6 +779,17 @@ static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	actor->onBumperEndCollide(bumper->facing_direction);
 }
 
+// Death collisions
+static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	
+	//cout << "Ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	actor1->die();
+	return 1;
+}
 
 // Ground collisions
 static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
@@ -748,16 +840,13 @@ bool Map::isLoaded() {
 }
 
 
-void Map::createSegment(cpVect &p1, cpVect &p2, bool ground) {
+void Map::createSegment(cpVect &p1, cpVect &p2, int type) {
 	if(debugMode) cout << "new segment (" << p1.x << ", " << p1.y << ") to (" << p2.x << ", " << p2.y << ")\n";
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 	seg->e = 0.0f;
 	seg->u = 1.0f;
 	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
-	if(ground)
-		seg->collision_type = PhysicsType::Ground;
-	else
-		seg->collision_type = PhysicsType::Wall;
+	seg->collision_type = type;
 	
 	cpSpaceAddShape(physSpace, seg);
 }

@@ -81,7 +81,7 @@ public:
 	int vBetween(int t1, int t2);
 	int hBetween(int t1, int t2);
 	
-	void createSegment(cpVect &p1, cpVect &p2, bool ground);
+	void createSegment(cpVect &p1, cpVect &p2, int type);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;
 	sf::Vector2f cp2sfml(const cpVect& v) const;
@@ -121,5 +121,6 @@ static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data);
 static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 static void map_bumper_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 
+static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data);
 #endif
 

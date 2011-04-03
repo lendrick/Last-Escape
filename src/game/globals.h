@@ -77,6 +77,7 @@ namespace PhysicsType {
 		Ground,
 		Sensor,
 		Wall,
+		Death,
 		Item,
 		Neutral,
 		PlayerBullet,
@@ -97,6 +98,7 @@ namespace Collision {
 	enum Enum {
 		None = 0,
 		Tile = 1,
+		Danger = 2,
 		SlantUp = 3,
 		SlantDown = 4
 	};
