@@ -202,7 +202,6 @@ void Player::shoot() {
 			setCurrentAnimation("shoot");
 		}
 
-
 		//resetCurrentAnimation();
 	}
 }
@@ -213,7 +212,7 @@ void Player::crouch() {
 
 void Player::update(float dt) {
 	if(!body) return;
-	const int speed_max = 240; // pixels per second
+	const int speed_max = 200; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16 * 60;
@@ -250,18 +249,18 @@ void Player::update(float dt) {
 	if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Left) {
 		move_direction = Facing::Left;
 		if(body->v.x > -speed_max)
-			cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
+			cpBodyApplyImpulse(body, cpv(-700, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
-		shape->u = 0.1f;
+		shape->u = 0.0f;
 	}
 	else if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Right) {
 		move_direction = Facing::Right;
 		if(body->v.x < speed_max)
-			cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
+			cpBodyApplyImpulse(body, cpv(700, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
-		shape->u = 0.1f;
+		shape->u = 0.0f;
 	}
 
 	if (!dying && recoveryTimer <= 0 && input.jumping())
@@ -335,6 +334,7 @@ void Player::update(float dt) {
 		*/
 		
 		//checkcollisions();
+		//cout << body->p.x << " " << body->p.y << "\n";
 	}
 }
 

@@ -77,6 +77,10 @@ public:
 	void clear();
 	bool isLoaded();
 	
+	// Functions for determining if there is a borderline between tiles
+	int vBetween(int t1, int t2);
+	int hBetween(int t1, int t2);
+	
 	void createSegment(cpVect &p1, cpVect &p2, bool ground);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;

@@ -309,6 +309,54 @@ void Map::initPhysics()
 
 }
 
+/*
+namespace Collision {
+	enum Enum {
+		None = 0,
+		Tile = 1,
+		SlantUp = 3,
+		SlantDown = 4
+	};
+};
+*/
+
+int Map::vBetween(int t1, int t2) {
+	if(t1 == Collision::None && t2 == Collision::Tile) {
+		return 1;
+	} else if(t1 == Collision::Tile && t2 == Collision::None) {
+		return 2;
+	} else if(t1 == Collision::SlantDown && t2 == Collision::Tile) {
+		return 1;
+	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
+		return 2;
+	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
+		return 1;
+	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
+		return 2;
+	}
+	
+	return 0;
+}
+
+int Map::hBetween(int t1, int t2) {
+	if(t1 == Collision::None && t2 == Collision::Tile) {
+		return 1;
+	} else if(t1 == Collision::Tile && t2 == Collision::None) {
+		return 2;
+	} else if(t1 == Collision::Tile && t2 == Collision::SlantDown) {
+		return 2;
+	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
+		return 2;
+	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
+		return 2;
+	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
+		return 2;
+	}
+	
+	return 0;
+}
+
+
 bool Map::setupPhysics()
 {
 	// Possibly reset the physics.
@@ -344,7 +392,7 @@ bool Map::setupPhysics()
 		cpVect p1, p2;
 		
 		for (int j=0; j<MAP_TILES_Y; j++) {
-			if(collision[i][MAP_TILES_Y - 1 - j] == collision[i+1][MAP_TILES_Y - 1 - j]) {
+			if(hBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i+1][MAP_TILES_Y - 1 - j]) == 0) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
@@ -376,7 +424,7 @@ bool Map::setupPhysics()
 		bool prev_different = false;
 		cpVect p1, p2;
 		for (int i=0; i<MAP_TILES_X; i++) {	
-			if(collision[i][MAP_TILES_Y - 1 - j] == collision[i][MAP_TILES_Y - j - 2]) {
+			if(vBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i][MAP_TILES_Y - j - 2]) == 0) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
@@ -400,8 +448,53 @@ bool Map::setupPhysics()
 		prev_different = false;
 	}
 	
-	//TODO: Diagonal pass once we have diagonal tiles
+	// SlantUp pass
+	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
+		cpVect p1, p2;
+		int prev_tile = 0;
+			
+		for(int j = 0; j <= i; j++) {
+			int x = j;
+			int y = i-j;
+
+			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
+				if(collision[x][y] == Collision::SlantUp && prev_tile != Collision::SlantUp) {
+					cout << "Slant Up " << x << " " << y << "\n";
+					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y - 1) - 1);
+				} else if(collision[x][y] != Collision::SlantUp && prev_tile == Collision::SlantUp) {
+					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
+					cout << "End Slant Up " << x << " " << y << 
+						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
+					createSegment(p1, p2, true);
+				}
+				prev_tile = collision[x][y];
+			}
+		}
+	}
 	
+  // SlantDown pass
+	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
+		cpVect p1, p2;
+		int prev_tile = 0;
+			
+		for(int j = 0; j <= i; j++) {
+			int x = j;
+			int y = MAP_TILES_Y - (i-j) - 1;
+
+			if(x < MAP_TILES_X && y > 0) {
+				if(collision[x][y] == Collision::SlantDown && prev_tile != Collision::SlantDown) {
+					cout << "Slant Down " << x << " " << y << "\n";
+					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y) - 1);
+				} else if(collision[x][y] != Collision::SlantDown && prev_tile == Collision::SlantDown) {
+					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
+					cout << "End Slant Down " << x << " " << y << 
+						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
+					createSegment(p1, p2, true);
+				}
+				prev_tile = collision[x][y];
+			}
+		}
+	}
 	
 	// Set up collision handlers
 	cpSpaceAddCollisionHandler(
@@ -704,44 +797,6 @@ void Map::renderBackground() {
 		gameView.SetCenter(cameraFollow->body->p.x, cameraFollow->body->p.y);
 	}
 
-	
-	// which tile is at the bottom left corner of the screen?
-	//cout << cam_tile_x << ", " << cam_tile_y << "\n";
-	/*
-	// how far offset is this tile (and each subsequent tiles)?
-	int cam_off_x = (int)(gameView.GetRect().GetWidth()) % TILE_SIZE;
-	int cam_off_y = (int)(gameView.GetRect().GetHeight()) % TILE_SIZE;
-
-	// apply camera
-	for (int i=0; i<VIEW_TILES_X; i++) {
-		for (int j=0; j<VIEW_TILES_Y; j++) {
-		+ cam_off_y	tile_sprites[i][j].SetPosition((cam_tile_x + i)*TILE_SIZE, (cam_tile_y + j)*TILE_SIZE);
-		}
-	}
-
-	// render background
-	for (int i=0; i<VIEW_TILES_X; i++) {
-		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
-		for (int j=0; j<VIEW_TILES_Y; j++) {
-			if (MAP_TILES_Y - cam_tile_y - j - 1 < 0 || MAP_TILES_Y - cam_tile_y - j - 1 >= MAP_TILES_Y) continue;
-			if (!background[cam_tile_x + i][cam_tile_y + j]) continue;
-			tile_sprites[i][j].SetSubRect(tile_rects[background[cam_tile_x + i][MAP_TILES_Y - cam_tile_y - j - 1]]);
-			App->Draw(tile_sprites[i][j]);
-		}
-	}
-
-	// render fringe
-	for (int i=0; i<VIEW_TILES_X; i++) {
-		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
-		for (int j=0; j<VIEW_TILES_Y; j++) {
-			if (MAP_TILES_Y - cam_tile_y - j - 1 < 0 || MAP_TILES_Y - cam_tile_y - j - 1 >= MAP_TILES_Y) continue;
-			if (!fringe[cam_tile_x + i][cam_tile_y + j]) continue;
-			tile_sprites[i][j].SetSubRect(tile_rects[fringe[cam_tile_x + i][MAP_TILES_Y - cam_tile_y - j - 1]]);
-			App->Draw(tile_sprites[i][j]);
-		}
-	}
-	*/
-
 	sf::FloatRect rect = gameView.GetRect();
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;
@@ -771,34 +826,6 @@ void Map::actorDestroyed(Actor * actor) {
 
 // and fringe
 void Map::renderForeground() {
-	/*
-	// which tile is at the topleft corner of the screen?
-	int cam_tile_x = cam_x / TILE_SIZE;
-	int cam_tile_y = cam_y / TILE_SIZE;
-
-	// how far offset is this tile (and each subsequent tiles)?
-	int cam_off_x = cam_x % TILE_SIZE;
-	int cam_off_y = cam_y % TILE_SIZE;
-
-	// apply camera
-	for (int i=0; i<VIEW_TILES_X; i++) {
-		for (int j=0; j<VIEW_TILES_Y; j++) {
-			tile_sprites[i][j].SetPosition(i*32 - cam_off_x + 0.5f, j*32 - cam_off_y + 0.5f);
-		}
-	}
-
-	// render foreground
-	for (int i=0; i<VIEW_TILES_X; i++) {
-		if (cam_tile_x + i < 0 || cam_tile_x + i >= MAP_TILES_X) continue;
-		for (int j=0; j<VIEW_TILES_Y; j++) {
-			if (cam_tile_y + j < 0 || cam_tile_y + j >= MAP_TILES_Y) continue;
-			if (!foreground[cam_tile_x + i][cam_tile_y + j]) continue;
-			tile_sprites[i][j].SetSubRect(tile_rects[foreground[cam_tile_x + i][cam_tile_y + j]]);
-			App->Draw(tile_sprites[i][j]);
-		}
-	}
-	*/
-	
 	sf::FloatRect rect = gameView.GetRect();
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;

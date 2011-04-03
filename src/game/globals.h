@@ -93,6 +93,15 @@ namespace PhysicsGroup {
 	};
 };
 
+namespace Collision {
+	enum Enum {
+		None = 0,
+		Tile = 1,
+		SlantUp = 3,
+		SlantDown = 4
+	};
+};
+
 extern bool paused;
 
 extern ImageCache imageCache;
