@@ -962,8 +962,6 @@ void Map::renderBackground() {
 	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
 	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
 	
-	int tiles_rendered = 0;
-	
 	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
 		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
 			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
@@ -972,11 +970,8 @@ void Map::renderBackground() {
 			App->Draw(tile_sprite);
 			tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
 			App->Draw(tile_sprite);
-			tiles_rendered++;
 		}
 	}
-	
-	cout << "Background tiles rendered: " << tiles_rendered << "\n";
 }
 
 // and fringe
