@@ -299,7 +299,7 @@ void Actor::destroyPhysics() {
 
 	} else if(shape) {
 		// Static things like collectibles have no body.
-		cpSpaceRemoveShape(game_map->physSpace, shape);
+ 		cpSpaceRemoveShape(game_map->physSpace, shape);
 		cpShapeFree(shape);		
 	}
 	shape = NULL;
