@@ -50,8 +50,9 @@ bool enableMusic = true;
 std::string startMap;
 bool debugMode = false;
 sf::Clock Clock;
+sf::Clock frameTimer;
 double clockTimer = 0;
-
+	
 sf::View uiView(sf::FloatRect(0, 0, 640, 480));
 sf::View gameView(sf::FloatRect(0, 480, 640, 0));
 
@@ -182,14 +183,17 @@ int main(int argc, char** argv)
 
 
 	Clock.Reset();
+	frameTimer.Reset();
 
 	double input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
-
+	
 	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
-
+	
 	// Start game loop
 	while (App->IsOpened())
 	{
+		int targetFrame = frameTimer.GetElapsedTime() / fps;
+		
 	  startTimer();
 		input.poll();
 		if(input.quit())
@@ -205,7 +209,7 @@ int main(int argc, char** argv)
 
 		// Clear screen
 		startTimer();
-		//App->Clear();
+		App->Clear();
 		clear_time += getTimer();
 
 		if(game_map != NULL && game_map->isLoaded()) {
@@ -215,30 +219,50 @@ int main(int argc, char** argv)
 			cleanup();
 			cleanup_time += getTimer();
 			game_map->loadNextMap();
-
+			
 			if(!paused) {
 				//update(frameTime);
 				startTimer();
 				update(time_step);
 				update_time += getTimer();
 			}
-
-			startTimer();
-			game_map->renderLandscape();
-			image_time += getTimer();
-
-			startTimer();
-			App->SetView(gameView);
-			game_map->renderBackground();
-			bg_time += getTimer();
-
-			startTimer();
-			renderActors();
-			sprite_time += getTimer();
-
-			startTimer();
-			game_map->renderForeground();
-			fg_time += getTimer();
+		
+			if(frameCount > targetFrame - 1) {
+				if(frameCount >= fps) {
+					cout << "\nIn last " << fps << " frames:\n";
+					cout << "  Poll Input:       " << input_time << "s\n";
+					cout << "  Clear Screen:     " << clear_time << "s\n";
+					cout << "  Actor Cleanup:    " << cleanup_time << "s\n";	
+					cout << "  Landscape Image:  " << image_time << "s\n";
+					cout << "  Background Tiles: " << bg_time << "s\n";			
+					cout << "  Sprites:          " << sprite_time << "s\n";
+					cout << "  Foreground Tiles: " << fg_time << "s\n";
+					cout << "  UI:               " << ui_time << "s\n";
+					cout << "  Actor Updates:    " << update_time << "s\n";
+					cout << "  App Display:      " << display_time << "s\n";
+					cout << "  Total:            " << input_time + clear_time + cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
+					input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+					frameCount = 0;
+					frameTimer.Reset();
+				}
+				
+				startTimer();
+				game_map->renderLandscape();
+				image_time += getTimer();
+				
+				startTimer();
+				App->SetView(gameView);
+				game_map->renderBackground();
+				bg_time += getTimer();
+				
+				startTimer();
+				renderActors();
+				sprite_time += getTimer();
+				
+				startTimer();
+				game_map->renderForeground();
+				fg_time += getTimer();
+			}
 		}
 
 		App->SetView(uiView);
@@ -246,30 +270,13 @@ int main(int argc, char** argv)
 		startTimer();
 		ui_render(g_player);
 		ui_time += getTimer();
-
+		
 		// Finally, display the rendered frame on screen
 		startTimer();
 		App->Display();
 		display_time += getTimer();
-
+		
 		frameCount++;
-		if(frameCount >= fps) {
-			cout << "\nIn last " << fps << " frames:\n";
-
-			cout << "  Poll Input:       " << input_time << "s\n";
-			cout << "  Clear Screen:     " << clear_time << "s\n";
-			cout << "  Actor Cleanup:    " << cleanup_time << "s\n";
-			cout << "  Landscape Image:  " << image_time << "s\n";
-			cout << "  Background Tiles: " << bg_time << "s\n";
-			cout << "  Sprites:          " << sprite_time << "s\n";
-			cout << "  Foreground Tiles: " << fg_time << "s\n";
-			cout << "  UI:               " << ui_time << "s\n";
-			cout << "  Actor Updates:    " << update_time << "s\n";
-			cout << "  App Display:      " << display_time << "s\n";
-			cout << "  Total:            " << input_time + clear_time + cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
-			input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
-			frameCount = 0;
-		}
 	}
 
 	delete game_map;
