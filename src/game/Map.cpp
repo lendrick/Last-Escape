@@ -966,10 +966,15 @@ void Map::renderBackground() {
 		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
 			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
 			
-			tile_sprite.SetSubRect(tile_rects[background[i][j]]);
-			App->Draw(tile_sprite);
-			tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
-			App->Draw(tile_sprite);
+			if(background[i][j] > 0) {
+				tile_sprite.SetSubRect(tile_rects[background[i][j]]);
+				App->Draw(tile_sprite);
+			}
+			
+			if(fringe[i][j] > 0) {
+				tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
+				App->Draw(tile_sprite);
+			}
 		}
 	}
 }
@@ -989,8 +994,10 @@ void Map::renderForeground() {
 		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
 			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
 			
-			tile_sprite.SetSubRect(tile_rects[foreground[i][j]]);
-			App->Draw(tile_sprite);
+			if(foreground[i][j] > 0) {
+				tile_sprite.SetSubRect(tile_rects[foreground[i][j]]);
+				App->Draw(tile_sprite);
+			}
 		}
 	}
 }
