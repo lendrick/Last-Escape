@@ -92,6 +92,8 @@ void cleanup() {
 		if((*tmp)->isDestroyed()) {
 			delete *tmp;
 			actors.erase(tmp);
+		} else if((*tmp)->toTeleport) {
+			(*tmp)->doTeleport();
 		}
 	}
 }

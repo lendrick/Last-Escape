@@ -90,6 +90,9 @@ public:
 	virtual void collideGround();
 	virtual void leaveGround();
 	
+	void teleport(float x, float y, float vx, float vy);
+	void doTeleport();
+	
 	bool isStaticBody() { return staticBody; }
 	
 	int getExperienceValue();
@@ -107,6 +110,8 @@ public:
 	
 	virtual void resetPhysics(float start_x, float start_y);
 	virtual void destroyPhysics();
+	virtual void resetPhysicsCustom(float start_x, float start_y) { }
+	
 	cpBody* body;
 	cpShape* shape;
 
@@ -120,6 +125,7 @@ public:
 	bool dying;
 	bool hasImage;
 	bool hidden;
+	bool toTeleport;
 	
 	int currentLevel;
 	int experienceValue;
@@ -129,12 +135,12 @@ protected:
 	//void //checkcollisions();
 	cpBodyVelocityFunc defaultVelocityFunc;
 	float static_x, static_y;
+	float teleport_x, teleport_y, teleport_vx, teleport_vy;
+	int grounded;
 	
 private:
 	bool staticBody;
 	cpLayers shapeLayers;
-	int grounded;
-
 };
 
 void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt);

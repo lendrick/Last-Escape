@@ -41,6 +41,9 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	this->staticBody = staticBody;
 	defaultVelocityFunc = cpBodyUpdateVelocity;
 	static_x = static_y = 0;
+	toTeleport = false;
+	teleport_x = teleport_y = 0;
+	teleport_vx = teleport_vy = 0;
 	resetPhysics(x, y);
 }
 
@@ -280,6 +283,8 @@ void Actor::resetPhysics(float start_x, float start_y)
 	}
 	
 	shape->data = (void *) this;
+	grounded = 0;
+	resetPhysicsCustom(start_x, start_y);
 }
 
 void Actor::destroyPhysics() {
@@ -327,4 +332,21 @@ void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt
 
 void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
 	cpBodyUpdateVelocity(body, cpv(0, 0), .1, dt);
+}
+
+void Actor::teleport(float x, float y, float vx, float vy) {
+	toTeleport = true;
+	teleport_x = x;
+	teleport_y = y;
+	teleport_vx = vx;
+	teleport_vy = vy;
+}
+
+void Actor::doTeleport() {
+	toTeleport = false;
+	resetPhysics(teleport_x, teleport_y);
+	if(body) {
+		body->v.x = teleport_vx;
+		body->v.y = teleport_vy;
+	}
 }

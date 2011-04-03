@@ -106,7 +106,9 @@ void Player::init() {
 
 	this->setCurrentAnimation("idle");
 	resetPhysics(sx, sy);
-	
+}
+
+void Player::resetPhysicsCustom(float start_x, float start_y) {
 	if(shape) {
 		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy|PhysicsLayer::EnemyBullet;
 		shape->collision_type = PhysicsType::Player;
@@ -119,7 +121,7 @@ StartPoint * Player::findStart() {
 			//if (debugMode)
 				float px, py;
 				(*it)->getPos(px, py);
-				cout << "found start at " << px << " " << py << "\n";
+				if(debugMode) cout << "found start at " << px << " " << py << "\n";
 			return static_cast<StartPoint *>(*it);
 		}
 	}
@@ -320,11 +322,9 @@ void Player::update(float dt) {
 			this->setCurrentAnimation("idle");
 		}
 
-		/*
-		cout << (crouched?"crouched":"not-crouched") << " " 
-		     << (isGrounded()?"grounded":"not-grounded") << " "
-		     << currentAnimation->getName() << "\n";
-	  */
+		if(debugMode)
+			cout << (isGrounded()?"grounded":"not-grounded") << " " << grounded << "\n";
+		     
 		updateSpriteFacing();
 
 		/*

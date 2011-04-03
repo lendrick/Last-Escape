@@ -40,6 +40,7 @@ public:
 	virtual bool doDamage(float damage, bool knockback = true);
 	virtual void onDamage();
 	virtual void onLevelUp(int newLevel);
+	virtual void resetPhysicsCustom(float start_x, float start_y);
 	
 	void addExperience(int exp);
 	int getCurrentExperience();

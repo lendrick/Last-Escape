@@ -32,12 +32,10 @@ void TeleportEnter::collide(Actor& otherActor) {
 			if ((*it)->isTeleportExit() && ((TeleportExit*)*it)->getName() == name)
 			{
 				// TODO: Fix this mofo, once we make an Actor::Teleport function.
-				/*
-				otherActor.setPos((*it)->pos_x, (*it)->pos_y);
-				// Make the player fly up a bit
-				((Player&)otherActor).speed_x = 0;
-				((Player&)otherActor).speed_y = -500;
-				*/
+			  float x, y;
+				(*it)->getPos(x, y);
+				otherActor.teleport(x, y, 0, 500);
+				
 				break;
 			}
 		}
