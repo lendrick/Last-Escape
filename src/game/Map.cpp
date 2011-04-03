@@ -415,6 +415,18 @@ bool Map::setupPhysics()
 		
 		for (int j=0; j<MAP_TILES_Y; j++) {
 			int different = hBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i+1][MAP_TILES_Y - 1 - j]);
+		
+			if(different != prev_different) {
+				p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
+				
+				if(prev_different != 0) {
+					createSegment(p1, p2, PhysicsType::Wall);
+				}
+				
+				p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
+			}
+			
+			/*
 			if(!different) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
@@ -427,6 +439,7 @@ bool Map::setupPhysics()
 					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
 				}
 			}
+			*/
 			prev_different = different;
 		}
 		
@@ -446,6 +459,19 @@ bool Map::setupPhysics()
 		cpVect p1, p2;
 		for (int i=0; i<MAP_TILES_X; i++) {	
 			int different = vBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i][MAP_TILES_Y - j - 2]);
+			
+			if(different != prev_different) {
+				p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
+				
+				if(prev_different == 2) {
+					createSegment(p1, p2, PhysicsType::Ground);
+				} else if(prev_different == 1) {
+					createSegment(p1, p2, PhysicsType::Wall);
+				}
+				
+				p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
+			}
+			/*
 			if(!different) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
@@ -462,6 +488,7 @@ bool Map::setupPhysics()
 					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
 				}
 			}
+			*/
 			prev_different = different;
 		}
 			

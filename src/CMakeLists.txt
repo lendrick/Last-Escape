@@ -17,7 +17,10 @@ endif(WIN32)
 #Variables to control the build type
 SET(CMAKE_BUILD_TYPE debug)
 #SET(CMAKE_BUILD_TYPE distribution)
-SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall -Wextra -Wno-unused")
+SET(CMAKE_CXX_FLAGS_DEBUG "-g3 -Wall -Wextra -Wno-unused -pg")
+SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
+SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
+SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
 SET(CMAKE_CXX_FLAGS_DISTRIBUTION "-Wall")
 
 if(UNIX)
