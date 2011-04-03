@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Close);
 		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
 	}
-	
+
 	App->SetFramerateLimit(1.0f/time_step);
 	App->UseVerticalSync(true);
 
@@ -191,24 +191,23 @@ int main(int argc, char** argv)
 			// This function loads a new map if one has been set with SetNextMap.
 			// Due to physics functions, we can't switch maps mid-loop.
 			game_map->loadNextMap();
-			
+
 			if(!paused) {
 				//update(frameTime);
 				update(time_step);
 			}
 
 			cleanup();
-			
-			App->SetView(uiView);
+
 			game_map->renderLandscape();
 			App->SetView(gameView);
 			game_map->renderBackground();
 			renderActors();
 			game_map->renderForeground();
 		}
-		
+
 		App->SetView(uiView);
-		
+
 		ui_render(g_player);
 
 		// Finally, display the rendered frame on screen
