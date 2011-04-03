@@ -921,14 +921,7 @@ bool Map::isOnInstantdeath(Actor &actor)
 	return false;
 }
 
-/*
-bool Map::isSolid(int x, int y) {
-	return collision[x/TILE_SIZE][y/TILE_SIZE] != 0;
-}
-*/
-
 void Map::renderBackground() {
-	int cam_x, cam_y;
 	if(cameraFollow != NULL && cameraFollow->body) {	
 		gameView.SetCenter(cameraFollow->body->p.x, cameraFollow->body->p.y);
 	}
@@ -964,8 +957,8 @@ void Map::actorDestroyed(Actor * actor) {
 void Map::renderForeground() {
 	sf::FloatRect rect = gameView.GetRect();
 	
-	int cam_tile_x = rect.Left / TILE_SIZE;
-	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	int cam_tile_x = rect.Left / TILE_SIZE + 0.5;
+	int cam_tile_y = rect.Bottom / TILE_SIZE + 0.5;
 	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
 	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
