@@ -77,3 +77,15 @@ cpShape * boxWithOffset(cpBody * body, double width, double height, cpVect offse
 		
 	return cpPolyShapeNew(body, 4, verts, offset);
 }
+
+double clamp(double n, double min, double max) {
+	if(max < min) {
+		double tmp;
+		tmp = max;
+		max = min;
+		min = tmp;
+	}
+	if(n > max) n = max;
+	if(n < min) n = min;
+	return n;
+}

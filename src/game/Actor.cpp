@@ -45,6 +45,7 @@ Actor::Actor(double x, double y, double w, double h, bool staticBody) {
 	teleport_x = teleport_y = 0;
 	teleport_vx = teleport_vy = 0;
 	awake = true;
+	canSleep = true;
 	resetPhysics(x, y);
 }
 
@@ -210,7 +211,7 @@ void Actor::leaveGround() {
 void Actor::doUpdate(double dt) {
 	if(!body) {
 		update(dt);
-	} else if(isOnCamera()) {
+	} else if(isOnCamera() || !canSleep) {
 		if(!awake) {
 			cpBodyActivate(body);
 			awake = true;

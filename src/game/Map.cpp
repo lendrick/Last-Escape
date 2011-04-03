@@ -124,6 +124,10 @@ void Map::loadMap(string filename) {
 	root->QueryIntAttribute("width", &width);
 	root->QueryIntAttribute("height", &height);
 
+	cam_x1 = 0;
+	cam_y2 = MAP_TILES_Y * TILE_SIZE;
+	cam_x2 = width * TILE_SIZE;
+	cam_y1 = cam_y2 - height * TILE_SIZE;
 	
 	for (TiXmlNode* child = root->FirstChild(); child; child = child->NextSibling())
 	{
@@ -921,9 +925,32 @@ bool Map::isOnInstantdeath(Actor &actor)
 	return false;
 }
 
+void Map::actorDestroyed(Actor * actor) {
+	if(actor == cameraFollow) {
+		cameraFollow = NULL;
+	}
+}
+
 void Map::renderBackground() {
-	if(cameraFollow != NULL && cameraFollow->body) {	
-		gameView.SetCenter(cameraFollow->body->p.x, cameraFollow->body->p.y);
+	if(cameraFollow != NULL && cameraFollow->body) {
+		cam_x = cameraFollow->body->p.x;
+		cam_y = cameraFollow->body->p.y;
+		
+		sf::Vector2f offset = gameView.GetHalfSize();
+		offset.x = fabs(offset.x);
+		offset.y = fabs(offset.y);
+		
+		//cout << cam_x1 << " " << cam_y1 << " " << cam_x2 << " " << cam_y2 << "\n";
+		//cout << offset.x << " " << offset.y << "\n";
+	  //cout << "Camera init: " << cam_x << " " << cam_y << "\n";
+		
+		// Constrain camera position
+		cam_x = clamp(cam_x, cam_x1 + offset.x, cam_x2 - offset.x);
+		cam_y = clamp(cam_y, cam_y1 + offset.y, cam_y2 - offset.y);
+		
+		//cout << "Camera: " << cam_x << " " << cam_y << "\n";
+		
+		gameView.SetCenter(cam_x, cam_y);
 	}
 
 	sf::FloatRect rect = gameView.GetRect();
@@ -944,12 +971,6 @@ void Map::renderBackground() {
 			tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
 			App->Draw(tile_sprite);
 		}
-	}
-}
-
-void Map::actorDestroyed(Actor * actor) {
-	if(actor == cameraFollow) {
-		cameraFollow = NULL;
 	}
 }
 
@@ -980,11 +1001,11 @@ void Map::renderLandscape() {
 		return;
 	
 	sf::Vector2f cam = gameView.GetCenter();
-	cam_x = cam.x;
-	cam_y = MAP_TILES_Y * TILE_SIZE - cam.y;
+	double cam_x = cam.x;
+	double cam_y = MAP_TILES_Y * TILE_SIZE - cam.y;
 	
 	// Draw it four times, aka repeating in X and Y
-	sf::Vector2f topleft(-(double)(cam_x/10 % landscapeImg.GetWidth()), -(double)(cam_y/10 % landscapeImg.GetHeight()));
+	sf::Vector2f topleft(-(double)((int)(cam_x/10) % landscapeImg.GetWidth()), -(double)((int)(cam_y/10) % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);
 	App->Draw(landscape);
 	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y);

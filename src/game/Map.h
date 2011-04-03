@@ -94,8 +94,12 @@ public:
 	//sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
 	sf::Sprite tile_sprite;
 	
-	int cam_x;
-	int cam_y;
+	double cam_x, cam_y;
+	double cam_x1;
+	double cam_y1;
+	double cam_x2;
+	double cam_y2;
+	
 	bool loaded;
 
 	std::string currentFilename;

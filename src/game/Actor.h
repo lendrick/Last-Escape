@@ -129,6 +129,7 @@ public:
 	bool hidden;
 	bool toTeleport;
 	bool awake;
+	bool canSleep;
 	
 	int currentLevel;
 	int experienceValue;

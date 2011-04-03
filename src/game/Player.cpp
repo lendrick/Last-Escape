@@ -79,6 +79,7 @@ Player::Player(double x, double y)
 	dieSound  = soundCache["xeonDies.ogg"];
 	currentStart = NULL;
 	dying = false;
+	canSleep = false;
 
 	init();
 }

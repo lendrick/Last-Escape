@@ -35,6 +35,8 @@ struct Point {
 
 string trim(string s, char c);
 string parse_section_title(string s);
+double clamp(double n, double min, double max);
+
 void parse_key_pair(string s, string &key, string &val);
 
 cpShape * boxWithOffset(cpBody * body, double width, double height, sf::Vector2f offset);
