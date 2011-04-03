@@ -194,7 +194,7 @@ int main(int argc, char** argv)
 	// Start game loop
 	while (App->IsOpened())
 	{
-		int targetFrame = frameTimer.GetElapsedTime() / fps;
+		int targetFrame = frameTimer.GetElapsedTime() * fps;
 		
 	  startTimer();
 		input.poll();
