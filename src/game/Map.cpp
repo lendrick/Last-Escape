@@ -391,6 +391,19 @@ bool Map::setupPhysics()
 	}
 	*/
 	
+	
+	// map bounds
+	double x1, y1, x2, y2;
+	x1 = 0;
+	y1 = 0;
+	x2 = MAP_TILES_X * TILE_SIZE;
+	y2 = MAP_TILES_Y * TILE_SIZE;
+
+	createSegment(cpv(x1, y1), cpv(x1, y2), PhysicsType::Wall);
+	createSegment(cpv(x1, y2), cpv(x2, y2), PhysicsType::Wall);
+	createSegment(cpv(x2, y2), cpv(x2, y1), PhysicsType::Wall);
+	createSegment(cpv(x2, y1), cpv(x1, y1), PhysicsType::Death);
+	
 	// Vertical Pass
 	/* This only accounts for on and off collision tiles now, but would be easy
 	 * enough to expand to working with diagonals as well, if we do a diagonal
@@ -840,7 +853,7 @@ bool Map::isLoaded() {
 }
 
 
-void Map::createSegment(cpVect &p1, cpVect &p2, int type) {
+void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	if(debugMode) cout << "new segment (" << p1.x << ", " << p1.y << ") to (" << p2.x << ", " << p2.y << ")\n";
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
 	seg->e = 0.0f;
