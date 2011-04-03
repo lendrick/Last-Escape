@@ -134,6 +134,8 @@ int main(int argc, char** argv)
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
 	int frameCount = 0;
+	int framesSkipped = 0;
+	int maxFramesSkipped = 10;
 	time_step = 1.0/fps;
 
 	// Parse a few command-line arguments
@@ -227,7 +229,9 @@ int main(int argc, char** argv)
 				update_time += getTimer();
 			}
 		
-			if(frameCount > targetFrame - 1) {
+			if(frameCount >= targetFrame - 1 || framesSkipped >= maxFramesSkipped) {
+				cout << "Skipped " << framesSkipped << " frames\n";
+				framesSkipped = 0;
 				if(frameCount >= fps) {
 					cout << "\nIn last " << fps << " frames:\n";
 					cout << "  Poll Input:       " << input_time << "s\n";
@@ -262,6 +266,8 @@ int main(int argc, char** argv)
 				startTimer();
 				game_map->renderForeground();
 				fg_time += getTimer();
+			} else {
+				framesSkipped++;
 			}
 		}
 
