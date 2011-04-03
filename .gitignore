@@ -10,3 +10,4 @@ lastescape
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
+gmon.out
