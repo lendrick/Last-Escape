@@ -279,16 +279,17 @@ int main(int argc, char** argv)
 
 		App->SetView(uiView);
 
-		startTimer();
-		if(renderUi) 
+		if(renderUi) {
+			startTimer();
 			ui_render(g_player);
-		ui_time += getTimer();
-		
-		// Finally, display the rendered frame on screen
-		startTimer();
-		App->Display();
-		display_time += getTimer();
-		
+			ui_time += getTimer();
+			
+			// Finally, display the rendered frame on screen
+			startTimer();
+			App->Display();
+			display_time += getTimer();
+		}
+	
 		frameCount++;
 	}
 
