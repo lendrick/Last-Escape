@@ -44,6 +44,7 @@ Actor::Actor(float x, float y, float w, float h, bool staticBody) {
 	toTeleport = false;
 	teleport_x = teleport_y = 0;
 	teleport_vx = teleport_vy = 0;
+	awake = true;
 	resetPhysics(x, y);
 }
 
@@ -95,6 +96,19 @@ void Actor::getSize(int &w, int &h) {
 	w = width;
 }
 
+bool Actor::isOnCamera() {
+	float px, py;
+	getPos(px, py);
+	if(body) py += height;
+	sf::FloatRect cam = gameView.GetRect();
+	
+	float radius = height + width;  // manhattan distance, for speed.
+	if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius)
+		return true;
+	
+	return false;
+}
+
 void Actor::draw() {
 	if(!hidden && hasImage) {
 		cpVect pos;
@@ -114,34 +128,33 @@ void Actor::draw() {
 			sprite.FlipY(true);
 			sprite.SetPosition(px, py);
 			App->Draw(sprite);
-		}
 		
-		if(debugMode)
-        {
-						float px, py;
-						getPos(px, py);
-						
-            float bbx1, bby1, bbx2, bby2;
-            bbx1 = px - width/2;
-            bby1 = py - height/2;
-            bbx2 = bbx1 + width;
-            bby2 = bby1 + height;
-						
-						sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
-                                           sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0));
-						rect.SetPosition(px, py);
-						if(body && body->a) {
-							rect.SetRotation(rad2deg(body->a));
-						}
-            App->Draw(rect);
-						
-						// Draw a crosshair at the actor's position
-						App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f, 
-																					 sf::Color(0, 0, 255)));
-						App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
-																					 sf::Color(0, 0, 255)));
-        }
-    
+			if(debugMode)
+			{
+				float px, py;
+				getPos(px, py);
+				
+				float bbx1, bby1, bbx2, bby2;
+				bbx1 = px - width/2;
+				bby1 = py - height/2;
+				bbx2 = bbx1 + width;
+				bby2 = bby1 + height;
+				
+				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
+																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0));
+				rect.SetPosition(px, py);
+				if(body && body->a) {
+					rect.SetRotation(rad2deg(body->a));
+				}
+				App->Draw(rect);
+				
+				// Draw a crosshair at the actor's position
+				App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f, 
+																				sf::Color(0, 0, 255)));
+				App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
+																				sf::Color(0, 0, 255)));
+      }
+		}
 	}
 }
 
@@ -195,7 +208,18 @@ void Actor::leaveGround() {
 }
 
 void Actor::doUpdate(float dt) {
-	update(dt);
+	if(!body) {
+		update(dt);
+	} else if(isOnCamera()) {
+		if(!awake) {
+			cpBodyActivate(body);
+			awake = true;
+		}
+		update(dt);
+	} else if(awake) {
+		awake = false;
+		cpBodySleep(body);
+	}
 	/*
 	if(body && game_map) {
 		sf::Vector2f pos = game_map->cp2sfml(body->p);

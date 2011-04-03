@@ -112,6 +112,8 @@ public:
 	virtual void destroyPhysics();
 	virtual void resetPhysicsCustom(float start_x, float start_y) { }
 	
+	bool isOnCamera();
+	
 	cpBody* body;
 	cpShape* shape;
 
@@ -126,6 +128,7 @@ public:
 	bool hasImage;
 	bool hidden;
 	bool toTeleport;
+	bool awake;
 	
 	int currentLevel;
 	int experienceValue;
