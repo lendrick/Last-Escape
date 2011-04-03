@@ -98,49 +98,23 @@ void Actor::getSize(int &w, int &h) {
 void Actor::draw() {
 	if(!hidden && hasImage) {
 		cpVect pos;
-		int pos_x, pos_y;
-
-		sf::Vector2f cam = game_map->cp2sfml(cpv(game_map->cam_x, game_map->cam_y));
+		float px, py;
+		getPos(px, py);
+		if(body) py += height;
+		sf::FloatRect cam = gameView.GetRect();
 		
-		if(body) {
-			pos = cpv(body->p.x, body->p.y + height/2);
-		} else {
-			pos = cpv(static_x, static_y + height/2);
-		}
-		
-		if(body && body->a) {
-			sprite.SetRotation(rad2deg(body->a));
-		} else {
-			sprite.SetRotation(0);
-		}
-		
-		sf::Vector2f sfPos = game_map->cp2sfml(pos);
-		
-		/*
-		if(isPlayer()) {
-			if(body) {
-				cout << "Position from physics body\n";
+		float radius = height + width;  // manhattan distance, for speed.
+		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
+			if(body && body->a) {
+				sprite.SetRotation(rad2deg(body->a));
 			} else {
-				cout << "Position from static shape\n";
+				sprite.SetRotation(0);
 			}
-			cout << "Player at " << body->p.x << " " << body->p.y << "\n";
-			cout << "Chipmunk screen position " << pos.x << " " << pos.y << "\n";
-			cout << "SFML Camera position " << cam.x << " " << cam.y << "\n";
-			cout << "SFML screen position " << sfPos.x - cam.x << " " << sfPos.y - cam.y<< "\n\n";
+					
+			sprite.FlipY(true);
+			sprite.SetPosition(px, py);
+			App->Draw(sprite);
 		}
-		*/
-		
-		//sprite.SetPosition(
-			//0.5f + (int)(sfPos.x - cam.x),
-			//0.5f + (int)(sfPos.y - cam.y));
-		//sprite.SetCenter(-width/2, height/2);
-		sprite.FlipY(true);
-		if(body) {
-			sprite.SetPosition(body->p.x, body->p.y + height);
-		} else {
-			sprite.SetPosition(static_x, static_y);
-		}
-		App->Draw(sprite);
 		
 		if(debugMode)
         {

@@ -259,6 +259,7 @@ void Map::loadMap(string filename) {
 				std::string propname = ((TiXmlElement*)prop)->Attribute("name");
 				std::string propval = ((TiXmlElement*)prop)->Attribute("value");
 				if(propname == "landscape") {
+					landscapeImg = sf::Image();
 					landscapeImg.LoadFromFile("images/landscapes/" + propval);
 					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
