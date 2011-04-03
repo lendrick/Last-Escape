@@ -21,14 +21,14 @@
 #include "globals.h"
 #include "Map.h"
 
-AnimatedActor::AnimatedActor(float x, float y, float w, float h, std::string filename,  bool staticBody)
+AnimatedActor::AnimatedActor(double x, double y, double w, double h, std::string filename,  bool staticBody)
 :Actor(x, y, w, h, staticBody)
 {
 	init();
 	setImage(filename);
 }
 
-AnimatedActor::AnimatedActor(float x, float y, float w, float h, bool staticBody)
+AnimatedActor::AnimatedActor(double x, double y, double w, double h, bool staticBody)
 :Actor(x, y, w, h, staticBody)
 {
 	init();
@@ -97,7 +97,7 @@ void AnimatedActor::draw()
 		}
 	}
 	
-	float redness = 0;
+	double redness = 0;
 	if(immunityTime > 0) {
                 redness = damageTimer / immunityTime;
         }
@@ -112,7 +112,7 @@ void AnimatedActor::draw()
 	Actor::draw();
 }
 
-void AnimatedActor::doUpdate(float dt) {
+void AnimatedActor::doUpdate(double dt) {
 	if(damageTimer > 0.0f)
 		damageTimer -= dt;
 	else
@@ -265,7 +265,7 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 	}
 }
 
-bool AnimatedActor::doDamage(float damage, bool knockback) {
+bool AnimatedActor::doDamage(double damage, bool knockback) {
         if(damageTimer <= 0) {
                 life -= damage;
                 if(life <= 0) {
@@ -283,7 +283,7 @@ void AnimatedActor::onDamage() {
         soundCache["hit1.ogg"]->playSound();
 }
 
-bool AnimatedActor::move(float mx, float my) {
+bool AnimatedActor::move(double mx, double my) {
 	/*
 	if(body != NULL) {
 		cout << actorName << " moving " << mx << " " << my << "\n";

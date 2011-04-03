@@ -22,21 +22,21 @@
 
 struct Particle
 {
-    float x, y, xSpeed, ySpeed, angle, angleSpeed;
-    float age, maxAge;
+    double x, y, xSpeed, ySpeed, angle, angleSpeed;
+    double age, maxAge;
 };
 
 class ParticleEmitter : public Actor
 {
 public:
-	ParticleEmitter(float x, float y);
+	ParticleEmitter(double x, double y);
 	virtual void draw();
-	virtual void update(float dt);
+	virtual void update(double dt);
 private:
-    float maxAge;
+    double maxAge;
 
-	float timeLeft;
-    float emissionRate;
+	double timeLeft;
+    double emissionRate;
     int maxParticles;
 
     size_t nextIdx;

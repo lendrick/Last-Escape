@@ -26,19 +26,19 @@
 #include "ExitPoint.h"
 #include "Collectible.h"
 
-const float energy_cost_jump = 0.f;
-const float energy_recharge_rate = 5.f; // units per second
+const double energy_cost_jump = 0.f;
+const double energy_recharge_rate = 5.f; // units per second
 static const int start_lives = 3;
 
 struct WeaponDesc {
 	const char* name;
-	float energy_cost;
-	float reload_time;
-	float angle_variation;
+	double energy_cost;
+	double reload_time;
+	double angle_variation;
 
 	int sprite_row;
 	int sprite_count;
-	float sprite_speed;
+	double sprite_speed;
 };
 
 const int num_weapon_types = 3;
@@ -51,7 +51,7 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 };
 
-Player::Player(float x, float y)
+Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
@@ -93,7 +93,7 @@ void Player::init() {
 	if(currentStart == NULL)
 		currentStart = findStart();
 
-	float sx, sy;
+	double sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
 		//setPos(sx, sy);
@@ -108,7 +108,7 @@ void Player::init() {
 	resetPhysics(sx, sy);
 }
 
-void Player::resetPhysicsCustom(float start_x, float start_y) {
+void Player::resetPhysicsCustom(double start_x, double start_y) {
 	if(shape) {
 		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy|PhysicsLayer::EnemyBullet;
 		shape->collision_type = PhysicsType::Player;
@@ -119,7 +119,7 @@ StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
 			//if (debugMode)
-				float px, py;
+				double px, py;
 				(*it)->getPos(px, py);
 				if(debugMode) cout << "found start at " << px << " " << py << "\n";
 			return static_cast<StartPoint *>(*it);
@@ -133,12 +133,12 @@ void Player::upgradeWeapon() {
 	currentWeapon = min(currentWeapon+1, num_weapon_types-1);
 }
 
-void Player::jump(float dt) {
+void Player::jump(double dt) {
 	const int jump_speed = 525;
-	const float max_jet_accel = 2000;
-	const float jet_cost = 35;
-	const float jet_speed_max = 250;
-	const float jet_wait = 0.4f;
+	const double max_jet_accel = 2000;
+	const double jet_cost = 35;
+	const double jet_speed_max = 250;
+	const double jet_wait = 0.4f;
 
 	if (body->v.y == 0 && isGrounded())
 	{
@@ -155,7 +155,7 @@ void Player::jump(float dt) {
 		if (time - last_jump_time < jet_wait)
 			return;
 
-		float cost = jet_cost * dt;
+		double cost = jet_cost * dt;
 		if (energy < cost)
 			return;
 
@@ -170,7 +170,7 @@ void Player::jump(float dt) {
 }
 
 void Player::shoot() {
-	const float shoot_reload_timer = 0.5f;
+	const double shoot_reload_timer = 0.5f;
 
 	if (energy < weapons[currentWeapon].energy_cost)
 		return;
@@ -182,7 +182,7 @@ void Player::shoot() {
 		
 		//sf::Vector2f pos = body->p;
 
-		float bulletX = body->p.x + 30.0f, bulletY = 0.0f;
+		double bulletX = body->p.x + 30.0f, bulletY = 0.0f;
 		if(facing_direction == Facing::Left)
 			bulletX = body->p.x - 30.0f;
 
@@ -210,7 +210,7 @@ void Player::crouch() {
 	crouched = true;
 }
 
-void Player::update(float dt) {
+void Player::update(double dt) {
 	if(!body) return;
 	const int speed_max = 200; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
@@ -239,10 +239,10 @@ void Player::update(float dt) {
 
 	// recharge energy
 	if(energy > 0)
-        energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
+        energy += std::min(energy_recharge_rate*dt, std::max(0., energy_max - energy));
 
 	if (godMode)
-		energy = std::max(energy, 10.f);
+		energy = std::max(energy, 10.);
 
 	// left/right move
 	shape->u = 2.0f;
@@ -412,7 +412,7 @@ void Player::onAnimationComplete(std::string anim) {
 	}
 }
 
-bool Player::doDamage(float damage, bool knockback) {
+bool Player::doDamage(double damage, bool knockback) {
 	bool dead = false;
 	if(damageTimer <= 0) {
 		energy -= damage * 30;

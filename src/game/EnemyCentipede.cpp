@@ -23,7 +23,7 @@
 #include "ImageCache.h"
 #include <SFML/Graphics.hpp>
 
-EnemyCentipede::EnemyCentipede(float x, float y)
+EnemyCentipede::EnemyCentipede(double x, double y)
 :EnemyPatroller(x, y, 32.0f, 25.0f)
 {
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
@@ -73,7 +73,7 @@ EnemyCentipede::EnemyCentipede(float x, float y)
 	setCurrentAnimation("walk");
 }
 
-void EnemyCentipede::update(float dt) {
+void EnemyCentipede::update(double dt) {
 	if(!dying) {
 		time += dt;
 		if(lastShot + shootInterval <= time && animationName() != "shoot") {
@@ -142,7 +142,7 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	shape->group = PhysicsGroup::EnemyBullets;
 }
 
-void EnemyCentipedeProjectile::update(float dt)
+void EnemyCentipedeProjectile::update(double dt)
 {
 	if(isGrounded()) {
 		setCurrentAnimation("splat");

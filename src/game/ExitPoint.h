@@ -25,7 +25,7 @@
 
 class ExitPoint : public Sensor {
 public:
-	ExitPoint(float x, float y, float w, float h);
+	ExitPoint(double x, double y, double w, double h);
 	
 	virtual bool isExitPoint() { return true; }
 

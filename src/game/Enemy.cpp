@@ -21,7 +21,7 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-Enemy::Enemy(float x, float y, float w, float h)
+Enemy::Enemy(double x, double y, double w, double h)
 :AnimatedActor(x, y, w, h)
 {
 	//make sure we die in one hit by default
@@ -50,9 +50,9 @@ void Enemy::collide(Actor& otherActor) {
 }
 
 
-void Enemy::patrol(float dt) {
-	float delta_x = speed_x * dt;
-	float delta_y = speed_y * dt;
+void Enemy::patrol(double dt) {
+	double delta_x = speed_x * dt;
+	double delta_y = speed_y * dt;
 
 	int check_pos = 12;
 	if(facing_direction == Facing::Left) check_pos = -check_pos;

@@ -22,17 +22,17 @@
 class EnemyPatroller : public Enemy 
 {
 public:
-	EnemyPatroller(float x, float y, float w, float h);
+	EnemyPatroller(double x, double y, double w, double h);
 	virtual ~EnemyPatroller();
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void draw();
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
 	virtual void onBumperCollide(int facing);
 protected:
-	float walk_speed;
+	double walk_speed;
 	Bumper* leftBumper;
 	Bumper* rightBumper;
-	float drop_offset_x, drop_offset_y;
+	double drop_offset_x, drop_offset_y;
 };
 

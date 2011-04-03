@@ -21,7 +21,7 @@
 
 class SpawnPoint : public StartPoint {
 public:
-    SpawnPoint(float x, float y) : StartPoint(x, y) {};
+    SpawnPoint(double x, double y) : StartPoint(x, y) {};
 private:
 	virtual bool isSpawnPoint() { return true; }
 };

@@ -24,6 +24,6 @@
 
 class StartPoint : public Sensor {
 public:
-	StartPoint(float x, float y) : Sensor(x, y, 32.0f, 32.0f) {};
+	StartPoint(double x, double y) : Sensor(x, y, 32.0f, 32.0f) {};
 	virtual bool isStartPoint() { return true; }
 };

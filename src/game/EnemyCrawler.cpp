@@ -26,7 +26,7 @@
 #include "Bumper.h"
 
 
-EnemyCrawler::EnemyCrawler(float x, float y)
+EnemyCrawler::EnemyCrawler(double x, double y)
 :EnemyPatroller(x, y, 40.0f, 16.0f)
 {
 	setImage("crawler.png");
@@ -83,13 +83,13 @@ EnemyCrawler::~EnemyCrawler() {
 	delete rightBumper;
 }
 
-void EnemyCrawler::update(float dt) {
+void EnemyCrawler::update(double dt) {
 	if(!dying) {
 
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
-		const float vision_range = 320;
-		const float vision_min_range = 32;
+		const double vision_range = 320;
+		const double vision_min_range = 32;
 
 		if(isGrounded()) {
 			if (facing_direction == Facing::Left) {

@@ -20,7 +20,7 @@
 #include "Enemy.h"
 #include "globals.h"
 
-PlayerBullet::PlayerBullet(float x, float y, int facing, float angleVariation, float lifetime):
+PlayerBullet::PlayerBullet(double x, double y, int facing, double angleVariation, double lifetime):
 AnimatedActor(x, y, 15.0f, 7.0f)
 {
 	this->setImage("xeon-bullet.png");
@@ -29,11 +29,11 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 
 	facing_direction = facing;
 
-	float speed = 500.f;
+	double speed = 500.f;
 
-	float angle = ((facing_direction == Facing::Right) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
-	float speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
-	float speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
+	double angle = ((facing_direction == Facing::Right) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
+	double speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
+	double speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
 	
 	body->v.x = speed_x;
 	body->v.y = speed_y;
@@ -74,7 +74,7 @@ void PlayerBullet::collide(Actor& otherActor) {
 	}
 }
 
-void PlayerBullet::update(float dt) {
+void PlayerBullet::update(double dt) {
 	//cout << "bullet " << body->p.x << " " << body->p.y << "\n";
 	bulletTime += dt;
 	//cout << "angle " << rad2deg(body->a) << "\n";

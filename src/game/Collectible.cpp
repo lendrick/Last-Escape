@@ -22,7 +22,7 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-Collectible::Collectible(float x, float y, float w, float h)
+Collectible::Collectible(double x, double y, double w, double h)
 :AnimatedActor(x, y, w, h, true)
 {
 	shape->sensor = true;
@@ -47,7 +47,7 @@ void Collectible::reset() {
 	hidden = false;
 }
 
-CollectiblePill::CollectiblePill(float x, float y)
+CollectiblePill::CollectiblePill(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f)
 {
 	this->setImage("smallenergy.png");
@@ -69,7 +69,7 @@ void CollectiblePill::collide(Actor& otherActor) {
 }
 
 
-CollectibleWeaponUpgrade::CollectibleWeaponUpgrade(float x, float y)
+CollectibleWeaponUpgrade::CollectibleWeaponUpgrade(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f)
 {
 	this->setImage("plasmaball.png");
@@ -87,7 +87,7 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 }
 
 
-CollectibleArmor::CollectibleArmor(float x, float y)
+CollectibleArmor::CollectibleArmor(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f) {
 	this->setImage("shield.png");
 	init();
@@ -103,7 +103,7 @@ void CollectibleArmor::collide(Actor& otherActor) {
 }
 
 
-CollectibleEnergyBall::CollectibleEnergyBall(float x, float y, int expValue)
+CollectibleEnergyBall::CollectibleEnergyBall(double x, double y, int expValue)
 : Collectible(x, y, 32.0f, 32.0f) {
 	actorName = "EnergyBall";
 	this->setImage("energyball.png");

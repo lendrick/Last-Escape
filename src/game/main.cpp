@@ -60,7 +60,7 @@ bool paused = false;
 const double time_step = 1.0f/60.0f;
 
 
-void update(float dt) {
+void update(double dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
@@ -98,15 +98,15 @@ void cleanup() {
 	}
 }
 
-float frand(float lower, float upper) {
-	return ((upper-lower)*((float)rand()/RAND_MAX))+lower;
+double frand(double lower, double upper) {
+	return ((upper-lower)*((double)rand()/RAND_MAX))+lower;
 }
 
-float deg2rad(float deg) {
+double deg2rad(double deg) {
 	return deg * 180.0f / M_PI;
 }
 
-float rad2deg(float rad) {
+double rad2deg(double rad) {
   return rad * M_PI / 180.0f;
 }
 
@@ -177,12 +177,12 @@ int main(int argc, char** argv)
 		if(input.quit())
 			App->Close();
 
-		float ElapsedTime = Clock.GetElapsedTime();
+		double ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
 		// Clamp frame update time if worse than 20fps, so it'll slow down instead
 		// of just getting very jerky (which breaks jump heights)
-		float frameTime = std::min(ElapsedTime, 0.05f);
+		double frameTime = std::min(ElapsedTime, 0.05);
 
 		// Clear screen
 		App->Clear();

@@ -26,7 +26,7 @@
 #include "Bumper.h"
 
 
-EnemyPatroller::EnemyPatroller(float x, float y, float w, float h)
+EnemyPatroller::EnemyPatroller(double x, double y, double w, double h)
 :Enemy(x, y, w, h)
 {
 	walk_speed = 0;
@@ -46,13 +46,13 @@ EnemyPatroller::~EnemyPatroller() {
 	delete rightBumper;
 }
 
-void EnemyPatroller::update(float dt) {
+void EnemyPatroller::update(double dt) {
 	if(!dying) {
 
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
-		const float vision_range = 320;
-		const float vision_min_range = 32;
+		const double vision_range = 320;
+		const double vision_min_range = 32;
 
 		if(isGrounded()) {
 			if (facing_direction == Facing::Left) {

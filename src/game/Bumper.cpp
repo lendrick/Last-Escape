@@ -20,7 +20,7 @@
 #include "Actor.h"
 #include "Map.h"
 
-Bumper::Bumper(Actor * actor, int facing_direction, float thickness) {
+Bumper::Bumper(Actor * actor, int facing_direction, double thickness) {
 	//cout << "New bumper on " << actor->actorName << " " << actor->width << " " << actor->height << "  " << facing_direction << "\n";
 	cpBody * body = actor->body;
 	this->actor = actor;

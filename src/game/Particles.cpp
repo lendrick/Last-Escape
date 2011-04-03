@@ -19,7 +19,7 @@
 
 #include "Map.h"
 
-ParticleEmitter::ParticleEmitter(float x, float y)
+ParticleEmitter::ParticleEmitter(double x, double y)
 :Actor(x, y, 32.0f, 32.0f)
 {
 
@@ -39,7 +39,7 @@ ParticleEmitter::ParticleEmitter(float x, float y)
 	setCanCollide(false);
 }
 
-void ParticleEmitter::update(float dt) {
+void ParticleEmitter::update(double dt) {
 
 	timeLeft += dt;
 
@@ -65,7 +65,7 @@ void ParticleEmitter::draw() {
 		sf::Vector2f pos = game_map->cp2sfml(cpv(particles[i].x, particles[i].y));
 		sprite.SetPosition(pos.x - game_map->cam_x, pos.y - game_map->cam_y);
 		sprite.SetRotation(particles[i].angle);
-		float a = std::min(1.0f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
+		double a = std::min(1.0f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
 		sprite.SetColor(sf::Color(255, 255, 255, std::min(255, std::max(0, (int)(a*255)))));
 		App->Draw(sprite);
 	}
@@ -77,10 +77,10 @@ void ParticleEmitter::addParticle()
 	Particle p;
 	p.x = body->p.x;
 	p.y = body->p.y;
-	p.xSpeed = float((rand() % 20) - 10);
-	p.ySpeed = -float((rand() % 10) - 50);
-	p.angle = float(rand() % 360);
-	p.angleSpeed = float((rand() % 200) - 100);
+	p.xSpeed = double((rand() % 20) - 10);
+	p.ySpeed = -double((rand() % 10) - 50);
+	p.angle = double(rand() % 360);
+	p.angleSpeed = double((rand() % 200) - 100);
 	p.age = 0;
 	p.maxAge = maxAge * (100 - (rand() % 10)) / 100.f;
 

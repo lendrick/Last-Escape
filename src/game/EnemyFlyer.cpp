@@ -21,7 +21,7 @@
 #include "SoundCache.h"
 #include "Collectible.h"
 
-EnemyFlyer::EnemyFlyer(float x, float y)
+EnemyFlyer::EnemyFlyer(double x, double y)
 :Enemy(x, y, 27.0f, 31.0f)
 {
 	setImage("flyer.png");
@@ -82,7 +82,7 @@ EnemyFlyer::EnemyFlyer(float x, float y)
 }
 
 
-void EnemyFlyer::update(float dt) {
+void EnemyFlyer::update(double dt) {
 	cpVect force = cpv(0, 0);
 	
   if(diving && timeUntilEndDive <= 0) {

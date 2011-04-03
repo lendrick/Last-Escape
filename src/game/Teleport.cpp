@@ -18,7 +18,7 @@
 #include "Teleport.h"
 #include "Player.h"
 
-TeleportEnter::TeleportEnter(float x, float y, float w, float h, std::string teleName)
+TeleportEnter::TeleportEnter(double x, double y, double w, double h, std::string teleName)
 :Sensor(x, y, w, h)
 {
 	name = teleName;
@@ -32,7 +32,7 @@ void TeleportEnter::collide(Actor& otherActor) {
 			if ((*it)->isTeleportExit() && ((TeleportExit*)*it)->getName() == name)
 			{
 				// TODO: Fix this mofo, once we make an Actor::Teleport function.
-			  float x, y;
+			  double x, y;
 				(*it)->getPos(x, y);
 				otherActor.teleport(x, y, 0, 500);
 				
@@ -42,7 +42,7 @@ void TeleportEnter::collide(Actor& otherActor) {
 	}
 }
 
-TeleportExit::TeleportExit(float x, float y, std::string teleName)
+TeleportExit::TeleportExit(double x, double y, std::string teleName)
 :Sensor(x, y, 32.0f, 32.0f)
 {
 	name = teleName;

@@ -195,7 +195,7 @@ void Map::loadMap(string filename) {
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
 				const char* name = ((TiXmlElement*)object)->Attribute("name");
 
-				float x = 0, y = 0;
+				double x = 0, y = 0;
 				int temp_x, temp_y;
 				((TiXmlElement*)object)->QueryIntAttribute("x", &temp_x);
 				((TiXmlElement*)object)->QueryIntAttribute("y", &temp_y);
@@ -207,33 +207,33 @@ void Map::loadMap(string filename) {
 
 				Actor* actor;
 				if (type == "pill") {
-					actor = new CollectiblePill((float)x, (float)y);
+					actor = new CollectiblePill((double)x, (double)y);
 				} else if (type == "weaponupgrade") {
-					actor = new CollectibleWeaponUpgrade((float)x, (float)y);
+					actor = new CollectibleWeaponUpgrade((double)x, (double)y);
 				} else if (type == "armor") {
-					actor = new CollectibleArmor((float)x, (float)y);
+					actor = new CollectibleArmor((double)x, (double)y);
 				} else if (type == "smoke") {
-					actor = new ParticleEmitter((float)x, (float)y);
+					actor = new ParticleEmitter((double)x, (double)y);
 				} else if (type == "walker") {
-					actor = new EnemyWalker((float)x, (float)y);
+					actor = new EnemyWalker((double)x, (double)y);
 				} else if (type == "crawler") {
-					actor = new EnemyCrawler((float)x, (float)y);
+					actor = new EnemyCrawler((double)x, (double)y);
 				} else if (type == "flyer") {
-					actor = new EnemyFlyer((float)x, (float)y);
+					actor = new EnemyFlyer((double)x, (double)y);
 				} else if (type == "centipede") {
-					actor = new EnemyCentipede((float)x, (float)y);
+					actor = new EnemyCentipede((double)x, (double)y);
 				} else if (type == "spider") {
-					actor = new BossSpider((float)x, (float)y);
+					actor = new BossSpider((double)x, (double)y);
 				} else if (type == "teleportenter") {
-					actor = new TeleportEnter((float)x, (float)y, w, h, name);
+					actor = new TeleportEnter((double)x, (double)y, w, h, name);
 				} else if (type == "teleportexit") {
-					actor = new TeleportExit((float)x, (float)y, name);
+					actor = new TeleportExit((double)x, (double)y, name);
 				} else if (type == "start") {
-					actor = new StartPoint((float)x, (float)y);
+					actor = new StartPoint((double)x, (double)y);
 				} else if (type == "spawn") {
-					actor = new SpawnPoint((float)x, (float)y);
+					actor = new SpawnPoint((double)x, (double)y);
 				} else if (type == "exit") {
-					actor = new ExitPoint((float)x, (float)y, w, h);
+					actor = new ExitPoint((double)x, (double)y, w, h);
 					if (debugMode)
 						cout << "Exit point\n";
 					TiXmlElement* prop = TiXmlHandle(object).FirstChild("properties").FirstChild("property").ToElement();
@@ -856,7 +856,7 @@ void Map::renderLandscape() {
 	cam_y = MAP_TILES_Y * TILE_SIZE - cam.y;
 	
 	// Draw it four times, aka repeating in X and Y
-	sf::Vector2f topleft(-(float)(cam_x/10 % landscapeImg.GetWidth()), -(float)(cam_y/10 % landscapeImg.GetHeight()));
+	sf::Vector2f topleft(-(double)(cam_x/10 % landscapeImg.GetWidth()), -(double)(cam_y/10 % landscapeImg.GetHeight()));
 	landscape.SetPosition(topleft);
 	App->Draw(landscape);
 	landscape.SetPosition(topleft.x + landscapeImg.GetWidth(), topleft.y);

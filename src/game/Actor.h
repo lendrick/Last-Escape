@@ -27,13 +27,13 @@ class Player;
 
 class Actor {
 public:
-	Actor(float x, float y, float w, float h, bool staticBody = false);
+	Actor(double x, double y, double w, double h, bool staticBody = false);
 	virtual ~Actor();
 	
-	void setPlaceholder(sf::Color c, float w, float h, float xoff = 0.5, float yoff = 0.5);
+	void setPlaceholder(sf::Color c, double w, double h, double xoff = 0.5, double yoff = 0.5);
 
 	void setDrawOffset(int ox, int oy);
-	void getPos(float &px, float &py);
+	void getPos(double &px, double &py);
 	
 	void setSize(int w, int h);
 	void getSize(int &w, int &h);
@@ -41,7 +41,7 @@ public:
 	//void setOrigin(int ox, int oy);
 	//void getOrigin(int &ox, int &oy);
 	
-	//void getBoundingBox(float &x1, float &y1, float &x2, float &y2);
+	//void getBoundingBox(double &x1, double &y1, double &x2, double &y2);
 	
 	//bool isColliding(Actor * otherActor);
 	bool isGrounded();
@@ -61,8 +61,8 @@ public:
 	// Start death animation, etc.  destroy() should be called in update() and not in collide()
 	virtual void die();
 	
-	virtual void update(float dt) { };
-	virtual	void doUpdate(float dt);
+	virtual void update(double dt) { };
+	virtual	void doUpdate(double dt);
 	virtual void draw();
 	
 	void destroy();
@@ -90,7 +90,7 @@ public:
 	virtual void collideGround();
 	virtual void leaveGround();
 	
-	void teleport(float x, float y, float vx, float vy);
+	void teleport(double x, double y, double vx, double vy);
 	void doTeleport();
 	
 	bool isStaticBody() { return staticBody; }
@@ -108,9 +108,9 @@ public:
 	// Set the velocity function to the default
 	void unFreeze();
 	
-	virtual void resetPhysics(float start_x, float start_y);
+	virtual void resetPhysics(double start_x, double start_y);
 	virtual void destroyPhysics();
-	virtual void resetPhysicsCustom(float start_x, float start_y) { }
+	virtual void resetPhysicsCustom(double start_x, double start_y) { }
 	
 	bool isOnCamera();
 	
@@ -137,8 +137,8 @@ public:
 protected:
 	//void //checkcollisions();
 	cpBodyVelocityFunc defaultVelocityFunc;
-	float static_x, static_y;
-	float teleport_x, teleport_y, teleport_vx, teleport_vy;
+	double static_x, static_y;
+	double teleport_x, teleport_y, teleport_vx, teleport_vy;
 	int grounded;
 	
 private:

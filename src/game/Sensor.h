@@ -21,7 +21,7 @@
 
 class Sensor : public Actor {
 public:
-	Sensor(float x, float y, float w, float h);
+	Sensor(double x, double y, double w, double h);
 private:
 };
 

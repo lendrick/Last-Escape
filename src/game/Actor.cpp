@@ -21,7 +21,7 @@
 #include <list>
 #include <cmath>
 
-Actor::Actor(float x, float y, float w, float h, bool staticBody) {
+Actor::Actor(double x, double y, double w, double h, bool staticBody) {
 	width = w;
 	height = h;
 // 	setPos(0, 0);
@@ -53,11 +53,11 @@ Actor::~Actor() {
 	destroyPhysics();
 }
 
-void Actor::setPlaceholder(sf::Color c, float w, float h, float xoff, float yoff) {
+void Actor::setPlaceholder(sf::Color c, double w, double h, double xoff, double yoff) {
 	width = (int)w;
 	height = (int)h;
 	sprite.SetColor(c);
-	sprite.SetScale((float)width, (float)height);
+	sprite.SetScale((double)width, (double)height);
 	sprite.SetCenter(xoff, yoff);
 }
 
@@ -70,10 +70,10 @@ void Actor::setVelocityFunc(cpBodyVelocityFunc f) {
 void Actor::setDrawOffset(int ox, int oy) {
 	xDrawOffset = ox;
 	yDrawOffset = oy;
-	sprite.SetCenter((float)ox, (float)oy);
+	sprite.SetCenter((double)ox, (double)oy);
 }
 
-void Actor::getPos(float &px, float &py) {
+void Actor::getPos(double &px, double &py) {
 	if(body) {
 		px = body->p.x;
 		py = body->p.y;
@@ -97,12 +97,12 @@ void Actor::getSize(int &w, int &h) {
 }
 
 bool Actor::isOnCamera() {
-	float px, py;
+	double px, py;
 	getPos(px, py);
 	if(body) py += height;
 	sf::FloatRect cam = gameView.GetRect();
 	
-	float radius = height + width;  // manhattan distance, for speed.
+	double radius = height + width;  // manhattan distance, for speed.
 	if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius)
 		return true;
 	
@@ -112,12 +112,12 @@ bool Actor::isOnCamera() {
 void Actor::draw() {
 	if(!hidden && hasImage) {
 		cpVect pos;
-		float px, py;
+		double px, py;
 		getPos(px, py);
 		if(body) py += height;
 		sf::FloatRect cam = gameView.GetRect();
 		
-		float radius = height + width;  // manhattan distance, for speed.
+		double radius = height + width;  // manhattan distance, for speed.
 		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
 			if(body && body->a) {
 				sprite.SetRotation(rad2deg(body->a));
@@ -131,10 +131,10 @@ void Actor::draw() {
 		
 			if(debugMode)
 			{
-				float px, py;
+				double px, py;
 				getPos(px, py);
 				
-				float bbx1, bby1, bbx2, bby2;
+				double bbx1, bby1, bbx2, bby2;
 				bbx1 = px - width/2;
 				bby1 = py - height/2;
 				bbx2 = bbx1 + width;
@@ -207,7 +207,7 @@ void Actor::leaveGround() {
 	grounded--;
 }
 
-void Actor::doUpdate(float dt) {
+void Actor::doUpdate(double dt) {
 	if(!body) {
 		update(dt);
 	} else if(isOnCamera()) {
@@ -249,7 +249,7 @@ void Actor::setExperienceValue(int exp) {
 	experienceValue = exp;
 }
 	
-void Actor::resetPhysics(float start_x, float start_y)
+void Actor::resetPhysics(double start_x, double start_y)
 {
 	// No map -> no physics
 	if(!game_map || !game_map->physSpace) {
@@ -332,7 +332,7 @@ void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFlo
 	cpBodyUpdateVelocity(body, cpv(0, 0), .1, dt);
 }
 
-void Actor::teleport(float x, float y, float vx, float vy) {
+void Actor::teleport(double x, double y, double vx, double vy) {
 	toTeleport = true;
 	teleport_x = x;
 	teleport_y = y;

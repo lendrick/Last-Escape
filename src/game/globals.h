@@ -107,10 +107,10 @@ extern bool paused;
 extern ImageCache imageCache;
 extern SoundCache soundCache;
 
-float frand(float lower, float upper);
+double frand(double lower, double upper);
 
-float deg2rad(float deg);
-float rad2deg(float rad);
+double deg2rad(double deg);
+double rad2deg(double rad);
 
 extern sf::View uiView;
 extern sf::View gameView;

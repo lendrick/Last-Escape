@@ -25,7 +25,7 @@
 class Collectible : public AnimatedActor
 {
 public:
-	Collectible(float x, float y, float w, float h);
+	Collectible(double x, double y, double w, double h);
 	
 	Sound* fireSound;
 
@@ -38,14 +38,14 @@ protected:
 class CollectiblePill : public Collectible
 {
 public:
-	CollectiblePill(float x, float y);
+	CollectiblePill(double x, double y);
 	virtual void collide(Actor& otherActor);
 };
 
 class CollectibleWeaponUpgrade : public Collectible
 {
 public:
-	CollectibleWeaponUpgrade(float x, float y);
+	CollectibleWeaponUpgrade(double x, double y);
 	virtual void collide(Actor& otherActor);
 };
 
@@ -53,14 +53,14 @@ public:
 class CollectibleArmor : public Collectible
 {
 public:
-	CollectibleArmor(float x, float y);
+	CollectibleArmor(double x, double y);
 	virtual void collide(Actor& otherActor);
 };
 
 class CollectibleEnergyBall : public Collectible
 {
 public:
-	CollectibleEnergyBall(float x, float y, int expValue = 1);
+	CollectibleEnergyBall(double x, double y, int expValue = 1);
 	virtual void collide(Actor& otherActor);
 };
 
