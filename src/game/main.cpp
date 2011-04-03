@@ -49,7 +49,9 @@ sf::Music backgroundMusic;
 bool enableMusic = true;
 std::string startMap;
 bool debugMode = false;
-
+sf::Clock Clock;
+double clockTimer = 0;
+	
 sf::View uiView(sf::FloatRect(0, 0, 640, 480));
 sf::View gameView(sf::FloatRect(0, 480, 640, 0));
 
@@ -57,8 +59,8 @@ ImageCache imageCache;
 SoundCache soundCache;
 
 bool paused = false;
-const double time_step = 1.0f/60.0f;
-
+double time_step;
+const double fps = 60.0f;
 
 void update(double dt) {
 	// Update the physics
@@ -110,6 +112,15 @@ double rad2deg(double rad) {
   return rad * M_PI / 180.0f;
 }
 
+void startTimer() {
+	clockTimer = Clock.GetElapsedTime();
+}
+
+double getTimer() {
+	return Clock.GetElapsedTime() - clockTimer;
+}
+
+
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
@@ -121,6 +132,8 @@ int main(int argc, char** argv)
   srand((unsigned)time(0));
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
+	int frameCount = 0;
+	time_step = 1.0/fps;
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -144,7 +157,7 @@ int main(int argc, char** argv)
 		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
 	}
 
-	App->SetFramerateLimit(1.0f/time_step);
+	App->SetFramerateLimit(fps);
 	App->UseVerticalSync(true);
 
 	cpInitChipmunk();
@@ -167,15 +180,21 @@ int main(int argc, char** argv)
 	*/
 	ui_init();
 
-	sf::Clock Clock;
+
 	Clock.Reset();
 
+	double input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
+	
+	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+	
 	// Start game loop
 	while (App->IsOpened())
 	{
+	  startTimer();
 		input.poll();
 		if(input.quit())
 			App->Close();
+		input_time += getTimer();
 
 		double ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
@@ -185,32 +204,71 @@ int main(int argc, char** argv)
 		double frameTime = std::min(ElapsedTime, 0.05);
 
 		// Clear screen
+		startTimer();
 		App->Clear();
+		clear_time += getTimer();
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
 			// Due to physics functions, we can't switch maps mid-loop.
+			startTimer();
 			cleanup();
+			cleanup_time += getTimer();
 			game_map->loadNextMap();
 			
 			if(!paused) {
 				//update(frameTime);
+				startTimer();
 				update(time_step);
+				update_time += getTimer();
 			}
 
+			startTimer();
 			game_map->renderLandscape();
+			image_time += getTimer();
+			
+			startTimer();
 			App->SetView(gameView);
 			game_map->renderBackground();
+			bg_time += getTimer();
+			
+			startTimer();
 			renderActors();
+			sprite_time += getTimer();
+			
+			startTimer();
 			game_map->renderForeground();
+			fg_time += getTimer();
 		}
 
 		App->SetView(uiView);
 
+		startTimer();
 		ui_render(g_player);
-
+		ui_time += getTimer();
+		
 		// Finally, display the rendered frame on screen
+		startTimer();
 		App->Display();
+		display_time += getTimer();
+		
+		frameCount++;
+		if(frameCount >= fps) {
+			cout << "\nIn last " << fps << " frames:\n";
+			
+			cout << "  Poll Input:       " << input_time << "s\n";
+			cout << "  Clear Screen:     " << clear_time << "s\n";
+			cout << "  Actor Cleanup:    " << cleanup_time << "s\n";	
+			cout << "  Landscape Image:  " << image_time << "s\n";
+			cout << "  Background Tiles: " << bg_time << "s\n";			
+			cout << "  Sprites:          " << sprite_time << "s\n";
+			cout << "  Foreground Tiles: " << fg_time << "s\n";
+			cout << "  UI:               " << ui_time << "s\n";
+			cout << "  Actor Updates:    " << update_time << "s\n";
+			cout << "  App Display:      " << display_time << "s\n";
+			input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+			frameCount = 0;
+		}
 	}
 
 	delete game_map;

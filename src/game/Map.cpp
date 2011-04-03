@@ -955,8 +955,8 @@ void Map::renderBackground() {
 
 	sf::FloatRect rect = gameView.GetRect();
 	
-	int cam_tile_x = rect.Left / TILE_SIZE;
-	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	int cam_tile_x = rect.Left / TILE_SIZE + 0.5;
+	int cam_tile_y = rect.Bottom / TILE_SIZE + 0.5;
 	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
 	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
