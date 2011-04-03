@@ -195,6 +195,7 @@ int main(int argc, char** argv)
 	while (App->IsOpened())
 	{
 		int targetFrame = frameTimer.GetElapsedTime() * fps;
+		bool renderUi = false;
 		
 	  startTimer();
 		input.poll();
@@ -209,10 +210,6 @@ int main(int argc, char** argv)
 		// of just getting very jerky (which breaks jump heights)
 		double frameTime = std::min(ElapsedTime, 0.05);
 
-		// Clear screen
-		startTimer();
-		App->Clear();
-		clear_time += getTimer();
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
@@ -249,6 +246,13 @@ int main(int argc, char** argv)
 					frameCount = 0;
 					frameTimer.Reset();
 				}
+
+				renderUi = true;
+				
+				// Clear screen
+				startTimer();
+				App->Clear();
+				clear_time += getTimer();
 				
 				startTimer();
 				game_map->renderLandscape();
@@ -274,7 +278,8 @@ int main(int argc, char** argv)
 		App->SetView(uiView);
 
 		startTimer();
-		ui_render(g_player);
+		if(renderUi) 
+			ui_render(g_player);
 		ui_time += getTimer();
 		
 		// Finally, display the rendered frame on screen
