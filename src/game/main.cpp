@@ -273,6 +273,8 @@ int main(int argc, char** argv)
 			} else {
 				framesSkipped++;
 			}
+		} else {
+			renderUi = true;
 		}
 
 		App->SetView(uiView);
