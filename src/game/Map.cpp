@@ -410,24 +410,24 @@ bool Map::setupPhysics()
 	 * pass and account for multiple tile types.
 	 */
 	for (int i=0; i<MAP_TILES_X - 1; i++) {
-		bool prev_different = false;
+		int prev_different = 0;
 		cpVect p1, p2;
 		
 		for (int j=0; j<MAP_TILES_Y; j++) {
-			if(hBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i+1][MAP_TILES_Y - 1 - j]) == 0) {
+			int different = hBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i+1][MAP_TILES_Y - 1 - j]);
+			if(!different) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
-					prev_different = false;
 					createSegment(p1, p2, PhysicsType::Wall);
 				}
 			} else {
 				if(!prev_different) {
 					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
 					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
-					prev_different = true;
 				}
 			}
+			prev_different = different;
 		}
 		
 		if(prev_different) {
@@ -435,7 +435,6 @@ bool Map::setupPhysics()
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
 			createSegment(p1, p2, PhysicsType::Wall);
 		}
-		prev_different = false;
 	}
 	
 	// Horizontal pass
@@ -443,31 +442,38 @@ bool Map::setupPhysics()
 	//TODO: Only set ground for top borders.
 	
 	for (int j=0; j<MAP_TILES_Y - 1; j++) {
-		bool prev_different = false;
+		int prev_different = 0;
 		cpVect p1, p2;
 		for (int i=0; i<MAP_TILES_X; i++) {	
-			if(vBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i][MAP_TILES_Y - j - 2]) == 0) {
+			int different = vBetween(collision[i][MAP_TILES_Y - 1 - j], collision[i][MAP_TILES_Y - j - 2]);
+			if(!different) {
 				if(prev_different) {
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
-					prev_different = false;
-					createSegment(p1, p2, PhysicsType::Ground);
+					if(prev_different == 2) {
+						createSegment(p1, p2, PhysicsType::Ground);
+					} else {
+						createSegment(p1, p2, PhysicsType::Wall);
+					}
 				}
 			} else {
 				if(!prev_different) {
 					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
 					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
-					prev_different = true;
 				}
 			}
+			prev_different = different;
 		}
 			
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
-			createSegment(p1, p2, PhysicsType::Ground);
+			if(prev_different == 2) {
+				createSegment(p1, p2, PhysicsType::Ground);
+			} else {
+				createSegment(p1, p2, PhysicsType::Wall);
+			}
 		}
-		prev_different = false;
 	}
 	
 	// SlantUp pass
