@@ -266,6 +266,7 @@ int main(int argc, char** argv)
 			cout << "  UI:               " << ui_time << "s\n";
 			cout << "  Actor Updates:    " << update_time << "s\n";
 			cout << "  App Display:      " << display_time << "s\n";
+			cout << "  Total:            " << input_time + clear_time + cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
 			input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
 			frameCount = 0;
 		}
