@@ -37,7 +37,11 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	
 	body->v.x = speed_x;
 	body->v.y = speed_y;
-	body->a = deg2rad(angle - 90);
+	
+	if(facing_direction == Facing::Right) 
+		body->a = deg2rad(angle - 90);
+	else
+		body->a = deg2rad(angle - 270);
 	
 	setVelocityFunc(no_gravity);
 	
@@ -59,6 +63,8 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	tmp->addFrame(3, .1f);
 	tmp->addFrame(4, .1f);
 	tmp->setDoLoop(true);
+	
+	canSleep = false;
 
 	setCurrentAnimation("bullet");
 }
