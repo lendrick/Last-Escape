@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 				update_time += getTimer();
 			}
 		
-			if(frameCount >= targetFrame - 1 || framesSkipped >= maxFramesSkipped) {
+			if(frameCount >= targetFrame || framesSkipped >= maxFramesSkipped) {
 				//cout << "Skipped " << framesSkipped << " frames\n";
 				framesSkipped = 0;
 							
