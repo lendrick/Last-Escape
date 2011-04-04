@@ -135,6 +135,8 @@ public:
 	int experienceValue;
 	std::string actorName;
 	
+	int destroyedCount;
+	
 protected:
 	//void //checkcollisions();
 	cpBodyVelocityFunc defaultVelocityFunc;

@@ -217,6 +217,7 @@ int main(int argc, char** argv)
 			startTimer();
 			cleanup();
 			cleanup_time += getTimer();
+			
 			game_map->loadNextMap();
 			
 			if(!paused) {

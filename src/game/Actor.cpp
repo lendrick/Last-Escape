@@ -46,6 +46,7 @@ Actor::Actor(double x, double y, double w, double h, bool staticBody) {
 	teleport_vx = teleport_vy = 0;
 	awake = true;
 	canSleep = true;
+	destroyedCount = 0;
 	resetPhysics(x, y);
 }
 
@@ -209,7 +210,7 @@ void Actor::leaveGround() {
 }
 
 void Actor::doUpdate(double dt) {
-	if(!body) {
+	if(body == NULL) {
 		update(dt);
 	} else if(isOnCamera() || !canSleep) {
 		if(!awake) {
@@ -287,7 +288,8 @@ void Actor::resetPhysics(double start_x, double start_y)
 }
 
 void Actor::destroyPhysics() {
-	cout << "Destroying physics for: " << actorName << "\n";
+	//cout << "Destroying physics for: " << actorName << "\n";
+	cout << actorName << " destroy count " << ++destroyedCount << "\n";
 	if(body != NULL) {
 		if(shape) 
 			cpSpaceRemoveShape(game_map->physSpace, shape);

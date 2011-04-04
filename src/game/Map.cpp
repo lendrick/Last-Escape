@@ -107,7 +107,6 @@ void Map::loadMap(string filename) {
 			collision[i][j] = false;
 		}
 	}
-	clear();
 
 	TiXmlDocument doc;
 
@@ -290,6 +289,7 @@ void Map::loadMap(string filename) {
 
 void Map::setNextMap(string filename) {
 	nextMap = filename;
+	clear();
 }
 
 void Map::loadNextMap() {
@@ -301,6 +301,7 @@ void Map::loadNextMap() {
 
 void Map::initPhysics()
 {
+	cout << "Initializing physics for map.\n";
 	if(physSpace) {
 		//cpSpaceFreeChildren(physSpace);
 		cpSpaceFree(physSpace);

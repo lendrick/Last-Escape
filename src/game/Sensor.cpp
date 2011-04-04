@@ -5,4 +5,5 @@ Sensor::Sensor(double x, double y, double w, double h)
   shape->sensor = true;
 	shape->collision_type = PhysicsType::Sensor;
 	shape->layers = PhysicsLayer::Player;
+	actorName = "Sensor";
 }
