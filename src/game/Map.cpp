@@ -951,7 +951,7 @@ void Map::renderBackground() {
 		
 		//cout << "Camera: " << cam_x << " " << cam_y << "\n";
 		
-		gameView.SetCenter(cam_x, cam_y);
+		gameView.SetCenter(floor(cam_x), floor(cam_y));
 	}
 
 	sf::FloatRect rect = gameView.GetRect();
