@@ -289,7 +289,7 @@ void Actor::resetPhysics(double start_x, double start_y)
 
 void Actor::destroyPhysics() {
 	//cout << "Destroying physics for: " << actorName << "\n";
-	cout << actorName << " destroy count " << ++destroyedCount << "\n";
+	//cout << actorName << " destroy count " << ++destroyedCount << "\n";
 	if(body != NULL) {
 		if(shape) 
 			cpSpaceRemoveShape(game_map->physSpace, shape);
