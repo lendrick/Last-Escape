@@ -227,9 +227,11 @@ int main(int argc, char** argv)
 			}
 		
 			if(frameCount >= targetFrame - 1 || framesSkipped >= maxFramesSkipped) {
-				cout << "Skipped " << framesSkipped << " frames\n";
+				//cout << "Skipped " << framesSkipped << " frames\n";
 				framesSkipped = 0;
+							
 				if(frameCount >= fps) {
+					/*
 					cout << "\nIn last " << fps << " frames:\n";
 					cout << "  Poll Input:       " << input_time << "s\n";
 					cout << "  Clear Screen:     " << clear_time << "s\n";
@@ -241,7 +243,10 @@ int main(int argc, char** argv)
 					cout << "  UI:               " << ui_time << "s\n";
 					cout << "  Actor Updates:    " << update_time << "s\n";
 					cout << "  App Display:      " << display_time << "s\n";
-					cout << "  Total:            " << input_time + clear_time + cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
+					cout << "  Total:            " << input_time + clear_time +
+					cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
+					*/
+					
 					input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
 					frameCount = 0;
 					frameTimer.Reset();
