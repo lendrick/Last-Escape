@@ -348,7 +348,7 @@
   </properties>
   <object type="exit" x="6347" y="492">
    <properties>
-    <property name="map" value="subwaymap-new.tmx"/>
+    <property name="map" value="desertwater.tmx"/>
    </properties>
   </object>
  </objectgroup>

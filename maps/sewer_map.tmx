@@ -231,7 +231,7 @@
   <object name="start" type="start" x="50" y="454"/>
   <object type="exit" x="6317" y="684">
    <properties>
-    <property name="map" value="lab_map.tmx"/>
+    <property name="map" value="tower_map.tmx"/>
    </properties>
   </object>
   <object name="one" type="teleportenter" x="1008" y="688"/>
