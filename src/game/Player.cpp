@@ -441,11 +441,11 @@ bool Player::doDamage(double damage, bool knockback) {
 				}
 			}
 			if(knockback_direction == Facing::Left) {
-				body->v.x = -300;
+				body->v.x = -200;
 			} else {
-				body->v.x = 300;
+				body->v.x = 200;
 			}
-			body->v.y = 400;
+			body->v.y = 300;
 		}
 	}
   return dead;
