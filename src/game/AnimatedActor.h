@@ -29,8 +29,8 @@
 class AnimatedActor : public Actor
 {
 public:
-	AnimatedActor(float x, float y, float w, float h, std::string filename, bool staticBody = false);
-	AnimatedActor(float x, float y, float w, float h, bool staticBody = false);
+	AnimatedActor(double x, double y, double w, double h, std::string filename, bool staticBody = false);
+	AnimatedActor(double x, double y, double w, double h, bool staticBody = false);
 	void setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
@@ -52,11 +52,11 @@ public:
 	virtual void onAnimationComplete(std::string anim) {};
 	
 	void setFacing(int direction);
-	virtual bool doDamage(float damage, bool knockback = false);
+	virtual bool doDamage(double damage, bool knockback = false);
 	virtual void onDamage();
-	virtual void doUpdate(float dt);
+	virtual void doUpdate(double dt);
 	
-	virtual bool move(float dx, float dy);
+	virtual bool move(double dx, double dy);
 
 protected:
 	void flipDirection();
@@ -65,9 +65,9 @@ protected:
 	std::map<std::string, Animation*> animations; ///< stores all available Animations for this Actor
 	int frame_h, frame_w;
         
-	float life;
-	float immunityTime;
-	float damageTimer;
+	double life;
+	double immunityTime;
+	double damageTimer;
 private:
 	void init();
 };

@@ -23,7 +23,7 @@
 #include "ImageCache.h"
 #include <SFML/Graphics.hpp>
 
-EnemyCentipede::EnemyCentipede(float x, float y)
+EnemyCentipede::EnemyCentipede(double x, double y)
 :EnemyPatroller(x, y, 32.0f, 25.0f)
 {
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
@@ -35,7 +35,7 @@ EnemyCentipede::EnemyCentipede(float x, float y)
 
 	dying = false;
 
-	setDrawOffset(32, 30);
+	setDrawOffset(32, 40);
 	setFrameSize(64, 32);
 
 	//pick a random death sound
@@ -73,7 +73,7 @@ EnemyCentipede::EnemyCentipede(float x, float y)
 	setCurrentAnimation("walk");
 }
 
-void EnemyCentipede::update(float dt) {
+void EnemyCentipede::update(double dt) {
 	if(!dying) {
 		time += dt;
 		if(lastShot + shootInterval <= time && animationName() != "shoot") {
@@ -92,15 +92,15 @@ void EnemyCentipede::onAnimationComplete(std::string anim) {
 	//cout << "EnemyCentipede::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x, pos_y-16);
+		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x+drop_offset_x, body->p.y+drop_offset_y);
 	} else if(anim == "shoot") {
 		//shoot a projectile
 		lastShot = time;
 		setCurrentAnimation("walk");
-		int px = pos_x + 8;
+		int px = body->p.x + 8;
 		if(facing_direction == Facing::Left) px -= 16;
 		EnemyCentipedeProjectile * projectile =
-			new EnemyCentipedeProjectile(facing_direction, px, int(pos_y - 20.0f));
+			new EnemyCentipedeProjectile(facing_direction, px, int(body->p.y + 10.0f));
 	}
 }
 
@@ -142,7 +142,7 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	shape->group = PhysicsGroup::EnemyBullets;
 }
 
-void EnemyCentipedeProjectile::update(float dt)
+void EnemyCentipedeProjectile::update(double dt)
 {
 	if(isGrounded()) {
 		setCurrentAnimation("splat");

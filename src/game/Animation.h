@@ -25,7 +25,7 @@ struct Frame
 {
 	int number;
 	sf::IntRect rect;
-	float timeToNextFrame;
+	double timeToNextFrame;
 };
 
 class Animation
@@ -49,7 +49,7 @@ public:
 	void toDefaultXeonIdleAnimation();
 
 	void setFrameSize(int fw, int fh);
-	void addFrame(int num, float duration);
+	void addFrame(int num, double duration);
 	void reset();
 	
 	int getFrame();

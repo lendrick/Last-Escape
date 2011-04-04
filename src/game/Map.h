@@ -68,22 +68,20 @@ public:
 	void loadTileset(string filename);
 	void setNextMap(string filename);
 	void loadNextMap();
-	bool checkHorizontalLine(int x1, int x2, int y);
-	bool checkVerticalLine(int x, int y1, int y2);
 	void setCameraFollow(Actor * actor);
-	bool move(float &pos_x, float &pos_y, int size_x, int size_y, float &move_x, float &move_y);
-	bool move(Actor &actor, float &move_x, float &move_y);
-	bool isGrounded(Actor &actor);
-	bool isGrounded(float &pos_x, float &pos_y, int size_x);
 	bool isOnInstantdeath(Actor &actor);
-	bool isSolid(int x, int y);
+	//bool isSolid(int x, int y);
 	void renderLandscape();
 	void renderBackground();
 	void renderForeground();
 	void clear();
 	bool isLoaded();
 	
-	void createSegment(cpVect &p1, cpVect &p2, bool ground);
+	// Functions for determining if there is a borderline between tiles
+	int vBetween(int t1, int t2);
+	int hBetween(int t1, int t2);
+	
+	void createSegment(cpVect p1, cpVect p2, int type);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;
 	sf::Vector2f cp2sfml(const cpVect& v) const;
@@ -93,10 +91,15 @@ public:
 	// collision layer
 	int collision[MAP_TILES_X][MAP_TILES_Y];
 
-	sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
+	//sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
+	sf::Sprite tile_sprite;
 	
-	int cam_x;
-	int cam_y;
+	double cam_x, cam_y;
+	double cam_x1;
+	double cam_y1;
+	double cam_x2;
+	double cam_y2;
+	
 	bool loaded;
 
 	std::string currentFilename;
@@ -122,5 +125,6 @@ static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data);
 static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 static void map_bumper_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 
+static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data);
 #endif
 

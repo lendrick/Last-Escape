@@ -18,9 +18,10 @@
 #include "ExitPoint.h"
 #include <iostream>
 
-ExitPoint::ExitPoint(float x, float y, float w, float h)
+ExitPoint::ExitPoint(double x, double y, double w, double h)
 :Sensor(x, y, w, h)
 {
+	actorName = "Level Exit";
 }
 
 void ExitPoint::collide(Actor& otherActor) {

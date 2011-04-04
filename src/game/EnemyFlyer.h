@@ -21,22 +21,22 @@
 class EnemyFlyer : public Enemy
 {
 public:
-	EnemyFlyer(float x, float y);
-	virtual void update(float dt);
+	EnemyFlyer(double x, double y);
+	virtual void update(double dt);
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
 private:
 	int patrolCountdown, patrolLength;
-	float fly_speed;
+	double fly_speed;
 	
 	// Limits that the flyer should attempt to stay inside.
-	float x1, y1, x2, y2;
+	double x1, y1, x2, y2;
 	
-	float timeUntilDive;
-	float timeUntilEndDive;
-	float minDiveTime;
-	float maxDiveTime;
-	float minTimeBetweenDives;
-	float maxTimeBetweenDives;
+	double timeUntilDive;
+	double timeUntilEndDive;
+	double minDiveTime;
+	double maxDiveTime;
+	double minTimeBetweenDives;
+	double maxTimeBetweenDives;
 	bool diving;
 }; 

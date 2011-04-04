@@ -49,15 +49,21 @@ sf::Music backgroundMusic;
 bool enableMusic = true;
 std::string startMap;
 bool debugMode = false;
+sf::Clock Clock;
+sf::Clock frameTimer;
+double clockTimer = 0;
+	
+sf::View uiView(sf::FloatRect(0, 0, 640, 480));
+sf::View gameView(sf::FloatRect(0, 480, 640, 0));
 
 ImageCache imageCache;
 SoundCache soundCache;
 
 bool paused = false;
-const double time_step = 1.0f/60.0f;
+double time_step;
+const double fps = 60.0f;
 
-
-void update(float dt) {
+void update(double dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
@@ -89,21 +95,32 @@ void cleanup() {
 		if((*tmp)->isDestroyed()) {
 			delete *tmp;
 			actors.erase(tmp);
+		} else if((*tmp)->toTeleport) {
+			(*tmp)->doTeleport();
 		}
 	}
 }
 
-float frand(float lower, float upper) {
-	return ((upper-lower)*((float)rand()/RAND_MAX))+lower;
+double frand(double lower, double upper) {
+	return ((upper-lower)*((double)rand()/RAND_MAX))+lower;
 }
 
-float deg2rad(float deg) {
+double deg2rad(double deg) {
 	return deg * 180.0f / M_PI;
 }
 
-float rad2deg(float rad) {
+double rad2deg(double rad) {
   return rad * M_PI / 180.0f;
 }
+
+void startTimer() {
+	clockTimer = Clock.GetElapsedTime();
+}
+
+double getTimer() {
+	return Clock.GetElapsedTime() - clockTimer;
+}
+
 
 ////////////////////////////////////////////////////////////
 /// Entry point of application
@@ -116,6 +133,10 @@ int main(int argc, char** argv)
   srand((unsigned)time(0));
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
+	int frameCount = 0;
+	int framesSkipped = 0;
+	int maxFramesSkipped = 10;
+	time_step = 1.0/fps;
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -138,8 +159,8 @@ int main(int argc, char** argv)
 		App = new sf::RenderWindow(sf::VideoMode(640, 480), "Last Escape", 		sf::Style::Close);
 		App->SetPosition((sf::VideoMode::GetDesktopMode().Width/2)-320, (sf::VideoMode::GetDesktopMode().Height/2)-260);
 	}
-	
-	App->SetFramerateLimit(1.0f/time_step);
+
+	App->SetFramerateLimit(fps);
 	App->UseVerticalSync(true);
 
 	cpInitChipmunk();
@@ -147,7 +168,7 @@ int main(int argc, char** argv)
 	if (!fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
 
-	g_player = new Player(0,0);
+	//g_player = new Player(0,0);
 
 	// Create game objects
 	// DON'T LOAD A REAL MAP HERE!  ui_start does that.
@@ -162,48 +183,120 @@ int main(int argc, char** argv)
 	*/
 	ui_init();
 
-	sf::Clock Clock;
-	Clock.Reset();
 
+	Clock.Reset();
+	frameTimer.Reset();
+
+	double input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
+	
+	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+	
 	// Start game loop
 	while (App->IsOpened())
 	{
+		int targetFrame = frameTimer.GetElapsedTime() * fps;
+		bool renderUi = false;
+		
+	  startTimer();
 		input.poll();
 		if(input.quit())
 			App->Close();
+		input_time += getTimer();
 
-		float ElapsedTime = Clock.GetElapsedTime();
+		double ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
 		// Clamp frame update time if worse than 20fps, so it'll slow down instead
 		// of just getting very jerky (which breaks jump heights)
-		float frameTime = std::min(ElapsedTime, 0.05f);
+		double frameTime = std::min(ElapsedTime, 0.05);
 
-		// Clear screen
-		App->Clear();
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
 			// Due to physics functions, we can't switch maps mid-loop.
+			startTimer();
+			cleanup();
+			cleanup_time += getTimer();
+			
 			game_map->loadNextMap();
 			
 			if(!paused) {
 				//update(frameTime);
+				startTimer();
 				update(time_step);
+				update_time += getTimer();
 			}
+		
+			if(frameCount >= targetFrame || framesSkipped >= maxFramesSkipped) {
+				//cout << "Skipped " << framesSkipped << " frames\n";
+				framesSkipped = 0;
+							
+				if(frameCount >= fps) {
+					/*
+					cout << "\nIn last " << fps << " frames:\n";
+					cout << "  Poll Input:       " << input_time << "s\n";
+					cout << "  Clear Screen:     " << clear_time << "s\n";
+					cout << "  Actor Cleanup:    " << cleanup_time << "s\n";	
+					cout << "  Landscape Image:  " << image_time << "s\n";
+					cout << "  Background Tiles: " << bg_time << "s\n";			
+					cout << "  Sprites:          " << sprite_time << "s\n";
+					cout << "  Foreground Tiles: " << fg_time << "s\n";
+					cout << "  UI:               " << ui_time << "s\n";
+					cout << "  Actor Updates:    " << update_time << "s\n";
+					cout << "  App Display:      " << display_time << "s\n";
+					cout << "  Total:            " << input_time + clear_time +
+					cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
+					*/
+					
+					input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+					frameCount = 0;
+					frameTimer.Reset();
+				}
 
-			cleanup();
-
-			game_map->renderLandscape();
-			game_map->renderBackground();
-			renderActors();
-			game_map->renderForeground();
+				renderUi = true;
+				
+				// Clear screen
+				startTimer();
+				App->Clear();
+				clear_time += getTimer();
+				
+				startTimer();
+				game_map->renderLandscape();
+				image_time += getTimer();
+				
+				startTimer();
+				App->SetView(gameView);
+				game_map->renderBackground();
+				bg_time += getTimer();
+				
+				startTimer();
+				renderActors();
+				sprite_time += getTimer();
+				
+				startTimer();
+				game_map->renderForeground();
+				fg_time += getTimer();
+			} else {
+				framesSkipped++;
+			}
+		} else {
+			renderUi = true;
 		}
 
-		ui_render(*g_player);
+		App->SetView(uiView);
 
-		// Finally, display the rendered frame on screen
-		App->Display();
+		if(renderUi) {
+			startTimer();
+			ui_render(g_player);
+			ui_time += getTimer();
+			
+			// Finally, display the rendered frame on screen
+			startTimer();
+			App->Display();
+			display_time += getTimer();
+		}
+	
+		frameCount++;
 	}
 
 	delete game_map;

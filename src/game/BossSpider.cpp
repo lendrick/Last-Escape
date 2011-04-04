@@ -25,7 +25,7 @@
 #include "EnemyCentipede.h"
 
 
-BossSpider::BossSpider(float x, float y)
+BossSpider::BossSpider(double x, double y)
 :Enemy(x, y, 56.0f, 41.0f)
 {
 	setImage("spider.png");
@@ -78,15 +78,15 @@ BossSpider::BossSpider(float x, float y)
 	setCurrentAnimation("walk");
 }
 
-void BossSpider::update(float dt) {
+void BossSpider::update(double dt) {
 	if(!dying) {
 		time += dt;
 		patrolTime += dt;
 
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
-		const float vision_range = 320;
-		const float vision_min_range = 32;
+		const double vision_range = 320;
+		const double vision_min_range = 32;
 
 		if(facing_direction == Facing::Left) {
 			if(body->v.x > -walk_speed)
@@ -111,7 +111,7 @@ void BossSpider::update(float dt) {
 		if(lastShot + shootInterval < time) {
 			lastShot = time;
 			EnemyCentipedeProjectile * projectile =
-				new EnemyCentipedeProjectile(facing_direction, (int)pos_x, int(pos_y - 20.0f));
+				new EnemyCentipedeProjectile(facing_direction, body->p.x, int(body->p.y + 20.0f));
 		}
 
 		//checkcollisions();
@@ -123,7 +123,7 @@ void BossSpider::draw() {
 	AnimatedActor::draw();
 }
 
-bool BossSpider::doDamage(float damage) {
+bool BossSpider::doDamage(double damage) {
 	life -= damage;
 	if(life <= 0) {
 		die();
@@ -146,12 +146,14 @@ void BossSpider::die() {
 void BossSpider::onAnimationComplete(std::string anim) {
 	//cout << "BossSpider::onAnimationComplete(\"" << anim << "\")\n";
 	if(anim == "die") {
+		double pos_x = body->p.x;
+		double pos_y = body->p.y;
 		destroy();
 		CollectibleEnergyBall * ball = NULL;
-		ball = new CollectibleEnergyBall(pos_x-32, pos_y-16);
-		ball = new CollectibleEnergyBall(pos_x, pos_y-16);
-		ball = new CollectibleEnergyBall(pos_x-32, pos_y-48);
-		ball = new CollectibleEnergyBall(pos_x, pos_y-48);
+		ball = new CollectibleEnergyBall(pos_x-16, pos_y-10);
+		ball = new CollectibleEnergyBall(pos_x+16, pos_y-10);
+		ball = new CollectibleEnergyBall(pos_x-16, pos_y+22);
+		ball = new CollectibleEnergyBall(pos_x+16, pos_y+22);
 	}
 
 	if(anim == "hurt") {

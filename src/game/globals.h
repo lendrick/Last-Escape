@@ -48,7 +48,7 @@ extern sf::Music backgroundMusic;
 extern bool enableMusic;
 extern std::string startMap;
 extern bool debugMode;
-extern const double time_step;
+extern double time_step;
 
 namespace Facing {
 	enum Enum {
@@ -77,6 +77,7 @@ namespace PhysicsType {
 		Ground,
 		Sensor,
 		Wall,
+		Death,
 		Item,
 		Neutral,
 		PlayerBullet,
@@ -93,12 +94,25 @@ namespace PhysicsGroup {
 	};
 };
 
+namespace Collision {
+	enum Enum {
+		None = 0,
+		Tile = 1,
+		Danger = 2,
+		SlantUp = 3,
+		SlantDown = 4
+	};
+};
+
 extern bool paused;
 
 extern ImageCache imageCache;
 extern SoundCache soundCache;
 
-float frand(float lower, float upper);
+double frand(double lower, double upper);
 
-float deg2rad(float deg);
-float rad2deg(float rad);
+double deg2rad(double deg);
+double rad2deg(double rad);
+
+extern sf::View uiView;
+extern sf::View gameView;

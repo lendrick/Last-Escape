@@ -23,7 +23,7 @@ class Actor;
 
 class Bumper {
 public:
-	Bumper(Actor * actor, int facing_direction, float thickness = 2.0f);
+	Bumper(Actor * actor, int facing_direction, double thickness = 4.0f);
 	~Bumper();
 	
 	int isGrounded();

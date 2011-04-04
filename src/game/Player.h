@@ -26,20 +26,21 @@
 
 class Player : public AnimatedActor {
 public:
-	Player(float x, float y);
+	Player(double x, double y);
 
 	virtual bool isPlayer() { return true; }
 
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void draw();
 	virtual void die();
 	//virtual void collide(Actor & otherActor);
 	virtual void onColliding(Actor & otherActor);
 	virtual void onDestroy();
 	virtual void onAnimationComplete(std::string anim);
-	virtual bool doDamage(float damage, bool knockback = true);
+	virtual bool doDamage(double damage, bool knockback = true);
 	virtual void onDamage();
 	virtual void onLevelUp(int newLevel);
+	virtual void resetPhysicsCustom(double start_x, double start_y);
 	
 	void addExperience(int exp);
 	int getCurrentExperience();
@@ -49,7 +50,7 @@ public:
 	StartPoint * currentStart;
 	void init();
 
-	void jump(float dt);
+	void jump(double dt);
 	void shoot();
 	void crouch();
 
@@ -57,17 +58,17 @@ public:
 
 	int currentWeapon;
 
-	float time;
-	float last_shoot_time;
-	float last_jump_time;
+	double time;
+	double last_shoot_time;
+	double last_jump_time;
 
-	float energy;
-	float energy_max;
+	double energy;
+	double energy_max;
 
-	float speed_x;
-	float speed_y;
+	double speed_x;
+	double speed_y;
 	
-	float shoot_duration;
+	double shoot_duration;
 	
 	bool crouched;
 	bool walking;
@@ -75,11 +76,11 @@ public:
 	int armor;
 	int lives;
 	int energyBalls;
-	float recoveryTime;
-	float recoveryTimer;
+	double recoveryTime;
+	double recoveryTimer;
 	
-	float baseMaxEnergy;
-	float energyPerLevel;
+	double baseMaxEnergy;
+	double energyPerLevel;
 	
 	Sound * fireSound;
 	Sound * jumpSound;

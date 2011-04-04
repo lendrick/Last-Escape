@@ -22,24 +22,24 @@
 class EnemyCentipede : public EnemyPatroller
 {
 public:
-	EnemyCentipede(float x, float y);
-	virtual void update(float dt);
+	EnemyCentipede(double x, double y);
+	virtual void update(double dt);
 	virtual void onAnimationComplete(std::string anim);
 
 private:
-	float shootInterval;
-	float lastShot;
-	float time;
+	double shootInterval;
+	double lastShot;
+	double time;
 }; 
 
 class EnemyCentipedeProjectile : public Enemy
 {
 public:
 	EnemyCentipedeProjectile(int direction, int start_x, int start_y);
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void onAnimationComplete(std::string anim);
 	virtual void collide(Actor &otherActor);
 private:
 
-	float fly_speed;
+	double fly_speed;
 };

@@ -24,7 +24,7 @@
 class Enemy : public AnimatedActor
 {
 public:
-	Enemy(float x, float y, float w, float h);
+	Enemy(double x, double y, double w, double h);
 	
 	virtual void collide(Actor& otherActor);
 
@@ -32,9 +32,9 @@ public:
 
 	Sound* fireSound;
 	
-	void patrol(float dt);
+	void patrol(double dt);
 protected:
-	float speed_x, speed_y;
+	double speed_x, speed_y;
 };
 
 

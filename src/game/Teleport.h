@@ -22,7 +22,7 @@
 
 class TeleportEnter : public Sensor {
 public:
-	TeleportEnter(float x, float y, float w, float h, std::string name);
+	TeleportEnter(double x, double y, double w, double h, std::string name);
 
 	virtual bool isTeleportEnter() { return true; }
 
@@ -33,7 +33,7 @@ private:
 
 class TeleportExit : public Sensor {
 public:
-	TeleportExit(float x, float y, std::string name);
+	TeleportExit(double x, double y, std::string name);
 
 	virtual bool isTeleportExit() { return true; }
 

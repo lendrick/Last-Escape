@@ -62,11 +62,11 @@ void parse_key_pair(string s, string &key, string &val) {
 	val = s.substr(separator+1, s.length());
 }
 
-cpShape * boxWithOffset(cpBody * body, float width, float height, sf::Vector2f offset) {
+cpShape * boxWithOffset(cpBody * body, double width, double height, sf::Vector2f offset) {
 	return boxWithOffset(body, width, height, game_map->sfml2cp(offset));
 }
 
-cpShape * boxWithOffset(cpBody * body, float width, float height, cpVect offset) {
+cpShape * boxWithOffset(cpBody * body, double width, double height, cpVect offset) {
 	//cout << "new box with offset " << width << "x" << height << "(" << offset.x << ", " << offset.y << ")\n";
 	cpVect verts[] = {
 		cpv(-width/2, -height/2),			
@@ -76,4 +76,16 @@ cpShape * boxWithOffset(cpBody * body, float width, float height, cpVect offset)
 	};
 		
 	return cpPolyShapeNew(body, 4, verts, offset);
+}
+
+double clamp(double n, double min, double max) {
+	if(max < min) {
+		double tmp;
+		tmp = max;
+		max = min;
+		min = tmp;
+	}
+	if(n > max) n = max;
+	if(n < min) n = min;
+	return n;
 }

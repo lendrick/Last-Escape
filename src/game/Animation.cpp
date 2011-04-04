@@ -37,7 +37,7 @@ void Animation::setFrameSize(int fw, int fh) {
 	frame_h = fh;
 }
 
-void Animation::addFrame(int num, float duration) {
+void Animation::addFrame(int num, double duration) {
 	const sf::Image * img = sprite.GetImage();
 	int w = img->GetWidth();
 	int h = img->GetHeight();

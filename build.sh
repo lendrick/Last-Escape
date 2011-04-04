@@ -1,4 +1,4 @@
 #!/bin/sh
-cd build
+cd build || mkdir build && cd build
 cmake ../src
 make

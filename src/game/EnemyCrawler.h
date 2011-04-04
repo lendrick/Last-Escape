@@ -21,20 +21,20 @@
 class EnemyCrawler : public EnemyPatroller
 {
 public:
-	EnemyCrawler(float x, float y);
+	EnemyCrawler(double x, double y);
 	virtual ~EnemyCrawler();
 	/*
 	virtual ~EnemyCrawler();
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void draw();
 	virtual void die();
-	//virtual void doDamage(float damage);
+	//virtual void doDamage(double damage);
 	virtual void onAnimationComplete(std::string anim);
 	//virtual void resetPhysics();
 	//virtual void destroyPhysics();
 	virtual void onBumperCollide(int facing);
 protected:
-	float walk_speed;
+	double walk_speed;
 	Bumper* leftBumper;
 	Bumper* rightBumper;
 	*/

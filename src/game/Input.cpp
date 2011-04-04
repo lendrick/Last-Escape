@@ -97,8 +97,8 @@ void Input::poll() {
 			inputDirection = Facing::Right;
 		} 
 		
-		float xAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisX);
-		float yAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisY);
+		double xAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisX);
+		double yAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisY);
 		
 		if(xAxis > 50) 
 			inputDirection = Facing::Right;

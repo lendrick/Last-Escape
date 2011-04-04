@@ -21,17 +21,17 @@
 class BossSpider : public Enemy
 {
 public:
-	BossSpider(float x, float y);
-	virtual void update(float dt);
+	BossSpider(double x, double y);
+	virtual void update(double dt);
 	virtual void draw();
 	virtual void die();
-	virtual bool doDamage(float damage);
+	virtual bool doDamage(double damage);
 	virtual void onAnimationComplete(std::string anim);
 	
 private:
-	float walk_speed;
-	float shootInterval;
-	float lastShot, time;
-	float patrolInterval, patrolTime;
+	double walk_speed;
+	double shootInterval;
+	double lastShot, time;
+	double patrolInterval, patrolTime;
 }; 
 

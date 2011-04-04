@@ -114,12 +114,12 @@ int Widget::getId()
 	return id;
 }
 
-void Widget::setPos(float px, float py) {
+void Widget::setPos(double px, double py) {
 	pos_x = px;
 	pos_y = py;
 	if (type != UI_CONTAINER) {
-		float x = 0;
-		float y = 0;
+		double x = 0;
+		double y = 0;
 		parent->getPos(x,y);
 		px += x;
 		py += y;
@@ -128,7 +128,7 @@ void Widget::setPos(float px, float py) {
 	background.SetPosition(px, py);
 }
 
-void Widget::getPos(float &px, float &py) {
+void Widget::getPos(double &px, double &py) {
 	px = pos_x;
 	py = pos_y;
 }
@@ -151,7 +151,7 @@ sf::String Widget::getText()
 void Widget::setTextSize(int sz)
 {
 	size = sz;
-	text.SetSize((float)size);
+	text.SetSize((double)size);
 }
 
 void Widget::setClick(void (*func)())
@@ -164,12 +164,12 @@ void Widget::setAnyKey(void (*func)())
 	anyKey = func;
 }
 
-void Widget::setSlide(void (*func)(float v))
+void Widget::setSlide(void (*func)(double v))
 {
 	slide = func;
 }
 
-void Widget::setSlideValue(float v)
+void Widget::setSlideValue(double v)
 {
 	sval = v;
 	if (sval > 100.f)
@@ -249,8 +249,8 @@ void Widget::draw() {
 			n = n->next;
 		}
 	}else{
-		float x = 0;
-		float y = 0;
+		double x = 0;
+		double y = 0;
 		sf::FloatRect p = text.GetRect();
 		parent->getPos(x,y);
 		if (type == UI_BUTTON || type == UI_PBAR) {
@@ -290,8 +290,8 @@ int Widget::event(sf::Event &Event)
 	int x = (int)pos_x;
 	int y = (int)pos_y;
 	if (type != UI_CONTAINER) {
-		float fx = 0;
-		float fy = 0;
+		double fx = 0;
+		double fy = 0;
 		parent->getPos(fx,fy);
 		x += (int)fx;
 		y += (int)fy;
@@ -330,7 +330,7 @@ int Widget::event(sf::Event &Event)
 			if (click)
 				click();
 			if (type == UI_HSLIDE) {
-				float v = (msx-x)/1.5f;
+				double v = (msx-x)/1.5f;
 				setSlideValue(v);
 			}
 			if (type == UI_CHECK) {
@@ -345,7 +345,7 @@ int Widget::event(sf::Event &Event)
 			return 1;
 		}else if (type == UI_HSLIDE && id == ui_focused_widget) {
 			if (Event.Type == sf::Event::MouseMoved) {
-				float v = (msx-x)/1.5f;
+				double v = (msx-x)/1.5f;
 				setSlideValue(v);
 				//return 1;
 			}else if (Event.Type == sf::Event::MouseButtonReleased) {
@@ -374,6 +374,7 @@ bool ui_menuOpen()
 
 void ui_start()
 {
+	if(!g_player) g_player = new Player(0, 0);
 	g_player->init();
 	ui_base->toggleBg();
 	//const char* mapName = "subwaymap-new.tmx";
@@ -600,7 +601,7 @@ void ui_setShoot()
 	ui_controls[INPUT_SHOOT]->setText(buf);
 }
 
-void ui_setVol(float v)
+void ui_setVol(double v)
 {
 	sf::Listener::SetGlobalVolume(v);
 	char buf[255];
@@ -701,7 +702,7 @@ void ui_init()
 
 	b = new Widget(UI_LABEL,ui_options);
 	char buf[255];
-	float svol = sf::Listener::GetGlobalVolume()*100.f;
+	double svol = sf::Listener::GetGlobalVolume()*100.f;
 	sprintf(buf,"Volume: %.0f%%",svol);
 	b->setText(buf);
 	b->setPos(62,50);
@@ -800,27 +801,30 @@ int ui_event(sf::Event &Event)
 	return r;
 }
 
-void ui_render(Player& player)
+void ui_render(Player * p)
 {
-	char buf[256];
-	float energy = 100*player.energy/player.energy_max;
-	ui_energy->setSlideValue(energy);
-	//sprintf(buf, "%.0f%%", energy);
-	sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
-	ui_energy->setText(buf);
+	if(p) {
+		Player & player = *p;
+		char buf[256];
+		double energy = 100*player.energy/player.energy_max;
+		ui_energy->setSlideValue(energy);
+		//sprintf(buf, "%.0f%%", energy);
+		sprintf(buf, "%.0f/%.0f", player.energy, player.energy_max);
+		ui_energy->setText(buf);
 
-	sprintf(buf, "Lives: %d", player.lives);
-	if (player.lives < 2)
-		ui_lives->setTextColor(0xef, 0x29, 0x29);
-	else
-		ui_lives->setTextColor(0x01, 135, 0x00);
-	ui_lives->setText(buf);
+		sprintf(buf, "Lives: %d", player.lives);
+		if (player.lives < 2)
+			ui_lives->setTextColor(0xef, 0x29, 0x29);
+		else
+			ui_lives->setTextColor(0x01, 135, 0x00);
+		ui_lives->setText(buf);
 
 
-	sprintf(buf, "Energy Balls: %d", player.energyBalls);
-	ui_energyballs->setTextColor(0x01, 135, 0x00);
-	ui_energyballs->setText(buf);
-
+		sprintf(buf, "Energy Balls: %d", player.energyBalls);
+		ui_energyballs->setTextColor(0x01, 135, 0x00);
+		ui_energyballs->setText(buf);
+	}
+	
 	ui_base->draw();
 }
 

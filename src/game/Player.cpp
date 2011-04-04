@@ -26,19 +26,19 @@
 #include "ExitPoint.h"
 #include "Collectible.h"
 
-const float energy_cost_jump = 0.f;
-const float energy_recharge_rate = 5.f; // units per second
+const double energy_cost_jump = 0.f;
+const double energy_recharge_rate = 5.f; // units per second
 static const int start_lives = 3;
 
 struct WeaponDesc {
 	const char* name;
-	float energy_cost;
-	float reload_time;
-	float angle_variation;
+	double energy_cost;
+	double reload_time;
+	double angle_variation;
 
 	int sprite_row;
 	int sprite_count;
-	float sprite_speed;
+	double sprite_speed;
 };
 
 const int num_weapon_types = 3;
@@ -51,18 +51,18 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 };
 
-Player::Player(float x, float y)
+Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
 	lives = start_lives;
-	setDrawOffset(64, 104);
+	setDrawOffset(64, 96);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	energyBalls = 0;
-	immunityTime = 0.5f;
-	recoveryTime = 0.2f;
+	immunityTime = 1.0;
+	recoveryTime = 0.2;
 	recoveryTimer = 0;
 	currentWeapon = 0;
 	baseMaxEnergy = 100.0f;
@@ -79,6 +79,7 @@ Player::Player(float x, float y)
 	dieSound  = soundCache["xeonDies.ogg"];
 	currentStart = NULL;
 	dying = false;
+	canSleep = false;
 
 	init();
 }
@@ -93,10 +94,10 @@ void Player::init() {
 	if(currentStart == NULL)
 		currentStart = findStart();
 
-	float sx, sy;
+	double sx, sy;
 	if(currentStart != NULL) {
 		currentStart->getPos(sx, sy);
-		setPos(sx, sy);
+		//setPos(sx, sy);
 	}
 
 	std::cout << "Init player at " << sx << ", " << sy << std::endl;
@@ -105,8 +106,10 @@ void Player::init() {
 	crouched = false;
 
 	this->setCurrentAnimation("idle");
-	resetPhysics();
-	
+	resetPhysics(sx, sy);
+}
+
+void Player::resetPhysicsCustom(double start_x, double start_y) {
 	if(shape) {
 		shape->layers = PhysicsLayer::Map|PhysicsLayer::Player|PhysicsLayer::Enemy|PhysicsLayer::EnemyBullet;
 		shape->collision_type = PhysicsType::Player;
@@ -116,8 +119,10 @@ void Player::init() {
 StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
-			if (debugMode)
-				cout << "found start at " << (*it)->pos_x << " " << (*it)->pos_y << "\n";
+			//if (debugMode)
+				double px, py;
+				(*it)->getPos(px, py);
+				if(debugMode) cout << "found start at " << px << " " << py << "\n";
 			return static_cast<StartPoint *>(*it);
 		}
 	}
@@ -129,12 +134,12 @@ void Player::upgradeWeapon() {
 	currentWeapon = min(currentWeapon+1, num_weapon_types-1);
 }
 
-void Player::jump(float dt) {
+void Player::jump(double dt) {
 	const int jump_speed = 525;
-	const float max_jet_accel = 2000;
-	const float jet_cost = 35;
-	const float jet_speed_max = 250;
-	const float jet_wait = 0.4f;
+	const double max_jet_accel = 2000;
+	const double jet_cost = 35;
+	const double jet_speed_max = 250;
+	const double jet_wait = 0.4f;
 
 	if (body->v.y == 0 && isGrounded())
 	{
@@ -151,7 +156,7 @@ void Player::jump(float dt) {
 		if (time - last_jump_time < jet_wait)
 			return;
 
-		float cost = jet_cost * dt;
+		double cost = jet_cost * dt;
 		if (energy < cost)
 			return;
 
@@ -166,7 +171,7 @@ void Player::jump(float dt) {
 }
 
 void Player::shoot() {
-	const float shoot_reload_timer = 0.5f;
+	const double shoot_reload_timer = 0.5f;
 
 	if (energy < weapons[currentWeapon].energy_cost)
 		return;
@@ -176,17 +181,17 @@ void Player::shoot() {
 		fireSound->playSound();
 		energy -= weapons[currentWeapon].energy_cost;
 		
-		sf::Vector2f pos = game_map->cp2sfml(body->p);
+		//sf::Vector2f pos = body->p;
 
-		float bulletX = pos.x + 30.0f, bulletY = 0.0f;
+		double bulletX = body->p.x + 30.0f, bulletY = 0.0f;
 		if(facing_direction == Facing::Left)
-			bulletX = pos.x - 30.0f;
+			bulletX = body->p.x - 30.0f;
 
 		if(crouched) {
-			bulletY = pos.y + 9.0f;
+			bulletY = body->p.y - 9.0f;
 		}
 		else {
-			bulletY = pos.y -6.0f;
+			bulletY = body->p.y + 6.0f;
 		}
 
 		Actor* bullet = new PlayerBullet(bulletX, bulletY, facing_direction, weapons[currentWeapon].angle_variation);
@@ -198,7 +203,6 @@ void Player::shoot() {
 			setCurrentAnimation("shoot");
 		}
 
-
 		//resetCurrentAnimation();
 	}
 }
@@ -207,9 +211,9 @@ void Player::crouch() {
 	crouched = true;
 }
 
-void Player::update(float dt) {
+void Player::update(double dt) {
 	if(!body) return;
-	const int speed_max = 240; // pixels per second
+	const int speed_max = 200; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
 	const int speed_delta_decel = speed_max*4;
 	const int terminal_velocity = 16 * 60;
@@ -236,28 +240,28 @@ void Player::update(float dt) {
 
 	// recharge energy
 	if(energy > 0)
-        energy += std::min(energy_recharge_rate*dt, std::max(0.f, energy_max - energy));
+        energy += std::min(energy_recharge_rate*dt, std::max(0., energy_max - energy));
 
 	if (godMode)
-		energy = std::max(energy, 10.f);
+		energy = std::max(energy, 10.);
 
 	// left/right move
 	shape->u = 2.0f;
 	if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Left) {
 		move_direction = Facing::Left;
 		if(body->v.x > -speed_max)
-			cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
+			cpBodyApplyImpulse(body, cpv(-700, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
-		shape->u = 0.1f;
+		shape->u = 0.0f;
 	}
 	else if (!dying && recoveryTimer <= 0 && input.direction() == Facing::Right) {
 		move_direction = Facing::Right;
 		if(body->v.x < speed_max)
-			cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
+			cpBodyApplyImpulse(body, cpv(700, 0), cpv(0, 0));
 		facing_direction = move_direction;
 		walking = true;
-		shape->u = 0.1f;
+		shape->u = 0.0f;
 	}
 
 	if (!dying && recoveryTimer <= 0 && input.jumping())
@@ -318,11 +322,9 @@ void Player::update(float dt) {
 			this->setCurrentAnimation("idle");
 		}
 
-		/*
-		cout << (crouched?"crouched":"not-crouched") << " " 
-		     << (isGrounded()?"grounded":"not-grounded") << " "
-		     << currentAnimation->getName() << "\n";
-	  */
+		if(debugMode)
+			cout << (isGrounded()?"grounded":"not-grounded") << " " << grounded << "\n";
+		     
 		updateSpriteFacing();
 
 		/*
@@ -333,6 +335,7 @@ void Player::update(float dt) {
 		*/
 		
 		//checkcollisions();
+		//cout << body->p.x << " " << body->p.y << "\n";
 	}
 }
 
@@ -399,7 +402,7 @@ void Player::onAnimationComplete(std::string anim) {
 					static_cast<Collectible *>(*it)->reset();
 				}
 			}
-			CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x - 16, pos_y - 48);
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x - 16, body->p.y - 48);
 
 			init();
 		} else {
@@ -410,7 +413,7 @@ void Player::onAnimationComplete(std::string anim) {
 	}
 }
 
-bool Player::doDamage(float damage, bool knockback) {
+bool Player::doDamage(double damage, bool knockback) {
 	bool dead = false;
 	if(damageTimer <= 0) {
 		energy -= damage * 30;
@@ -438,11 +441,11 @@ bool Player::doDamage(float damage, bool knockback) {
 				}
 			}
 			if(knockback_direction == Facing::Left) {
-				body->v.x = -300;
+				body->v.x = -200;
 			} else {
-				body->v.x = 300;
+				body->v.x = 200;
 			}
-			body->v.y = 150;
+			body->v.y = 300;
 		}
 	}
   return dead;

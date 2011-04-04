@@ -33,8 +33,8 @@ public:
 	Widget(int tp, Widget *parent);
 	~Widget();
 
-	void setPos(float px, float py);
-	void getPos(float &px, float &py);
+	void setPos(double px, double py);
+	void getPos(double &px, double &py);
 
 	void setText(const sf::Unicode::Text &Text);
 	sf::String getText();
@@ -45,8 +45,8 @@ public:
 	void setBg(const sf::Unicode::Text &Text);
 
 	void setClick(void (*func)());
-	void setSlide(void (*func)(float v));
-	void setSlideValue(float v);
+	void setSlide(void (*func)(double v));
+	void setSlideValue(double v);
 	void setAnyKey(void (*func)());
 
 	void show();
@@ -74,7 +74,7 @@ protected:
 	Widget *parent;
 
 	void (*click)();
-	void (*slide)(float v);
+	void (*slide)(double v);
 	void (*anyKey)();
 	char txt[255];
 	int txtPos;
@@ -82,8 +82,8 @@ protected:
 	int type;
 	int size;
 	int height, width;
-	float pos_x, pos_y;
-	float sval;
+	double pos_x, pos_y;
+	double sval;
 	bool checked;
 	bool hidden;
 	bool has_bg;
@@ -100,7 +100,7 @@ extern Widget *ui_pause;
 void ui_init(void);
 int ui_event(sf::Event &Event);
 void ui_popupImage(const sf::Unicode::Text &path, void (*func)());
-void ui_render(Player &player);
+void ui_render(Player * p);
 void ui_exit(void);
 void ui_start();
 void ui_togglePause();

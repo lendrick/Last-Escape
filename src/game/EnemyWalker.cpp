@@ -23,7 +23,7 @@
 #include "Sound.h"
 #include "SoundCache.h"
 
-EnemyWalker::EnemyWalker(float x, float y)
+EnemyWalker::EnemyWalker(double x, double y)
 :EnemyPatroller(x, y, 28.0f, 19.0f)
 {
 	setImage("walker.png");

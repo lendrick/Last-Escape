@@ -21,15 +21,15 @@
 class EnemyWalker : public EnemyPatroller
 {
 public:
-	EnemyWalker(float x, float y);
+	EnemyWalker(double x, double y);
 	virtual ~EnemyWalker();
 /*
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void draw();
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
 protected:
-	float walk_speed;
+	double walk_speed;
 	Bumper* leftBumper;
 	Bumper* rightBumper;
 	*/
