@@ -287,7 +287,8 @@ void Actor::resetPhysics(double start_x, double start_y)
 }
 
 void Actor::destroyPhysics() {
-	if(body) {
+	cout << "Destroying physics for: " << actorName << "\n";
+	if(body != NULL) {
 		if(shape) 
 			cpSpaceRemoveShape(game_map->physSpace, shape);
 		
@@ -298,7 +299,7 @@ void Actor::destroyPhysics() {
 		
 		cpBodyFree(body);
 
-	} else if(shape) {
+	} else if(shape != NULL) {
 		// Static things like collectibles have no body.
  		cpSpaceRemoveShape(game_map->physSpace, shape);
 		cpShapeFree(shape);		

@@ -61,8 +61,8 @@ Player::Player(double x, double y)
 	shoot_duration = .2f;
 	last_shoot_time = 0;
 	energyBalls = 0;
-	immunityTime = 0.5f;
-	recoveryTime = 0.2f;
+	immunityTime = 1.0;
+	recoveryTime = 0.2;
 	recoveryTimer = 0;
 	currentWeapon = 0;
 	baseMaxEnergy = 100.0f;
@@ -445,7 +445,7 @@ bool Player::doDamage(double damage, bool knockback) {
 			} else {
 				body->v.x = 300;
 			}
-			body->v.y = 150;
+			body->v.y = 400;
 		}
 	}
   return dead;

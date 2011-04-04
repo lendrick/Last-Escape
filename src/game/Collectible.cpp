@@ -40,6 +40,7 @@ void Collectible::init()
 	setCurrentAnimation("image");
 	shape->collision_type = PhysicsType::Item;
 	setShapeLayers(PhysicsLayer::Player);
+	actorName = "Collectible";
 }
 
 void Collectible::reset() {
@@ -51,6 +52,7 @@ CollectiblePill::CollectiblePill(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f)
 {
 	this->setImage("smallenergy.png");
+	actorName = "Pill";
 	init();
 }
 
@@ -72,6 +74,7 @@ void CollectiblePill::collide(Actor& otherActor) {
 CollectibleWeaponUpgrade::CollectibleWeaponUpgrade(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f)
 {
+	actorName = "Weapon Upgrade";
 	this->setImage("plasmaball.png");
 	init();
 }
@@ -89,6 +92,7 @@ void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
 
 CollectibleArmor::CollectibleArmor(double x, double y)
 :Collectible(x, y, 32.0f, 32.0f) {
+	actorName = "Armor";
 	this->setImage("shield.png");
 	init();
 }
