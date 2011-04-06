@@ -41,6 +41,10 @@
 #include "Actor.h"
 #include <cstdlib>
 
+typedef std::list<MapSegment *> MapSegmentList;
+MapSegmentList mapSegments;
+
+
 Map::Map(string mapName) {
 
 	physSpace = NULL;
@@ -308,10 +312,7 @@ void Map::initPhysics()
 	if(physSpace) {
 		//cpSpaceFreeChildren(physSpace);
 		while(!mapSegments.empty()) {
-			cpShape * shape = mapSegments.front();
 			mapSegments.pop_front();
-			cpSpaceRemoveShape(physSpace, shape);
-			cpShapeFree(shape);	
 		}
 		cpSpaceFree(physSpace);
 	}
@@ -413,10 +414,10 @@ bool Map::setupPhysics()
 	x2 = MAP_TILES_X * TILE_SIZE;
 	y2 = MAP_TILES_Y * TILE_SIZE;
 
-	createSegment(cpv(x1, y1), cpv(x1, y2), PhysicsType::Wall);
-	createSegment(cpv(x1, y2), cpv(x2, y2), PhysicsType::Wall);
-	createSegment(cpv(x2, y2), cpv(x2, y1), PhysicsType::Wall);
-	createSegment(cpv(x2, y1), cpv(x1, y1), PhysicsType::Death);
+	new MapSegment(cpv(x1, y1), cpv(x1, y2), PhysicsType::Wall);
+	new MapSegment(cpv(x1, y2), cpv(x2, y2), PhysicsType::Wall);
+	new MapSegment(cpv(x2, y2), cpv(x2, y1), PhysicsType::Wall);
+	new MapSegment(cpv(x2, y1), cpv(x1, y1), PhysicsType::Death);
 	
 	// Vertical Pass
 	/* This only accounts for on and off collision tiles now, but would be easy
@@ -434,7 +435,7 @@ bool Map::setupPhysics()
 				p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 				
 				if(prev_different != 0) {
-					createSegment(p1, p2, PhysicsType::Wall);
+					new MapSegment(p1, p2, PhysicsType::Wall);
 				}
 				
 				p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
@@ -460,7 +461,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
-			createSegment(p1, p2, PhysicsType::Wall);
+			new MapSegment(p1, p2, PhysicsType::Wall);
 		}
 	}
 	
@@ -478,9 +479,9 @@ bool Map::setupPhysics()
 				p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 				
 				if(prev_different == 2) {
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				} else if(prev_different == 1) {
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				
 				p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
@@ -510,9 +511,9 @@ bool Map::setupPhysics()
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
 			if(prev_different == 2) {
-				createSegment(p1, p2, PhysicsType::Ground);
+				new MapSegment(p1, p2, PhysicsType::Ground);
 			} else {
-				createSegment(p1, p2, PhysicsType::Ground);
+				new MapSegment(p1, p2, PhysicsType::Ground);
 			}
 		}
 	}
@@ -534,7 +535,7 @@ bool Map::setupPhysics()
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
 					if(debugMode) cout << "End Slant Up " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
@@ -558,7 +559,7 @@ bool Map::setupPhysics()
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
 					if(debugMode) cout << "End Slant Down " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
@@ -577,7 +578,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 					prev_different = false;
-					createSegment(p1, p2, PhysicsType::Death);
+					new MapSegment(p1, p2, PhysicsType::Death);
 				}
 			} else {
 				if(!prev_different) {
@@ -591,7 +592,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
-			createSegment(p1, p2, PhysicsType::Death);
+			new MapSegment(p1, p2, PhysicsType::Death);
 		}
 		prev_different = false;
 	}
@@ -609,7 +610,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 					prev_different = false;
-					createSegment(p1, p2, PhysicsType::Death);
+					new MapSegment(p1, p2, PhysicsType::Death);
 				}
 			} else {
 				if(!prev_different) {
@@ -623,7 +624,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
-			createSegment(p1, p2, PhysicsType::Death);
+			new MapSegment(p1, p2, PhysicsType::Death);
 		}
 		prev_different = false;
 	}
@@ -926,7 +927,7 @@ bool Map::isLoaded() {
 	return loaded;
 }
 
-
+/*
 void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	if(debugMode) cout << "new segment (" << p1.x << ", " << p1.y << ") to (" << p2.x << ", " << p2.y << ")\n";
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
@@ -938,6 +939,7 @@ void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	mapSegments.push_back(seg);
 	cpSpaceAddShape(physSpace, seg);
 }
+*/
 
 // Convert SFML 0,0 = top left csys and y down
 // to cp 0,0 = bottom left csys and y up.
@@ -1038,6 +1040,13 @@ void Map::renderForeground() {
 			}
 		}
 	}
+	
+	if(debugMode) {
+		MapSegmentList::iterator i;
+		for(i = mapSegments.begin(); i != mapSegments.end(); ++i) {
+			(*i)->draw();
+		}
+	}
 }
 
 void Map::renderLandscape() {
@@ -1070,4 +1079,40 @@ void Map::clear() {
 
 Map::~Map() {
 	clear();
+}
+
+
+MapSegment::MapSegment(cpVect p1, cpVect p2, int type) {
+	cpShape * seg = cpSegmentShapeNew(&game_map->physSpace->staticBody, p1, p2, 1);
+	seg->e = 0.0f;
+	seg->u = 1.0f;
+	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
+	seg->collision_type = type;
+	
+	x1 = p1.x;
+	y1 = p1.y;
+	x2 = p2.x;
+	y2 = p2.y;
+	
+	color = sf::Color(255, 0, 255);
+	
+	if(type == PhysicsType::Wall) {
+		color = sf::Color(0, 255, 0);
+	} else if(type == PhysicsType::Ground) {
+		color = sf::Color(0, 0, 255);
+	} else if(type == PhysicsType::Death) {
+		color = sf::Color(255, 0, 0);
+	}
+	
+	mapSegments.push_back(this);
+	cpSpaceAddShape(game_map->physSpace, seg);
+}
+
+MapSegment::~MapSegment() {
+	cpSpaceRemoveShape(game_map->physSpace, seg);
+	cpShapeFree(seg);	
+}
+
+void MapSegment::draw() {
+	App->Draw(sf::Shape::Line(x1, y1, x2, y2, 1.0f, color));
 }

@@ -145,7 +145,7 @@ void Actor::draw() {
 				bby2 = bby1 + height;
 				
 				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
-																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0));
+																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
 				rect.SetPosition(px, py);
 				if(body && body->a) {
 					rect.SetRotation(-rad2deg(body->a));

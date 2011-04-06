@@ -41,6 +41,17 @@ const int MAP_TILES_X = 1024;
 const int MAP_TILES_Y = 256;
 const int TILE_COUNT = 1024;
 
+
+struct MapSegment {
+	MapSegment(cpVect p1, cpVect p2, int type);
+	~MapSegment();
+	void draw();
+	
+	cpShape * seg;
+	double x1, y1, x2, y2;
+	sf::Color color;
+};
+
 class Map {
 private:
 	sf::RenderWindow *target;
@@ -56,7 +67,6 @@ private:
 	int danger[MAP_TILES_X][MAP_TILES_Y];
 	
 	Actor * cameraFollow;
-	std::list <cpShape *> mapSegments;
 
 protected:
 	void initPhysics();
@@ -83,7 +93,7 @@ public:
 	int vBetween(int t1, int t2);
 	int hBetween(int t1, int t2);
 	
-	void createSegment(cpVect p1, cpVect p2, int type);
+	//void createSegment(cpVect p1, cpVect p2, int type);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;
 	sf::Vector2f cp2sfml(const cpVect& v) const;

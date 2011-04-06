@@ -39,9 +39,9 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	body->v.y = speed_y;
 	
 	if(facing_direction == Facing::Right) 
-		body->a = deg2rad(angle - 90);
+		body->a = deg2rad(-angle - 270);
 	else
-		body->a = deg2rad(angle - 270);
+		body->a = deg2rad(-angle - 90);
 	
 	setVelocityFunc(no_gravity);
 	
