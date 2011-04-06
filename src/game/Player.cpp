@@ -60,6 +60,7 @@ Player::Player(double x, double y)
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
+	last_jump_time = 0;
 	energyBalls = 0;
 	immunityTime = 1.0;
 	recoveryTime = 0.2;
@@ -141,8 +142,6 @@ void Player::jump(double dt) {
 	const double jet_speed_max = 250;
 	const double jet_wait = 0.4f;
 	const double jump_wait = 0.3f;
-	
-	
 
 	if (isGrounded() && time - last_jump_time > jump_wait)
 	{
