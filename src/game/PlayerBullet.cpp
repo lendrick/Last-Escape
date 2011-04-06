@@ -95,3 +95,8 @@ void PlayerBullet::update(double dt) {
 void PlayerBullet::collideGround() {
 	destroy();
 }
+
+void PlayerBullet::collideWall() {
+	destroy();
+}
+
