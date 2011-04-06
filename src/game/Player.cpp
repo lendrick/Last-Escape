@@ -144,11 +144,11 @@ void Player::jump(double dt) {
 	const double jet_wait = 0.4f;
 	const double jump_wait = 0.3f;
 	
-	cout << "jumping\n";
+	//cout << "jumping\n";
 
 	if (isGrounded() && time - last_jump_time > jump_wait)
 	{
-		cout << "jump!\n";
+		//cout << "jump!\n";
 		if (energy < energy_cost_jump)
 			return;
 
@@ -158,10 +158,10 @@ void Player::jump(double dt) {
 	}
 	else
 	{
-		if(isGrounded())
-			cout << "too soon " << time - last_jump_time << "\n";
-		else 
-			cout << "not grounded\n";
+		//if(isGrounded())
+		//	cout << "too soon " << time - last_jump_time << "\n";
+		//else 
+		//	cout << "not grounded\n";
 		
 		// Can't jet immediately after jumping
 		if (time - last_jump_time < jet_wait)

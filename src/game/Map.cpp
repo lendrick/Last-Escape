@@ -109,7 +109,8 @@ void Map::loadMap(string filename) {
 			background[i][j] = 0;
 			foreground[i][j] = 0;
 			fringe[i][j] = 0;
-			collision[i][j] = false;
+			collision[i][j] = 0;
+			danger[i][j] = 0;
 		}
 	}
 
@@ -274,8 +275,8 @@ void Map::loadMap(string filename) {
 					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
 				} else if(propname == "music" && enableMusic) {
-                                        backgroundMusic.Stop();
-                                        backgroundMusic.OpenFromFile("audio/" + propval);
+					backgroundMusic.Stop();
+					backgroundMusic.OpenFromFile("audio/" + propval);
 					backgroundMusic.SetLoop(true);
 					backgroundMusic.Play();
 				}
