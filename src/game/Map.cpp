@@ -307,6 +307,12 @@ void Map::initPhysics()
 	cout << "Initializing physics for map.\n";
 	if(physSpace) {
 		//cpSpaceFreeChildren(physSpace);
+		while(!mapSegments.empty()) {
+			cpShape * shape = mapSegments.front();
+			mapSegments.pop_front();
+			cpSpaceRemoveShape(physSpace, shape);
+			cpShapeFree(shape);	
+		}
 		cpSpaceFree(physSpace);
 	}
 	cpResetShapeIdCounter();
@@ -929,6 +935,7 @@ void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
 	seg->collision_type = type;
 	
+	mapSegments.push_back(seg);
 	cpSpaceAddShape(physSpace, seg);
 }
 

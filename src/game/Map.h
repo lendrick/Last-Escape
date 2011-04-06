@@ -26,6 +26,7 @@
 #include <chipmunk/chipmunk.h>
 #include <string>
 #include <fstream>
+#include <list>
 #include "Utils.h"
 #include "globals.h"
 
@@ -55,6 +56,7 @@ private:
 	int danger[MAP_TILES_X][MAP_TILES_Y];
 	
 	Actor * cameraFollow;
+	std::list <cpShape *> mapSegments;
 
 protected:
 	void initPhysics();
