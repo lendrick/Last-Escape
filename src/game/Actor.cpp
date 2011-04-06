@@ -206,7 +206,7 @@ void Actor::collideGround() {
 }
 
 void Actor::leaveGround() {
-	grounded--;
+//	grounded--;
 }
 
 void Actor::doUpdate(double dt) {
@@ -218,6 +218,7 @@ void Actor::doUpdate(double dt) {
 			awake = true;
 		}
 		update(dt);
+		grounded = 0;
 	} else if(awake) {
 		awake = false;
 		cpBodySleep(body);

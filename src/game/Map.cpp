@@ -471,7 +471,7 @@ bool Map::setupPhysics()
 				if(prev_different == 2) {
 					createSegment(p1, p2, PhysicsType::Ground);
 				} else if(prev_different == 1) {
-					createSegment(p1, p2, PhysicsType::Wall);
+					createSegment(p1, p2, PhysicsType::Ground);
 				}
 				
 				p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
@@ -503,7 +503,7 @@ bool Map::setupPhysics()
 			if(prev_different == 2) {
 				createSegment(p1, p2, PhysicsType::Ground);
 			} else {
-				createSegment(p1, p2, PhysicsType::Wall);
+				createSegment(p1, p2, PhysicsType::Ground);
 			}
 		}
 	}
@@ -663,10 +663,10 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Player, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 
@@ -683,40 +683,40 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Enemy, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Neutral, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::PlayerBullet, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::PlayerBullet, PhysicsType::Wall, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
@@ -843,6 +843,7 @@ static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data) {
 }
 
 // Ground collisions
+/*
 static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	cpShape *a, *b; 
 	cpArbiterGetShapes(arb, &a, &b);
@@ -853,7 +854,32 @@ static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) 
 	actor1->collideGround();
 	return 1;
 }
+*/
 
+static int map_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	
+	//cout << "Ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	cpVect normal = cpArbiterGetNormal(arb, 0);
+	
+	//cout << "Collision normal: " << normal.x << " " << normal.y << "\n";
+	
+	if(normal.y < 0) {
+		float slope = fabs(normal.x / normal.y);
+		if(slope <= 2)
+			actor1->collideGround();
+		else
+			actor1->collideWall();
+	} else {
+		actor1->collideWall();
+	}
+	return 1;
+}
+
+/*
 static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	cpShape *a, *b; 
 	cpArbiterGetShapes(arb, &a, &b);
@@ -863,6 +889,7 @@ static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
 	actor1->leaveGround();
 }
+*/
 
 // Bumper ground collisions
 static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
