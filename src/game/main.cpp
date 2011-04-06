@@ -106,11 +106,11 @@ double frand(double lower, double upper) {
 }
 
 double deg2rad(double deg) {
-	return deg * 180.0f / M_PI;
+  return deg * M_PI / 180.0f;
 }
 
 double rad2deg(double rad) {
-  return rad * M_PI / 180.0f;
+	return rad * 180.0f / M_PI;
 }
 
 void startTimer() {

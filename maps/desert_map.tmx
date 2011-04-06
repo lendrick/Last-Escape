@@ -583,4 +583,22 @@
   <object x="2382" y="1884" width="12" height="13"/>
   <object x="2350" y="1915" width="12" height="13"/>
  </objectgroup>
+ <objectgroup name="crates" width="400" height="70">
+  <properties>
+   <property name="type" value="crate"/>
+  </properties>
+  <object x="997" y="1253"/>
+  <object x="1042" y="1266"/>
+  <object x="1040" y="1218"/>
+  <object x="1013" y="1194"/>
+  <object x="979" y="1201"/>
+  <object x="911" y="1269" width="29" height="38"/>
+  <object x="1010" y="1287"/>
+  <object x="949" y="1234"/>
+  <object x="984" y="1148"/>
+  <object x="1071" y="1236"/>
+  <object x="1063" y="1286" width="22" height="17"/>
+  <object x="934" y="1318" width="21" height="17"/>
+  <object x="959" y="1283" width="22" height="23"/>
+ </objectgroup>
 </map>

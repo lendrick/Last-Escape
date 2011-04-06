@@ -34,7 +34,7 @@ BossSpider::BossSpider(double x, double y)
 	dying = false;
 	life = 5;
 
-	setDrawOffset(32, 63);
+	setDrawOffset(32, 22);
 	setFrameSize(64, 64);
 	lastShot = 0;
 	shootInterval = 0.5f;

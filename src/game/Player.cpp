@@ -56,7 +56,7 @@ Player::Player(double x, double y)
 	setImage("xeon.png");
 
 	lives = start_lives;
-	setDrawOffset(64, 96);
+	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
@@ -140,8 +140,11 @@ void Player::jump(double dt) {
 	const double jet_cost = 35;
 	const double jet_speed_max = 250;
 	const double jet_wait = 0.4f;
+	const double jump_wait = 0.3f;
+	
+	
 
-	if (body->v.y == 0 && isGrounded())
+	if (isGrounded() && time - last_jump_time > jump_wait)
 	{
 		if (energy < energy_cost_jump)
 			return;

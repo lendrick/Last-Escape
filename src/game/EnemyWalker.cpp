@@ -32,7 +32,7 @@ EnemyWalker::EnemyWalker(double x, double y)
 
 	dying = false;
 
-	setDrawOffset(16, 30);
+	setDrawOffset(16, 11);
 	setFrameSize(32, 32);
 
 	Animation * tmp;

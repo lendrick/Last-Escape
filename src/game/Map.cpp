@@ -29,6 +29,7 @@
 #include "EnemyCrawler.h"
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
+#include "PhysicsCrate.h"
 #include "BossSpider.h"
 #include "Particles.h"
 #include "Player.h"
@@ -217,6 +218,8 @@ void Map::loadMap(string filename) {
 					actor = new CollectibleArmor((double)x, (double)y);
 				} else if (type == "smoke") {
 					actor = new ParticleEmitter((double)x, (double)y);
+				} else if (type == "crate") {
+					actor = new PhysicsCrate((double)x, (double)y);
 				} else if (type == "walker") {
 					actor = new EnemyWalker((double)x, (double)y);
 				} else if (type == "crawler") {

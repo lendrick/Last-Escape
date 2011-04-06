@@ -116,13 +116,15 @@ void Actor::draw() {
 		cpVect pos;
 		double px, py;
 		getPos(px, py);
-		if(body) py += height;
+		//if(body) py += height;
 		sf::FloatRect cam = gameView.GetRect();
 		
 		double radius = height + width;  // manhattan distance, for speed.
 		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
-			if(body && body->a) {
-				sprite.SetRotation(rad2deg(body->a));
+			if(body && body->a != 0) {
+				sprite.SetRotation(-rad2deg(body->a));
+				//if(body->a > 0)
+					//cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
 			} else {
 				sprite.SetRotation(0);
 			}
@@ -146,7 +148,7 @@ void Actor::draw() {
 																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0));
 				rect.SetPosition(px, py);
 				if(body && body->a) {
-					rect.SetRotation(rad2deg(body->a));
+					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
 				
