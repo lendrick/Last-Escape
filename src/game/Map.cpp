@@ -528,11 +528,11 @@ bool Map::setupPhysics()
 
 			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
 				if(collision[x][y] == Collision::SlantUp && prev_tile != Collision::SlantUp) {
-					cout << "Slant Up " << x << " " << y << "\n";
+					if(debugMode) cout << "Slant Up " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y - 1) - 1);
 				} else if(collision[x][y] != Collision::SlantUp && prev_tile == Collision::SlantUp) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
-					cout << "End Slant Up " << x << " " << y << 
+					if(debugMode) cout << "End Slant Up " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
 					createSegment(p1, p2, PhysicsType::Ground);
 				}
@@ -552,11 +552,11 @@ bool Map::setupPhysics()
 
 			if(x < MAP_TILES_X && y > 0) {
 				if(collision[x][y] == Collision::SlantDown && prev_tile != Collision::SlantDown) {
-					cout << "Slant Down " << x << " " << y << "\n";
+					if(debugMode) cout << "Slant Down " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y) - 1);
 				} else if(collision[x][y] != Collision::SlantDown && prev_tile == Collision::SlantDown) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
-					cout << "End Slant Down " << x << " " << y << 
+					if(debugMode) cout << "End Slant Down " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
 					createSegment(p1, p2, PhysicsType::Ground);
 				}
