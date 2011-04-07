@@ -1116,4 +1116,15 @@ MapSegment::~MapSegment() {
 
 void MapSegment::draw() {
 	App->Draw(sf::Shape::Line(x1, y1, x2, y2, 1.0f, color));
+	
+					// Draw a crosshair at the segment's start position
+	App->Draw(sf::Shape::Line(x1-2, y1, x1+2, y1, 1.0f, 
+																				sf::Color(0, 0, 255)));
+	App->Draw(sf::Shape::Line(x1, y1-2, x1, y1+2, 1.0f,
+																				sf::Color(0, 0, 255)));
+	
+	App->Draw(sf::Shape::Line(x2-2, y2, x2+2, y2, 1.0f, 
+																				sf::Color(0, 0, 255)));
+	App->Draw(sf::Shape::Line(x2, y2-2, x2, y2+2, 1.0f,
+																				sf::Color(0, 0, 255)));
 }
