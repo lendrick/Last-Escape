@@ -313,6 +313,7 @@ void Map::initPhysics()
 	if(physSpace) {
 		//cpSpaceFreeChildren(physSpace);
 		while(!mapSegments.empty()) {
+			delete mapSegments.front();
 			mapSegments.pop_front();
 		}
 		cpSpaceFree(physSpace);
@@ -344,8 +345,6 @@ int Map::vBetween(int t1, int t2) {
 		return 2;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::Tile) {
 		return 1;
-	//} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
-		//return 2;
 	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
 		return 1;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
@@ -364,8 +363,6 @@ int Map::hBetween(int t1, int t2) {
 		return 1;
 	} else if(t1 == Collision::Tile && t2 == Collision::None) {
 		return 2;
-	//} else if(t1 == Collision::Tile && t2 == Collision::SlantDown) {
-		//return 2;
 	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
 		return 2;
 	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
@@ -441,21 +438,6 @@ bool Map::setupPhysics()
 				
 				p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
 			}
-			
-			/*
-			if(!different) {
-				if(prev_different) {
-					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
-					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
-					createSegment(p1, p2, PhysicsType::Wall);
-				}
-			} else {
-				if(!prev_different) {
-					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
-					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
-				}
-			}
-			*/
 			prev_different = different;
 		}
 		
@@ -487,24 +469,6 @@ bool Map::setupPhysics()
 				
 				p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
 			}
-			/*
-			if(!different) {
-				if(prev_different) {
-					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
-					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
-					if(prev_different == 2) {
-						createSegment(p1, p2, PhysicsType::Ground);
-					} else {
-						createSegment(p1, p2, PhysicsType::Wall);
-					}
-				}
-			} else {
-				if(!prev_different) {
-					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
-					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
-				}
-			}
-			*/
 			prev_different = different;
 		}
 			
@@ -1110,8 +1074,9 @@ MapSegment::MapSegment(cpVect p1, cpVect p2, int type) {
 }
 
 MapSegment::~MapSegment() {
-	cpSpaceRemoveShape(game_map->physSpace, seg);
-	cpShapeFree(seg);	
+	cout << "deleting MapSegment\n";
+	//cpSpaceRemoveStaticShape(game_map->physSpace, seg);
+	//cpShapeFree(seg);	
 }
 
 void MapSegment::draw() {

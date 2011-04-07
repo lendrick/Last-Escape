@@ -130,7 +130,7 @@ void Actor::draw() {
 			}
 					
 			sprite.FlipY(true);
-			sprite.SetPosition(px + 0.5, py + 0.5);
+			sprite.SetPosition(px, py);
 			App->Draw(sprite);
 		
 			if(debugMode)
