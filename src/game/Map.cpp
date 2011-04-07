@@ -344,8 +344,8 @@ int Map::vBetween(int t1, int t2) {
 		return 2;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::Tile) {
 		return 1;
-	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
-		return 2;
+	//} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
+		//return 2;
 	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
 		return 1;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
@@ -364,8 +364,8 @@ int Map::hBetween(int t1, int t2) {
 		return 1;
 	} else if(t1 == Collision::Tile && t2 == Collision::None) {
 		return 2;
-	} else if(t1 == Collision::Tile && t2 == Collision::SlantDown) {
-		return 2;
+	//} else if(t1 == Collision::Tile && t2 == Collision::SlantDown) {
+		//return 2;
 	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
 		return 2;
 	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
