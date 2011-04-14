@@ -273,6 +273,11 @@ int main(int argc, char** argv)
       // This function loads a new map if one has been set with SetNextMap.
       // Due to physics functions, we can't switch maps mid-loop.
       startTimer();
+
+			// Process Qt event loop
+			QCoreApplication::processEvents(QEventLoop::AllEvents, time_step / 4.0 * 1000.0);
+			QCoreApplication::sendPostedEvents(0, QEvent::DeferredDelete);
+
       cleanup();
       cleanup_time += getTimer();
 
