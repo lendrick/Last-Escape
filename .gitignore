@@ -11,3 +11,4 @@ CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
 gmon.out
+*-build-desktop
