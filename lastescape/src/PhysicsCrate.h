@@ -22,6 +22,6 @@
 class PhysicsCrate : public AnimatedActor
 {
 public:
-	PhysicsCrate(double x, double y);
-	virtual ~PhysicsCrate();
+  PhysicsCrate(double x, double y);
+  virtual ~PhysicsCrate();
 };

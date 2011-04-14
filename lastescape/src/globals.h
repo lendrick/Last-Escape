@@ -19,13 +19,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <QtScript>
 #include <list>
 #include <cstdio>
 #include <iostream>
 #include <string>
-
-#define foreach BOOST_FOREACH
-#define reverse_foreach BOOST_REVERSE_FOREACH
 
 using namespace std;
 
@@ -49,59 +47,65 @@ extern bool enableMusic;
 extern std::string startMap;
 extern bool debugMode;
 extern double time_step;
+extern QScriptEngine * scriptEngine;
 
-namespace Facing {
-	enum Enum {
-		None,
-		Up,
-		Down,
-		Left,
-		Right
-	};
+namespace Facing
+{
+enum Enum {
+  None,
+  Up,
+  Down,
+  Left,
+  Right
+};
 };
 
-namespace PhysicsLayer {
-	enum Enum {
-		Map = 1,
-		Player = 2,
-		Enemy = 4,
-		PlayerBullet = 8,
-		EnemyBullet = 16
-	};
+namespace PhysicsLayer
+{
+enum Enum {
+  Map = 1,
+  Player = 2,
+  Enemy = 4,
+  PlayerBullet = 8,
+  EnemyBullet = 16
+};
 };
 
-namespace PhysicsType {
-	enum Enum {
-		Player = 1,
-		Enemy,
-		Ground,
-		Sensor,
-		Wall,
-		Death,
-		Item,
-		Neutral,
-		PlayerBullet,
-		CentipedeBullet,
-		Bumper
-	};
+namespace PhysicsType
+{
+enum Enum {
+  Player = 1,
+  Enemy,
+  Ground,
+  Sensor,
+  Wall,
+  Death,
+  Item,
+  Neutral,
+  PlayerBullet,
+  CentipedeBullet,
+  Bumper
+};
 };
 
-namespace PhysicsGroup {
-	enum Enum {
-		PlayerBullets = 1,
-		EnemyBullets = 2,
-		Bumpers = 3
-	};
+namespace PhysicsGroup
+{
+enum Enum {
+  PlayerBullets = 1,
+  EnemyBullets = 2,
+  Bumpers = 3
+};
 };
 
-namespace Collision {
-	enum Enum {
-		None = 0,
-		Tile = 1,
-		Danger = 2,
-		SlantUp = 3,
-		SlantDown = 4
-	};
+namespace Collision
+{
+enum Enum {
+  None = 0,
+  Tile = 1,
+  Danger = 2,
+  SlantUp = 3,
+  SlantDown = 4
+};
 };
 
 extern bool paused;

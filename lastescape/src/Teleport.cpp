@@ -19,31 +19,29 @@
 #include "Player.h"
 
 TeleportEnter::TeleportEnter(double x, double y, double w, double h, std::string teleName)
-:Sensor(x, y, w, h)
+  :Sensor(x, y, w, h)
 {
-	name = teleName;
+  name = teleName;
 }
 
-void TeleportEnter::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
-		{
-			if ((*it)->isTeleportExit() && ((TeleportExit*)*it)->getName() == name)
-			{
-				// TODO: Fix this mofo, once we make an Actor::Teleport function.
-			  double x, y;
-				(*it)->getPos(x, y);
-				otherActor.teleport(x, y, 0, 500);
-				
-				break;
-			}
-		}
-	}
+void TeleportEnter::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
+      if ((*it)->isTeleportExit() && ((TeleportExit*)*it)->getName() == name) {
+        // TODO: Fix this mofo, once we make an Actor::Teleport function.
+        double x, y;
+        (*it)->getPos(x, y);
+        otherActor.teleport(x, y, 0, 500);
+
+        break;
+      }
+    }
+  }
 }
 
 TeleportExit::TeleportExit(double x, double y, std::string teleName)
-:Sensor(x, y, 32.0f, 32.0f)
+  :Sensor(x, y, 32.0f, 32.0f)
 {
-	name = teleName;
+  name = teleName;
 }

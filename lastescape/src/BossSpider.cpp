@@ -26,139 +26,141 @@
 
 
 BossSpider::BossSpider(double x, double y)
-:Enemy(x, y, 56.0f, 41.0f)
+  :Enemy(x, y, 56.0f, 41.0f)
 {
-	setImage("spider.png");
-	walk_speed = 100.0f;
+  setImage("spider.png");
+  walk_speed = 100.0f;
 
-	dying = false;
-	life = 5;
+  dying = false;
+  life = 5;
 
-	setDrawOffset(32, 22);
-	setFrameSize(64, 64);
-	lastShot = 0;
-	shootInterval = 0.5f;
-	time = 0;
+  setDrawOffset(32, 22);
+  setFrameSize(64, 64);
+  lastShot = 0;
+  shootInterval = 0.5f;
+  time = 0;
 
-	patrolInterval = 1.5f;
-	patrolTime = 0;
+  patrolInterval = 1.5f;
+  patrolTime = 0;
 
-	Animation * tmp;
+  Animation * tmp;
 
-	//pick a random death sound
-	int sound_num = rand() % 19;
-	sound_num += 1;
-	std::string s;
-	std::stringstream out;
-	out << sound_num;
-	s = out.str();
+  //pick a random death sound
+  int sound_num = rand() % 19;
+  sound_num += 1;
+  std::string s;
+  std::stringstream out;
+  out << sound_num;
+  s = out.str();
 
-	std::string sound_file = s + "-BugSplat.ogg";
-	//cout << sound_file;
-	fireSound = soundCache[sound_file];
-	shape->u = 0.1f;
+  std::string sound_file = s + "-BugSplat.ogg";
+  //cout << sound_file;
+  fireSound = soundCache[sound_file];
+  shape->u = 0.1f;
 
-	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(4, .2f);
-	tmp->addFrame(5, .2f);
-	tmp->setDoLoop(true);
+  tmp = addAnimation("walk");
+  tmp->addFrame(0, .2f);
+  tmp->addFrame(1, .2f);
+  tmp->addFrame(2, .2f);
+  tmp->addFrame(4, .2f);
+  tmp->addFrame(5, .2f);
+  tmp->setDoLoop(true);
 
-	tmp = addAnimation("die");
-	tmp->addFrame(8, .2f);
-	tmp->addFrame(9, .2f);
-	tmp->addFrame(10, .2f);
-	tmp->addFrame(11, .2f);
+  tmp = addAnimation("die");
+  tmp->addFrame(8, .2f);
+  tmp->addFrame(9, .2f);
+  tmp->addFrame(10, .2f);
+  tmp->addFrame(11, .2f);
 
-	tmp = addAnimation("hurt");
-	tmp->addFrame(0, 0.07f);
+  tmp = addAnimation("hurt");
+  tmp->addFrame(0, 0.07f);
 
-	setCurrentAnimation("walk");
+  setCurrentAnimation("walk");
+
+	resetPhysics(x, y);
 }
 
-void BossSpider::update(double dt) {
-	if(!dying) {
-		time += dt;
-		patrolTime += dt;
+void BossSpider::update(double dt)
+{
+  if(!dying) {
+    time += dt;
+    patrolTime += dt;
 
-		//setCurrentAnimation("walk");
-		const int speed_gravity = 960;
-		const double vision_range = 320;
-		const double vision_min_range = 32;
 
-		if(facing_direction == Facing::Left) {
-			if(body->v.x > -walk_speed)
-				cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
-			
-			if(patrolTime > patrolInterval) {
-				facing_direction = Facing::Right;
-				patrolTime = 0;
-			}
-		} else {
-			if(body->v.x < walk_speed)
-					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
-			
-			if(patrolTime > patrolInterval) {
-				facing_direction = Facing::Left;
-				patrolTime = 0;
-			}
-		}
+    if(facing_direction == Facing::Left) {
+      if(body->v.x > -walk_speed)
+        cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
 
-		updateSpriteFacing();
+      if(patrolTime > patrolInterval) {
+        facing_direction = Facing::Right;
+        patrolTime = 0;
+      }
+    } else {
+      if(body->v.x < walk_speed)
+        cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
 
-		if(lastShot + shootInterval < time) {
-			lastShot = time;
-			EnemyCentipedeProjectile * projectile =
-				new EnemyCentipedeProjectile(facing_direction, body->p.x, int(body->p.y + 20.0f));
-		}
+      if(patrolTime > patrolInterval) {
+        facing_direction = Facing::Left;
+        patrolTime = 0;
+      }
+    }
 
-		//checkcollisions();
-	}
+    updateSpriteFacing();
+
+    if(lastShot + shootInterval < time) {
+      lastShot = time;
+      new EnemyCentipedeProjectile(facing_direction, body->p.x, int(body->p.y + 20.0f));
+    }
+
+    //checkcollisions();
+  }
 }
 
-void BossSpider::draw() {
-	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
-	AnimatedActor::draw();
+void BossSpider::draw()
+{
+  //cout << "walker frame " << currentAnimation->getFrame() << "\n";
+  AnimatedActor::draw();
 }
 
-bool BossSpider::doDamage(double damage) {
-	life -= damage;
-	if(life <= 0) {
-		die();
-		return true;	
-	} else {
-		setCurrentAnimation("hurt");
-	}
+bool BossSpider::doDamage(double damage)
+{
+  life -= damage;
+  if(life <= 0) {
+    die();
+    return true;
+  } else {
+    setCurrentAnimation("hurt");
+  }
 
-	return false;
+  return false;
 }
 
-void BossSpider::die() {
-	setCanCollide(false);
-	dying = true;
-	freeze();
-	setCurrentAnimation("die");
-	fireSound->playSound();
+void BossSpider::die()
+{
+  setCanCollide(false);
+  dying = true;
+  freeze();
+  setCurrentAnimation("die");
+  fireSound->play();
 }
 
-void BossSpider::onAnimationComplete(std::string anim) {
-	//cout << "BossSpider::onAnimationComplete(\"" << anim << "\")\n";
-	if(anim == "die") {
-		double pos_x = body->p.x;
-		double pos_y = body->p.y;
-		destroy();
-		CollectibleEnergyBall * ball = NULL;
-		ball = new CollectibleEnergyBall(pos_x-16, pos_y-10);
-		ball = new CollectibleEnergyBall(pos_x+16, pos_y-10);
-		ball = new CollectibleEnergyBall(pos_x-16, pos_y+22);
-		ball = new CollectibleEnergyBall(pos_x+16, pos_y+22);
-	}
+void BossSpider::animationCompleteCallback(std::string anim)
+{
+  //cout << "BossSpider::animationCompleteCallback(\"" << anim << "\")\n";
+  if(anim == "die") {
+    double pos_x = body->p.x;
+    double pos_y = body->p.y;
+    destroy();
+    CollectibleEnergyBall * ball = NULL;
+    ball = new CollectibleEnergyBall(pos_x-16, pos_y-10);
+    ball = new CollectibleEnergyBall(pos_x+16, pos_y-10);
+    ball = new CollectibleEnergyBall(pos_x-16, pos_y+22);
+    ball = new CollectibleEnergyBall(pos_x+16, pos_y+22);
+  }
 
-	if(anim == "hurt") {
-		setCurrentAnimation("walk");
-	}
+  if(anim == "hurt") {
+    setCurrentAnimation("walk");
+  }
 }
 
 

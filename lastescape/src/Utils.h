@@ -18,6 +18,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <QtScript>
 #include <string>
 #include <chipmunk/chipmunk.h>
 #include <SFML/Graphics.hpp>
@@ -25,12 +26,12 @@
 using namespace std;
 
 struct Point {
-	int x;
-	int y;
-	Point() {
-		x=0;
-		y=0;
-	}
+  int x;
+  int y;
+  Point() {
+    x=0;
+    y=0;
+  }
 };
 
 string trim(string s, char c);
@@ -41,5 +42,7 @@ void parse_key_pair(string s, string &key, string &val);
 
 cpShape * boxWithOffset(cpBody * body, double width, double height, sf::Vector2f offset);
 cpShape * boxWithOffset(cpBody * body, double width, double height, cpVect offset);
+
+QScriptValue runScript(QString filename) ;
 
 #endif

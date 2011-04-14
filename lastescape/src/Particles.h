@@ -20,29 +20,28 @@
 
 #include "Actor.h"
 
-struct Particle
-{
-    double x, y, xSpeed, ySpeed, angle, angleSpeed;
-    double age, maxAge;
+struct Particle {
+  double x, y, xSpeed, ySpeed, angle, angleSpeed;
+  double age, maxAge;
 };
 
 class ParticleEmitter : public Actor
 {
 public:
-	ParticleEmitter(double x, double y);
-	virtual void draw();
-	virtual void update(double dt);
+  ParticleEmitter(double x, double y);
+  virtual void draw();
+  virtual void update(double dt);
 private:
-    double maxAge;
+  double maxAge;
 
-	double timeLeft;
-    double emissionRate;
-    int maxParticles;
+  double timeLeft;
+  double emissionRate;
+  int maxParticles;
 
-    size_t nextIdx;
-	std::vector<Particle> particles;
+  size_t nextIdx;
+  std::vector<Particle> particles;
 
-	void addParticle();
+  void addParticle();
 };
 
 #endif

@@ -24,138 +24,144 @@
 #include <SFML/Graphics.hpp>
 
 EnemyCentipede::EnemyCentipede(double x, double y)
-:EnemyPatroller(x, y, 32.0f, 25.0f)
+  :EnemyPatroller(x, y, 32.0f, 25.0f)
 {
-	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
-	setImage("centipede.png");
-	walk_speed = 90.f;
-	shootInterval = 2.5f;
-	lastShot = 0;
-	time = 0;
+  //debugPixel.SetImage(*imageCache["bluepixel.png"]);
+  setImage("centipede.png");
+  walk_speed = 90.f;
+  shootInterval = 2.5f;
+  lastShot = 0;
+  time = 0;
 
-	dying = false;
+  dying = false;
 
-	setDrawOffset(32, 15);
-	setFrameSize(64, 32);
+  setDrawOffset(32, 15);
+  setFrameSize(64, 32);
 
-	//pick a random death sound
-	int sound_num = rand() % 19;
-	sound_num += 1;
-	std::string s;
-	std::stringstream out;
-	out << sound_num;
-	s = out.str();
+  //pick a random death sound
+  int sound_num = rand() % 19;
+  sound_num += 1;
+  std::string s;
+  std::stringstream out;
+  out << sound_num;
+  s = out.str();
 
-	std::string sound_file = s + "-BugSplat.ogg";
-	//cout << sound_file;
-	fireSound = soundCache[sound_file];
+  std::string sound_file = s + "-BugSplat.ogg";
+  //cout << sound_file;
+  fireSound = soundCache[sound_file];
 
-	Animation * tmp;
+  Animation * tmp;
 
-	tmp = addAnimation("walk");
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->addFrame(6, .2f);
-	tmp->addFrame(7, .2f);
-	tmp->setDoLoop(true);
+  tmp = addAnimation("walk");
+  tmp->addFrame(2, .2f);
+  tmp->addFrame(3, .2f);
+  tmp->addFrame(6, .2f);
+  tmp->addFrame(7, .2f);
+  tmp->setDoLoop(true);
 
-	tmp = addAnimation("die");
-	tmp->addFrame(0, .07f);
-	tmp->addFrame(4, .07f);
-	tmp->addFrame(8, .07f);
-	tmp->addFrame(12, .07f);
+  tmp = addAnimation("die");
+  tmp->addFrame(0, .07f);
+  tmp->addFrame(4, .07f);
+  tmp->addFrame(8, .07f);
+  tmp->addFrame(12, .07f);
 
-	tmp = addAnimation("shoot");
-	tmp->addFrame(11, .4f);
-	tmp->addFrame(10, .2f);
-	tmp->addFrame(9, .1f);
+  tmp = addAnimation("shoot");
+  tmp->addFrame(11, .4f);
+  tmp->addFrame(10, .2f);
+  tmp->addFrame(9, .1f);
 
-	setCurrentAnimation("walk");
+  setCurrentAnimation("walk");
+
 }
 
-void EnemyCentipede::update(double dt) {
-	if(!dying) {
-		time += dt;
-		if(lastShot + shootInterval <= time && animationName() != "shoot") {
-			setCurrentAnimation("shoot");
-			shape->u = 1.0f;
-		} else {
-			shape->u = 0.1f;
-		}
-		
-		if(animationName() != "shoot")
-			EnemyPatroller::update(dt);
-	}
+void EnemyCentipede::update(double dt)
+{
+  if(!dying) {
+    time += dt;
+    if(lastShot + shootInterval <= time && animationName() != "shoot") {
+      setCurrentAnimation("shoot");
+      shape->u = 1.0f;
+    } else {
+      shape->u = 0.1f;
+    }
+
+    if(animationName() != "shoot")
+      EnemyPatroller::update(dt);
+  }
 }
 
-void EnemyCentipede::onAnimationComplete(std::string anim) {
-	//cout << "EnemyCentipede::onAnimationComplete(\"" << anim << "\")\n";
-	if(anim == "die") {
-		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x+drop_offset_x, body->p.y+drop_offset_y);
-	} else if(anim == "shoot") {
-		//shoot a projectile
-		lastShot = time;
-		setCurrentAnimation("walk");
-		int px = body->p.x + 8;
-		if(facing_direction == Facing::Left) px -= 16;
-		EnemyCentipedeProjectile * projectile =
-			new EnemyCentipedeProjectile(facing_direction, px, int(body->p.y + 10.0f));
-	}
+void EnemyCentipede::animationCompleteCallback(std::string anim)
+{
+  //cout << "EnemyCentipede::animationCompleteCallback(\"" << anim << "\")\n";
+  if(anim == "die") {
+    destroy();
+    new CollectibleEnergyBall(body->p.x+drop_offset_x, body->p.y+drop_offset_y);
+  } else if(anim == "shoot") {
+    //shoot a projectile
+    lastShot = time;
+    setCurrentAnimation("walk");
+    int px = body->p.x + 8;
+    if(facing_direction == Facing::Left) px -= 16;
+    new EnemyCentipedeProjectile(facing_direction, px, int(body->p.y + 10.0f));
+  }
 }
 
 EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, int start_y)
-	: Enemy(start_x, start_y, 8.0f, 4.0f)
+  : Enemy(start_x, start_y, 8.0f, 4.0f)
 {
-	setImage("centipedeprojectile.png");
-	fly_speed = 400.0f;
-	speed_y = 200.0f;
-	dying = false;
+	shapeLayers = PhysicsLayer::EnemyBullet;
+	collisionGroup = PhysicsGroup::EnemyBullets;
 
-	setDrawOffset(16, 11);
-	setFrameSize(32, 16);
-	facing_direction = direction;
-	if(facing_direction == Facing::Left) {
-		speed_x = -fly_speed;
-	} else {
-		speed_x = fly_speed;
-	}
+	resetPhysics(start_x, start_y);
+  setImage("centipedeprojectile.png");
+  fly_speed = 400.0f;
+  speed_y = 200.0f;
+  dying = false;
 
-	Animation * tmp;
+  setDrawOffset(16, 11);
+  setFrameSize(32, 16);
+  facing_direction = direction;
+  if(facing_direction == Facing::Left) {
+    speed_x = -fly_speed;
+  } else {
+    speed_x = fly_speed;
+  }
 
-	tmp = addAnimation("fly");
-	tmp->addFrame(8, .1f);
-	tmp->addFrame(9, .1f);
-	tmp->addFrame(8, .1f);
-	tmp->addFrame(10, .1f);
-	tmp->setDoLoop(true);
+  Animation * tmp;
 
-	tmp = addAnimation("splat");
-	tmp->addFrame(12, .2f);
-	tmp->addFrame(13, .5f);
+  tmp = addAnimation("fly");
+  tmp->addFrame(8, .1f);
+  tmp->addFrame(9, .1f);
+  tmp->addFrame(8, .1f);
+  tmp->addFrame(10, .1f);
+  tmp->setDoLoop(true);
 
-	setCurrentAnimation("fly");
-	
-	body->v = cpv(speed_x, speed_y);
+  tmp = addAnimation("splat");
+  tmp->addFrame(12, .2f);
+  tmp->addFrame(13, .5f);
 
-	shape->layers = PhysicsLayer::EnemyBullet;
-	shape->group = PhysicsGroup::EnemyBullets;
+  setCurrentAnimation("fly");
+
+  body->v = cpv(speed_x, speed_y);
 }
 
 void EnemyCentipedeProjectile::update(double dt)
 {
-	if(isGrounded()) {
-		setCurrentAnimation("splat");
-	}
+  (void)dt;
+  if(isGrounded()) {
+    setCurrentAnimation("splat");
+  }
 }
 
-void EnemyCentipedeProjectile::collide(Actor &otherActor) {
-	destroy();
-}
-
-void EnemyCentipedeProjectile::onAnimationComplete(std::string anim)
+void EnemyCentipedeProjectile::collideCallback(Actor &otherActor)
 {
-	if(anim == "splat") {
-		destroy();
-	}
+  (void)otherActor;
+  destroy();
+}
+
+void EnemyCentipedeProjectile::animationCompleteCallback(std::string anim)
+{
+  if(anim == "splat") {
+    destroy();
+  }
 }

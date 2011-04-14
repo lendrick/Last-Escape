@@ -24,46 +24,47 @@
 #include "SoundCache.h"
 
 EnemyWalker::EnemyWalker(double x, double y)
-:EnemyPatroller(x, y, 28.0f, 19.0f)
+  :EnemyPatroller(x, y, 28.0f, 19.0f)
 {
-	setImage("walker.png");
-	walk_speed = 120.f;
-	shape->u = 0.1f;
+  setImage("walker.png");
+  walk_speed = 120.f;
+  shape->u = 0.1f;
 
-	dying = false;
+  dying = false;
 
-	setDrawOffset(16, 11);
-	setFrameSize(32, 32);
+  setDrawOffset(16, 11);
+  setFrameSize(32, 32);
 
-	Animation * tmp;
+  Animation * tmp;
 
-	//pick a random death sound
-	int sound_num = rand() % 19;
-	sound_num += 1;
-	std::string s;
-	std::stringstream out;
-	out << sound_num;
-	s = out.str();
+  //pick a random death sound
+  int sound_num = rand() % 19;
+  sound_num += 1;
+  std::string s;
+  std::stringstream out;
+  out << sound_num;
+  s = out.str();
 
-	std::string sound_file = s + "-BugSplat.ogg";
-	//cout << sound_file;
-	fireSound = soundCache[sound_file];
+  std::string sound_file = s + "-BugSplat.ogg";
+  //cout << sound_file;
+  fireSound = soundCache[sound_file];
 
-	tmp = addAnimation("walk");
-	tmp->addFrame(3, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->setDoLoop(true);
+  tmp = addAnimation("walk");
+  tmp->addFrame(3, .2f);
+  tmp->addFrame(2, .2f);
+  tmp->addFrame(1, .2f);
+  tmp->addFrame(2, .2f);
+  tmp->setDoLoop(true);
 
-	tmp = addAnimation("die");
-	tmp->addFrame(7, .07f);
-	tmp->addFrame(6, .07f);
-	tmp->addFrame(5, .07f);
-	tmp->addFrame(4, .07f);
+  tmp = addAnimation("die");
+  tmp->addFrame(7, .07f);
+  tmp->addFrame(6, .07f);
+  tmp->addFrame(5, .07f);
+  tmp->addFrame(4, .07f);
 
-	setCurrentAnimation("walk");
+  setCurrentAnimation("walk");
 }
 
-EnemyWalker::~EnemyWalker() {
+EnemyWalker::~EnemyWalker()
+{
 }

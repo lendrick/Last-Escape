@@ -19,8 +19,7 @@
  *  Map
  */
 
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <chipmunk/chipmunk.h>
@@ -43,101 +42,81 @@ const int TILE_COUNT = 1024;
 
 
 struct MapSegment {
-	MapSegment(cpVect p1, cpVect p2, int type);
-	~MapSegment();
-	void draw();
-	
-	cpShape * seg;
-	double x1, y1, x2, y2;
-	sf::Color color;
+  MapSegment(cpVect p1, cpVect p2, int type);
+  ~MapSegment();
+  void draw();
+
+  cpShape * seg;
+  double x1, y1, x2, y2;
+  sf::Color color;
 };
 
-class Map {
+class Map
+{
 private:
-	sf::RenderWindow *target;
-	sf::Image tileset;
-	sf::Image landscapeImg;
-	sf::Sprite landscape;
-	sf::IntRect tile_rects[1024];
-	
-	// map layers
-	int background[MAP_TILES_X][MAP_TILES_Y];
-	int fringe[MAP_TILES_X][MAP_TILES_Y];
-	int foreground[MAP_TILES_X][MAP_TILES_Y];
-	int danger[MAP_TILES_X][MAP_TILES_Y];
-	
-	Actor * cameraFollow;
+  sf::RenderWindow *target;
+  sf::Image tileset;
+  sf::Image landscapeImg;
+  sf::Sprite landscape;
+  sf::IntRect tile_rects[1024];
+
+  // map layers
+  int background[MAP_TILES_X][MAP_TILES_Y];
+  int fringe[MAP_TILES_X][MAP_TILES_Y];
+  int foreground[MAP_TILES_X][MAP_TILES_Y];
+  int danger[MAP_TILES_X][MAP_TILES_Y];
+
+  Actor * cameraFollow;
 
 protected:
-	void initPhysics();
-	bool setupPhysics();
-	
+  void initPhysics();
+  bool setupPhysics();
+
 public:
-	Map(string mapName);
-	~Map();
+  Map(string mapName);
+  ~Map();
 
-	void loadMap(string filename);
-	void loadTileset(string filename);
-	void setNextMap(string filename);
-	void loadNextMap();
-	void setCameraFollow(Actor * actor);
-	bool isOnInstantdeath(Actor &actor);
-	//bool isSolid(int x, int y);
-	void renderLandscape();
-	void renderBackground();
-	void renderForeground();
-	void clear();
-	bool isLoaded();
-	
-	// Functions for determining if there is a borderline between tiles
-	int vBetween(int t1, int t2);
-	int hBetween(int t1, int t2);
-	
-	//void createSegment(cpVect p1, cpVect p2, int type);
+  void loadMap(string filename);
+  void loadTileset(string filename);
+  void setNextMap(string filename);
+  void loadNextMap();
+  void setCameraFollow(Actor * actor);
+  //bool isSolid(int x, int y);
+  void renderLandscape();
+  void renderBackground();
+  void renderForeground();
+  void clear();
+  bool isLoaded();
 
-	cpVect sfml2cp(const sf::Vector2f& v) const;
-	sf::Vector2f cp2sfml(const cpVect& v) const;
+  // Functions for determining if there is a borderline between tiles
+  int vBetween(int t1, int t2);
+  int hBetween(int t1, int t2);
 
-	void actorDestroyed(Actor * actor);
+  //void createSegment(cpVect p1, cpVect p2, int type);
 
-	// collision layer
-	int collision[MAP_TILES_X][MAP_TILES_Y];
+  cpVect sfml2cp(const sf::Vector2f& v) const;
+  sf::Vector2f cp2sfml(const cpVect& v) const;
 
-	//sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
-	sf::Sprite tile_sprite;
-	
-	double cam_x, cam_y;
-	double cam_x1;
-	double cam_y1;
-	double cam_x2;
-	double cam_y2;
-	
-	bool loaded;
+  void actorDestroyed(Actor * actor);
 
-	std::string currentFilename;
-	std::string nextMap;
-	
+  // collision layer
+  int collision[MAP_TILES_X][MAP_TILES_Y];
 
-	// Physics of the map.
-	cpSpace *physSpace;
+  //sf::Sprite tile_sprites[VIEW_TILES_X][VIEW_TILES_X];
+  sf::Sprite tile_sprite;
+
+  double cam_x, cam_y;
+  double cam_x1;
+  double cam_y1;
+  double cam_x2;
+  double cam_y2;
+
+  bool loaded;
+
+  std::string currentFilename;
+  std::string nextMap;
+
+  // Physics of the map.
+  cpSpace *physSpace;
 };
-
-
-static int map_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
-static int map_colliding(cpArbiter *arb, cpSpace *space, void *data);
-static void map_end_collide(cpArbiter *arb, cpSpace *space, void *data);
-
-//static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-static int map_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-//static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-
-static int map_bumper_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
-static int map_bumper_colliding(cpArbiter *arb, cpSpace *space, void *data);
-static void map_bumper_end_collide(cpArbiter *arb, cpSpace *space, void *data);
-
-static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-static void map_bumper_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-
-static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data);
-#endif
 

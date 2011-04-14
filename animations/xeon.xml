@@ -1,4 +1,4 @@
-<animations frameWidth="128" frameHeight="128">
+<animations image="xeon.png" frameWidth="128" frameHeight="128" drawOffsetX="64" drawOffsetY="48" width="24" height="48" prototype="testObject">
 	<animation name="walk" doLoop="true">
 		<frames>
 			<frame number="1" time="0.2"/>
@@ -73,9 +73,9 @@
 		</frames>
 	</animation>	
         
-        <animation name="damage">
-                <frames>
-                        <frame number="56" time="0.5"/>
-                </frames>
-        </animation>
+	<animation name="damage">
+		<frames>
+			<frame number="56" time="0.5"/>
+		</frames>
+	</animation>
 </animations>

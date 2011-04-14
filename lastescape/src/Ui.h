@@ -28,65 +28,66 @@
 #define UI_HSLIDE	5
 #define UI_PBAR		6
 
-class Widget {
+class Widget
+{
 public:
-	Widget(int tp, Widget *parent);
-	~Widget();
+  Widget(int tp, Widget *parent);
+  ~Widget();
 
-	void setPos(double px, double py);
-	void getPos(double &px, double &py);
+  void setPos(double px, double py);
+  void getPos(double &px, double &py);
 
-	void setText(const sf::Unicode::Text &Text);
-	sf::String getText();
-	void setTextColor(int r, int g, int b);
-	void setTextSize(int sz);
+  void setText(const sf::Unicode::Text &Text);
+  sf::String getText();
+  void setTextColor(int r, int g, int b);
+  void setTextSize(int sz);
 
-	bool toggleBg();
-	void setBg(const sf::Unicode::Text &Text);
+  bool toggleBg();
+  void setBg(const sf::Unicode::Text &Text);
 
-	void setClick(void (*func)());
-	void setSlide(void (*func)(double v));
-	void setSlideValue(double v);
-	void setAnyKey(void (*func)());
+  void setClick(void (*func)());
+  void setSlide(void (*func)(double v));
+  void setSlideValue(double v);
+  void setAnyKey(void (*func)());
 
-	void show();
-	void hide();
-	bool isHidden();
-	bool isChecked();
+  void show();
+  void hide();
+  bool isHidden();
+  bool isChecked();
 
-	int getId();
+  int getId();
 
-	void draw();
+  void draw();
 
-	void setSize(int w, int h);
-	void getSize(int &w, int &h);
+  void setSize(int w, int h);
+  void getSize(int &w, int &h);
 
-	int event(sf::Event &Event);
-	Widget *child;
+  int event(sf::Event &Event);
+  Widget *child;
 
 protected:
-	sf::Image bgi;
-	sf::Sprite background;
-	sf::Sprite slider;
-	sf::String text;
+  sf::Image bgi;
+  sf::Sprite background;
+  sf::Sprite slider;
+  sf::String text;
 
-	Widget *next;
-	Widget *parent;
+  Widget *next;
+  Widget *parent;
 
-	void (*click)();
-	void (*slide)(double v);
-	void (*anyKey)();
-	char txt[255];
-	int txtPos;
-	int id;
-	int type;
-	int size;
-	int height, width;
-	double pos_x, pos_y;
-	double sval;
-	bool checked;
-	bool hidden;
-	bool has_bg;
+  void (*click)();
+  void (*slide)(double v);
+  void (*anyKey)();
+  char txt[255];
+  int txtPos;
+  int id;
+  int type;
+  int size;
+  int height, width;
+  double pos_x, pos_y;
+  double sval;
+  bool checked;
+  bool hidden;
+  bool has_bg;
 };
 
 extern sf::Font fontUI;

@@ -19,17 +19,20 @@
 
 AllComponentsList allComponents;
 
-Component::Component(ComponentType::Enum type) {
-	allComponents[type].push_back(this);
-	componentType = type;
+Component::Component(ComponentType::Enum type)
+{
+  allComponents[type].push_back(this);
+  componentType = type;
 }
 
-Component::~Component() {
-	ComponentList::iterator i;
-	i = find(allComponents[componentType].begin(), allComponents[componentType].end(), this);
-	allComponents[componentType].erase(i);
+Component::~Component()
+{
+  ComponentList::iterator i;
+  i = find(allComponents[componentType].begin(), allComponents[componentType].end(), this);
+  allComponents[componentType].erase(i);
 }
 
-ComponentType::Enum Component::getType() {
-	return componentType;
+ComponentType::Enum Component::getType()
+{
+  return componentType;
 }

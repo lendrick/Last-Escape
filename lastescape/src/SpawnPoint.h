@@ -19,9 +19,12 @@
 
 #include "StartPoint.h"
 
-class SpawnPoint : public StartPoint {
+class SpawnPoint : public StartPoint
+{
 public:
-    SpawnPoint(double x, double y) : StartPoint(x, y) {};
+  SpawnPoint(double x, double y) : StartPoint(x, y) {};
 private:
-	virtual bool isSpawnPoint() { return true; }
+  virtual bool isSpawnPoint() {
+    return true;
+  }
 };

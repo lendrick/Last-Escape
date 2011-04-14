@@ -21,82 +21,92 @@
 #include "globals.h"
 
 PlayerBullet::PlayerBullet(double x, double y, int facing, double angleVariation, double lifetime):
-AnimatedActor(x, y, 15.0f, 7.0f)
+  AnimatedActor(x, y, 15.0f, 7.0f)
 {
-	this->setImage("xeon-bullet.png");
-	this->lifetime = lifetime;
-	bulletTime = 0;
 
-	facing_direction = facing;
+  this->setImage("xeon-bullet.png");
+	actorName = "Player Bullet";
+  this->lifetime = lifetime;
+  bulletTime = 0;
 
-	double speed = 500.f;
+  facing_direction = facing;
 
-	double angle = ((facing_direction == Facing::Right) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
-	double speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
-	double speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
-	
-	body->v.x = speed_x;
-	body->v.y = speed_y;
-	
-	if(facing_direction == Facing::Right) 
-		body->a = deg2rad(-angle - 270);
-	else
-		body->a = deg2rad(-angle - 90);
-	
-	setVelocityFunc(no_gravity);
-	
+  double speed = 500.f;
+
+  double angle = ((facing_direction == Facing::Right) ? 90 : -90) + (rand() % 200 - 100) * angleVariation/100;
+  double speed_x = (int)(0.5f + sin(angle * 3.14159/180.0) * speed);
+  double speed_y = (int)(0.5f + cos(angle * 3.14159/180.0) * speed);
+
 	// Put it in the PLayerBullets group so it doesn't collide with other PlayerBullets
-	shape->group = PhysicsGroup::PlayerBullets;
-	shape->layers = PhysicsLayer::Map|PhysicsLayer::PlayerBullet;
-	shape->collision_type = PhysicsType::PlayerBullet;
-	
-	setDrawOffset(8, 6);
-	setFrameSize(16, 16);
-	damage = 1;
+	collisionGroup = PhysicsGroup::PlayerBullets;
+	shapeLayers = PhysicsLayer::Map|PhysicsLayer::PlayerBullet;
+	collisionType = PhysicsType::PlayerBullet;
 
-	Animation * tmp;
+	resetPhysics(x, y);
+  body->v.x = speed_x;
+  body->v.y = speed_y;
 
-	tmp = addAnimation("bullet");
-	tmp->addFrame(0, .1f);
-	tmp->addFrame(1, .1f);
-	tmp->addFrame(2, .1f);
-	tmp->addFrame(3, .1f);
-	tmp->addFrame(4, .1f);
-	tmp->setDoLoop(true);
-	
-	canSleep = false;
+  if(facing_direction == Facing::Right)
+    body->a = deg2rad(-angle - 270);
+  else
+    body->a = deg2rad(-angle - 90);
 
-	setCurrentAnimation("bullet");
+  setVelocityFunc(no_gravity);
+
+
+  setDrawOffset(8, 6);
+  setFrameSize(16, 16);
+  damage = 1;
+
+  Animation * tmp;
+
+  tmp = addAnimation("bullet");
+  tmp->addFrame(0, .1f);
+  tmp->addFrame(1, .1f);
+  tmp->addFrame(2, .1f);
+  tmp->addFrame(3, .1f);
+  tmp->addFrame(4, .1f);
+  tmp->setDoLoop(true);
+
+  canSleep = false;
+
+  setCurrentAnimation("bullet");
 }
 
-void PlayerBullet::collide(Actor& otherActor) {
-	if (otherActor.isEnemy())
-	{
-		dynamic_cast<Enemy * >(&otherActor)->doDamage(damage);
-		//if(dynamic_cast<Enemy * >(&otherActor)->doDamage(damage)) {
-			//g_player->addExperience(otherActor.getExperienceValue());
-		//}
-		die();
-	}
+void PlayerBullet::collideCallback(Actor& otherActor)
+{
+	//cout << "Bullet collision: " << otherActor.actorName << "\n";
+	if (otherActor.shape->collision_type == PhysicsType::Enemy) {
+		AnimatedActor * a = dynamic_cast<AnimatedActor * >(&otherActor);
+		if(a) a->doDamage(damage);
+    //if(dynamic_cast<Enemy * >(&otherActor)->doDamage(damage)) {
+    //g_player->addExperience(otherActor.getExperienceValue());
+    //}
+    die();
+  }
 }
 
-void PlayerBullet::update(double dt) {
-	//cout << "bullet " << body->p.x << " " << body->p.y << "\n";
-	bulletTime += dt;
-	//cout << "angle " << rad2deg(body->a) << "\n";
+void PlayerBullet::update(double dt)
+{
+  //cout << "bullet " << body->p.x << " " << body->p.y << "\n";
+  bulletTime += dt;
+  //cout << "angle " << rad2deg(body->a) << "\n";
 
-	updateSpriteFacing();
-	//checkcollisions();
-	if(bulletTime > lifetime) {
-		destroy();
-	}
+  updateSpriteFacing();
+  //checkcollisions();
+  if(bulletTime > lifetime) {
+    destroy();
+  }
 }
 
-void PlayerBullet::collideGround() {
-	destroy();
+void PlayerBullet::collideGround(cpVect v)
+{
+	(void)v;
+  destroy();
 }
 
-void PlayerBullet::collideWall() {
-	destroy();
+void PlayerBullet::collideWall()
+{
+  destroy();
 }
 

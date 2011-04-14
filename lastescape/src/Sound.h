@@ -27,24 +27,28 @@
 
 #include <SFML/Audio.hpp>
 #include <string>
+#include <QtCore>
 using namespace std;
 
-class Sound
+class Sound : public QObject
 {
+	Q_OBJECT
 private:
-	sf::Music song;
-	string file;
-	
-public:
-	Sound();
-	Sound(string filename);
-	~Sound();
+  sf::Music song;
+  string file;
 
-	bool loadSound(string filename);
-	void playSound();
-	void setLoop(bool);
+public:
+  Sound();
+  Sound(string filename);
+  ~Sound();
+
+  bool loadSound(string filename);
+
+public slots:
+  void play();
+  void setLoop(bool);
+  void stop();
 	sf::Sound::Status getStatus();
-	void stop();
 
 };
 

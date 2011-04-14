@@ -1,0 +1,17 @@
+<animations image="crawler.png" frameWidth="64" frameHeight="32" drawOffsetX="33" drawOffsetY="10" width="40" height="16">
+	<animation name="walk" doLoop="true">
+		<frames>
+			<frame number="2" time="0.2"/>
+			<frame number="3" time="0.2"/>
+		</frames>
+	</animation>
+
+	<animation name="die" doLoop="false">
+		<frames>
+			<frame number="8" time="0.1"/>
+			<frame number="7" time="0.1"/>
+			<frame number="6" time="0.1"/>
+			<frame number="5" time="0.1"/>
+		</frames>
+	</animation>
+</animations>

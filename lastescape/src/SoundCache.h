@@ -22,15 +22,16 @@
 
 typedef std::map<std::string, Sound *> soundPtrMap;
 
-class SoundCache {
+class SoundCache
+{
 public:
-	SoundCache();
-	~SoundCache();
-	
-	soundPtrMap sounds;
-	Sound * get(std::string name);
-	void unload(std::string name);
-	Sound * operator[](std::string name);
+  SoundCache();
+  ~SoundCache();
+
+  soundPtrMap sounds;
+  Sound * get(std::string name);
+  void unload(std::string name);
+  Sound * operator[](std::string name);
 private:
-	Sound * load(std::string filename);
-}; 
+  Sound * load(std::string filename);
+};

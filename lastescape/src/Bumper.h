@@ -17,21 +17,39 @@
 
 #pragma once
 #include "globals.h"
-#include <chipmunk/chipmunk.h> 
+#include <chipmunk/chipmunk.h>
+#include <QtCore>
+#include <QtScript>
 
 class Actor;
+class PhysicsShapeScriptWrapper;
+class ScriptedActor;
 
-class Bumper {
+class Bumper : public QObject
+{
+	Q_OBJECT
+	Q_PROPERTY(int facing READ getFacingDirection)
+	Q_PROPERTY(bool grounded READ isGrounded)
 public:
-	Bumper(Actor * actor, int facing_direction, double thickness = 4.0f);
-	~Bumper();
-	
-	int isGrounded();
-	void collideGround();
-	void leaveGround();
-	
+  Bumper(Actor * actor, int facing_direction, double thickness = 4.0f);
+  ~Bumper();
+	void setThisObject(QScriptValue o);
 	Actor * actor;
+	ScriptedActor * scriptedActor;
 	cpShape * shape;
 	int facing_direction;
 	int grounded;
+
+	PhysicsShapeScriptWrapper * shapeWrapper;
+	QScriptValue thisObject;
+	QScriptValue actorValue;
+	QScriptValue shapeValue;
+
+public slots:
+	bool isGrounded();
+  void collideGround();
+  void leaveGround();
+	int getFacingDirection();
 };
+
+QScriptValue bumperConstructor(QScriptContext * context, QScriptEngine *);

@@ -19,24 +19,26 @@
 #include <iostream>
 
 ExitPoint::ExitPoint(double x, double y, double w, double h)
-:Sensor(x, y, w, h)
+  :Sensor(x, y, w, h)
 {
-	actorName = "Level Exit";
+  actorName = "Level Exit";
 }
 
-void ExitPoint::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		printf("You are victorious! (But we don't have a victory UI.)\n");
-	}
+void ExitPoint::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    printf("You are victorious! (But we don't have a victory UI.)\n");
+  }
 }
 
-void ExitPoint::setMap(std::string filename) {
-	mapname = filename;
-	if (debugMode)
-		std::cout << "setting map exit to " << filename << "\n";
+void ExitPoint::setMap(std::string filename)
+{
+  mapname = filename;
+  if (debugMode)
+    std::cout << "setting map exit to " << filename << "\n";
 }
 
-std::string ExitPoint::getMap() {
-	return mapname;
+std::string ExitPoint::getMap()
+{
+  return mapname;
 }

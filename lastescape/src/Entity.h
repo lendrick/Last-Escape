@@ -23,14 +23,15 @@
 
 typedef std::map<int, Component *> ComponentMap;
 
-class Entity {
+class Entity
+{
 public:
-	Entity();
-	~Entity();
-	void addComponent(Component * component);
-	void update(ComponentType::Enum type);
+  Entity();
+  ~Entity();
+  void addComponent(Component * component);
+  void update(ComponentType::Enum type);
 private:
-	ComponentMap components;
+  ComponentMap components;
 };
 
 typedef std::list<Entity *> EntityList;

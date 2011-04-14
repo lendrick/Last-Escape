@@ -23,16 +23,19 @@
 // Use this actor to signify an map exit.  When the player collides with it,
 // go to the next map.
 
-class ExitPoint : public Sensor {
+class ExitPoint : public Sensor
+{
 public:
-	ExitPoint(double x, double y, double w, double h);
-	
-	virtual bool isExitPoint() { return true; }
+  ExitPoint(double x, double y, double w, double h);
 
-	void collide(Actor& otherActor);
-	void setMap(std::string filename);
-	std::string getMap();
+  virtual bool isExitPoint() {
+    return true;
+  }
+
+	void collideCallback(Actor& otherActor);
+  void setMap(std::string filename);
+  std::string getMap();
 private:
-	std::string mapname;
+  std::string mapname;
 };
 

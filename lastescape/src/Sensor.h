@@ -19,10 +19,11 @@
 
 #include "Actor.h"
 
-class Sensor : public Actor {
+class Sensor : public Actor
+{
 public:
-	Sensor(double x, double y, double w, double h);
+  Sensor(double x, double y, double w, double h);
 private:
 };
 
- 
+

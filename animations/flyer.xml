@@ -1,0 +1,18 @@
+<animations image="flyer.png" frameWidth="32" frameHeight="64" drawOffsetX="15" drawOffsetY="21" width="27" height="31">
+	<animation name="fly" doLoop="true">
+		<frames>
+			<frame number="0" time="0.2"/>
+			<frame number="1" time="0.2"/>
+			<frame number="2" time="0.2"/>
+		</frames>
+	</animation>
+
+	<animation name="die" doLoop="false">
+		<frames>
+			<frame number="4" time="0.1"/>
+			<frame number="5" time="0.1"/>
+			<frame number="6" time="0.1"/>
+			<frame number="7" time="0.1"/>
+		</frames>
+	</animation>
+</animations>

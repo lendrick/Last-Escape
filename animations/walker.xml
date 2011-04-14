@@ -1,0 +1,19 @@
+<animations image="walker.png" frameWidth="32" frameHeight="32" drawOffsetX="16" drawOffsetY="11" width="28" height="19">
+	<animation name="walk" doLoop="true">
+		<frames>
+			<frame number="3" time="0.2"/>
+			<frame number="2" time="0.2"/>
+			<frame number="1" time="0.2"/>
+			<frame number="2" time="0.2"/>
+		</frames>
+	</animation>
+
+	<animation name="die" doLoop="false">
+		<frames>
+			<frame number="7" time="0.1"/>
+			<frame number="6" time="0.1"/>
+			<frame number="5" time="0.1"/>
+			<frame number="4" time="0.1"/>
+		</frames>
+	</animation>
+</animations>

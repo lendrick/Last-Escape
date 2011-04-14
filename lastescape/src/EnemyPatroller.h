@@ -19,20 +19,20 @@
 #include "Enemy.h"
 #include "Bumper.h"
 
-class EnemyPatroller : public Enemy 
+class EnemyPatroller : public Enemy
 {
 public:
-	EnemyPatroller(double x, double y, double w, double h);
-	virtual ~EnemyPatroller();
-	virtual void update(double dt);
-	virtual void draw();
-	virtual void die();
-	virtual void onAnimationComplete(std::string anim);
-	virtual void onBumperCollide(int facing);
+  EnemyPatroller(double x, double y, double w, double h);
+  virtual ~EnemyPatroller();
+  virtual void update(double dt);
+  virtual void draw();
+  virtual void die();
+  virtual void animationCompleteCallback(std::string anim);
+  virtual void bumperCollideCallback(int facing);
 protected:
-	double walk_speed;
-	Bumper* leftBumper;
-	Bumper* rightBumper;
-	double drop_offset_x, drop_offset_y;
+  double walk_speed;
+  Bumper* leftBumper;
+  Bumper* rightBumper;
+  double drop_offset_x, drop_offset_y;
 };
 

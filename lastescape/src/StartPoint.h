@@ -22,8 +22,11 @@
 #include "Actor.h"
 #include "Sensor.h"
 
-class StartPoint : public Sensor {
+class StartPoint : public Sensor
+{
 public:
-	StartPoint(double x, double y) : Sensor(x, y, 32.0f, 32.0f) {};
-	virtual bool isStartPoint() { return true; }
+  StartPoint(double x, double y) : Sensor(x, y, 32.0f, 32.0f) {};
+  virtual bool isStartPoint() {
+    return true;
+  }
 };

@@ -18,340 +18,411 @@
 #include "Actor.h"
 #include "Map.h"
 #include "globals.h"
+#include "Bumper.h"
 #include <list>
 #include <cmath>
 
-Actor::Actor(double x, double y, double w, double h, bool staticBody) {
-	width = w;
-	height = h;
+Actor::Actor(double x, double y, double w, double h, bool staticBody) : QObject(0)
+{
+  width = w;
+  height = h;
 // 	setPos(0, 0);
-	destroyed = false;
-	actors.push_back(this);
-	setDrawOffset(0, 0);
-	collideable = true;
-	hasImage = false;
-	hidden = false;
-	currentLevel = 1;
-	experienceValue = 0;
-	body = NULL;
-	shape = NULL;
-	grounded = 0;
-	actorName = "Unnamed Actor";
+  destroyed = false;
+  actors.push_back(this);
+  setDrawOffset(0, 0);
+  collideable = true;
+  hasImage = false;
+  hidden = false;
+  currentLevel = 1;
+  experienceValue = 0;
+  body = NULL;
+  shape = NULL;
+  grounded = 0;
+  actorName = "Unnamed Actor";
+  shapeLayers = CP_ALL_LAYERS;
+  this->staticBody = staticBody;
+  defaultVelocityFunc = cpBodyUpdateVelocity;
+  static_x = static_y = 0;
+  toTeleport = false;
+  teleport_x = teleport_y = 0;
+  teleport_vx = teleport_vy = 0;
+  awake = true;
+  canSleep = true;
+  destroyedCount = 0;
+	groundVelocity = cpv(0, 0);
 	shapeLayers = CP_ALL_LAYERS;
-	this->staticBody = staticBody;
-	defaultVelocityFunc = cpBodyUpdateVelocity;
-	static_x = static_y = 0;
-	toTeleport = false;
-	teleport_x = teleport_y = 0;
-	teleport_vx = teleport_vy = 0;
-	awake = true;
-	canSleep = true;
-	destroyedCount = 0;
-	resetPhysics(x, y);
+	collisionType = 0;
+	collisionGroup = CP_NO_GROUP;
+
+
+	//resetPhysics(x, y);
 }
 
-Actor::~Actor() {
-	//cout << "delete actor " << actorName << "\n";
-	destroyPhysics();
+Actor::~Actor()
+{
+	cout << "delete actor " << actorName << "\n";
+  destroyPhysics();
 }
 
-void Actor::setPlaceholder(sf::Color c, double w, double h, double xoff, double yoff) {
-	width = (int)w;
-	height = (int)h;
-	sprite.SetColor(c);
-	sprite.SetScale((double)width, (double)height);
-	sprite.SetCenter(xoff, yoff);
+void Actor::setPlaceholder(sf::Color c, double w, double h, double xoff, double yoff)
+{
+  width = (int)w;
+  height = (int)h;
+  sprite.SetColor(c);
+  sprite.SetScale((double)width, (double)height);
+  sprite.SetCenter(xoff, yoff);
 }
 
-void Actor::setVelocityFunc(cpBodyVelocityFunc f) {
-	if(body)
-		body->velocity_func = f;
-	defaultVelocityFunc = f;
+void Actor::setVelocityFunc(cpBodyVelocityFunc f)
+{
+  if(body)
+    body->velocity_func = f;
+  defaultVelocityFunc = f;
 }
 
-void Actor::setDrawOffset(int ox, int oy) {
-	xDrawOffset = ox;
-	yDrawOffset = oy;
-	sprite.SetCenter((double)ox, (double)oy);
+void Actor::setDrawOffset(int ox, int oy)
+{
+  xDrawOffset = ox;
+  yDrawOffset = oy;
+  sprite.SetCenter((double)ox, (double)oy);
 }
 
-void Actor::getPos(double &px, double &py) {
-	if(body) {
-		px = body->p.x;
-		py = body->p.y;
-	} else if(shape) {
-		px = static_x;
-		py = static_y;
-	} else {
-		px = py = 0;
-	}
+void Actor::getPos(double &px, double &py)
+{
+  if(body) {
+    px = body->p.x;
+    py = body->p.y;
+  } else if(shape) {
+    px = static_x;
+    py = static_y;
+  } else {
+    px = py = 0;
+  }
 }
 
-void Actor::setSize(int w, int h) {
-	height = h;
-	width = w;
-	//resetPhysics();
+void Actor::setSize(int w, int h)
+{
+  height = h;
+  width = w;
+  //resetPhysics();
 }
 
-void Actor::getSize(int &w, int &h) {
-	h = height;
-	w = width;
+void Actor::getSize(int &w, int &h)
+{
+  h = height;
+  w = width;
 }
 
-bool Actor::isOnCamera() {
-	double px, py;
-	getPos(px, py);
-	if(body) py += height;
-	sf::FloatRect cam = gameView.GetRect();
-	
-	double radius = height + width;  // manhattan distance, for speed.
-	if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius)
-		return true;
-	
-	return false;
+bool Actor::isOnCamera()
+{
+  double px, py;
+  getPos(px, py);
+  if(body) py += height;
+  sf::FloatRect cam = gameView.GetRect();
+
+  double radius = height + width;  // manhattan distance, for speed.
+  if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius)
+    return true;
+
+  return false;
 }
 
-void Actor::draw() {
-	if(!hidden && hasImage) {
-		cpVect pos;
-		double px, py;
-		getPos(px, py);
-		//if(body) py += height;
-		sf::FloatRect cam = gameView.GetRect();
-		
-		double radius = height + width;  // manhattan distance, for speed.
-		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
-			if(body && body->a != 0) {
-				sprite.SetRotation(-rad2deg(body->a));
-				//if(body->a > 0)
-					//cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
-			} else {
-				sprite.SetRotation(0);
-			}
-					
-			sprite.FlipY(true);
-			sprite.SetPosition(px, py);
-			App->Draw(sprite);
-		
-			if(debugMode)
-			{
-				double px, py;
-				getPos(px, py);
-				
-				double bbx1, bby1, bbx2, bby2;
-				bbx1 = px - width/2;
-				bby1 = py - height/2;
-				bbx2 = bbx1 + width;
-				bby2 = bby1 + height;
-				
-				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
-																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
-				rect.SetPosition(px, py);
-				if(body && body->a) {
-					rect.SetRotation(-rad2deg(body->a));
-				}
-				App->Draw(rect);
-				
-				// Draw a crosshair at the actor's position
-				App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f, 
-																				sf::Color(0, 0, 255)));
-				App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
-																				sf::Color(0, 0, 255)));
+void Actor::draw()
+{
+  if(!hidden && hasImage) {
+    double px, py;
+    getPos(px, py);
+    //if(body) py += height;
+    sf::FloatRect cam = gameView.GetRect();
+
+    double radius = height + width;  // manhattan distance, for speed.
+    if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {
+      if(body && body->a != 0) {
+        sprite.SetRotation(-rad2deg(body->a));
+        //if(body->a > 0)
+        //cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
+      } else {
+        sprite.SetRotation(0);
       }
-		}
+
+      sprite.FlipY(true);
+      sprite.SetPosition(px, py);
+      App->Draw(sprite);
+
+      if(debugMode) {
+        double px, py;
+        getPos(px, py);
+
+        double bbx1, bby1, bbx2, bby2;
+        bbx1 = px - width/2;
+        bby1 = py - height/2;
+        bbx2 = bbx1 + width;
+        bby2 = bby1 + height;
+
+        sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
+                                              sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
+        rect.SetPosition(px, py);
+        if(body && body->a) {
+          rect.SetRotation(-rad2deg(body->a));
+        }
+        App->Draw(rect);
+
+        // Draw a crosshair at the actor's position
+        App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f,
+                                  sf::Color(0, 0, 255)));
+        App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
+                                  sf::Color(0, 0, 255)));
+      }
+    }
+  }
+}
+
+void Actor::destroy()
+{
+  destroyCallback();
+  game_map->actorDestroyed(this);
+  destroyed = true;
+}
+
+bool Actor::isGrounded()
+{
+  //return game_map->isGrounded(*this);
+  return(grounded > 0);
+}
+
+bool Actor::isDestroyed()
+{
+  return destroyed;
+}
+
+bool Actor::isDying()
+{
+  return dying;
+}
+
+void Actor::setDying(bool d) {
+	dying = d;
+}
+
+void Actor::die()
+{
+  destroy();
+}
+
+bool Actor::canCollide()
+{
+  return collideable;
+}
+
+void Actor::setCanCollide(bool col)
+{
+  collideable = col;
+  if(col) {
+    shape->layers = shapeLayers;
+  } else {
+    shape->layers = 0;
+  }
+}
+
+void Actor::goToGround()
+{
+  // TODO: Make this function actually work again.  What it should do is move
+  // the current actor down to where it is colliding with the ground.
+}
+
+void Actor::collideGround(cpVect v)
+{
+  grounded++;
+	if(grounded == 0 || v.y > groundVelocity.y) {
+		groundVelocity = v;
 	}
 }
 
-void Actor::destroy() {
-	onDestroy();
-	game_map->actorDestroyed(this);
-	destroyed = true;
-}
-
-bool Actor::isGrounded() {
-	//return game_map->isGrounded(*this);
-	return(grounded > 0);
-}
-
-bool Actor::isDestroyed() {
-	return destroyed;
-}
-
-bool Actor::isDying() {
-	return dying;
-}
-
-void Actor::die() {
-	destroy();
-}
-
-bool Actor::canCollide() {
-	return collideable;
-}
-
-void Actor::setCanCollide(bool col) {
-	collideable = col;
-	if(col) {
-		shape->layers = shapeLayers;
-	} else {
-		shape->layers = 0;
-	}
-}
-
-void Actor::goToGround() {
-	// TODO: Make this function actually work again.  What it should do is move
-	// the current actor down to where it is colliding with the ground.
-}
-
-void Actor::collideGround() {
-	grounded++;
-}
-
-void Actor::leaveGround() {
+void Actor::leaveGround()
+{
 //	grounded--;
 }
 
-void Actor::doUpdate(double dt) {
-	if(body == NULL) {
-		update(dt);
-	} else if(isOnCamera() || !canSleep) {
-		if(!awake) {
-			cpBodyActivate(body);
-			awake = true;
-		}
-		update(dt);
-		grounded = 0;
-	} else if(awake) {
-		awake = false;
-		cpBodySleep(body);
-	}
+void Actor::doUpdate(double dt)
+{
+  if(body == NULL) {
+    update(dt);
+  } else if(isOnCamera() || !canSleep) {
+    if(!awake) {
+      cpBodyActivate(body);
+      awake = true;
+    }
+    update(dt);
+    grounded = 0;
+  } else if(awake) {
+    awake = false;
+    cpBodySleep(body);
+  }
+  /*
+  if(body && game_map) {
+  	sf::Vector2f pos = game_map->cp2sfml(body->p);
+  	setPos(pos.x, pos.y+height/2);
+  }
+  */
+}
+
+void Actor::setLevel(int newLevel)
+{
+  currentLevel = newLevel;
+}
+
+int Actor::getLevel()
+{
+  return currentLevel;
+}
+
+void Actor::incrementLevel()
+{
+  currentLevel++;
+  onLevelUp(currentLevel);
+}
+
+int Actor::getExperienceValue()
+{
+  return experienceValue;
+}
+
+void Actor::setExperienceValue(int exp)
+{
+  experienceValue = exp;
+}
+
+void Actor::resetPhysics(double start_x, double start_y)
+{
+  // No map -> no physics
+  if(!game_map || !game_map->physSpace) {
+    return;
+  }
+
+  destroyPhysics();
+
+  if(!staticBody) {
+    body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
+    //body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
+    body->p = cpv(start_x, start_y);
+
+		//cout << actorName << " new shape " << width << " " << height << "\n";
+    shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
+    shape->e = 0.0f;
+    shape->u = 2.0f;
+  } else {
+
+    cpVect verts[] = {
+      cpv(-width/2, -height/2),
+      cpv(-width/2, height/2),
+      cpv(width/2, height/2),
+      cpv(width/2, -height/2)
+    };
+
+    //shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, game_map->sfml2cp(sf::Vector2f(pos_x, pos_y))));
+    shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, cpv(start_x, start_y)));
+    static_x = start_x;
+    static_y = start_y;
+  }
+
+  shape->data = (void *) this;
+  grounded = 0;
+	shape->layers = shapeLayers;
+	shape->group = collisionGroup;
+	shape->collision_type = collisionType;
+  resetPhysicsCustom(start_x, start_y);
+
 	/*
-	if(body && game_map) {
-		sf::Vector2f pos = game_map->cp2sfml(body->p);
-		setPos(pos.x, pos.y+height/2);
-	}
+	cout << "\n" << actorName << ":\n";
+	cout << "Layers: " << shape->layers << "\n";
+	cout << "Group: " << shape->group << "\n";
+	cout << "Collision Type: " << shape->collision_type << "\n";
 	*/
 }
 
-void Actor::setLevel(int newLevel) {
-	currentLevel = newLevel;
-}
-
-int Actor::getLevel() {
-	return currentLevel;
-}
-
-void Actor::incrementLevel() {
-	currentLevel++;
-	onLevelUp(currentLevel);
-}
-
-int Actor::getExperienceValue() {
-	return experienceValue;
-}
-	
-void Actor::setExperienceValue(int exp) {
-	experienceValue = exp;
-}
-	
-void Actor::resetPhysics(double start_x, double start_y)
+void Actor::destroyPhysics()
 {
-	// No map -> no physics
-	if(!game_map || !game_map->physSpace) {
-		return;
-	}
+  //cout << "Destroying physics for: " << actorName << "\n";
+  //cout << actorName << " destroy count " << ++destroyedCount << "\n";
+  if(body != NULL) {
+    if(shape)
+      cpSpaceRemoveShape(game_map->physSpace, shape);
 
-	destroyPhysics();
-	
-	if(!staticBody) {
-		body = cpSpaceAddBody(game_map->physSpace, cpBodyNew(10.0f, INFINITY));
-		//body->p = game_map->sfml2cp(sf::Vector2f(pos_x, pos_y - height/2));
-		body->p = cpv(start_x, start_y);
+    cpSpaceRemoveBody(game_map->physSpace, body);
 
-		shape = cpSpaceAddShape(game_map->physSpace, cpBoxShapeNew(body, width, height));
-		shape->e = 0.0f; shape->u = 2.0f;
-	} else {
-		
-		cpVect verts[] = {
-			cpv(-width/2, -height/2),			
-			cpv(-width/2, height/2),			
-			cpv(width/2, height/2),
-			cpv(width/2, -height/2)
-		};
-		
-		//shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, game_map->sfml2cp(sf::Vector2f(pos_x, pos_y))));
-		shape = cpSpaceAddShape(game_map->physSpace, cpPolyShapeNew(&game_map->physSpace->staticBody, 4, verts, cpv(start_x, start_y)));
-		static_x = start_x;
-		static_y = start_y;
-	}
-	
-	shape->data = (void *) this;
-	grounded = 0;
-	resetPhysicsCustom(start_x, start_y);
+    if(shape)
+      cpShapeFree(shape);
+
+    cpBodyFree(body);
+
+  } else if(shape != NULL) {
+    // Static things like collectibles have no body.
+    cpSpaceRemoveShape(game_map->physSpace, shape);
+    cpShapeFree(shape);
+  }
+  shape = NULL;
+  body = NULL;
+
+	while(bumpers.length() > 0)
+		delete bumpers.takeFirst();
 }
 
-void Actor::destroyPhysics() {
-	//cout << "Destroying physics for: " << actorName << "\n";
-	//cout << actorName << " destroy count " << ++destroyedCount << "\n";
-	if(body != NULL) {
-		if(shape) 
-			cpSpaceRemoveShape(game_map->physSpace, shape);
-		
-		cpSpaceRemoveBody(game_map->physSpace, body);
-		
-		if(shape)
-			cpShapeFree(shape);
-		
-		cpBodyFree(body);
-
-	} else if(shape != NULL) {
-		// Static things like collectibles have no body.
- 		cpSpaceRemoveShape(game_map->physSpace, shape);
-		cpShapeFree(shape);		
-	}
-	shape = NULL;
-	body = NULL;
+void Actor::setShapeLayers(cpLayers l)
+{
+  shapeLayers = l;
+  if(collideable) shape->layers = shapeLayers;
 }
 
-void Actor::setShapeLayers(cpLayers l) {
-	shapeLayers = l;
-	if(collideable) shape->layers = shapeLayers;
+void Actor::freeze()
+{
+  if(body) {
+    //body->v = cpv(0, 0);
+    body->velocity_func = no_gravity_stop;
+  }
 }
 
-void Actor::freeze() {
-	if(body) {
-		//body->v = cpv(0, 0);
-		body->velocity_func = no_gravity_stop;
-	}
+void Actor::unFreeze()
+{
+  if(body) {
+    body->velocity_func = defaultVelocityFunc;
+  }
 }
 
-void Actor::unFreeze() {
-	if(body) {
-		body->velocity_func = defaultVelocityFunc;
-	}
+void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
+{
+  (void)gravity;
+  (void)damping;
+  cpBodyUpdateVelocity(body, cpv(0, 0), 1, dt);
 }
 
-void no_gravity(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
-	cpBodyUpdateVelocity(body, cpv(0, 0), 1, dt);
+void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
+{
+  (void)gravity;
+  (void)damping;
+  cpBodyUpdateVelocity(body, cpv(0, 0), .1, dt);
 }
 
-void no_gravity_stop(struct cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt) {
-	cpBodyUpdateVelocity(body, cpv(0, 0), .1, dt);
+void Actor::teleport(double x, double y, double vx, double vy)
+{
+  toTeleport = true;
+  teleport_x = x;
+  teleport_y = y;
+  teleport_vx = vx;
+  teleport_vy = vy;
 }
 
-void Actor::teleport(double x, double y, double vx, double vy) {
-	toTeleport = true;
-	teleport_x = x;
-	teleport_y = y;
-	teleport_vx = vx;
-	teleport_vy = vy;
+void Actor::doTeleport()
+{
+  toTeleport = false;
+  resetPhysics(teleport_x, teleport_y);
+  if(body) {
+    body->v.x = teleport_vx;
+    body->v.y = teleport_vy;
+  }
 }
 
-void Actor::doTeleport() {
-	toTeleport = false;
-	resetPhysics(teleport_x, teleport_y);
-	if(body) {
-		body->v.x = teleport_vx;
-		body->v.y = teleport_vy;
-	}
+QScriptValue Actor::addBumper(int facing, double thickness)
+{
+	bumpers.append(new Bumper(this, facing, thickness));
+	return scriptEngine->newQObject(bumpers.last());
 }

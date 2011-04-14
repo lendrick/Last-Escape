@@ -25,43 +25,45 @@
 class Collectible : public AnimatedActor
 {
 public:
-	Collectible(double x, double y, double w, double h);
-	
-	Sound* fireSound;
+  Collectible(double x, double y, double w, double h);
 
-	virtual bool isCollectible() { return true; }
-	virtual void reset();
+  Sound* fireSound;
+
+  virtual bool isCollectible() {
+    return true;
+  }
+  virtual void reset();
 protected:
-	void init();
+  void init();
 };
 
 class CollectiblePill : public Collectible
 {
 public:
-	CollectiblePill(double x, double y);
-	virtual void collide(Actor& otherActor);
+  CollectiblePill(double x, double y);
+	virtual void collideCallback(Actor& otherActor);
 };
 
 class CollectibleWeaponUpgrade : public Collectible
 {
 public:
-	CollectibleWeaponUpgrade(double x, double y);
-	virtual void collide(Actor& otherActor);
+  CollectibleWeaponUpgrade(double x, double y);
+	virtual void collideCallback(Actor& otherActor);
 };
 
 
 class CollectibleArmor : public Collectible
 {
 public:
-	CollectibleArmor(double x, double y);
-	virtual void collide(Actor& otherActor);
+  CollectibleArmor(double x, double y);
+	virtual void collideCallback(Actor& otherActor);
 };
 
 class CollectibleEnergyBall : public Collectible
 {
 public:
-	CollectibleEnergyBall(double x, double y, int expValue = 1);
-	virtual void collide(Actor& otherActor);
+  CollectibleEnergyBall(double x, double y, int expValue = 1);
+	virtual void collideCallback(Actor& otherActor);
 };
 
 #endif

@@ -28,40 +28,42 @@
 //for testing
 //#include <iostream>
 
-Sound::Sound()
+Sound::Sound() : QObject(0)
 {
 }
 
-Sound::Sound(string filename) {
-	loadSound(filename);
+Sound::Sound(string filename) : QObject(0)
+{
+  loadSound(filename);
 }
 
-Sound::~Sound() {
+Sound::~Sound()
+{
 }
 
 bool Sound::loadSound(string filename)
 {
-	file = filename;
-	return song.OpenFromFile(("audio/" + filename).c_str());
+  file = filename;
+  return song.OpenFromFile(("audio/" + filename).c_str());
 }
 
-void Sound::playSound()
+void Sound::play()
 {
-	//std::cout << "play sound " << file << "\n";
-	song.Play();
+  //std::cout << "play sound " << file << "\n";
+  song.Play();
 }
 
 void Sound::setLoop(bool loop)
 {
-	song.SetLoop(loop);
+  song.SetLoop(loop);
 }
 
 void Sound::stop()
 {
-	song.Stop();
+  song.Stop();
 }
 
 sf::Sound::Status Sound::getStatus()
 {
-	return song.GetStatus();
+  return song.GetStatus();
 }

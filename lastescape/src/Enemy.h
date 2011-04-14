@@ -24,17 +24,17 @@
 class Enemy : public AnimatedActor
 {
 public:
-	Enemy(double x, double y, double w, double h);
-	
-	virtual void collide(Actor& otherActor);
+  Enemy(double x, double y, double w, double h);
 
-	virtual bool isEnemy() { return true; }
+	virtual void collideCallback(Actor& otherActor);
 
-	Sound* fireSound;
-	
-	void patrol(double dt);
+  virtual bool isEnemy() {
+    return true;
+  }
+
+  Sound* fireSound;
 protected:
-	double speed_x, speed_y;
+  double speed_x, speed_y;
 };
 
 

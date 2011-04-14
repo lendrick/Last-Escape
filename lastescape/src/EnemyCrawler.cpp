@@ -27,52 +27,54 @@
 
 
 EnemyCrawler::EnemyCrawler(double x, double y)
-:EnemyPatroller(x, y, 40.0f, 16.0f)
+  :EnemyPatroller(x, y, 40.0f, 16.0f)
 {
-	setImage("crawler.png");
-	walk_speed = 70.f;
-	shape->u = 0.1f;
+  setImage("crawler.png");
+  walk_speed = 70.f;
+  shape->u = 0.1f;
 
-	dying = false;
-	life = 2;
+  dying = false;
+  life = 2;
 
-	setDrawOffset(33, 10);
-	setFrameSize(64, 32);
+  setDrawOffset(33, 10);
+  setFrameSize(64, 32);
 
-	Animation * tmp;
-	actorName = "Crawler";
-	
-	//pick a random death sound
-	int sound_num = rand() % 19;
-	sound_num += 1;
-	std::string s;
-	std::stringstream out;
-	out << sound_num;
-	s = out.str();
+  Animation * tmp;
+  actorName = "Crawler";
 
-	std::string sound_file = s + "-BugSplat.ogg";
-	//cout << sound_file;
-	fireSound = soundCache[sound_file];
-	facing_direction = Facing::Left;
+  //pick a random death sound
+  int sound_num = rand() % 19;
+  sound_num += 1;
+  std::string s;
+  std::stringstream out;
+  out << sound_num;
+  s = out.str();
 
-	tmp = addAnimation("walk");
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setDoLoop(true);
+  std::string sound_file = s + "-BugSplat.ogg";
+  //cout << sound_file;
+  fireSound = soundCache[sound_file];
+  facing_direction = Facing::Left;
 
-	tmp = addAnimation("die");
-	tmp->addFrame(8, .07f);
-	tmp->addFrame(7, .07f);
-	tmp->addFrame(6, .07f);
-	tmp->addFrame(5, .07f);
+  tmp = addAnimation("walk");
+  tmp->addFrame(2, .2f);
+  tmp->addFrame(3, .2f);
+  tmp->setDoLoop(true);
 
-	tmp = addAnimation("hurt");
-	tmp->addFrame(4, 0.07f);
+  tmp = addAnimation("die");
+  tmp->addFrame(8, .07f);
+  tmp->addFrame(7, .07f);
+  tmp->addFrame(6, .07f);
+  tmp->addFrame(5, .07f);
 
-	setCurrentAnimation("walk");
+  tmp = addAnimation("hurt");
+  tmp->addFrame(4, 0.07f);
+
+  setCurrentAnimation("walk");
+
 }
 
-EnemyCrawler::~EnemyCrawler() {
+EnemyCrawler::~EnemyCrawler()
+{
 }
 
 
@@ -95,18 +97,18 @@ void EnemyCrawler::update(double dt) {
 			if (facing_direction == Facing::Left) {
 				if(body->v.x > -walk_speed)
 					cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
-				
+
 				if(!leftBumper->isGrounded())
 					facing_direction = Facing::Right;
 			} else if (facing_direction  == Facing::Right) {
 				if(body->v.x < walk_speed)
 					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
-				
+
 				if(!rightBumper->isGrounded())
 					facing_direction = Facing::Left;
 			}
 		}
-		
+
 		updateSpriteFacing();
 	}
 }
@@ -121,11 +123,11 @@ void EnemyCrawler::die() {
 	dying = true;
 	freeze();
 	setCurrentAnimation("die");
-	fireSound->playSound();
+	fireSound->play();
 }
 
-void EnemyCrawler::onAnimationComplete(std::string anim) {
-	//cout << "EnemyCrawler::onAnimationComplete(\"" << anim << "\")\n";
+void EnemyCrawler::animationCompleteCallback(std::string anim) {
+	//cout << "EnemyCrawler::animationCompleteCallback(\"" << anim << "\")\n";
 	if(anim == "die") {
 		destroy();
 		CollectibleEnergyBall * ball = new CollectibleEnergyBall(pos_x-16, pos_y-16);
@@ -136,7 +138,7 @@ void EnemyCrawler::onAnimationComplete(std::string anim) {
 	}
 }
 
-void EnemyCrawler::onBumperCollide(int facing) {
+void EnemyCrawler::bumperCollideCallback(int facing) {
 	//cout << "Bumper collide " << actorName << "\n";
 	if(facing == Facing::Left) {
 		facing_direction = Facing::Right;

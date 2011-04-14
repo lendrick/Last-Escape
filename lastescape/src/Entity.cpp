@@ -19,26 +19,30 @@
 
 EntityList allEntities;
 
-Entity::Entity() {
-	allEntities.push_back(this);
+Entity::Entity()
+{
+  allEntities.push_back(this);
 }
 
-Entity::~Entity() {
-	ComponentMap::iterator c;
-	for(c = components.begin(); c != components.end(); ++c) {
-		delete (*c).second;
-		components.erase(c);
-	}
-	
-	EntityList::iterator i;
-	i = find(allEntities.begin(), allEntities.end(), this);
-	allEntities.erase(i);
+Entity::~Entity()
+{
+  ComponentMap::iterator c;
+  for(c = components.begin(); c != components.end(); ++c) {
+    delete (*c).second;
+    components.erase(c);
+  }
+
+  EntityList::iterator i;
+  i = find(allEntities.begin(), allEntities.end(), this);
+  allEntities.erase(i);
 }
 
-void Entity::addComponent(Component * component) {
-	components[component->getType()] = component;
+void Entity::addComponent(Component * component)
+{
+  components[component->getType()] = component;
 }
 
-void Entity::update(ComponentType::Enum type) {
-	components[type]->update();
+void Entity::update(ComponentType::Enum type)
+{
+  components[type]->update();
 }

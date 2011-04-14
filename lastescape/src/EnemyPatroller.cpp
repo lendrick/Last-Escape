@@ -27,83 +27,85 @@
 
 
 EnemyPatroller::EnemyPatroller(double x, double y, double w, double h)
-:Enemy(x, y, w, h)
+  :Enemy(x, y, w, h)
 {
-	walk_speed = 0;
-	shape->u = 0.1f;
+	resetPhysics(x, y);
+  walk_speed = 0;
+  shape->u = 0.1f;
 
-	drop_offset_x = drop_offset_y = 0;
-	dying = false;
-	leftBumper = rightBumper = NULL;
-	facing_direction = Facing::Left;
-	leftBumper = new Bumper(this, Facing::Left);
-	rightBumper = new Bumper(this, Facing::Right);
+  drop_offset_x = drop_offset_y = 0;
+  dying = false;
+  leftBumper = rightBumper = NULL;
+  facing_direction = Facing::Left;
+  leftBumper = new Bumper(this, Facing::Left);
+  rightBumper = new Bumper(this, Facing::Right);
 }
 
-EnemyPatroller::~EnemyPatroller() {
-	//cout << "delete patroller " << actorName << "\n";
-	delete leftBumper;
-	delete rightBumper;
+EnemyPatroller::~EnemyPatroller()
+{
+  //cout << "delete patroller " << actorName << "\n";
+  delete leftBumper;
+  delete rightBumper;
 }
 
-void EnemyPatroller::update(double dt) {
-	if(!dying) {
+void EnemyPatroller::update(double dt)
+{
+  (void)dt;
+  if(!dying) {
+    if(isGrounded()) {
+      if (facing_direction == Facing::Left) {
+        if(body->v.x > -walk_speed)
+          cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
 
-		//setCurrentAnimation("walk");
-		const int speed_gravity = 960;
-		const double vision_range = 320;
-		const double vision_min_range = 32;
+        if(!leftBumper->isGrounded())
+          facing_direction = Facing::Right;
+      } else if (facing_direction  == Facing::Right) {
+        if(body->v.x < walk_speed)
+          cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
 
-		if(isGrounded()) {
-			if (facing_direction == Facing::Left) {
-				if(body->v.x > -walk_speed)
-					cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
-				
-				if(!leftBumper->isGrounded())
-					facing_direction = Facing::Right;
-			} else if (facing_direction  == Facing::Right) {
-				if(body->v.x < walk_speed)
-					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
-				
-				if(!rightBumper->isGrounded())
-					facing_direction = Facing::Left;
-			}
-		}
-		
-		updateSpriteFacing();
-	}
+        if(!rightBumper->isGrounded())
+          facing_direction = Facing::Left;
+      }
+    }
+
+    updateSpriteFacing();
+  }
 }
 
-void EnemyPatroller::draw() {
-	//cout << "walker frame " << currentAnimation->getFrame() << "\n";
-	AnimatedActor::draw();
+void EnemyPatroller::draw()
+{
+  //cout << "walker frame " << currentAnimation->getFrame() << "\n";
+  AnimatedActor::draw();
 }
 
-void EnemyPatroller::die() {
-	setCanCollide(false);
-	dying = true;
-	freeze();
-	setCurrentAnimation("die");
-	fireSound->playSound();
+void EnemyPatroller::die()
+{
+  setCanCollide(false);
+  dying = true;
+  freeze();
+  setCurrentAnimation("die");
+  fireSound->play();
 }
 
-void EnemyPatroller::onAnimationComplete(std::string anim) {
-	//cout << "EnemyPatroller::onAnimationComplete(\"" << anim << "\")\n";
-	if(anim == "die") {
-		destroy();
-		CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x + drop_offset_x, body->p.y+drop_offset_y);
-	}
+void EnemyPatroller::animationCompleteCallback(std::string anim)
+{
+  //cout << "EnemyPatroller::animationCompleteCallback(\"" << anim << "\")\n";
+  if(anim == "die") {
+    destroy();
+    new CollectibleEnergyBall(body->p.x + drop_offset_x, body->p.y+drop_offset_y);
+  }
 
-	if(anim == "hurt") {
-		setCurrentAnimation("walk");
-	}
+  if(anim == "hurt") {
+    setCurrentAnimation("walk");
+  }
 }
 
-void EnemyPatroller::onBumperCollide(int facing) {
-	//cout << "Bumper collide " << actorName << "\n";
-	if(facing == Facing::Left) {
-		facing_direction = Facing::Right;
-	} else if(facing == Facing::Right) {
-		facing_direction = Facing::Left;
-	}
-} 
+void EnemyPatroller::bumperCollideCallback(int facing)
+{
+  //cout << "Bumper collide " << actorName << "\n";
+  if(facing == Facing::Left) {
+    facing_direction = Facing::Right;
+  } else if(facing == Facing::Right) {
+    facing_direction = Facing::Left;
+  }
+}

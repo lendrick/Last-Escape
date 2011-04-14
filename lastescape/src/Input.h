@@ -18,35 +18,36 @@
 #pragma once
 #include "globals.h"
 
-class Input {
+class Input
+{
 public:
-	Input();
-	~Input();
-	void poll();
-	int direction();
-	bool jump();
-	bool quit();
-	bool shoot();
-	bool crouch();
-	bool shooting();
-	bool jumping();
-	bool crouching();
-	bool stopJump();
+  Input();
+  ~Input();
+  void poll();
+  int direction();
+  bool jump();
+  bool quit();
+  bool shoot();
+  bool crouch();
+  bool shooting();
+  bool jumping();
+  bool crouching();
+  bool stopJump();
 
 private:
-	void initFrame();
+  void initFrame();
 
-	int inputDirection;
-	bool inputQuit;
-	bool inputShoot;
-	bool inputJump;
-	bool inputCrouch;
-	bool inputStopJump;
+  int inputDirection;
+  bool inputQuit;
+  bool inputShoot;
+  bool inputJump;
+  bool inputCrouch;
+  bool inputStopJump;
 };
 
 typedef struct InputItem {
-	sf::Key::Code key;
-	sf::String text;
+  sf::Key::Code key;
+  sf::String text;
 } InputItem;
 
 #define INPUT_JUMP 0

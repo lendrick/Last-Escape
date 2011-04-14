@@ -20,26 +20,34 @@
 #include "Actor.h"
 #include "Sensor.h"
 
-class TeleportEnter : public Sensor {
+class TeleportEnter : public Sensor
+{
 public:
-	TeleportEnter(double x, double y, double w, double h, std::string name);
+  TeleportEnter(double x, double y, double w, double h, std::string name);
 
-	virtual bool isTeleportEnter() { return true; }
+  virtual bool isTeleportEnter() {
+    return true;
+  }
 
-	void collide(Actor& otherActor);
+	void collideCallback(Actor& otherActor);
 private:
-	std::string name;
+  std::string name;
 };
 
-class TeleportExit : public Sensor {
+class TeleportExit : public Sensor
+{
 public:
-	TeleportExit(double x, double y, std::string name);
+  TeleportExit(double x, double y, std::string name);
 
-	virtual bool isTeleportExit() { return true; }
+  virtual bool isTeleportExit() {
+    return true;
+  }
 
-	std::string getName() { return name; }
+  std::string getName() {
+    return name;
+  }
 
 private:
-	std::string name;
+  std::string name;
 };
 

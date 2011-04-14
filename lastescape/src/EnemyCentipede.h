@@ -16,30 +16,30 @@
  */
 
 #pragma once
-#include "EnemyPatroller.h" 
+#include "EnemyPatroller.h"
 #include <SFML/Graphics.hpp>
 
 class EnemyCentipede : public EnemyPatroller
 {
 public:
-	EnemyCentipede(double x, double y);
-	virtual void update(double dt);
-	virtual void onAnimationComplete(std::string anim);
+  EnemyCentipede(double x, double y);
+  virtual void update(double dt);
+  virtual void animationCompleteCallback(std::string anim);
 
 private:
-	double shootInterval;
-	double lastShot;
-	double time;
-}; 
+  double shootInterval;
+  double lastShot;
+  double time;
+};
 
 class EnemyCentipedeProjectile : public Enemy
 {
 public:
-	EnemyCentipedeProjectile(int direction, int start_x, int start_y);
-	virtual void update(double dt);
-	virtual void onAnimationComplete(std::string anim);
-	virtual void collide(Actor &otherActor);
+  EnemyCentipedeProjectile(int direction, int start_x, int start_y);
+  virtual void update(double dt);
+  virtual void animationCompleteCallback(std::string anim);
+	virtual void collideCallback(Actor &otherActor);
 private:
 
-	double fly_speed;
+  double fly_speed;
 };

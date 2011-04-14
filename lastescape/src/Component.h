@@ -18,26 +18,28 @@
 #include <map>
 #include <list>
 
-namespace ComponentType {
-	enum Enum {
-		Drawable,
-		Physics,
-		Health,
-		Damage,
-		AI
-	};
+namespace ComponentType
+{
+enum Enum {
+  Drawable,
+  Physics,
+  Health,
+  Damage,
+  AI
+};
 };
 
-class Component {
+class Component
+{
 public:
-	Component(ComponentType::Enum type);
-	virtual ~Component();
-	
-	virtual void update() = 0;
-	ComponentType::Enum getType();
-	
+  Component(ComponentType::Enum type);
+  virtual ~Component();
+
+  virtual void update() = 0;
+  ComponentType::Enum getType();
+
 protected:
-	ComponentType::Enum componentType;
+  ComponentType::Enum componentType;
 };
 
 typedef std::list<Component *> ComponentList;

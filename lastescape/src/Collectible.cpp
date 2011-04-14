@@ -23,124 +23,130 @@
 #include "SoundCache.h"
 
 Collectible::Collectible(double x, double y, double w, double h)
-:AnimatedActor(x, y, w, h, true)
+  :AnimatedActor(x, y, w, h, true)
 {
+	collisionType = PhysicsType::Item;
+	shapeLayers = PhysicsLayer::Player;
+	resetPhysics(x, y);
 	shape->sensor = true;
 }
 
 
 void Collectible::init()
 {
-	setDrawOffset(16, 16);
-	setFrameSize(32, 32);
+  setDrawOffset(16, 16);
+  setFrameSize(32, 32);
 
-	Animation * tmp;
-	tmp = addAnimation("image");
-	tmp->addFrame(0, .1f);
-	setCurrentAnimation("image");
-	shape->collision_type = PhysicsType::Item;
-	setShapeLayers(PhysicsLayer::Player);
-	actorName = "Collectible";
+  Animation * tmp;
+  tmp = addAnimation("image");
+  tmp->addFrame(0, .1f);
+  setCurrentAnimation("image");
+	//shape->collision_type = PhysicsType::Item;
+	//setShapeLayers(PhysicsLayer::Player);
+  actorName = "Collectible";
 }
 
-void Collectible::reset() {
-	setCanCollide(true);
-	hidden = false;
+void Collectible::reset()
+{
+  setCanCollide(true);
+  hidden = false;
 }
 
 CollectiblePill::CollectiblePill(double x, double y)
-:Collectible(x, y, 32.0f, 32.0f)
+  :Collectible(x, y, 32.0f, 32.0f)
 {
-	this->setImage("smallenergy.png");
-	actorName = "Pill";
-	init();
+  this->setImage("smallenergy.png");
+  actorName = "Pill";
+  init();
 }
 
-void CollectiblePill::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		fireSound = soundCache["energyblip.ogg"];
-		fireSound->playSound();
-		setCanCollide(false);
-		hidden = true;
-        // give player 5 energy, but only up to max energy + 100
-        if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max + 100) {
-            ((Player&)otherActor).energy = min(((Player&)otherActor).energy_max + 100, ((Player&)otherActor).energy + 5.0f);
-        }
-	}
+void CollectiblePill::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    fireSound = soundCache["energyblip.ogg"];
+    fireSound->play();
+    setCanCollide(false);
+    hidden = true;
+    // give player 5 energy, but only up to max energy + 100
+    if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max + 100) {
+      ((Player&)otherActor).energy = min(((Player&)otherActor).energy_max + 100, ((Player&)otherActor).energy + 5.0f);
+    }
+  }
 }
 
 
 CollectibleWeaponUpgrade::CollectibleWeaponUpgrade(double x, double y)
-:Collectible(x, y, 32.0f, 32.0f)
+  :Collectible(x, y, 32.0f, 32.0f)
 {
-	actorName = "Weapon Upgrade";
-	this->setImage("plasmaball.png");
-	init();
+  actorName = "Weapon Upgrade";
+  this->setImage("plasmaball.png");
+  init();
 }
 
-void CollectibleWeaponUpgrade::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		soundCache["gmae.ogg"]->playSound();
-		setCanCollide(false);
-		hidden = true;
-		((Player&)otherActor).upgradeWeapon();
-	}
+void CollectibleWeaponUpgrade::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    soundCache["gmae.ogg"]->play();
+    setCanCollide(false);
+    hidden = true;
+    ((Player&)otherActor).upgradeWeapon();
+  }
 }
 
 
 CollectibleArmor::CollectibleArmor(double x, double y)
-:Collectible(x, y, 32.0f, 32.0f) {
-	actorName = "Armor";
-	this->setImage("shield.png");
-	init();
+  :Collectible(x, y, 32.0f, 32.0f)
+{
+  actorName = "Armor";
+  this->setImage("shield.png");
+  init();
 }
 
-void CollectibleArmor::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		setCanCollide(false);
-		hidden = true;
-		((Player&)otherActor).armor += 1;
-	}
+void CollectibleArmor::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    setCanCollide(false);
+    hidden = true;
+    ((Player&)otherActor).armor += 1;
+  }
 }
 
 
 CollectibleEnergyBall::CollectibleEnergyBall(double x, double y, int expValue)
-: Collectible(x, y, 32.0f, 32.0f) {
-	actorName = "EnergyBall";
-	this->setImage("energyball.png");
-	setDrawOffset(16, 16);
-	setFrameSize(32, 32);
-	experienceValue = expValue;
+  : Collectible(x, y, 32.0f, 32.0f)
+{
+  actorName = "EnergyBall";
+  this->setImage("energyball.png");
+  setDrawOffset(16, 16);
+  setFrameSize(32, 32);
+  experienceValue = expValue;
 
-	Animation * tmp;
-	tmp = addAnimation("anim");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->setDoLoop(true);
-	setCurrentAnimation("anim");
-	shape->collision_type = PhysicsType::Item;
-	setShapeLayers(PhysicsLayer::Player);
+  Animation * tmp;
+  tmp = addAnimation("anim");
+  tmp->addFrame(0, .2f);
+  tmp->addFrame(1, .2f);
+  tmp->addFrame(2, .2f);
+  tmp->addFrame(3, .2f);
+  tmp->setDoLoop(true);
+  setCurrentAnimation("anim");
+  shape->collision_type = PhysicsType::Item;
+  setShapeLayers(PhysicsLayer::Player);
 }
 
-void CollectibleEnergyBall::collide(Actor& otherActor) {
-	if (otherActor.isPlayer())
-	{
-		if(!g_player->dying) {
-			destroy();
-			soundCache["gmae.ogg"]->playSound();
-			if(g_player->energyBalls < 10)
-                g_player->energyBalls++;
+void CollectibleEnergyBall::collideCallback(Actor& otherActor)
+{
+  if (otherActor.isPlayer()) {
+    if(!g_player->dying) {
+      destroy();
+      soundCache["gmae.ogg"]->play();
+      if(g_player->energyBalls < 10)
+        g_player->energyBalls++;
 
-			g_player->addExperience(experienceValue);
-			// give player 25 energy, but only up to max energy
-			if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max) {
-				((Player&)otherActor).energy = min(((Player&)otherActor).energy_max, ((Player&)otherActor).energy + 25.f);
-			}
-		}
-	}
+      g_player->addExperience(experienceValue);
+      // give player 25 energy, but only up to max energy
+      if(((Player&)otherActor).energy < ((Player&)otherActor).energy_max) {
+        ((Player&)otherActor).energy = min(((Player&)otherActor).energy_max, ((Player&)otherActor).energy + 25.f);
+      }
+    }
+  }
 }

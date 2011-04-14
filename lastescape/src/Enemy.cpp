@@ -22,51 +22,31 @@
 #include "SoundCache.h"
 
 Enemy::Enemy(double x, double y, double w, double h)
-:AnimatedActor(x, y, w, h)
+  :AnimatedActor(x, y, w, h)
 {
-	//make sure we die in one hit by default
-	life = 0.1f;
-	experienceValue = 1;
-	actorName = "Enemy";
-	shape->layers = PhysicsLayer::Map|PhysicsLayer::Enemy|PhysicsLayer::PlayerBullet;
-	shape->collision_type = PhysicsType::Enemy;
+  //make sure we die in one hit by default
+  life = 0.1f;
+  experienceValue = 1;
+  actorName = "Enemy";
+	shapeLayers = PhysicsLayer::Map|PhysicsLayer::Enemy|PhysicsLayer::PlayerBullet;
+	collisionType = PhysicsType::Enemy;
 }
 
 
-void Enemy::collide(Actor& otherActor) {
+void Enemy::collideCallback(Actor& otherActor)
+{
+  (void)otherActor;
+  /*
+  if (otherActor.isCollectible())
+  	otherActor.destroy();
+  */
 
-	/*
-	if (otherActor.isCollectible())
-		otherActor.destroy();
-	*/
-
-	/*
-	if (otherActor.isPlayer())
-	{
-		// TODO: kill the player
-		otherActor.sprite.FlipY(true);
-	}
-	*/
+  /*
+  if (otherActor.isPlayer())
+  {
+  	// TODO: kill the player
+  	otherActor.sprite.FlipY(true);
+  }
+  */
 }
 
-
-void Enemy::patrol(double dt) {
-	double delta_x = speed_x * dt;
-	double delta_y = speed_y * dt;
-
-	int check_pos = 12;
-	if(facing_direction == Facing::Left) check_pos = -check_pos;
-	if(move(delta_x, delta_y)) {
-		// Turn around if you run into something.
-		//cout << "obstructed\n";
-		flipDirection();
-	} /*else if(!game_map->isSolid(int(pos_x + check_pos), int(pos_y + yOrigin + 1))) {
-		// Turn around if there's a pit up ahead.
-		//cout << "pit\n";
-		//debugPixel.SetPosition(
-		//	0.5f + (int)(pos_x - game_map->cam_x),
-		//											 0.5f + (int)(pos_y - game_map->cam_y));
-		//checkGround = true;
-		flipDirection();
-	}*/
-}
