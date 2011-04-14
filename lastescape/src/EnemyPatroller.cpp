@@ -48,7 +48,7 @@ EnemyPatroller::~EnemyPatroller()
   delete rightBumper;
 }
 
-void EnemyPatroller::update(double dt)
+void EnemyPatroller::updateCallback(double dt)
 {
   (void)dt;
   if(!dying) {

@@ -24,7 +24,7 @@ class EnemyPatroller : public Enemy
 public:
   EnemyPatroller(double x, double y, double w, double h);
   virtual ~EnemyPatroller();
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
   virtual void draw();
   virtual void die();
   virtual void animationCompleteCallback(std::string anim);

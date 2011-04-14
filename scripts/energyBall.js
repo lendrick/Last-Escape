@@ -21,6 +21,7 @@ function energyBallCollide(otherActor)
 
 
 function energyBall(x, y) {
+	print("New energy ball at " + x + " " + y);
 	var a = baseCollectible(x, y, "energyBall.xml");
 	a.animation = "anim";
 	a.actorName = "energyBall";

@@ -74,7 +74,7 @@ const double fps = 60.0f;
 QScriptValue scriptPrint(QScriptContext* context, QScriptEngine* se)
 {
 	QString value = context->argument(0).toString();
-	qDebug() << value;
+	cout << value.data();
 
 	return QScriptValue(se, 0);
 }
@@ -104,6 +104,10 @@ void initScriptEngine() {
 	QScriptValue scriptedActorConst = scriptEngine->newFunction(scriptedActorConstructor);
 	QScriptValue scriptedActorMetaObject = scriptEngine->newQMetaObject(&QObject::staticMetaObject, scriptedActorConst);
 	scriptEngine->globalObject().setProperty("Actor", scriptedActorMetaObject);
+
+	QScriptValue scriptedStaticActorConst = scriptEngine->newFunction(scriptedStaticActorConstructor);
+	QScriptValue scriptedStaticActorMetaObject = scriptEngine->newQMetaObject(&QObject::staticMetaObject, scriptedStaticActorConst);
+	scriptEngine->globalObject().setProperty("StaticActor", scriptedStaticActorMetaObject);
 
 	QScriptValue bumperConst = scriptEngine->newFunction(bumperConstructor);
 	QScriptValue bumperMetaObject = scriptEngine->newQMetaObject(&QObject::staticMetaObject, bumperConst);

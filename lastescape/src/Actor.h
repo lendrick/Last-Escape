@@ -106,7 +106,7 @@ public slots:
   // Start death animation, etc.  destroy() should be called in update() and not in collide()
   virtual void die();
 
-  virtual void update(double dt) {
+	virtual void updateCallback(double dt) {
     (void)dt;
   };
   virtual	void doUpdate(double dt);

@@ -40,11 +40,11 @@ class ScriptedActor : public AnimatedActor
 
 public:
 	explicit ScriptedActor(double x, double y, double w, double h, QString image, QString animation);
-	explicit ScriptedActor(double x, double y, QString filename);
+	explicit ScriptedActor(double x, double y, QString filename, bool staticBody = false);
 	virtual ~ScriptedActor();
 	void setThisObject(QScriptValue thisObj);
 
-	virtual void update(double dt);
+	virtual void updateCallback(double dt);
 	virtual void die();
 
 	virtual void collideCallback(Actor& otherActor);
@@ -109,5 +109,6 @@ private:
 };
 
 QScriptValue scriptedActorConstructor(QScriptContext * context, QScriptEngine * engine);
+QScriptValue scriptedStaticActorConstructor(QScriptContext * context, QScriptEngine * engine);
 
 ScriptedActor * loadScriptedActor(QString filename);

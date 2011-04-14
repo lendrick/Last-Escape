@@ -236,7 +236,7 @@ void Player::crouch()
   crouched = true;
 }
 
-void Player::update(double dt)
+void Player::updateCallback(double dt)
 {
   if(!body) return;
   const int speed_max = 200; // pixels per second

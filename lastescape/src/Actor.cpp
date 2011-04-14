@@ -246,13 +246,13 @@ void Actor::leaveGround()
 void Actor::doUpdate(double dt)
 {
   if(body == NULL) {
-    update(dt);
+		updateCallback(dt);
   } else if(isOnCamera() || !canSleep) {
     if(!awake) {
       cpBodyActivate(body);
       awake = true;
     }
-    update(dt);
+		updateCallback(dt);
     grounded = 0;
   } else if(awake) {
     awake = false;

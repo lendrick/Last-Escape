@@ -86,7 +86,7 @@ void PlayerBullet::collideCallback(Actor& otherActor)
   }
 }
 
-void PlayerBullet::update(double dt)
+void PlayerBullet::updateCallback(double dt)
 {
   //cout << "bullet " << body->p.x << " " << body->p.y << "\n";
   bulletTime += dt;

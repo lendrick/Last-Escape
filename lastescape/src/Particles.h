@@ -30,7 +30,7 @@ class ParticleEmitter : public Actor
 public:
   ParticleEmitter(double x, double y);
   virtual void draw();
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
 private:
   double maxAge;
 

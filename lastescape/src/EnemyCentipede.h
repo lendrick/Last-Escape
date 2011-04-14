@@ -23,7 +23,7 @@ class EnemyCentipede : public EnemyPatroller
 {
 public:
   EnemyCentipede(double x, double y);
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
   virtual void animationCompleteCallback(std::string anim);
 
 private:
@@ -36,7 +36,7 @@ class EnemyCentipedeProjectile : public Enemy
 {
 public:
   EnemyCentipedeProjectile(int direction, int start_x, int start_y);
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
   virtual void animationCompleteCallback(std::string anim);
 	virtual void collideCallback(Actor &otherActor);
 private:

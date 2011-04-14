@@ -19,7 +19,7 @@ function baseEnemyCollide(otherActor) {
 function baseEnemyAnimationComplete(anim) {
 	if(anim == "die") {
 		this.destroy();
-		//energyBall(this.x, this.y);
+		energyBall(this.x, this.y);
 	}
 }
 

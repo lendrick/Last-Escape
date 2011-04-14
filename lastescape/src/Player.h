@@ -37,7 +37,7 @@ public:
     return true;
   }
 
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
   virtual void draw();
   virtual void die();
   //virtual void collide(Actor & otherActor);

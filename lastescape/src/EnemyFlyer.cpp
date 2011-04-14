@@ -83,7 +83,7 @@ EnemyFlyer::EnemyFlyer(double x, double y)
 }
 
 
-void EnemyFlyer::update(double dt)
+void EnemyFlyer::updateCallback(double dt)
 {
   cpVect force = cpv(0, 0);
 

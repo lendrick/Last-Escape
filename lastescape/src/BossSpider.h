@@ -22,7 +22,7 @@ class BossSpider : public Enemy
 {
 public:
   BossSpider(double x, double y);
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
   virtual void draw();
   virtual void die();
   virtual bool doDamage(double damage);

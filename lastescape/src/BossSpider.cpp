@@ -80,7 +80,7 @@ BossSpider::BossSpider(double x, double y)
 	resetPhysics(x, y);
 }
 
-void BossSpider::update(double dt)
+void BossSpider::updateCallback(double dt)
 {
   if(!dying) {
     time += dt;

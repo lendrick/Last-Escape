@@ -37,8 +37,8 @@ AnimatedActor::AnimatedActor(double x, double y, double w, double h, bool static
 	actorName = "Animated Actor";
 }
 
-AnimatedActor::AnimatedActor(double x, double y, std::string filename)
-	:Actor(x, y, 0, 0, false)
+AnimatedActor::AnimatedActor(double x, double y, std::string filename, bool staticBody)
+	:Actor(x, y, 0, 0, staticBody)
 {
 	//cout << "new actor from file: " << filename << "\n";
 	actorName = "Animated Actor";

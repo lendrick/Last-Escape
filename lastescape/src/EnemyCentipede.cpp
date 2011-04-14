@@ -74,7 +74,7 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 
 }
 
-void EnemyCentipede::update(double dt)
+void EnemyCentipede::updateCallback(double dt)
 {
   if(!dying) {
     time += dt;
@@ -86,7 +86,7 @@ void EnemyCentipede::update(double dt)
     }
 
     if(animationName() != "shoot")
-      EnemyPatroller::update(dt);
+      EnemyPatroller::updateCallback(dt);
   }
 }
 
@@ -145,7 +145,7 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
   body->v = cpv(speed_x, speed_y);
 }
 
-void EnemyCentipedeProjectile::update(double dt)
+void EnemyCentipedeProjectile::updateCallback(double dt)
 {
   (void)dt;
   if(isGrounded()) {

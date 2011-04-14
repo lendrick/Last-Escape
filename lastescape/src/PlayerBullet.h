@@ -25,7 +25,7 @@ class PlayerBullet  : public AnimatedActor
 public:
   PlayerBullet(double x, double y, int facing, double angleVariation, double lifetime = 1.5f);
 	virtual void collideCallback(Actor& otherActor);
-  virtual void update(double dt);
+  virtual void updateCallback(double dt);
 	virtual void collideGround(cpVect v);
 	virtual void collideWall();
 private:

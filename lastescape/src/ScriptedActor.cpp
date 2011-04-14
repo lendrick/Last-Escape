@@ -28,8 +28,8 @@ ScriptedActor::ScriptedActor(double x, double y, double w, double h, QString ima
 	shapeWrapper = new PhysicsShapeScriptWrapper(shape);
 }
 
-ScriptedActor::ScriptedActor(double x, double y, QString animation) :
-	AnimatedActor(x, y, animation.toStdString())
+ScriptedActor::ScriptedActor(double x, double y, QString animation, bool staticBody) :
+	AnimatedActor(x, y, animation.toStdString(), staticBody)
 {
 	resetPhysics(x, y);
 	//qDebug() << "Creating ScriptedActor from animation " << animation;
@@ -52,7 +52,7 @@ void ScriptedActor::setThisObject(QScriptValue thisObj) {
 	thisObject.setProperty("shape", shapeWrapper->thisObject);
 }
 
-void ScriptedActor::update(double dt)
+void ScriptedActor::updateCallback(double dt)
 {
 	QScriptValue updateFunc = thisObject.property("update");
 	if(updateFunc.isFunction()) {
@@ -357,6 +357,7 @@ double ScriptedActor::getY()
 
 void ScriptedActor::setSensor(bool s)
 {
+	//cout << actorName << " sensor set to " << s << "\n";
 	shape->sensor = s;
 }
 
@@ -378,3 +379,19 @@ QScriptValue scriptedActorConstructor(QScriptContext * context, QScriptEngine * 
 		return context->throwError(s);
 	}
 }
+
+QScriptValue scriptedStaticActorConstructor(QScriptContext * context, QScriptEngine * engine)
+{
+	double x = context->argument(0).toNumber();
+	double y = context->argument(1).toNumber();
+	QString anim = context->argument(2).toString();
+	try {
+		ScriptedActor * object = new ScriptedActor(x, y, anim, true);
+		QScriptValue thisObject = engine->newQObject(object, QScriptEngine::QtOwnership);
+		object->setThisObject(thisObject);
+		return thisObject;
+	} catch(QString s) {
+		return context->throwError(s);
+	}
+}
+
