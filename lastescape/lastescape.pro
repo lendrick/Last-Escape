@@ -14,7 +14,6 @@ OTHER_FILES += \
     ../animations/crawler.xml \
     ../animations/spider.xml \
     ../animations/default_bullet.xml \
-    ../animations/centipede_spit.xml \
     ../scripts/testActor.js \
     ../scripts/flyer.js \
     ../scripts/baseEnemy.js \
@@ -25,7 +24,12 @@ OTHER_FILES += \
     ../scripts/crawler.js \
     ../scripts/baseCollectible.js \
     ../scripts/energyBall.js \
-    ../animations/energyBall.xml
+    ../animations/energyBall.xml \
+    ../scripts/playerBullet.js \
+    ../animations/playerBullet.xml \
+    ../scripts/centipedeSpit.js \
+    ../animations/centipedeSpit.xml \
+    ../scripts/centipede.js
 
 HEADERS += \
     src/Utils.h \

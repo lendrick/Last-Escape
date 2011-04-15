@@ -10,7 +10,7 @@ function energyBallCollide(otherActor)
 			if(otherActor.energyBalls < 10)
 				otherActor.energyBalls++;
 
-			otherActor.addExperience(experienceValue);
+			otherActor.addExperience(a.experienceValue);
 			// give player 25 energy, but only up to max energy
 			if(otherActor.energy < otherActor.energy_max) {
 				otherActor.energy = Math.min(otherActor.energy_max, otherActor.energy + 25.0);

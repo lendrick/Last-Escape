@@ -74,7 +74,7 @@ const double fps = 60.0f;
 QScriptValue scriptPrint(QScriptContext* context, QScriptEngine* se)
 {
 	QString value = context->argument(0).toString();
-	cout << value.data();
+	cout << value.toStdString() << "\n";
 
 	return QScriptValue(se, 0);
 }
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 	QCoreApplication qtApp(argc, argv);
 	initScriptEngine();
   srand((unsigned)time(0));
-  startMap = "desert_map.tmx";
+	startMap = "suburbs.tmx";
   bool fullScreen = false;
   int frameCount = 0;
   int framesSkipped = 0;

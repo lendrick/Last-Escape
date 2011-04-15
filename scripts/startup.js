@@ -6,4 +6,5 @@ include("testActor.js");
 include("flyer.js");
 include("walker.js");
 include("crawler.js");
+include("centipede.js");
 

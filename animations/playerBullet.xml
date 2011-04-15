@@ -1,0 +1,11 @@
+<animations image="xeon-bullet.png" frameWidth="15" frameHeight="7" drawOffsetX="8" drawOffsetY="6" width="16" height="16">
+	<animation name="bullet" doLoop="true">
+		<frames>
+			<frame number="0" time="0.1"/>
+			<frame number="1" time="0.1"/>
+			<frame number="2" time="0.1"/>
+			<frame number="3" time="0.1"/>
+			<frame number="4" time="0.1"/>
+		</frames>
+	</animation>
+</animations>

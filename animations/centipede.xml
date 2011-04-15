@@ -1,0 +1,27 @@
+<animations image="centipede.png" frameWidth="64" frameHeight="32" drawOffsetX="32" drawOffsetY="15" width="32" height="25">
+	<animation name="walk" doLoop="true">
+		<frames>
+			<frame number="2" time="0.2"/>
+			<frame number="3" time="0.2"/>
+			<frame number="6" time="0.2"/>
+			<frame number="7" time="0.2"/>
+		</frames>
+	</animation>
+
+	<animation name="die" doLoop="false">
+		<frames>
+			<frame number="0" time="0.07"/>
+			<frame number="4" time="0.07"/>
+			<frame number="8" time="0.07"/>
+			<frame number="12" time="0.07"/>
+		</frames>
+	</animation>
+
+	<animation name="shoot" doLoop="false">
+		<frames>
+			<frame number="11" time="0.4"/>
+			<frame number="10" time="0.2"/>
+			<frame number="9" time="0.1"/>
+		</frames>
+	</animation>
+</animations>

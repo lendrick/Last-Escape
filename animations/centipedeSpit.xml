@@ -1,0 +1,17 @@
+<animations image="centipedeprojectile.png" frameWidth="32" frameHeight="16" drawOffsetX="16" drawOffsetY="11" width="8" height="4">
+	<animation name="fly" doLoop="true">
+		<frames>
+			<frame number="8" time="0.1"/>
+			<frame number="9" time="0.1"/>
+			<frame number="8" time="0.1"/>
+			<frame number="10" time="0.1"/>
+		</frames>
+	</animation>
+
+	<animation name="splat" doLoop="false">
+		<frames>
+			<frame number="12" time="0.2"/>
+			<frame number="13" time="0.5"/>
+		</frames>
+	</animation>
+</animations>
