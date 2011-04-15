@@ -1,0 +1,20 @@
+<animations image="spider.png" frameWidth="64" frameHeight="64" drawOffsetX="32" drawOffsetY="22" width="56" height="41">
+	<animation name="walk" doLoop="true">
+		<frames>
+			<frame number="0" time="0.2"/>
+			<frame number="1" time="0.2"/>
+			<frame number="2" time="0.2"/>
+			<frame number="4" time="0.2"/>
+			<frame number="5" time="0.2"/>
+		</frames>
+	</animation>
+
+	<animation name="die" doLoop="false">
+		<frames>
+			<frame number="8" time="0.2"/>
+			<frame number="9" time="0.2"/>
+			<frame number="10" time="0.2"/>
+			<frame number="11" time="0.2"/>
+		</frames>
+	</animation>
+</animations>

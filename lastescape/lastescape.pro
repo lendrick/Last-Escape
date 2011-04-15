@@ -29,7 +29,8 @@ OTHER_FILES += \
     ../animations/playerBullet.xml \
     ../scripts/centipedeSpit.js \
     ../animations/centipedeSpit.xml \
-    ../scripts/centipede.js
+    ../scripts/centipede.js \
+    ../scripts/spider.js
 
 HEADERS += \
     src/Utils.h \

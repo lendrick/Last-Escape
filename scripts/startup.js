@@ -7,4 +7,5 @@ include("flyer.js");
 include("walker.js");
 include("crawler.js");
 include("centipede.js");
+include("spider.js");
 

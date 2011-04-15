@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 	QCoreApplication qtApp(argc, argv);
 	initScriptEngine();
   srand((unsigned)time(0));
-	startMap = "suburbs.tmx";
+	startMap = "lab_map.tmx";
   bool fullScreen = false;
   int frameCount = 0;
   int framesSkipped = 0;

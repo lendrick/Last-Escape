@@ -245,8 +245,8 @@ void Map::loadMap(string filename)
 				//  actor = new EnemyFlyer((double)x, (double)y);
 				//} else if (type == "centipede") {
 				//  actor = new EnemyCentipede((double)x, (double)y);
-        } else if (type == "spider") {
-          actor = new BossSpider((double)x, (double)y);
+				//} else if (type == "spider") {
+				//  actor = new BossSpider((double)x, (double)y);
         } else if (type == "teleportenter") {
           actor = new TeleportEnter((double)x, (double)y, w, h, name);
         } else if (type == "teleportexit") {
