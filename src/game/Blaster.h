@@ -15,33 +15,28 @@
  *  along with Last Escape.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WEAPON_H
-#define WEAPON_H
+#ifndef BLASTER_H
+#define BLASTER_H
 
-#include <string>
-#include <list>
-#include <vector>
+#include "Weapon.h"
 
-class Weapon
+class Blaster : public Weapon
 {
 	public:
 
-	virtual void upgrade() = 0;
-	virtual void shoot() = 0;
-	virtual ~Weapon() {}
+	Blaster();
+	~Blaster();
 
-	int getUpgrade const { return upgrade; }
-	string getName const { return name[upgrade]; }
-	double getEnergyCost const { return energy_cost[upgrade]; }
-	double getReloadTime const { return reload_time[upgrade]; }
+	void upgrade();
+	void shoot();
 
 	protected:
 
-	int upgrade;
-	int maxUpgrade;
-	vector<std::string> name;
-	vector<double> energy_cost;
-	vector<double> reload_time;
+	vector<double> angle_variation;
+	vector<int> sprite_row;
+	vector<int> sprite_count;
+	vector<double> sprite_speed;
+
 };
 
 #endif
