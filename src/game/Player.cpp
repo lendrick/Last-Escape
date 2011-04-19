@@ -51,6 +51,8 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 };*/
 
+Weapon * currentWeapon;
+
 Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
@@ -135,7 +137,7 @@ StartPoint * Player::findStart() {
 }
 
 void Player::upgradeWeapon() {
-	currentWeapon.upgradeWeapon();
+	currentWeapon->upgradeWeapon();
 }
 
 void Player::jump(double dt) {
@@ -219,7 +221,7 @@ void Player::shoot() {
 		//resetCurrentAnimation();
 	}*/
 
-	currentWeapon->shoot(this);
+	currentWeapon->shoot(*this);
 }
 
 void Player::crouch() {
