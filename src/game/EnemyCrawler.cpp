@@ -36,7 +36,7 @@ EnemyCrawler::EnemyCrawler(double x, double y)
 	dying = false;
 	life = 2;
 
-	setDrawOffset(33, 26);
+	setDrawOffset(33, 10);
 	setFrameSize(64, 32);
 
 	Animation * tmp;

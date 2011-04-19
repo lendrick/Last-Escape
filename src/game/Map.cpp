@@ -29,6 +29,7 @@
 #include "EnemyCrawler.h"
 #include "EnemyFlyer.h"
 #include "EnemyCentipede.h"
+#include "PhysicsCrate.h"
 #include "BossSpider.h"
 #include "Particles.h"
 #include "Player.h"
@@ -39,6 +40,10 @@
 #include "Player.h"
 #include "Actor.h"
 #include <cstdlib>
+
+typedef std::list<MapSegment *> MapSegmentList;
+MapSegmentList mapSegments;
+
 
 Map::Map(string mapName) {
 
@@ -104,7 +109,8 @@ void Map::loadMap(string filename) {
 			background[i][j] = 0;
 			foreground[i][j] = 0;
 			fringe[i][j] = 0;
-			collision[i][j] = false;
+			collision[i][j] = 0;
+			danger[i][j] = 0;
 		}
 	}
 
@@ -217,6 +223,8 @@ void Map::loadMap(string filename) {
 					actor = new CollectibleArmor((double)x, (double)y);
 				} else if (type == "smoke") {
 					actor = new ParticleEmitter((double)x, (double)y);
+				} else if (type == "crate") {
+					actor = new PhysicsCrate((double)x, (double)y);
 				} else if (type == "walker") {
 					actor = new EnemyWalker((double)x, (double)y);
 				} else if (type == "crawler") {
@@ -267,8 +275,8 @@ void Map::loadMap(string filename) {
 					landscapeImg.SetSmooth(false);
 					landscape.SetImage(landscapeImg);
 				} else if(propname == "music" && enableMusic) {
-                                        backgroundMusic.Stop();
-                                        backgroundMusic.OpenFromFile("audio/" + propval);
+					backgroundMusic.Stop();
+					backgroundMusic.OpenFromFile("audio/" + propval);
 					backgroundMusic.SetLoop(true);
 					backgroundMusic.Play();
 				}
@@ -304,6 +312,10 @@ void Map::initPhysics()
 	cout << "Initializing physics for map.\n";
 	if(physSpace) {
 		//cpSpaceFreeChildren(physSpace);
+		while(!mapSegments.empty()) {
+			delete mapSegments.front();
+			mapSegments.pop_front();
+		}
 		cpSpaceFree(physSpace);
 	}
 	cpResetShapeIdCounter();
@@ -333,8 +345,6 @@ int Map::vBetween(int t1, int t2) {
 		return 2;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::Tile) {
 		return 1;
-	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
-		return 2;
 	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
 		return 1;
 	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
@@ -352,8 +362,6 @@ int Map::hBetween(int t1, int t2) {
 	if(t1 == Collision::None && t2 == Collision::Tile) {
 		return 1;
 	} else if(t1 == Collision::Tile && t2 == Collision::None) {
-		return 2;
-	} else if(t1 == Collision::Tile && t2 == Collision::SlantDown) {
 		return 2;
 	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
 		return 2;
@@ -404,10 +412,10 @@ bool Map::setupPhysics()
 	x2 = MAP_TILES_X * TILE_SIZE;
 	y2 = MAP_TILES_Y * TILE_SIZE;
 
-	createSegment(cpv(x1, y1), cpv(x1, y2), PhysicsType::Wall);
-	createSegment(cpv(x1, y2), cpv(x2, y2), PhysicsType::Wall);
-	createSegment(cpv(x2, y2), cpv(x2, y1), PhysicsType::Wall);
-	createSegment(cpv(x2, y1), cpv(x1, y1), PhysicsType::Death);
+	new MapSegment(cpv(x1, y1), cpv(x1, y2), PhysicsType::Wall);
+	new MapSegment(cpv(x1, y2), cpv(x2, y2), PhysicsType::Wall);
+	new MapSegment(cpv(x2, y2), cpv(x2, y1), PhysicsType::Wall);
+	new MapSegment(cpv(x2, y1), cpv(x1, y1), PhysicsType::Death);
 	
 	// Vertical Pass
 	/* This only accounts for on and off collision tiles now, but would be easy
@@ -425,33 +433,18 @@ bool Map::setupPhysics()
 				p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 				
 				if(prev_different != 0) {
-					createSegment(p1, p2, PhysicsType::Wall);
+					new MapSegment(p1, p2, PhysicsType::Wall);
 				}
 				
 				p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
 			}
-			
-			/*
-			if(!different) {
-				if(prev_different) {
-					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
-					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
-					createSegment(p1, p2, PhysicsType::Wall);
-				}
-			} else {
-				if(!prev_different) {
-					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j + 1));
-					p1 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j + 1);
-				}
-			}
-			*/
 			prev_different = different;
 		}
 		
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
-			createSegment(p1, p2, PhysicsType::Wall);
+			new MapSegment(p1, p2, PhysicsType::Wall);
 		}
 	}
 	
@@ -469,31 +462,13 @@ bool Map::setupPhysics()
 				p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 				
 				if(prev_different == 2) {
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				} else if(prev_different == 1) {
-					createSegment(p1, p2, PhysicsType::Wall);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				
 				p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
 			}
-			/*
-			if(!different) {
-				if(prev_different) {
-					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
-					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
-					if(prev_different == 2) {
-						createSegment(p1, p2, PhysicsType::Ground);
-					} else {
-						createSegment(p1, p2, PhysicsType::Wall);
-					}
-				}
-			} else {
-				if(!prev_different) {
-					//p1 = sfml2cp(sf::Vector2f(TILE_SIZE * i + 1, TILE_SIZE * (j + 1)));
-					p1 = cpv(TILE_SIZE * i + 1, TILE_SIZE * (j + 1));
-				}
-			}
-			*/
 			prev_different = different;
 		}
 			
@@ -501,9 +476,9 @@ bool Map::setupPhysics()
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
 			if(prev_different == 2) {
-				createSegment(p1, p2, PhysicsType::Ground);
+				new MapSegment(p1, p2, PhysicsType::Ground);
 			} else {
-				createSegment(p1, p2, PhysicsType::Wall);
+				new MapSegment(p1, p2, PhysicsType::Ground);
 			}
 		}
 	}
@@ -519,13 +494,13 @@ bool Map::setupPhysics()
 
 			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
 				if(collision[x][y] == Collision::SlantUp && prev_tile != Collision::SlantUp) {
-					cout << "Slant Up " << x << " " << y << "\n";
+					if(debugMode) cout << "Slant Up " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y - 1) - 1);
 				} else if(collision[x][y] != Collision::SlantUp && prev_tile == Collision::SlantUp) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
-					cout << "End Slant Up " << x << " " << y << 
+					if(debugMode) cout << "End Slant Up " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
@@ -543,13 +518,13 @@ bool Map::setupPhysics()
 
 			if(x < MAP_TILES_X && y > 0) {
 				if(collision[x][y] == Collision::SlantDown && prev_tile != Collision::SlantDown) {
-					cout << "Slant Down " << x << " " << y << "\n";
+					if(debugMode) cout << "Slant Down " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y) - 1);
 				} else if(collision[x][y] != Collision::SlantDown && prev_tile == Collision::SlantDown) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
-					cout << "End Slant Down " << x << " " << y << 
+					if(debugMode) cout << "End Slant Down " << x << " " << y << 
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
-					createSegment(p1, p2, PhysicsType::Ground);
+					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
 				prev_tile = collision[x][y];
 			}
@@ -568,7 +543,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * j - 1));
 					p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * j - 1);
 					prev_different = false;
-					createSegment(p1, p2, PhysicsType::Death);
+					new MapSegment(p1, p2, PhysicsType::Death);
 				}
 			} else {
 				if(!prev_different) {
@@ -582,7 +557,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1));
 			p2 = cpv(TILE_SIZE * (i + 1), TILE_SIZE * MAP_TILES_Y - 1);
-			createSegment(p1, p2, PhysicsType::Death);
+			new MapSegment(p1, p2, PhysicsType::Death);
 		}
 		prev_different = false;
 	}
@@ -600,7 +575,7 @@ bool Map::setupPhysics()
 					//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * i - 1, TILE_SIZE * (j + 1)));
 					p2 = cpv(TILE_SIZE * i - 1, TILE_SIZE * (j + 1));
 					prev_different = false;
-					createSegment(p1, p2, PhysicsType::Death);
+					new MapSegment(p1, p2, PhysicsType::Death);
 				}
 			} else {
 				if(!prev_different) {
@@ -614,7 +589,7 @@ bool Map::setupPhysics()
 		if(prev_different) {
 			//p2 = sfml2cp(sf::Vector2f(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1)));
 			p2 = cpv(TILE_SIZE * MAP_TILES_X - 1, TILE_SIZE * (j + 1));
-			createSegment(p1, p2, PhysicsType::Death);
+			new MapSegment(p1, p2, PhysicsType::Death);
 		}
 		prev_different = false;
 	}
@@ -663,10 +638,10 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Player, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 
@@ -683,40 +658,40 @@ bool Map::setupPhysics()
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Enemy, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::Neutral, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::PlayerBullet, PhysicsType::Ground, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
 		PhysicsType::PlayerBullet, PhysicsType::Wall, //types of objects
-		map_begin_ground_collide, // callback on initial collision
-		NULL, // any time the shapes are touching
+		NULL, //map_begin_ground_collide, // callback on initial collision
+		map_ground_collide, //NULL, // any time the shapes are touching
 		NULL, // after the collision has been processed
-		map_end_ground_collide, // after the shapes separate
+		NULL, //map_end_ground_collide, // after the shapes separate
 		NULL // data pointer
 	);
 	
@@ -843,6 +818,7 @@ static int map_begin_death_collide(cpArbiter *arb, cpSpace *space, void *data) {
 }
 
 // Ground collisions
+/*
 static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	cpShape *a, *b; 
 	cpArbiterGetShapes(arb, &a, &b);
@@ -853,7 +829,32 @@ static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) 
 	actor1->collideGround();
 	return 1;
 }
+*/
 
+static int map_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
+	cpShape *a, *b; 
+	cpArbiterGetShapes(arb, &a, &b);
+	
+	Actor *actor1 = (Actor *) a->data;
+	
+	//cout << "Ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
+	cpVect normal = cpArbiterGetNormal(arb, 0);
+	
+	//cout << "Collision normal: " << normal.x << " " << normal.y << "\n";
+	
+	if(normal.y < 0) {
+		float slope = fabs(normal.x / normal.y);
+		if(slope <= 2)
+			actor1->collideGround();
+		else
+			actor1->collideWall();
+	} else {
+		actor1->collideWall();
+	}
+	return 1;
+}
+
+/*
 static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	cpShape *a, *b; 
 	cpArbiterGetShapes(arb, &a, &b);
@@ -863,6 +864,7 @@ static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
 	//cout << "End ground collision: " << actor1->actorName << " " << actor1->grounded << "\n"; 
 	actor1->leaveGround();
 }
+*/
 
 // Bumper ground collisions
 static int map_bumper_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data) {
@@ -890,7 +892,7 @@ bool Map::isLoaded() {
 	return loaded;
 }
 
-
+/*
 void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	if(debugMode) cout << "new segment (" << p1.x << ", " << p1.y << ") to (" << p2.x << ", " << p2.y << ")\n";
 	cpShape * seg = cpSegmentShapeNew(&physSpace->staticBody, p1, p2, 1);
@@ -899,8 +901,10 @@ void Map::createSegment(cpVect p1, cpVect p2, int type) {
 	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
 	seg->collision_type = type;
 	
+	mapSegments.push_back(seg);
 	cpSpaceAddShape(physSpace, seg);
 }
+*/
 
 // Convert SFML 0,0 = top left csys and y down
 // to cp 0,0 = bottom left csys and y up.
@@ -1001,6 +1005,13 @@ void Map::renderForeground() {
 			}
 		}
 	}
+	
+	if(debugMode) {
+		MapSegmentList::iterator i;
+		for(i = mapSegments.begin(); i != mapSegments.end(); ++i) {
+			(*i)->draw();
+		}
+	}
 }
 
 void Map::renderLandscape() {
@@ -1033,4 +1044,52 @@ void Map::clear() {
 
 Map::~Map() {
 	clear();
+}
+
+
+MapSegment::MapSegment(cpVect p1, cpVect p2, int type) {
+	cpShape * seg = cpSegmentShapeNew(&game_map->physSpace->staticBody, p1, p2, 1);
+	seg->e = 0.0f;
+	seg->u = 1.0f;
+	seg->layers = PhysicsLayer::Map|PhysicsLayer::EnemyBullet;
+	seg->collision_type = type;
+	
+	x1 = p1.x;
+	y1 = p1.y;
+	x2 = p2.x;
+	y2 = p2.y;
+	
+	color = sf::Color(255, 0, 255);
+	
+	if(type == PhysicsType::Wall) {
+		color = sf::Color(0, 255, 0);
+	} else if(type == PhysicsType::Ground) {
+		color = sf::Color(0, 0, 255);
+	} else if(type == PhysicsType::Death) {
+		color = sf::Color(255, 0, 0);
+	}
+	
+	mapSegments.push_back(this);
+	cpSpaceAddShape(game_map->physSpace, seg);
+}
+
+MapSegment::~MapSegment() {
+	cout << "deleting MapSegment\n";
+	//cpSpaceRemoveStaticShape(game_map->physSpace, seg);
+	//cpShapeFree(seg);	
+}
+
+void MapSegment::draw() {
+	App->Draw(sf::Shape::Line(x1, y1, x2, y2, 1.0f, color));
+	
+					// Draw a crosshair at the segment's start position
+	App->Draw(sf::Shape::Line(x1-2, y1, x1+2, y1, 1.0f, 
+																				sf::Color(0, 0, 255)));
+	App->Draw(sf::Shape::Line(x1, y1-2, x1, y1+2, 1.0f,
+																				sf::Color(0, 0, 255)));
+	
+	App->Draw(sf::Shape::Line(x2-2, y2, x2+2, y2, 1.0f, 
+																				sf::Color(0, 0, 255)));
+	App->Draw(sf::Shape::Line(x2, y2-2, x2, y2+2, 1.0f,
+																				sf::Color(0, 0, 255)));
 }

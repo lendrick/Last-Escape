@@ -27,6 +27,7 @@ public:
 	virtual void collide(Actor& otherActor);
 	virtual void update(double dt);
 	virtual void collideGround();
+	virtual void collideWall();
 private:
 	double lifetime;
 	double bulletTime;

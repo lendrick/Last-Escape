@@ -35,7 +35,7 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 
 	dying = false;
 
-	setDrawOffset(32, 40);
+	setDrawOffset(32, 15);
 	setFrameSize(64, 32);
 
 	//pick a random death sound

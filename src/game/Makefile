@@ -57,6 +57,47 @@ edit_cache:
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: install/local
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -208,6 +249,30 @@ BossSpider.cpp.s:
 	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/BossSpider.cpp.s
 .PHONY : BossSpider.cpp.s
 
+Bumper.o: Bumper.cpp.o
+.PHONY : Bumper.o
+
+# target to build an object file
+Bumper.cpp.o:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Bumper.cpp.o
+.PHONY : Bumper.cpp.o
+
+Bumper.i: Bumper.cpp.i
+.PHONY : Bumper.i
+
+# target to preprocess a source file
+Bumper.cpp.i:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Bumper.cpp.i
+.PHONY : Bumper.cpp.i
+
+Bumper.s: Bumper.cpp.s
+.PHONY : Bumper.s
+
+# target to generate assembly for a file
+Bumper.cpp.s:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Bumper.cpp.s
+.PHONY : Bumper.cpp.s
+
 Collectible.o: Collectible.cpp.o
 .PHONY : Collectible.o
 
@@ -327,6 +392,30 @@ EnemyFlyer.s: EnemyFlyer.cpp.s
 EnemyFlyer.cpp.s:
 	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/EnemyFlyer.cpp.s
 .PHONY : EnemyFlyer.cpp.s
+
+EnemyPatroller.o: EnemyPatroller.cpp.o
+.PHONY : EnemyPatroller.o
+
+# target to build an object file
+EnemyPatroller.cpp.o:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/EnemyPatroller.cpp.o
+.PHONY : EnemyPatroller.cpp.o
+
+EnemyPatroller.i: EnemyPatroller.cpp.i
+.PHONY : EnemyPatroller.i
+
+# target to preprocess a source file
+EnemyPatroller.cpp.i:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/EnemyPatroller.cpp.i
+.PHONY : EnemyPatroller.cpp.i
+
+EnemyPatroller.s: EnemyPatroller.cpp.s
+.PHONY : EnemyPatroller.s
+
+# target to generate assembly for a file
+EnemyPatroller.cpp.s:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/EnemyPatroller.cpp.s
+.PHONY : EnemyPatroller.cpp.s
 
 EnemyShooter.o: EnemyShooter.cpp.o
 .PHONY : EnemyShooter.o
@@ -544,6 +633,30 @@ PlayerBullet.cpp.s:
 	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/PlayerBullet.cpp.s
 .PHONY : PlayerBullet.cpp.s
 
+Sensor.o: Sensor.cpp.o
+.PHONY : Sensor.o
+
+# target to build an object file
+Sensor.cpp.o:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Sensor.cpp.o
+.PHONY : Sensor.cpp.o
+
+Sensor.i: Sensor.cpp.i
+.PHONY : Sensor.i
+
+# target to preprocess a source file
+Sensor.cpp.i:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Sensor.cpp.i
+.PHONY : Sensor.cpp.i
+
+Sensor.s: Sensor.cpp.s
+.PHONY : Sensor.s
+
+# target to generate assembly for a file
+Sensor.cpp.s:
+	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Sensor.cpp.s
+.PHONY : Sensor.cpp.s
+
 Sound.o: Sound.cpp.o
 .PHONY : Sound.o
 
@@ -663,30 +776,6 @@ Teleport.s: Teleport.cpp.s
 Teleport.cpp.s:
 	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/Teleport.cpp.s
 .PHONY : Teleport.cpp.s
-
-TempPlayer.o: TempPlayer.cpp.o
-.PHONY : TempPlayer.o
-
-# target to build an object file
-TempPlayer.cpp.o:
-	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/TempPlayer.cpp.o
-.PHONY : TempPlayer.cpp.o
-
-TempPlayer.i: TempPlayer.cpp.i
-.PHONY : TempPlayer.i
-
-# target to preprocess a source file
-TempPlayer.cpp.i:
-	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/TempPlayer.cpp.i
-.PHONY : TempPlayer.cpp.i
-
-TempPlayer.s: TempPlayer.cpp.s
-.PHONY : TempPlayer.s
-
-# target to generate assembly for a file
-TempPlayer.cpp.s:
-	cd /home/poss/game/src && $(MAKE) -f game/CMakeFiles/lastescape.dir/build.make game/CMakeFiles/lastescape.dir/TempPlayer.cpp.s
-.PHONY : TempPlayer.cpp.s
 
 Ui.o: Ui.cpp.o
 .PHONY : Ui.o
@@ -863,7 +952,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... lastescape"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... Actor.o"
 	@echo "... Actor.i"
@@ -877,6 +970,9 @@ help:
 	@echo "... BossSpider.o"
 	@echo "... BossSpider.i"
 	@echo "... BossSpider.s"
+	@echo "... Bumper.o"
+	@echo "... Bumper.i"
+	@echo "... Bumper.s"
 	@echo "... Collectible.o"
 	@echo "... Collectible.i"
 	@echo "... Collectible.s"
@@ -892,6 +988,9 @@ help:
 	@echo "... EnemyFlyer.o"
 	@echo "... EnemyFlyer.i"
 	@echo "... EnemyFlyer.s"
+	@echo "... EnemyPatroller.o"
+	@echo "... EnemyPatroller.i"
+	@echo "... EnemyPatroller.s"
 	@echo "... EnemyShooter.o"
 	@echo "... EnemyShooter.i"
 	@echo "... EnemyShooter.s"
@@ -919,6 +1018,9 @@ help:
 	@echo "... PlayerBullet.o"
 	@echo "... PlayerBullet.i"
 	@echo "... PlayerBullet.s"
+	@echo "... Sensor.o"
+	@echo "... Sensor.i"
+	@echo "... Sensor.s"
 	@echo "... Sound.o"
 	@echo "... Sound.i"
 	@echo "... Sound.s"
@@ -934,9 +1036,6 @@ help:
 	@echo "... Teleport.o"
 	@echo "... Teleport.i"
 	@echo "... Teleport.s"
-	@echo "... TempPlayer.o"
-	@echo "... TempPlayer.i"
-	@echo "... TempPlayer.s"
 	@echo "... Ui.o"
 	@echo "... Ui.i"
 	@echo "... Ui.s"

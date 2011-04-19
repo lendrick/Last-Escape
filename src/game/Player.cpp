@@ -30,7 +30,7 @@ const double energy_cost_jump = 0.f;
 const double energy_recharge_rate = 5.f; // units per second
 static const int start_lives = 3;
 
-struct WeaponDesc {
+/*struct WeaponDesc {
 	const char* name;
 	double energy_cost;
 	double reload_time;
@@ -49,27 +49,30 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 	{"Way Overcharged Blaster", 2.0f, 0.01f, 5.0f,
 		2, 3, 32.0f },
-};
+};*/
 
 Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
 	lives = start_lives;
-	setDrawOffset(64, 96);
+	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
+	last_jump_time = 0;
 	energyBalls = 0;
 	immunityTime = 1.0;
 	recoveryTime = 0.2;
 	recoveryTimer = 0;
-	currentWeapon = 0;
+	//currentWeapon = 0;
 	baseMaxEnergy = 100.0f;
 	energyPerLevel = 10.0f;
 	energy_max = baseMaxEnergy;
 	currentExperience = 0;
 	actorName = "Player";
+
+	currentWeapon = new Blaster();
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -87,6 +90,7 @@ Player::Player(double x, double y)
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
+	last_jump_time = 0.0f;
 	dying = false;
 
 	energy = energy_max;
@@ -131,7 +135,7 @@ StartPoint * Player::findStart() {
 }
 
 void Player::upgradeWeapon() {
-	currentWeapon = min(currentWeapon+1, num_weapon_types-1);
+	currentWeapon.upgradeWeapon();
 }
 
 void Player::jump(double dt) {
@@ -140,9 +144,13 @@ void Player::jump(double dt) {
 	const double jet_cost = 35;
 	const double jet_speed_max = 250;
 	const double jet_wait = 0.4f;
+	const double jump_wait = 0.3f;
+	
+	//cout << "jumping\n";
 
-	if (body->v.y == 0 && isGrounded())
+	if (isGrounded() && time - last_jump_time > jump_wait)
 	{
+		//cout << "jump!\n";
 		if (energy < energy_cost_jump)
 			return;
 
@@ -152,6 +160,11 @@ void Player::jump(double dt) {
 	}
 	else
 	{
+		//if(isGrounded())
+		//	cout << "too soon " << time - last_jump_time << "\n";
+		//else 
+		//	cout << "not grounded\n";
+		
 		// Can't jet immediately after jumping
 		if (time - last_jump_time < jet_wait)
 			return;
@@ -171,7 +184,7 @@ void Player::jump(double dt) {
 }
 
 void Player::shoot() {
-	const double shoot_reload_timer = 0.5f;
+	/*const double shoot_reload_timer = 0.5f;
 
 	if (energy < weapons[currentWeapon].energy_cost)
 		return;
@@ -204,7 +217,9 @@ void Player::shoot() {
 		}
 
 		//resetCurrentAnimation();
-	}
+	}*/
+
+	currentWeapon->shoot(this);
 }
 
 void Player::crouch() {
@@ -382,10 +397,12 @@ void Player::die() {
 	lives--;
 	dying = true;
 	this->setCurrentAnimation("die");
-	currentWeapon = 0;
+	//currentWeapon = 0;
+	currentWeapon->reset();
 }
 
 void Player::onDestroy() {
+	delete currentWeapon;
 	if (debugMode)
 		cout << "player destroyed\n";
 }

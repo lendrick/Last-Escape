@@ -26,6 +26,7 @@
 #include <chipmunk/chipmunk.h>
 #include <string>
 #include <fstream>
+#include <list>
 #include "Utils.h"
 #include "globals.h"
 
@@ -39,6 +40,17 @@ const int VIEW_TILES_Y = 16;
 const int MAP_TILES_X = 1024;
 const int MAP_TILES_Y = 256;
 const int TILE_COUNT = 1024;
+
+
+struct MapSegment {
+	MapSegment(cpVect p1, cpVect p2, int type);
+	~MapSegment();
+	void draw();
+	
+	cpShape * seg;
+	double x1, y1, x2, y2;
+	sf::Color color;
+};
 
 class Map {
 private:
@@ -81,7 +93,7 @@ public:
 	int vBetween(int t1, int t2);
 	int hBetween(int t1, int t2);
 	
-	void createSegment(cpVect p1, cpVect p2, int type);
+	//void createSegment(cpVect p1, cpVect p2, int type);
 
 	cpVect sfml2cp(const sf::Vector2f& v) const;
 	sf::Vector2f cp2sfml(const cpVect& v) const;
@@ -115,8 +127,9 @@ static int map_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
 static int map_colliding(cpArbiter *arb, cpSpace *space, void *data);
 static void map_end_collide(cpArbiter *arb, cpSpace *space, void *data);
 
-static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
-static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+//static int map_begin_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+static int map_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
+//static void map_end_ground_collide(cpArbiter *arb, cpSpace *space, void *data);
 
 static int map_bumper_begin_collide(cpArbiter *arb, cpSpace *space, void *data);
 static int map_bumper_colliding(cpArbiter *arb, cpSpace *space, void *data);

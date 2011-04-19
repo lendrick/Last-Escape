@@ -116,19 +116,21 @@ void Actor::draw() {
 		cpVect pos;
 		double px, py;
 		getPos(px, py);
-		if(body) py += height;
+		//if(body) py += height;
 		sf::FloatRect cam = gameView.GetRect();
 		
 		double radius = height + width;  // manhattan distance, for speed.
 		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
-			if(body && body->a) {
-				sprite.SetRotation(rad2deg(body->a));
+			if(body && body->a != 0) {
+				sprite.SetRotation(-rad2deg(body->a));
+				//if(body->a > 0)
+					//cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
 			} else {
 				sprite.SetRotation(0);
 			}
 					
 			sprite.FlipY(true);
-			sprite.SetPosition(px + 0.5, py + 0.5);
+			sprite.SetPosition(px, py);
 			App->Draw(sprite);
 		
 			if(debugMode)
@@ -143,10 +145,10 @@ void Actor::draw() {
 				bby2 = bby1 + height;
 				
 				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
-																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(255, 0, 0));
+																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
 				rect.SetPosition(px, py);
 				if(body && body->a) {
-					rect.SetRotation(rad2deg(body->a));
+					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
 				
@@ -206,7 +208,7 @@ void Actor::collideGround() {
 }
 
 void Actor::leaveGround() {
-	grounded--;
+//	grounded--;
 }
 
 void Actor::doUpdate(double dt) {
@@ -218,6 +220,7 @@ void Actor::doUpdate(double dt) {
 			awake = true;
 		}
 		update(dt);
+		grounded = 0;
 	} else if(awake) {
 		awake = false;
 		cpBodySleep(body);
