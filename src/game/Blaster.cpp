@@ -19,36 +19,86 @@
 
 Blaster::Blaster()
 {
-	upgrade = 1;
-	maxUpgrade = 3;
+	upgrade = 0;
+	maxUpgrade = 2;
 
 	std::string tempName[] = {"Blaster", "Overcharged Blaster", "Way Overcharged Blaster"};
-	name.assign( tempName, tempName + 3 );
+	name.assign( tempName, tempName + maxUpgrade );
 
 	double tempEnergyCost[] = {5.0f, 2.5f, 2.0f};
-	energy_cost.assign( tempEnergyCost, tempEnergyCost + 3 );
+	energy_cost.assign( tempEnergyCost, tempEnergyCost + maxUpgrade );
 
 	double tempReloadTime[] = {0.5f, 0.1f, 0.01f};
-	reload_time.assign( tempReloadTime, tempReloadTime + 3 );
+	reload_time.assign( tempReloadTime, tempReloadTime + maxUpgrade );
 
 	double tempAngleVariation[] = {0.0f, 10.0f, 5.0f};
-	angle_variation.assign( tempAngleVariation, tempAngleVariation + 3 );
+	angle_variation.assign( tempAngleVariation, tempAngleVariation + maxUpgrade );
 
 	sprite_row.assign( 3, 2 );
 
 	sprite_count.assign( 3, 3 );
 
 	double tempSpriteSpeed[] = {16.0f, 32.0f, 32.0f};
-	sprite_speed.assign( tempSpriteSpeed, tempSpriteSpeed + 3);
+	sprite_speed.assign( tempSpriteSpeed, tempSpriteSpeed + maxUpgrade );
 }
 
 Blaster::~Blaster() {}
 
-void Blaster::upgrade()
+void Blaster::upgradeWeapon()
 {
-	if ( upgrade > maxUpgrade )
+	if ( upgrade < maxUpgrade )
 	{
 		++upgrade;
 	}
 }
 
+void Blaster::reset()
+{
+	upgrade = 0;
+}
+
+void Blaster::shoot(Player & player)
+{
+	if ( player.energy < energy_cost[upgrade] )
+	{
+		return;
+	}
+
+	if ( (player.time - player.last_shoot_time) > reload_time[upgrade] )
+	{
+		player.last_shoot_time = player.time;
+		player.fireSound->playSound();
+		player.energy -= energy_cost[upgrade];
+
+		double bulletX, bulletY;
+
+		if ( player.getFacing() == Facing::Left )
+		{
+			bulletX = player.body->p.x - 30.0f;
+		}
+		else if ( player.getFacing() == Facing::Right )
+		{
+			bulletX = player.body->p.x + 30.0f;
+		}
+
+		if ( player.crouched )
+		{
+			bulletY = player.body->p.y - 9.0f;
+		}
+		else
+		{
+			bulletY = player.body->p.y + 6.0f;
+		}
+
+		Actor * bullet = new PlayerBullet( bulletX, bulletY, player.getFacing(), angle_variation[upgrade] );
+
+		if ( player.walking )
+		{
+			player.setCurrentAnimation("walkshoot");
+		}
+		else
+		{
+			player.setCurrentAnimation("shoot");
+		}
+	}
+}		

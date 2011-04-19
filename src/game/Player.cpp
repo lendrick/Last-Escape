@@ -30,7 +30,7 @@ const double energy_cost_jump = 0.f;
 const double energy_recharge_rate = 5.f; // units per second
 static const int start_lives = 3;
 
-struct WeaponDesc {
+/*struct WeaponDesc {
 	const char* name;
 	double energy_cost;
 	double reload_time;
@@ -49,7 +49,7 @@ WeaponDesc weapons[num_weapon_types] = {
 		2, 3, 32.0f },
 	{"Way Overcharged Blaster", 2.0f, 0.01f, 5.0f,
 		2, 3, 32.0f },
-};
+};*/
 
 Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
@@ -65,12 +65,14 @@ Player::Player(double x, double y)
 	immunityTime = 1.0;
 	recoveryTime = 0.2;
 	recoveryTimer = 0;
-	currentWeapon = 0;
+	//currentWeapon = 0;
 	baseMaxEnergy = 100.0f;
 	energyPerLevel = 10.0f;
 	energy_max = baseMaxEnergy;
 	currentExperience = 0;
 	actorName = "Player";
+
+	currentWeapon = new Blaster();
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -133,7 +135,7 @@ StartPoint * Player::findStart() {
 }
 
 void Player::upgradeWeapon() {
-	currentWeapon = min(currentWeapon+1, num_weapon_types-1);
+	currentWeapon.upgradeWeapon();
 }
 
 void Player::jump(double dt) {
@@ -182,7 +184,7 @@ void Player::jump(double dt) {
 }
 
 void Player::shoot() {
-	const double shoot_reload_timer = 0.5f;
+	/*const double shoot_reload_timer = 0.5f;
 
 	if (energy < weapons[currentWeapon].energy_cost)
 		return;
@@ -215,7 +217,9 @@ void Player::shoot() {
 		}
 
 		//resetCurrentAnimation();
-	}
+	}*/
+
+	currentWeapon->shoot(this);
 }
 
 void Player::crouch() {
@@ -393,10 +397,12 @@ void Player::die() {
 	lives--;
 	dying = true;
 	this->setCurrentAnimation("die");
-	currentWeapon = 0;
+	//currentWeapon = 0;
+	currentWeapon->reset();
 }
 
 void Player::onDestroy() {
+	delete currentWeapon;
 	if (debugMode)
 		cout << "player destroyed\n";
 }

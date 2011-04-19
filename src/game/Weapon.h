@@ -18,6 +18,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include "Player.h"
+#include "PlayerBullet.h"
 #include <string>
 #include <list>
 #include <vector>
@@ -26,22 +28,23 @@ class Weapon
 {
 	public:
 
-	virtual void upgrade() = 0;
-	virtual void shoot() = 0;
+	virtual void reset() = 0;
+	virtual void upgradeWeapon() = 0;
+	virtual void shoot(Player & player) = 0;
 	virtual ~Weapon() {}
 
-	int getUpgrade const { return upgrade; }
-	string getName const { return name[upgrade]; }
-	double getEnergyCost const { return energy_cost[upgrade]; }
-	double getReloadTime const { return reload_time[upgrade]; }
+	int getUpgrade() const { return upgrade; }
+	std::string getName() const { return name[upgrade]; }
+	double getEnergyCost() const { return energy_cost[upgrade]; }
+	double getReloadTime() const { return reload_time[upgrade]; }
 
 	protected:
 
 	int upgrade;
 	int maxUpgrade;
-	vector<std::string> name;
-	vector<double> energy_cost;
-	vector<double> reload_time;
+	std::vector<std::string> name;
+	std::vector<double> energy_cost;
+	std::vector<double> reload_time;
 };
 
 #endif

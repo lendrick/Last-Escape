@@ -27,15 +27,16 @@ class Blaster : public Weapon
 	Blaster();
 	~Blaster();
 
-	void upgrade();
-	void shoot();
+	void reset();
+	void upgradeWeapon();
+	void shoot(Player & player);
 
 	protected:
 
-	vector<double> angle_variation;
-	vector<int> sprite_row;
-	vector<int> sprite_count;
-	vector<double> sprite_speed;
+	std::vector<double> angle_variation;
+	std::vector<int> sprite_row;
+	std::vector<int> sprite_count;
+	std::vector<double> sprite_speed;
 
 };
 
