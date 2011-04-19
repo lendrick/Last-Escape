@@ -56,10 +56,11 @@ Player::Player(double x, double y)
 	setImage("xeon.png");
 
 	lives = start_lives;
-	setDrawOffset(64, 96);
+	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
 	shoot_duration = .2f;
 	last_shoot_time = 0;
+	last_jump_time = 0;
 	energyBalls = 0;
 	immunityTime = 1.0;
 	recoveryTime = 0.2;
@@ -87,6 +88,7 @@ Player::Player(double x, double y)
 void Player::init() {
 	time = 0.f;
 	last_shoot_time = -100.f;
+	last_jump_time = 0.0f;
 	dying = false;
 
 	energy = energy_max;
@@ -140,9 +142,13 @@ void Player::jump(double dt) {
 	const double jet_cost = 35;
 	const double jet_speed_max = 250;
 	const double jet_wait = 0.4f;
+	const double jump_wait = 0.3f;
+	
+	//cout << "jumping\n";
 
-	if (body->v.y == 0 && isGrounded())
+	if (isGrounded() && time - last_jump_time > jump_wait)
 	{
+		//cout << "jump!\n";
 		if (energy < energy_cost_jump)
 			return;
 
@@ -152,6 +158,11 @@ void Player::jump(double dt) {
 	}
 	else
 	{
+		//if(isGrounded())
+		//	cout << "too soon " << time - last_jump_time << "\n";
+		//else 
+		//	cout << "not grounded\n";
+		
 		// Can't jet immediately after jumping
 		if (time - last_jump_time < jet_wait)
 			return;

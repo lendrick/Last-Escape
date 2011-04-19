@@ -88,6 +88,9 @@ public:
 	virtual void onLevelUp(int newLevel) {}
 	
 	virtual void collideGround();
+	virtual void collideWall() {}
+	
+	//TODO  Get rid of this function.
 	virtual void leaveGround();
 	
 	void teleport(double x, double y, double vx, double vy);

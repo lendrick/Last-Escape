@@ -39,9 +39,9 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	body->v.y = speed_y;
 	
 	if(facing_direction == Facing::Right) 
-		body->a = deg2rad(angle - 90);
+		body->a = deg2rad(-angle - 270);
 	else
-		body->a = deg2rad(angle - 270);
+		body->a = deg2rad(-angle - 90);
 	
 	setVelocityFunc(no_gravity);
 	
@@ -50,7 +50,7 @@ AnimatedActor(x, y, 15.0f, 7.0f)
 	shape->layers = PhysicsLayer::Map|PhysicsLayer::PlayerBullet;
 	shape->collision_type = PhysicsType::PlayerBullet;
 	
-	setDrawOffset(8, 13);
+	setDrawOffset(8, 6);
 	setFrameSize(16, 16);
 	damage = 1;
 
@@ -95,3 +95,8 @@ void PlayerBullet::update(double dt) {
 void PlayerBullet::collideGround() {
 	destroy();
 }
+
+void PlayerBullet::collideWall() {
+	destroy();
+}
+
