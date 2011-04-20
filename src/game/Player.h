@@ -18,11 +18,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "Weapon.h"
 #include "Map.h"
 #include "AnimatedActor.h"
 #include "Sound.h"
 #include "globals.h"
 #include "StartPoint.h"
+#include "Blaster.h"
+
 
 class Player : public AnimatedActor {
 public:
@@ -56,7 +59,7 @@ public:
 
 	void upgradeWeapon();
 
-	int currentWeapon;
+	//int currentWeapon;
 
 	double time;
 	double last_shoot_time;
@@ -87,6 +90,7 @@ public:
 	Sound * dieSound;
 	
 	int currentExperience;
+
 };
 
 

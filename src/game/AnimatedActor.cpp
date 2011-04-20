@@ -167,6 +167,10 @@ void AnimatedActor::setFacing(int direction) {
 	facing_direction = direction;
 }
 
+int AnimatedActor::getFacing() const
+{
+	return facing_direction;
+}
 
 void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {
