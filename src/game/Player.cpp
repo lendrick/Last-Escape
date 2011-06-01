@@ -421,7 +421,7 @@ void Player::onAnimationComplete(std::string anim) {
 					static_cast<Collectible *>(*it)->reset();
 				}
 			}
-			CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x - 16, body->p.y - 48);
+			CollectibleEnergyBall * ball = new CollectibleEnergyBall(body->p.x - 16, body->p.y);
 
 			init();
 		} else {
