@@ -18,10 +18,13 @@
 #pragma once
 #include "globals.h"
 #include "AnimatedActor.h"
+#include "PlayerBullet.h"
 
 class PhysicsCrate : public AnimatedActor
 {
 public:
 	PhysicsCrate(double x, double y);
 	virtual ~PhysicsCrate();
+
+	void collide(Actor& otherActor);
 };
