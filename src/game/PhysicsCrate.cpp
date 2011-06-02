@@ -24,6 +24,8 @@ PhysicsCrate::PhysicsCrate(double x, double y)
 	cpBodySetMoment(body, 7000.0);
 	shape->collision_type = PhysicsType::Crate;
 	shape->e = 0.0;
+
+	life = 4;
 }
 
 PhysicsCrate::~PhysicsCrate()
