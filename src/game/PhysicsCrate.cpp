@@ -22,7 +22,7 @@ PhysicsCrate::PhysicsCrate(double x, double y)
 	cpBodySetMass(body, 30.0);
 	//cout << "crate mass: " << body->m << "\n";
 	cpBodySetMoment(body, 7000.0);
-	shape->collision_type = PhysicsType::Ground;
+	shape->collision_type = PhysicsType::Crate;
 	shape->e = 0.0;
 }
 

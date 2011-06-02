@@ -19,6 +19,7 @@
 #define PLAYERBULLET_H
 
 #include "AnimatedActor.h"
+#include "PhysicsCrate.h"
 
 class PlayerBullet  : public AnimatedActor
 {

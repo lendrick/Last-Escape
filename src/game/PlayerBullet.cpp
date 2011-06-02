@@ -77,7 +77,16 @@ void PlayerBullet::collide(Actor& otherActor) {
 			//g_player->addExperience(otherActor.getExperienceValue());
 		//}
 		die();
+		cout << "It's an enemy!" << endl;
 	}
+	else if ( dynamic_cast<PhysicsCrate*>(&otherActor) != NULL )
+	{
+		((PhysicsCrate&)otherActor).doDamage(damage);
+		die();
+		cout << "it's a crate!" << endl;
+	}
+	else
+		cout << "we don't know!" << endl;
 }
 
 void PlayerBullet::update(double dt) {

@@ -637,6 +637,26 @@ bool Map::setupPhysics()
 	
 	cpSpaceAddCollisionHandler(
 		physSpace, 
+		PhysicsType::PlayerBullet, PhysicsType::Crate, //types of objects
+		map_begin_collide, // callback on initial collision
+		map_colliding, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		map_end_collide, // after the shapes separate
+		NULL // data pointer
+	);
+
+	cpSpaceAddCollisionHandler(
+		physSpace,
+		PhysicsType::Player, PhysicsType::Crate, //types of objects
+		NULL, // callback on initial collision
+		map_ground_collide, // any time the shapes are touching
+		NULL, // after the collision has been processed
+		NULL, // after the shapes separate
+		NULL // data pointer
+	);
+
+	cpSpaceAddCollisionHandler(
+		physSpace,
 		PhysicsType::Player, PhysicsType::Ground, //types of objects
 		NULL, //map_begin_ground_collide, // callback on initial collision
 		map_ground_collide, //NULL, // any time the shapes are touching
