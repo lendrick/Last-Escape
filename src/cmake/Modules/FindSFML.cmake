@@ -43,8 +43,8 @@ if(SFML_FIND_VERSION AND SFML_INCLUDE_DIR)
     math(EXPR SFML_REQUESTED_VERSION "${SFML_FIND_VERSION_MAJOR} * 10 + ${SFML_FIND_VERSION_MINOR}")
     
     #ugly, but i need to cheat
-    set (SFML_VERSION_MAJOR "1")
-    set (SFML_VERSION_MINOR "6")
+    set (SFML_VERSION_MAJOR "2")
+    set (SFML_VERSION_MINOR "0")
 
     # if we could extract them, compare with the requested version number
     if (SFML_VERSION_MAJOR)
