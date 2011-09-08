@@ -43,7 +43,7 @@ void Input::poll() {
 	sf::Event Event;
 
 
-	while (App->GetEvent(Event))
+	while (App->PollEvent(Event))
 	{
 		// Close window : exit
 		if (Event.Type == sf::Event::Closed)
@@ -52,7 +52,7 @@ void Input::poll() {
 		if (ui_event(Event))
 			continue;
 
-		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Key::Escape)
+		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Keyboard::Escape)
 			ui_togglePause();
 
 		if (!ui_menuOpen()) {
@@ -63,19 +63,19 @@ void Input::poll() {
 					inputShoot = true;
 				if (Event.Key.Code == inputs[INPUT_CROUCH].key)
 					inputCrouch = true;
-			} else if(Event.Type == sf::Event::JoyButtonPressed 
-				&& Event.JoyButton.JoystickId == 0) {
-				if(Event.JoyButton.Button == 0) {
+			} else if(Event.Type == sf::Event::JoystickButtonPressed
+				&& Event.JoystickButton.JoystickId == 0) {
+				if(Event.JoystickButton.Button == 0) {
 					inputShoot = true;
-				} else if(Event.JoyButton.Button == 1) {
+				} else if(Event.JoystickButton.Button == 1) {
 					inputJump = true;
 				}
 			} else if(Event.Type == sf::Event::KeyReleased) {
 				if(Event.Key.Code == inputs[INPUT_JUMP].key)
 					inputStopJump = true;
-			} else if (Event.Type == sf::Event::JoyButtonReleased
-				&& Event.JoyButton.JoystickId == 0) {
-				if(Event.JoyButton.Button == 1) {
+			} else if (Event.Type == sf::Event::JoystickButtonReleased
+				&& Event.JoystickButton.JoystickId == 0) {
+				if(Event.JoystickButton.Button == 1) {
 					inputStopJump = true;
 				}
 			}
@@ -89,16 +89,15 @@ void Input::poll() {
 	}
 
 	if (!ui_menuOpen()) {
-		const sf::Input& appInput = App->GetInput();
 
-		if(appInput.IsKeyDown(inputs[INPUT_LEFT].key) && !appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
+		if(sf::Keyboard::IsKeyPressed(inputs[INPUT_LEFT].key) && !sf::Keyboard::IsKeyPressed(inputs[INPUT_RIGHT].key)) {
 			inputDirection = Facing::Left;
-		} else if(appInput.IsKeyDown(inputs[INPUT_RIGHT].key)) {
+		} else if(sf::Keyboard::IsKeyPressed(inputs[INPUT_RIGHT].key)) {
 			inputDirection = Facing::Right;
 		} 
 		
-		double xAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisX);
-		double yAxis = appInput.GetJoystickAxis(0, sf::Joy::AxisY);
+		double xAxis = sf::Joystick::GetAxisPosition(0, sf::Joystick::X);
+		double yAxis = sf::Joystick::GetAxisPosition(0, sf::Joystick::Y);
 		
 		if(xAxis > 50) 
 			inputDirection = Facing::Right;
@@ -109,15 +108,15 @@ void Input::poll() {
 			inputCrouch = true;
 		
 		
-		if(appInput.IsKeyDown(inputs[INPUT_CROUCH].key)) {
+		if(sf::Keyboard::IsKeyPressed(inputs[INPUT_CROUCH].key)) {
 			inputCrouch = true;
 		}
 		
-		if(appInput.IsJoystickButtonDown(0, 0)) {
+		if(sf::Joystick::IsButtonPressed(0, 0)) {
 			inputShoot = true;
 		}
 		
-		if(appInput.IsJoystickButtonDown(0, 1)) {
+		if(sf::Joystick::IsButtonPressed(0, 1)) {
 			inputCrouch = true;
 		}
 	}
@@ -151,14 +150,14 @@ bool Input::shooting()
 {
 	if (ui_menuOpen())
 		return false;
-	return inputShoot || App->GetInput().IsKeyDown(inputs[INPUT_SHOOT].key) || App->GetInput().IsJoystickButtonDown(0, 0);
+	return inputShoot || sf::Keyboard::IsKeyPressed(inputs[INPUT_SHOOT].key) || sf::Joystick::IsButtonPressed(0, 0);
 }
 
 bool Input::jumping()
 {
 	if (ui_menuOpen())
 		return false;
-	return inputJump || App->GetInput().IsKeyDown(inputs[INPUT_JUMP].key) || App->GetInput().IsJoystickButtonDown(0, 1);
+	return inputJump || sf::Keyboard::IsKeyPressed(inputs[INPUT_JUMP].key) || sf::Joystick::IsButtonPressed(0, 1);
 }
 
 bool Input::stopJump() {
@@ -172,5 +171,5 @@ bool Input::crouching()
 {
 	if (ui_menuOpen())
 		return false;
-	return inputCrouch || App->GetInput().IsKeyDown(inputs[INPUT_CROUCH].key) || App->GetInput().GetJoystickAxis(0, sf::Joy::AxisY) > 50;
+	return inputCrouch || sf::Keyboard::IsKeyPressed(inputs[INPUT_CROUCH].key) || sf::Joystick::GetAxisPosition(0, sf::Joystick::Y) > 50;
 }

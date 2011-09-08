@@ -45,7 +45,7 @@ private:
 };
 
 typedef struct InputItem {
-	sf::Key::Code key;
+	sf::Keyboard::Key key;
 	sf::String text;
 } InputItem;
 
