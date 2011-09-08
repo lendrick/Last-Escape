@@ -11,7 +11,7 @@ if (WIN32)
 	if (NOT DEFINED WINDEPS)
 		set (WINDEPS "${CMAKE_SOURCE_DIR}/windeps")
 	endif()
-	set (SFMLDIR "${WINDEPS}/SFML-1.6")
+	set (SFMLDIR "${WINDEPS}/SFML")
 endif(WIN32)
 
 #Variables to control the build type
@@ -28,7 +28,7 @@ if(UNIX)
 endif(UNIX)
 
 #find the required libraries
-find_package (SFML 1.6 COMPONENTS system window graphics audio REQUIRED)
+find_package (SFML 2.0 COMPONENTS system window graphics audio REQUIRED)
 include_directories (${SFML_INCLUDE_DIR})
 
 #adding the physics library
