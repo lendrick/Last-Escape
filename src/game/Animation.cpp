@@ -38,9 +38,9 @@ void Animation::setFrameSize(int fw, int fh) {
 }
 
 void Animation::addFrame(int num, double duration) {
-	const sf::Image * img = sprite.GetImage();
-	int w = img->GetWidth();
-	int h = img->GetHeight();
+	const sf::Texture * tex = sprite.GetTexture();
+	int w = tex->GetWidth();
+	int h = tex->GetHeight();
 	
 	
 	//std::cout << "*** " << name << "\n";
