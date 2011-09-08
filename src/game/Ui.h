@@ -19,6 +19,7 @@
 #include "globals.h"
 #include "SFML/System.hpp"
 #include "Player.h"
+#include <stdio.h>
 
 #define UI_CONTAINER	0
 #define UI_BUTTON	1
@@ -36,13 +37,13 @@ public:
 	void setPos(double px, double py);
 	void getPos(double &px, double &py);
 
-	void setText(const sf::Unicode::Text &Text);
+	void setText(const sf::String &Text);
 	sf::String getText();
 	void setTextColor(int r, int g, int b);
 	void setTextSize(int sz);
 
 	bool toggleBg();
-	void setBg(const sf::Unicode::Text &Text);
+	void setBg(const sf::String &Text);
 
 	void setClick(void (*func)());
 	void setSlide(void (*func)(double v));
@@ -65,10 +66,10 @@ public:
 	Widget *child;
 
 protected:
-	sf::Image bgi;
+	sf::Texture bgi;
 	sf::Sprite background;
 	sf::Sprite slider;
-	sf::String text;
+	sf::Text text;
 
 	Widget *next;
 	Widget *parent;
@@ -99,7 +100,7 @@ extern Widget *ui_pause;
 
 void ui_init(void);
 int ui_event(sf::Event &Event);
-void ui_popupImage(const sf::Unicode::Text &path, void (*func)());
+void ui_popupImage(const sf::String &path, void (*func)());
 void ui_render(Player * p);
 void ui_exit(void);
 void ui_start();

@@ -37,7 +37,7 @@ Widget *ui_controls[5];
 Widget *ui_snd = NULL;
 Widget *ui_popup = NULL;
 void (*ui_popup_close)() = NULL;
-sf::Image ui_background;
+sf::Texture ui_background;
 
 Widget::Widget(int tp, Widget *par) {
 	type = tp;
@@ -61,7 +61,7 @@ Widget::Widget(int tp, Widget *par) {
 
 	if (parent) {
 		if (tp != UI_LABEL && tp != UI_TEXT) {
-			background.SetImage(ui_background);
+			background.SetTexture(ui_background);
 			if (tp == UI_CONTAINER) {
 				setSize(203,203);
 				background.SetSubRect(sf::IntRect(0,0,202,203));
@@ -77,7 +77,7 @@ Widget::Widget(int tp, Widget *par) {
 			}else if (tp == UI_HSLIDE) {
 				setSize(150,3);
 				background.SetSubRect(sf::IntRect(0,203,150,206));
-				slider.SetImage(ui_background);
+				slider.SetTexture(ui_background);
 				slider.SetSubRect(sf::IntRect(203,40,223,60));
 			}
 		}
@@ -135,23 +135,23 @@ void Widget::getPos(double &px, double &py) {
 
 void Widget::setTextColor(int r, int g, int b)
 {
-	text.SetColor(sf::Color(r,g,b));
+	text.SetColor(sf::Color(r,g,b, 1)); // TODO give color
 }
 
-void Widget::setText(const sf::Unicode::Text &Text)
+void Widget::setText(const sf::String &Text)
 {
-	text.SetText(Text);
+	text.SetString(Text.ToAnsiString());
 }
 
 sf::String Widget::getText()
 {
-	return text;
+	return text.GetString();
 }
 
 void Widget::setTextSize(int sz)
 {
 	size = sz;
-	text.SetSize((double)size);
+	text.SetScale((double)size, size); //TODO make sure that's right
 }
 
 void Widget::setClick(void (*func)())
@@ -207,11 +207,11 @@ bool Widget::toggleBg()
 	}
 }
 
-void Widget::setBg(const sf::Unicode::Text &Text)
+void Widget::setBg(const sf::String &Text)
 {
-	bgi.LoadFromFile(Text);
-	bgi.SetSmooth(false);
-	background.SetImage(bgi);
+	bgi.LoadFromFile(Text.ToAnsiString());
+//	bgi.SetSmooth(false);
+	background.SetTexture(bgi);
 	int w = (int)bgi.GetWidth();
 	int h = (int)bgi.GetHeight();
 	background.SetSubRect(sf::IntRect(0,0,w,h));
@@ -254,7 +254,7 @@ void Widget::draw() {
 		sf::FloatRect p = text.GetRect();
 		parent->getPos(x,y);
 		if (type == UI_BUTTON || type == UI_PBAR) {
-			x += (pos_x+(width/2))-(p.GetWidth()/2);
+			x += (pos_x+(width/2))-(p.Width/2);
 		}else{
 			x += pos_x;
 		}
@@ -437,82 +437,82 @@ void ui_setEvent(sf::Event &Event)
 			sprintf(buf,"%c",(char)Event.Key.Code);
 		}else{
 			switch (Event.Key.Code) {
-			case sf::Key::LBracket:
+			case sf::Keyboard::LBracket:
 				sprintf(buf,"(");
 				break;
-			case sf::Key::RBracket:
+			case sf::Keyboard::RBracket:
 				sprintf(buf,")");
 				break;
-			case sf::Key::SemiColon:
+			case sf::Keyboard::SemiColon:
 				sprintf(buf,";");
 				break;
-			case sf::Key::Comma:
+			case sf::Keyboard::Comma:
 				sprintf(buf,",");
 				break;
-			case sf::Key::Period:
+			case sf::Keyboard::Period:
 				sprintf(buf,".");
 				break;
-			case sf::Key::Quote:
+			case sf::Keyboard::Quote:
 				sprintf(buf,"\"");
 				break;
-			case sf::Key::Slash:
+			case sf::Keyboard::Slash:
 				sprintf(buf,"/");
 				break;
-			case sf::Key::BackSlash:
+			case sf::Keyboard::BackSlash:
 				sprintf(buf,"\\");
 				break;
-			case sf::Key::Tilde:
+			case sf::Keyboard::Tilde:
 				sprintf(buf,"`");
 				break;
-			case sf::Key::Equal:
+			case sf::Keyboard::Equal:
 				sprintf(buf,"=");
 				break;
-			case sf::Key::Dash:
+			case sf::Keyboard::Dash:
 				sprintf(buf,"-");
 				break;
-			case sf::Key::Space:
+			case sf::Keyboard::Space:
 				sprintf(buf,"Space");
 				break;
-			case sf::Key::Left:
+			case sf::Keyboard::Left:
 				sprintf(buf,"Left Arrow");
 				break;
-			case sf::Key::Right:
+			case sf::Keyboard::Right:
 				sprintf(buf,"Right Arrow");
 				break;
-			case sf::Key::Up:
+			case sf::Keyboard::Up:
 				sprintf(buf,"Up Arrow");
 				break;
-			case sf::Key::Down:
+			case sf::Keyboard::Down:
 				sprintf(buf,"Down Arrow");
 				break;
-			case sf::Key::Numpad0:
+			case sf::Keyboard::Numpad0:
 				sprintf(buf,"np-0");
 				break;
-			case sf::Key::Numpad1:
+			case sf::Keyboard::Numpad1:
 				sprintf(buf,"np-1");
 				break;
-			case sf::Key::Numpad2:
+			case sf::Keyboard::Numpad2:
 				sprintf(buf,"np-2");
 				break;
-			case sf::Key::Numpad3:
+			case sf::Keyboard::Numpad3:
 				sprintf(buf,"np-3");
 				break;
-			case sf::Key::Numpad4:
+			case sf::Keyboard::Numpad4:
 				sprintf(buf,"np-4");
 				break;
-			case sf::Key::Numpad5:
+			case sf::Keyboard::Numpad5:
 				sprintf(buf,"np-5");
 				break;
-			case sf::Key::Numpad6:
+			case sf::Keyboard::Numpad6:
 				sprintf(buf,"np-6");
 				break;
-			case sf::Key::Numpad7:
+			case sf::Keyboard::Numpad7:
 				sprintf(buf,"np-7");
 				break;
-			case sf::Key::Numpad8:
+			case sf::Keyboard::Numpad8:
 				sprintf(buf,"np-8");
 				break;
-			case sf::Key::Numpad9:
+			case sf::Keyboard::Numpad9:
 				sprintf(buf,"np-9");
 				break;
 			default:
@@ -523,14 +523,14 @@ void ui_setEvent(sf::Event &Event)
 		for (int i=0; i<5; i++) {
 			if (i != ui_setter && inputs[i].key == Event.Key.Code) {
 				ui_controls[i]->setText("???");
-				inputs[i].key = sf::Key::Count;
+				inputs[i].key = sf::Keyboard::KeyCount;
 			}
 		}
 		ui_setter = -1;
 	}
 }
 
-void ui_popupImage(const sf::Unicode::Text &path, void (*func)())
+void ui_popupImage(const sf::String &path, void (*func)())
 {
 	ui_popup->setBg(path);
 	int w;
@@ -560,7 +560,7 @@ void ui_setJump()
 {
 	char buf[255];
 	ui_setter = INPUT_JUMP;
-	sf::Unicode::Text txt = ui_controls[INPUT_JUMP]->getText().GetText();
+	sf::String txt = ui_controls[INPUT_JUMP]->getText();
 	sprintf(buf,"-- %s --",static_cast<std::string>(txt).c_str());
 	ui_controls[INPUT_JUMP]->setText(buf);
 }
@@ -569,7 +569,7 @@ void ui_setLeft()
 {
 	char buf[255];
 	ui_setter = INPUT_LEFT;
-	sf::Unicode::Text txt = ui_controls[INPUT_LEFT]->getText().GetText();
+	sf::String txt = ui_controls[INPUT_LEFT]->getText();
 	sprintf(buf,"-- %s --",static_cast<std::string>(txt).c_str());
 	ui_controls[INPUT_LEFT]->setText(buf);
 }
@@ -578,7 +578,7 @@ void ui_setRight()
 {
 	char buf[255];
 	ui_setter = INPUT_RIGHT;
-	sf::Unicode::Text txt = ui_controls[INPUT_RIGHT]->getText().GetText();
+	sf::String txt = ui_controls[INPUT_RIGHT]->getText();
 	sprintf(buf,"-- %s --",static_cast<std::string>(txt).c_str());
 	ui_controls[INPUT_RIGHT]->setText(buf);
 }
@@ -587,7 +587,7 @@ void ui_setCrouch()
 {
 	char buf[255];
 	ui_setter = INPUT_CROUCH;
-	sf::Unicode::Text txt = ui_controls[INPUT_CROUCH]->getText().GetText();
+	sf::String txt = ui_controls[INPUT_CROUCH]->getText();
 	sprintf(buf,"-- %s --",static_cast<std::string>(txt).c_str());
 	ui_controls[INPUT_CROUCH]->setText(buf);
 }
@@ -596,7 +596,7 @@ void ui_setShoot()
 {
 	char buf[255];
 	ui_setter = INPUT_SHOOT;
-	sf::Unicode::Text txt = ui_controls[INPUT_SHOOT]->getText().GetText();
+	sf::String txt = ui_controls[INPUT_SHOOT]->getText();
 	sprintf(buf,"-- %s --",static_cast<std::string>(txt).c_str());
 	ui_controls[INPUT_SHOOT]->setText(buf);
 }
@@ -776,11 +776,11 @@ void ui_init()
 	b->setClick(ui_showOptions);
 
 	// set the default game events
-	inputs[INPUT_JUMP].key = sf::Key::Up;
-	inputs[INPUT_LEFT].key = sf::Key::Left;
-	inputs[INPUT_RIGHT].key = sf::Key::Right;
-	inputs[INPUT_CROUCH].key = sf::Key::Down;
-	inputs[INPUT_SHOOT].key = sf::Key::Space;
+	inputs[INPUT_JUMP].key = sf::Keyboard::Up;
+	inputs[INPUT_LEFT].key = sf::Keyboard::Left;
+	inputs[INPUT_RIGHT].key = sf::Keyboard::Right;
+	inputs[INPUT_CROUCH].key = sf::Keyboard::Down;
+	inputs[INPUT_SHOOT].key = sf::Keyboard::Space;
 }
 
 int ui_event(sf::Event &Event)
