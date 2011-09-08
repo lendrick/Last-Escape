@@ -135,12 +135,12 @@ void Widget::getPos(double &px, double &py) {
 
 void Widget::setTextColor(int r, int g, int b)
 {
-	text.SetColor(sf::Color(r,g,b, 1)); // TODO give color
+	text.SetColor(sf::Color(r,g,b, 255)); // TODO give alpha
 }
 
 void Widget::setText(const sf::String &Text)
 {
-	text.SetString(Text.ToAnsiString());
+	text.SetString(Text);
 }
 
 sf::String Widget::getText()
@@ -151,7 +151,7 @@ sf::String Widget::getText()
 void Widget::setTextSize(int sz)
 {
 	size = sz;
-	text.SetScale((double)size, size); //TODO make sure that's right
+	text.SetCharacterSize((double)size);
 }
 
 void Widget::setClick(void (*func)())
