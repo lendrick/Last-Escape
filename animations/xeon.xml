@@ -1,81 +1,81 @@
 <animations frameWidth="128" frameHeight="128">
 	<animation name="walk" doLoop="true">
 		<frames>
-			<frame number="1" time="0.2"/>
-			<frame number="2" time="0.2"/>
-			<frame number="3" time="0.2"/>
-			<frame number="4" time="0.2"/>
-			<frame number="0" time="0.2"/>
+			<frame number="1" time="200"/>
+			<frame number="2" time="200"/>
+			<frame number="3" time="200"/>
+			<frame number="4" time="200"/>
+			<frame number="0" time="200"/>
 		</frames>
 	</animation>
 	
 	<animation name="jump">
 		<frames>
-			<frame number="24" time="0.1"/>
-			<frame number="25" time="0.1"/>
-			<frame number="26" time="0.1"/>
+			<frame number="24" time="100"/>
+			<frame number="25" time="100"/>
+			<frame number="26" time="100"/>
 		</frames>
 	</animation>
 	
 	<animation name="fall">
 		<frames>
-			<frame number="27" time="0.2"/>
-			<frame number="28" time="0.2"/>
+			<frame number="27" time="200"/>
+			<frame number="28" time="200"/>
 		</frames>
 	</animation>
 	
 	<animation name="idle">
 		<frames>
-			<frame number="0" time="0.1"/>
+			<frame number="0" time="100"/>
 		</frames>
 	</animation>
 
 	<animation name="shoot">
 		<frames>
-			<frame number="16" time="0.04"/>
-			<frame number="17" time="0.04"/>
-			<frame number="18" time="0.04"/>
+			<frame number="16" time="40"/>
+			<frame number="17" time="40"/>
+			<frame number="18" time="40"/>
 		</frames>
 	</animation>
 
 	<animation name="walkshoot">
 		<frames>
-			<frame number="34" time="0.04"/>
-			<frame number="35" time="0.04"/>
-			<frame number="36" time="0.04"/>
+			<frame number="34" time="40"/>
+			<frame number="35" time="40"/>
+			<frame number="36" time="40"/>
 		
 		</frames>
 	</animation>
 
 	<animation name="crouch">
 		<frames>
-			<frame number="40" time="0.1"/>
+			<frame number="40" time="100"/>
 		</frames>
 	</animation>
 	
 	<animation name="crouchshoot">
 		<frames>
-			<frame number="41" time="0.04"/>
-			<frame number="42" time="0.04"/>
-			<frame number="43" time="0.04"/>
+			<frame number="41" time="40"/>
+			<frame number="42" time="40"/>
+			<frame number="43" time="40"/>
 		</frames>
 	</animation>
 
 	<animation name="die">
 		<frames>
-			<frame number="48" time="0.1"/>
-			<frame number="49" time="0.1"/>
-			<frame number="50" time="0.1"/>
-			<frame number="51" time="0.1"/>
-			<frame number="52" time="0.1"/>
-			<frame number="53" time="0.1"/>
-			<frame number="54" time="0.3"/>
+			<frame number="48" time="100"/>
+			<frame number="49" time="100"/>
+			<frame number="50" time="100"/>
+			<frame number="51" time="100"/>
+			<frame number="52" time="100"/>
+			<frame number="53" time="100"/>
+			<frame number="54" time="300"/>
 		</frames>
 	</animation>	
         
         <animation name="damage">
                 <frames>
-                        <frame number="56" time="0.5"/>
+                        <frame number="56" time="500"/>
                 </frames>
         </animation>
 </animations>
