@@ -55,8 +55,8 @@ struct MapSegment {
 class Map {
 private:
 	sf::RenderWindow *target;
-	sf::Image tileset;
-	sf::Image landscapeImg;
+	sf::Texture tileset;
+	sf::Texture landscapeImg;
 	sf::Sprite landscape;
 	sf::IntRect tile_rects[1024];
 	

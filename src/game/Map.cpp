@@ -52,13 +52,13 @@ Map::Map(string mapName) {
 	loadTileset("tileset.png");
 	loaded = false;
 	
-	tile_sprite.SetImage(tileset);
+	tile_sprite.SetTexture(tileset);
 	tile_sprite.FlipY(true);
 	
 	/*
 	for (int i=0; i<VIEW_TILES_X; i++) {
 		for (int j=0; j<VIEW_TILES_Y; j++) {
-			tile_sprites[i][j].SetImage(tileset);
+			tile_sprites[i][j].SetTexture(tileset);
 		}
 	}
 	*/
@@ -69,8 +69,8 @@ Map::Map(string mapName) {
 		// assumes tileset is 512px wide
 		tile_rects[i+1].Left = (i % 16) * TILE_SIZE;
 		tile_rects[i+1].Top = (i / 16) * TILE_SIZE;
-		tile_rects[i+1].Right = tile_rects[i+1].Left + TILE_SIZE;
-		tile_rects[i+1].Bottom = tile_rects[i+1].Top + TILE_SIZE;
+		tile_rects[i+1].Width = TILE_SIZE;//tile_rects[i+1].Left + TILE_SIZE;
+		tile_rects[i+1].Height = TILE_SIZE;//tile_rects[i+1].Top + TILE_SIZE;
 	}
 
 	cam_x = 0;
@@ -270,10 +270,10 @@ void Map::loadMap(string filename) {
 				std::string propname = ((TiXmlElement*)prop)->Attribute("name");
 				std::string propval = ((TiXmlElement*)prop)->Attribute("value");
 				if(propname == "landscape") {
-					landscapeImg = sf::Image();
+					landscapeImg = sf::Texture();
 					landscapeImg.LoadFromFile("images/landscapes/" + propval);
 					landscapeImg.SetSmooth(false);
-					landscape.SetImage(landscapeImg);
+					landscape.SetTexture(landscapeImg);
 				} else if(propname == "music" && enableMusic) {
 					backgroundMusic.Stop();
 					backgroundMusic.OpenFromFile("audio/" + propval);
@@ -961,7 +961,9 @@ void Map::renderBackground() {
 		cam_x = cameraFollow->body->p.x;
 		cam_y = cameraFollow->body->p.y;
 		
-		sf::Vector2f offset = gameView.GetHalfSize();
+		sf::Vector2f offset = gameView.GetSize();
+		offset.x /= 2;
+		offset.y /= 2;
 		offset.x = fabs(offset.x);
 		offset.y = fabs(offset.y);
 		
@@ -978,17 +980,17 @@ void Map::renderBackground() {
 		gameView.SetCenter(floor(cam_x), floor(cam_y));
 	}
 
-	sf::FloatRect rect = gameView.GetRect();
+	sf::FloatRect rect = getRectFromView(gameView);
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;
-	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	int cam_tile_y = rect.Top + rect.Height / TILE_SIZE;
 	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
-	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
-	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
+	int tile_w = rect.Width / TILE_SIZE + 2;
+	int tile_h = rect.Height / TILE_SIZE + 2;
 	
 	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
-		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
+		for(int j = max(cam_tile_y, 0); j < min(-cam_tile_y + tile_h, MAP_TILES_Y); j++) {
 			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
 			
 			if(background[i][j] > 0) {
@@ -1006,17 +1008,17 @@ void Map::renderBackground() {
 
 // and fringe
 void Map::renderForeground() {
-	sf::FloatRect rect = gameView.GetRect();
+	sf::FloatRect rect = getRectFromView(gameView);
 	
 	int cam_tile_x = rect.Left / TILE_SIZE;
-	int cam_tile_y = rect.Bottom / TILE_SIZE;
+	int cam_tile_y = rect.Top + rect.Height / TILE_SIZE;
 	cam_tile_y = MAP_TILES_Y - cam_tile_y - 1;
 	
-	int tile_w = rect.GetWidth() / TILE_SIZE + 2;
-	int tile_h = rect.GetHeight() / TILE_SIZE + 2;
+	int tile_w = rect.Width / TILE_SIZE + 2;
+	int tile_h = rect.Height / TILE_SIZE + 2;
 	
 	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
-		for(int j = max(cam_tile_y, 0); j < min(cam_tile_y + tile_h, MAP_TILES_Y); j++) {
+		for(int j = max(cam_tile_y, 0); j < min(-cam_tile_y + tile_h, MAP_TILES_Y); j++) {
 			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
 			
 			if(foreground[i][j] > 0) {
