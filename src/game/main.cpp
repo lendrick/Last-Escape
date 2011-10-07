@@ -60,8 +60,8 @@ ImageCache imageCache;
 SoundCache soundCache;
 
 bool paused = false;
-double time_step;
-const double fps = 60.0f;
+sf::Uint32 time_step;
+sf::Uint32 fps = 60.0f;
 
 void update(sf::Uint32 dt) {
 	// Update the physics
@@ -72,7 +72,7 @@ void update(sf::Uint32 dt) {
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		(*it)->doUpdate(dt/steps/1000);
+		(*it)->doUpdate(dt/steps);
 	}
 }
 
