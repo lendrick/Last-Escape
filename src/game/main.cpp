@@ -68,7 +68,8 @@ void update(sf::Uint32 dt) {
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
 		//cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
-		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps/10000); //TODO get the timestamp right for ms time
+		cpSpaceStep(game_map->physSpace, (dt/10000.0)/(cpFloat)steps); //TODO get the timestamp right for ms time
+		cout << (dt/1000)/(cpFloat)steps << endl;
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
@@ -132,9 +133,9 @@ int main(int argc, char** argv)
   srand((unsigned)time(0));
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
-	int frameCount = 0;
-	int framesSkipped = 0;
-	int maxFramesSkipped = 10;
+	sf::Uint32 frameCount = 0;
+	sf::Uint32 framesSkipped = 0;
+	unsigned short maxFramesSkipped = 10;
 	time_step = 1000/fps;
 
 	// Parse a few command-line arguments
@@ -194,7 +195,7 @@ int main(int argc, char** argv)
 	// Start game loop
 	while (App->IsOpened())
 	{
-		int targetFrame = frameTimer.GetElapsedTime() * fps;
+		sf::Uint32 targetFrame = frameTimer.GetElapsedTime() * fps;
 		bool renderUi = false;
 		
 	  startTimer();
@@ -221,12 +222,12 @@ int main(int argc, char** argv)
 			game_map->loadNextMap();
 			
 			if(!paused) {
-				//update(frameTime);
+//				update(frameTime*1000);
 				startTimer();
 				update(time_step);
 				update_time += getTimer();
 			}
-		
+
 			if(frameCount >= targetFrame || framesSkipped >= maxFramesSkipped) {
 				//cout << "Skipped " << framesSkipped << " frames\n";
 				framesSkipped = 0;
