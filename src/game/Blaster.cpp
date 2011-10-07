@@ -28,7 +28,7 @@ Blaster::Blaster()
 	double tempEnergyCost[] = {5.0f, 2.5f, 2.0f};
 	energy_cost.assign( tempEnergyCost, tempEnergyCost + 3 );
 
-	double tempReloadTime[] = {0.5f, 0.1f, 0.01f};
+	double tempReloadTime[] = {500, 100, 10};
 	reload_time.assign( tempReloadTime, tempReloadTime + 3 );
 
 	double tempAngleVariation[] = {0.0f, 10.0f, 5.0f};
@@ -38,7 +38,7 @@ Blaster::Blaster()
 
 	sprite_count.assign( 3, 3 );
 
-	double tempSpriteSpeed[] = {16.0f, 32.0f, 32.0f};
+	double tempSpriteSpeed[] = {16000, 32000, 32000};
 	sprite_speed.assign( tempSpriteSpeed, tempSpriteSpeed + 3 );
 	
 	//std::cout << "Upgrade: " << upgrade << "\nName: " << name[upgrade] << "\nEnergy Cost: " << energy_cost[upgrade] << "\nReload Time: " << reload_time[upgrade]

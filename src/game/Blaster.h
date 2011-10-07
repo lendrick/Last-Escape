@@ -36,7 +36,7 @@ class Blaster : public Weapon
 	std::vector<double> angle_variation;
 	std::vector<int> sprite_row;
 	std::vector<int> sprite_count;
-	std::vector<double> sprite_speed;
+	std::vector<sf::Uint32> sprite_speed;
 
 };
 
