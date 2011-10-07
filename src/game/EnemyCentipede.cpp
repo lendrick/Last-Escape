@@ -53,22 +53,22 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 	Animation * tmp;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
-	tmp->addFrame(6, .2f);
-	tmp->addFrame(7, .2f);
+	tmp->addFrame(2, 200);
+	tmp->addFrame(3, 200);
+	tmp->addFrame(6, 200);
+	tmp->addFrame(7, 200);
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(0, .07f);
-	tmp->addFrame(4, .07f);
-	tmp->addFrame(8, .07f);
-	tmp->addFrame(12, .07f);
+	tmp->addFrame(0, 70);
+	tmp->addFrame(4, 70);
+	tmp->addFrame(8, 70);
+	tmp->addFrame(12, 70);
 
 	tmp = addAnimation("shoot");
-	tmp->addFrame(11, .4f);
-	tmp->addFrame(10, .2f);
-	tmp->addFrame(9, .1f);
+	tmp->addFrame(11, 400);
+	tmp->addFrame(10, 200);
+	tmp->addFrame(9, 100);
 
 	setCurrentAnimation("walk");
 }

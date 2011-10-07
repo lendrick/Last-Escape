@@ -49,16 +49,16 @@ EnemyFlyer::EnemyFlyer(double x, double y)
 
 	Animation * tmp;
 	tmp = addAnimation("fly");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
+	tmp->addFrame(0, 200);
+	tmp->addFrame(1, 200);
+	tmp->addFrame(2, 200);
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(4, .1f);
-	tmp->addFrame(5, .1f);
-	tmp->addFrame(6, .1f);
-	tmp->addFrame(7, .1f);
+	tmp->addFrame(4, 100);
+	tmp->addFrame(5, 100);
+	tmp->addFrame(6, 100);
+	tmp->addFrame(7, 100);
 	
 	x1 = body->p.x - 100;
 	x2 = body->p.x + 100;

@@ -56,18 +56,18 @@ EnemyCrawler::EnemyCrawler(double x, double y)
 	facing_direction = Facing::Left;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
+	tmp->addFrame(2, 200);
+	tmp->addFrame(3, 200);
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(8, .07f);
-	tmp->addFrame(7, .07f);
-	tmp->addFrame(6, .07f);
-	tmp->addFrame(5, .07f);
+	tmp->addFrame(8, 70);
+	tmp->addFrame(7, 70);
+	tmp->addFrame(6, 70);
+	tmp->addFrame(5, 70);
 
 	tmp = addAnimation("hurt");
-	tmp->addFrame(4, 0.07f);
+	tmp->addFrame(4, 70);
 
 	setCurrentAnimation("walk");
 }
