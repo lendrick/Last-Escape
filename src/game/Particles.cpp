@@ -29,8 +29,8 @@ ParticleEmitter::ParticleEmitter(double x, double y)
 	if (!image.LoadFromFile("images/smoke.png"))
 		printf("failed to load images/smoke.png\n");
 
-	sprite.SetImage(image);
-	sprite.SetCenter(16, 16);
+	sprite.SetTexture(image);
+	sprite.SetOrigin(16, 16);
 
 	maxParticles = int(maxAge*emissionRate);
 	timeLeft = 0;
