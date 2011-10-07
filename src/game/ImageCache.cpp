@@ -30,21 +30,21 @@ ImageCache::~ImageCache()
 	imagePtrMap::iterator i;
 	while(!images.empty()) {
 		i = images.begin();
-		sf::Image * img = (*i).second;
+		sf::Texture * img = (*i).second;
 		images.erase(i);
 		delete img;
 	}
 }
 
-sf::Image * ImageCache::operator[](std::string name)
+sf::Texture * ImageCache::operator[](std::string name)
 {
 	return getImage(name);
 }
 
-sf::Image * ImageCache::getImage(std::string name)
+sf::Texture * ImageCache::getImage(std::string name)
 {
 	if(images.find(name) == images.end()) {
-		sf::Image * img = loadImage(name);
+		sf::Texture * img = loadImage(name);
 		images[name] = img;
 	}
 
@@ -53,14 +53,14 @@ sf::Image * ImageCache::getImage(std::string name)
 
 void ImageCache::unload(std::string name)
 {
-	sf::Image * img = images[name];
+	sf::Texture * img = images[name];
 	images.erase(name);
 	delete img;
 }
 
-sf::Image * ImageCache::loadImage(std::string filename)
+sf::Texture * ImageCache::loadImage(std::string filename)
 {
-	sf::Image * img = new sf::Image;
+	sf::Texture * img = new sf::Texture;
 	if(!img->LoadFromFile("images/" + filename)) {
 		std::cout << "Failed to load image " << filename << "\n";
 		return NULL;
