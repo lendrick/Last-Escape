@@ -101,8 +101,8 @@ sf::FloatRect getRectFromView(sf::View& view)
 	float Height = size.y;
 
 	sf::FloatRect rect;
-	rect.Left   = max(Left, -Left);
-	rect.Top    = max(Top, -Top);
+	rect.Left   = Left;
+	rect.Top    = Top;
 	rect.Width  = max(Width, -Width);
 	rect.Height = max(Height, -Height);
 	return rect;
