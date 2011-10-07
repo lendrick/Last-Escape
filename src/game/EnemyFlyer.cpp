@@ -82,7 +82,7 @@ EnemyFlyer::EnemyFlyer(double x, double y)
 }
 
 
-void EnemyFlyer::update(double dt) {
+void EnemyFlyer::update(sf::Uint32 dt) {
 	cpVect force = cpv(0, 0);
 	
   if(diving && timeUntilEndDive <= 0) {

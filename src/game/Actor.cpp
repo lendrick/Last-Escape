@@ -211,7 +211,7 @@ void Actor::leaveGround() {
 //	grounded--;
 }
 
-void Actor::doUpdate(double dt) {
+void Actor::doUpdate(sf::Uint32 dt) {
 	if(body == NULL) {
 		update(dt);
 	} else if(isOnCamera() || !canSleep) {

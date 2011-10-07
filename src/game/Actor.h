@@ -61,8 +61,8 @@ public:
 	// Start death animation, etc.  destroy() should be called in update() and not in collide()
 	virtual void die();
 	
-	virtual void update(double dt) { };
-	virtual	void doUpdate(double dt);
+	virtual void update(sf::Uint32 dt) { };
+	virtual	void doUpdate(sf::Uint32 dt);
 	virtual void draw();
 	
 	void destroy();

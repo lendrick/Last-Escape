@@ -22,7 +22,7 @@ class EnemyFlyer : public Enemy
 {
 public:
 	EnemyFlyer(double x, double y);
-	virtual void update(double dt);
+	virtual void update(sf::Uint32 dt);
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);
 private:

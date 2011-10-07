@@ -228,7 +228,7 @@ void Player::crouch() {
 	crouched = true;
 }
 
-void Player::update(double dt) {
+void Player::update(sf::Uint32 dt) {
 	if(!body) return;
 	const int speed_max = 200; // pixels per second
 	const int speed_delta = speed_max*4; // pixels per second per second
@@ -434,7 +434,7 @@ void Player::onAnimationComplete(std::string anim) {
 
 bool Player::doDamage(double damage, bool knockback) {
 	bool dead = false;
-	if(damageTimer <= 0) {
+	if(damageTime <= 0) {
 		energy -= damage * 30;
 		if(energy <= 0) {
 			dead = true;
@@ -442,7 +442,7 @@ bool Player::doDamage(double damage, bool knockback) {
 		} else {
 				onDamage();
 		}
-		damageTimer = immunityTime;
+		damageTime = immunityTime;
 		recoveryTimer = recoveryTime;
 
 		if(knockback) {

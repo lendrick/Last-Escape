@@ -55,7 +55,7 @@ public:
 	int getFacing() const;
 	virtual bool doDamage(double damage, bool knockback = false);
 	virtual void onDamage();
-	virtual void doUpdate(double dt);
+	virtual void doUpdate(sf::Uint32 dt);
 	
 	virtual bool move(double dx, double dy);
 
@@ -67,8 +67,8 @@ protected:
 	int frame_h, frame_w;
         
 	double life;
-	double immunityTime;
-	double damageTimer;
+	sf::Uint32 immunityTime;
+	sf::Uint32 damageTime;
 private:
 	void init();
 };

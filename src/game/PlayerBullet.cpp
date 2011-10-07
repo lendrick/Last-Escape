@@ -85,7 +85,7 @@ void PlayerBullet::collide(Actor& otherActor) {
 	}
 }
 
-void PlayerBullet::update(double dt) {
+void PlayerBullet::update(sf::Uint32 dt) {
 	//cout << "bullet " << body->p.x << " " << body->p.y << "\n";
 	bulletTime += dt;
 	//cout << "angle " << rad2deg(body->a) << "\n";

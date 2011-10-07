@@ -78,7 +78,7 @@ BossSpider::BossSpider(double x, double y)
 	setCurrentAnimation("walk");
 }
 
-void BossSpider::update(double dt) {
+void BossSpider::update(sf::Uint32 dt) {
 	if(!dying) {
 		time += dt;
 		patrolTime += dt;

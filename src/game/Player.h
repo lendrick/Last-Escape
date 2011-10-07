@@ -33,7 +33,7 @@ public:
 
 	virtual bool isPlayer() { return true; }
 
-	virtual void update(double dt);
+	virtual void update(sf::Uint32 dt);
 	virtual void draw();
 	virtual void die();
 	//virtual void collide(Actor & otherActor);

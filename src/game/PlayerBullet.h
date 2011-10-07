@@ -26,7 +26,7 @@ class PlayerBullet  : public AnimatedActor
 public:
 	PlayerBullet(double x, double y, int facing, double angleVariation, double lifetime = 1.5f);
 	virtual void collide(Actor& otherActor);
-	virtual void update(double dt);
+	virtual void update(sf::Uint32 dt);
 	virtual void collideGround();
 	virtual void collideWall();
 private:

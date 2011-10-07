@@ -46,7 +46,7 @@ EnemyPatroller::~EnemyPatroller() {
 	delete rightBumper;
 }
 
-void EnemyPatroller::update(double dt) {
+void EnemyPatroller::update(sf::Uint32 dt) {
 	if(!dying) {
 
 		//setCurrentAnimation("walk");

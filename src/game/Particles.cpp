@@ -39,7 +39,7 @@ ParticleEmitter::ParticleEmitter(double x, double y)
 	setCanCollide(false);
 }
 
-void ParticleEmitter::update(double dt) {
+void ParticleEmitter::update(sf::Uint32 dt) {
 
 	timeLeft += dt;
 

@@ -73,7 +73,7 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 	setCurrentAnimation("walk");
 }
 
-void EnemyCentipede::update(double dt) {
+void EnemyCentipede::update(sf::Uint32 dt) {
 	if(!dying) {
 		time += dt;
 		if(lastShot + shootInterval <= time && animationName() != "shoot") {
@@ -142,7 +142,7 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	shape->group = PhysicsGroup::EnemyBullets;
 }
 
-void EnemyCentipedeProjectile::update(double dt)
+void EnemyCentipedeProjectile::update(sf::Uint32 dt)
 {
 	if(isGrounded()) {
 		setCurrentAnimation("splat");
