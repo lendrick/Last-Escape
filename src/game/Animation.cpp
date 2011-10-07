@@ -37,7 +37,7 @@ void Animation::setFrameSize(int fw, int fh) {
 	frame_h = fh;
 }
 
-void Animation::addFrame(int num, double duration) {
+void Animation::addFrame(int num, sf::Uint32 duration) {
 	const sf::Texture * tex = sprite.GetTexture();
 	int w = tex->GetWidth();
 	int h = tex->GetHeight();
@@ -59,12 +59,9 @@ void Animation::addFrame(int num, double duration) {
 	
 	int x1 = column * frame_w;
 	int y1 = row * frame_h;
-	int x2 = x1 + frame_w;
-	int y2 = y1 + frame_h;
 	
-	//std::cout << "rect: (" << x1 << ", " << y1 << ") (" << x2 << ", " << y2 << ")\n";
 	Frame frame;
-	frame.rect = sf::IntRect(x1, y1, x2, y2);
+	frame.rect = sf::IntRect(x1, y1, frame_w, frame_h);
 	frame.timeToNextFrame = duration;
 	frame.number = num;
 	frames.push_back(frame);	
@@ -114,7 +111,7 @@ void Animation::update()
 			if(this->doLoop)
 			{
 				frameIterator = 0;
-				this->updateFrame();
+//				this->updateFrame();
 				//cout << " > " << frameIterator << "\n";
 			}
 			else
@@ -137,7 +134,7 @@ void Animation::updateFrame()
 {
 	
 	if(!this->frames.empty())
-		this->sprite.SetSubRect(frames.at(frameIterator).rect );
+		this->sprite.SetSubRect(frames.at(frameIterator).rect);
 	else
 		cout << "no frames!" << endl;
 	
