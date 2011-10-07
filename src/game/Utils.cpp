@@ -89,3 +89,21 @@ double clamp(double n, double min, double max) {
 	if(n < min) n = min;
 	return n;
 }
+
+sf::FloatRect getRectFromView(sf::View& view)
+{
+	sf::Vector2f center = view.GetCenter();
+	sf::Vector2f size = view.GetSize();
+
+	float Left   = center.x - size.x/2.0;
+	float Top    = center.y - size.y/2.0;
+	float Width  = size.x;
+	float Height = size.y;
+
+	sf::FloatRect rect;
+	rect.Left   = max(Left, -Left);
+	rect.Top    = max(Top, -Top);
+	rect.Width  = max(Width, -Width);
+	rect.Height = max(Height, -Height);
+	return rect;
+}

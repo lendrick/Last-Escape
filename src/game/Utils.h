@@ -42,4 +42,6 @@ void parse_key_pair(string s, string &key, string &val);
 cpShape * boxWithOffset(cpBody * body, double width, double height, sf::Vector2f offset);
 cpShape * boxWithOffset(cpBody * body, double width, double height, cpVect offset);
 
+sf::FloatRect getRectFromView(sf::View& view);
+
 #endif
