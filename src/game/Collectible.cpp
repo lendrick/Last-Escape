@@ -36,7 +36,7 @@ void Collectible::init()
 
 	Animation * tmp;
 	tmp = addAnimation("image");
-	tmp->addFrame(0, .1f);
+	tmp->addFrame(0, 100);
 	setCurrentAnimation("image");
 	shape->collision_type = PhysicsType::Item;
 	setShapeLayers(PhysicsLayer::Player);
@@ -117,10 +117,10 @@ CollectibleEnergyBall::CollectibleEnergyBall(double x, double y, int expValue)
 
 	Animation * tmp;
 	tmp = addAnimation("anim");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(3, .2f);
+	tmp->addFrame(0, 200);
+	tmp->addFrame(1, 200);
+	tmp->addFrame(2, 200);
+	tmp->addFrame(3, 200);
 	tmp->setDoLoop(true);
 	setCurrentAnimation("anim");
 	shape->collision_type = PhysicsType::Item;
