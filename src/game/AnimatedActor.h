@@ -68,7 +68,7 @@ protected:
         
 	double life;
 	sf::Uint32 immunityTime;
-	sf::Uint32 damageTime;
+	int damageTimer;
 private:
 	void init();
 };

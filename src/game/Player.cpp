@@ -27,7 +27,7 @@
 #include "Collectible.h"
 
 const double energy_cost_jump = 0.f;
-const double energy_recharge_rate = 5.f; // units per second
+const double energy_recharge_rate = 0.005f; // units per ms
 static const int start_lives = 3;
 
 /*struct WeaponDesc {
@@ -60,12 +60,12 @@ Player::Player(double x, double y)
 	lives = start_lives;
 	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
-	shoot_duration = .2f;
+	shoot_duration = 200;
 	last_shoot_time = 0;
 	last_jump_time = 0;
 	energyBalls = 0;
-	immunityTime = 1.0;
-	recoveryTime = 0.2;
+	immunityTime = 1000;
+	recoveryTime = 200;
 	recoveryTimer = 0;
 	//currentWeapon = 0;
 	baseMaxEnergy = 100.0f;
@@ -90,9 +90,9 @@ Player::Player(double x, double y)
 }
 
 void Player::init() {
-	time = 0.f;
-	last_shoot_time = -100.f;
-	last_jump_time = 0.0f;
+	time = 0;
+	last_shoot_time = -100;
+	last_jump_time = 0;
 	dying = false;
 
 	energy = energy_max;
@@ -145,8 +145,8 @@ void Player::jump(double dt) {
 	const double max_jet_accel = 2000;
 	const double jet_cost = 35;
 	const double jet_speed_max = 250;
-	const double jet_wait = 0.4f;
-	const double jump_wait = 0.3f;
+	const double jet_wait = 400;
+	const double jump_wait = 300;
 	
 	//cout << "jumping\n";
 
@@ -171,7 +171,7 @@ void Player::jump(double dt) {
 		if (time - last_jump_time < jet_wait)
 			return;
 
-		double cost = jet_cost * dt;
+		double cost = jet_cost * dt/1000.f;
 		if (energy < cost)
 			return;
 
@@ -434,7 +434,7 @@ void Player::onAnimationComplete(std::string anim) {
 
 bool Player::doDamage(double damage, bool knockback) {
 	bool dead = false;
-	if(damageTime <= 0) {
+	if(damageTimer <= 0) {
 		energy -= damage * 30;
 		if(energy <= 0) {
 			dead = true;
@@ -442,7 +442,7 @@ bool Player::doDamage(double damage, bool knockback) {
 		} else {
 				onDamage();
 		}
-		damageTime = immunityTime;
+		damageTimer = immunityTime;
 		recoveryTimer = recoveryTime;
 
 		if(knockback) {

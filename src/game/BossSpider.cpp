@@ -37,10 +37,10 @@ BossSpider::BossSpider(double x, double y)
 	setDrawOffset(32, 22);
 	setFrameSize(64, 64);
 	lastShot = 0;
-	shootInterval = 0.5f;
+	shootInterval = 500;
 	time = 0;
 
-	patrolInterval = 1.5f;
+	patrolInterval = 1500;
 	patrolTime = 0;
 
 	Animation * tmp;
@@ -59,21 +59,21 @@ BossSpider::BossSpider(double x, double y)
 	shape->u = 0.1f;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(0, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(4, .2f);
-	tmp->addFrame(5, .2f);
+	tmp->addFrame(0, 200);
+	tmp->addFrame(1, 200);
+	tmp->addFrame(2, 200);
+	tmp->addFrame(4, 200);
+	tmp->addFrame(5, 200);
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(8, .2f);
-	tmp->addFrame(9, .2f);
-	tmp->addFrame(10, .2f);
-	tmp->addFrame(11, .2f);
+	tmp->addFrame(8, 200);
+	tmp->addFrame(9, 200);
+	tmp->addFrame(10, 200);
+	tmp->addFrame(11, 200);
 
 	tmp = addAnimation("hurt");
-	tmp->addFrame(0, 0.07f);
+	tmp->addFrame(0, 70);
 
 	setCurrentAnimation("walk");
 }

@@ -43,7 +43,7 @@ void AnimatedActor::init() {
 	currentAnimation = NULL;
 	dying = false;
 	immunityTime = 50;
-	damageTime = 0;
+	damageTimer = 0;
 }
 
 void AnimatedActor::setImage(std::string filename) 
@@ -97,26 +97,26 @@ void AnimatedActor::draw()
 		}
 	}
 	
-	double redness = 0;
+	sf::Uint32 redness = 0;
 	if(immunityTime > 0) {
-		redness = damageTime / immunityTime;
+		redness = damageTimer / immunityTime;
 	}
         
-	int colorLevel = (int) (255.0f * (1.0f - redness));
+	int colorLevel = (int) (255.f * (100.f - redness));
 
-	if(damageTime > 0)
-			sprite.SetColor(sf::Color(255, colorLevel, colorLevel, 128));
+	if(damageTimer > 0)
+		sprite.SetColor(sf::Color(255, colorLevel, colorLevel, 128));
 	else
-			sprite.SetColor(sf::Color(255, 255, 255, 255));
+		sprite.SetColor(sf::Color(255, 255, 255, 255));
 
 	Actor::draw();
 }
 
 void AnimatedActor::doUpdate(sf::Uint32 dt) {
-	if(damageTime > 0)
-		damageTime -= dt;
+	if(damageTimer > 0)
+		damageTimer -= dt;
 	else
-		damageTime = 0;
+		damageTimer = 0;
 
 	Actor::doUpdate(dt);
 }
@@ -270,15 +270,15 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 }
 
 bool AnimatedActor::doDamage(double damage, bool knockback) {
-        if(damageTime <= 0) {
-                life -= damage;
-                if(life <= 0) {
-					die();
-					return true;
-                } else {
-					onDamage();
-                }
-                damageTime = immunityTime;
+        if(damageTimer <= 0) {
+			life -= damage;
+			if(life <= 0) {
+				die();
+				return true;
+			} else {
+				onDamage();
+			}
+			damageTimer = immunityTime;
         }
         return false;
 }
