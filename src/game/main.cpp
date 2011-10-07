@@ -68,7 +68,7 @@ void update(sf::Uint32 dt) {
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
 		//cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
-		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps/10000);
+		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps/10000); //TODO get the timestamp right for ms time
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
