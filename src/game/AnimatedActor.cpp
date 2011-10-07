@@ -50,7 +50,7 @@ void AnimatedActor::setImage(std::string filename)
 {
 	hasImage = true;
 	setFrameSize(0, 0);
-	this->sprite.SetImage(*(imageCache[filename]));
+	this->sprite.SetTexture(*(imageCache[filename]));
 	this->currentAnimation = NULL;
 }
 
@@ -174,7 +174,7 @@ int AnimatedActor::getFacing() const
 
 void AnimatedActor::loadAnimationsFromFile(std::string filename)
 {
-	if(this->sprite.GetImage() == NULL)
+	if(this->sprite.GetTexture() == NULL)
 	{
 		if (debugMode)
 		{
@@ -233,9 +233,9 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 						if(fChildName == "frame")
 						{
 							int number = 0;
-							float timeToNextFrame = 0.f;
+							int timeToNextFrame = 0;
 							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
-							((TiXmlElement*)fChild)->QueryFloatAttribute("time", &timeToNextFrame);
+							((TiXmlElement*)fChild)->QueryIntAttribute("time", &timeToNextFrame);
 							newAnimation->addFrame(number, timeToNextFrame);
 						} 
 						else
