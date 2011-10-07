@@ -120,7 +120,7 @@ public:
 	cpBody* body;
 	cpShape* shape;
 
-	sf::Image image;
+	sf::Texture image;
 	sf::Sprite sprite;
 
 	int height, width;

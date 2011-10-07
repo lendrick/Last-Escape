@@ -60,7 +60,7 @@ void Actor::setPlaceholder(sf::Color c, double w, double h, double xoff, double 
 	height = (int)h;
 	sprite.SetColor(c);
 	sprite.SetScale((double)width, (double)height);
-	sprite.SetCenter(xoff, yoff);
+	sprite.SetOrigin(xoff, yoff);
 }
 
 void Actor::setVelocityFunc(cpBodyVelocityFunc f) {
@@ -72,7 +72,7 @@ void Actor::setVelocityFunc(cpBodyVelocityFunc f) {
 void Actor::setDrawOffset(int ox, int oy) {
 	xDrawOffset = ox;
 	yDrawOffset = oy;
-	sprite.SetCenter((double)ox, (double)oy);
+	sprite.SetOrigin((double)ox, (double)oy);
 }
 
 void Actor::getPos(double &px, double &py) {
@@ -102,13 +102,13 @@ bool Actor::isOnCamera() {
 	double px, py;
 	getPos(px, py);
 	if(body) py += height;
-	sf::FloatRect cam = gameView.GetRect();
+	sf::FloatRect cam = getRectFromView(gameView);
 	
 	double radius = height + width;  // manhattan distance, for speed.
-	if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius)
+	if(px > cam.Left - radius && px < cam.Left + cam.Width + radius && py > cam.Top - cam.Height - radius && py < cam.Top + radius)
 		return true;
-	
-	return false;
+	else
+		return false;
 }
 
 void Actor::draw() {
@@ -117,10 +117,10 @@ void Actor::draw() {
 		double px, py;
 		getPos(px, py);
 		//if(body) py += height;
-		sf::FloatRect cam = gameView.GetRect();
+		sf::FloatRect cam = getRectFromView(gameView);
 		
 		double radius = height + width;  // manhattan distance, for speed.
-		if(px > cam.Left - radius && px < cam.Right + radius && py < cam.Bottom + radius && py > cam.Top - radius) {		
+		if(px > cam.Left - radius && px < cam.Left + cam.Width + radius && py > cam.Top - cam.Height - radius && py < cam.Top + radius) {
 			if(body && body->a != 0) {
 				sprite.SetRotation(-rad2deg(body->a));
 				//if(body->a > 0)
@@ -221,9 +221,11 @@ void Actor::doUpdate(double dt) {
 		}
 		update(dt);
 		grounded = 0;
-	} else if(awake) {
-		awake = false;
-		cpBodySleep(body);
+	} else  {
+		if(awake) {
+			awake = false;
+			cpBodySleep(body);
+		}
 	}
 	/*
 	if(body && game_map) {
