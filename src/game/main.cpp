@@ -51,10 +51,10 @@ std::string startMap;
 bool debugMode = false;
 sf::Clock Clock;
 sf::Clock frameTimer;
-double clockTimer = 0;
+sf::Uint32 clockTimer = 0;
 	
 sf::View uiView(sf::FloatRect(0, 0, 640, 480));
-sf::View gameView(sf::FloatRect(0, 480, 640, 0));
+sf::View gameView(sf::FloatRect(0, 0, 640, -480));
 
 ImageCache imageCache;
 SoundCache soundCache;
@@ -63,16 +63,16 @@ bool paused = false;
 double time_step;
 const double fps = 60.0f;
 
-void update(double dt) {
+void update(sf::Uint32 dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
 		//cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
-		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
+		cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps/1000);
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		(*it)->doUpdate(dt);
+		(*it)->doUpdate(dt/steps/1000);
 	}
 }
 
@@ -121,12 +121,11 @@ double getTimer() {
 	return Clock.GetElapsedTime() - clockTimer;
 }
 
-
 ////////////////////////////////////////////////////////////
 /// Entry point of application
 ///
 /// \return Application exit code
-///
+///time_step
 ////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
@@ -136,7 +135,7 @@ int main(int argc, char** argv)
 	int frameCount = 0;
 	int framesSkipped = 0;
 	int maxFramesSkipped = 10;
-	time_step = 1.0/fps;
+	time_step = 1000/fps;
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -161,7 +160,7 @@ int main(int argc, char** argv)
 	}
 
 	App->SetFramerateLimit(fps);
-	App->UseVerticalSync(true);
+	App->EnableVerticalSync(true);
 
 	cpInitChipmunk();
 
@@ -184,10 +183,11 @@ int main(int argc, char** argv)
 	ui_init();
 
 
+
 	Clock.Reset();
 	frameTimer.Reset();
 
-	double input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
+	sf::Uint32 input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
 	
 	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
 	
