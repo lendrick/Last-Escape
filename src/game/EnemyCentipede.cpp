@@ -29,7 +29,7 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 	//debugPixel.SetImage(*imageCache["bluepixel.png"]);
 	setImage("centipede.png");
 	walk_speed = 90.f;
-	shootInterval = 2.5f;
+	shootInterval = 2500;
 	lastShot = 0;
 	time = 0;
 
