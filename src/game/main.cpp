@@ -67,13 +67,11 @@ void update(sf::Uint32 dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
-		//cpSpaceStep(game_map->physSpace, dt/(cpFloat)steps);
-		cpSpaceStep(game_map->physSpace, (dt/10000.0)/(cpFloat)steps); //TODO get the timestamp right for ms time
-		cout << (dt/1000)/(cpFloat)steps << endl;
+		cpSpaceStep(game_map->physSpace, ((cpFloat)dt/1000.0)/(cpFloat)steps);
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		(*it)->doUpdate(dt/steps);
+		(*it)->doUpdate(dt);
 	}
 }
 
@@ -204,13 +202,12 @@ int main(int argc, char** argv)
 			App->Close();
 		input_time += getTimer();
 
-		double ElapsedTime = Clock.GetElapsedTime();
+		sf::Uint32 ElapsedTime = Clock.GetElapsedTime();
 		Clock.Reset();
 
 		// Clamp frame update time if worse than 20fps, so it'll slow down instead
 		// of just getting very jerky (which breaks jump heights)
-		double frameTime = std::min(ElapsedTime, 0.05);
-
+		double frameTime = std::min(ElapsedTime, (sf::Uint32)50);
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
@@ -220,13 +217,6 @@ int main(int argc, char** argv)
 			cleanup_time += getTimer();
 			
 			game_map->loadNextMap();
-			
-			if(!paused) {
-//				update(frameTime*1000);
-				startTimer();
-				update(time_step);
-				update_time += getTimer();
-			}
 
 			if(frameCount >= targetFrame || framesSkipped >= maxFramesSkipped) {
 				//cout << "Skipped " << framesSkipped << " frames\n";
@@ -253,6 +243,13 @@ int main(int argc, char** argv)
 					frameCount = 0;
 					frameTimer.Reset();
 				}
+
+				if(!paused) {
+					startTimer();
+					update(time_step);
+					update_time += getTimer();
+				}
+
 
 				renderUi = true;
 				
