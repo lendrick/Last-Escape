@@ -163,9 +163,6 @@ int main(int argc, char** argv)
 
 	cpInitChipmunk();
 
-	if (!fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
-		printf("failed to load font\n");
-
 	//g_player = new Player(0,0);
 
 	// Create game objects
