@@ -52,7 +52,7 @@ void Input::poll() {
 		if (ui_event(Event))
 			continue;
 
-		if (Event.Type == sf::Event::KeyPressed && Event.Key.Code == sf::Keyboard::Escape)
+		if (Event.Type == sf::Event::KeyReleased && Event.Key.Code == sf::Keyboard::Escape)
 			ui_togglePause();
 
 		if (!ui_menuOpen()) {
