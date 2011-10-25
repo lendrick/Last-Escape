@@ -283,10 +283,10 @@ void ui_init()
 	if (!Widget::fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
 
-	if (!Widget::ui_background.LoadFromFile("images/ui.png"))
-		printf("failed to load ui sprites\n");
-    else
-    	Widget::ui_background.SetSmooth(false);
+//	if (!Widget::ui_background.LoadFromFile("images/ui.png"))
+//		printf("failed to load ui sprites\n");
+//    else
+//    	Widget::ui_background.SetSmooth(false);
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);

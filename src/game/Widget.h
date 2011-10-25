@@ -68,7 +68,6 @@ public:
 
 	static int ui_focused_widget;
 	static sf::Font fontUI;
-	static sf::Texture ui_background;
 
 protected:
 	sf::Texture bgi;

@@ -8,7 +8,6 @@
 #include "Widget.h"
 
 sf::Font Widget::fontUI;
-sf::Texture Widget::ui_background;
 int Widget::ui_focused_widget;
 int Widget::ui_widget_id = 0;
 
@@ -34,7 +33,18 @@ Widget::Widget(int tp, Widget *par) {
 
 	if (parent) {
 		if (tp != UI_LABEL && tp != UI_TEXT) {
-			background.SetTexture(ui_background);
+
+			sf::Texture* ui_background = imageCache["ui.png"];
+			if (!ui_background)
+			{
+				ui_background = imageCache.getFailsafeTexture();
+				printf("failed to load ui sprites\n");
+			}
+			else
+				ui_background->SetSmooth(false);
+
+
+			background.SetTexture(*ui_background);
 			if (tp == UI_CONTAINER) {
 				setSize(203,203);
 				background.SetSubRect(sf::IntRect(0,0,202,203));
@@ -50,7 +60,7 @@ Widget::Widget(int tp, Widget *par) {
 			}else if (tp == UI_HSLIDE) {
 				setSize(150,3);
 				background.SetSubRect(sf::IntRect(0,203,150,206));
-				slider.SetTexture(ui_background);
+				slider.SetTexture(*ui_background);
 				slider.SetSubRect(sf::IntRect(203,40,223,60));
 			}
 		}
