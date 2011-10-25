@@ -50,18 +50,18 @@ Widget::Widget(int tp, Widget *par) {
 				background.SetSubRect(sf::IntRect(0,0,202,203));
 			}else if (tp == UI_BUTTON) {
 				setSize(75,20);
-				background.SetSubRect(sf::IntRect(203,0,278,20));
+				background.SetSubRect(sf::IntRect(203,0,75,20));
 			}else if (tp == UI_CHECK) {
 				setSize(20,20);
-				background.SetSubRect(sf::IntRect(203,40,223,60));
+				background.SetSubRect(sf::IntRect(203,40,20,20));
 			}else if (tp == UI_PBAR) {
 				setSize(150,32);
-				background.SetSubRect(sf::IntRect(0,207,150,239));
+				background.SetSubRect(sf::IntRect(0,207,150,32));
 			}else if (tp == UI_HSLIDE) {
 				setSize(150,3);
-				background.SetSubRect(sf::IntRect(0,203,150,206));
+				background.SetSubRect(sf::IntRect(0,203,150,3));
 				slider.SetTexture(*ui_background);
-				slider.SetSubRect(sf::IntRect(203,40,223,60));
+				slider.SetSubRect(sf::IntRect(203,40,20,20));
 			}
 		}
 		if (parent->child) {
