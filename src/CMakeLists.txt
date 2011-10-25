@@ -6,6 +6,13 @@ project (LastEscape)
 #tell cmake where to search for package finding modules
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+#use C++0x
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-std=gnu++0x")
+else()
+    set(CMAKE_CXX_FLAGS "-std=c++0x")
+endif()
+
 #add windows dependencies
 if (WIN32)
 	if (NOT DEFINED WINDEPS)
