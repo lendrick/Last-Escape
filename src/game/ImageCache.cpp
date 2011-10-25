@@ -25,7 +25,7 @@ ImageCache::ImageCache()
 {
 	failsafeTexture = getImage("failsafe.png");
 	if(!failsafeTexture)
-		failsafeTexture = new Texture();
+		failsafeTexture = new sf::Texture();
 }
 
 ImageCache::~ImageCache()
