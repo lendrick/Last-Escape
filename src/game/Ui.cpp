@@ -100,95 +100,8 @@ void ui_setEvent(sf::Event &Event)
 {
 	if (Event.Type == sf::Event::KeyPressed)
 	{
-		char buf[255];
 		inputs[ui_setter].key = Event.Key.Code;
-		if (isalnum(Event.Key.Code)) {
-			sprintf(buf,"%c",(char)Event.Key.Code);
-		}else{
-			switch (Event.Key.Code) {
-			case sf::Keyboard::LBracket:
-				sprintf(buf,"(");
-				break;
-			case sf::Keyboard::RBracket:
-				sprintf(buf,")");
-				break;
-			case sf::Keyboard::SemiColon:
-				sprintf(buf,";");
-				break;
-			case sf::Keyboard::Comma:
-				sprintf(buf,",");
-				break;
-			case sf::Keyboard::Period:
-				sprintf(buf,".");
-				break;
-			case sf::Keyboard::Quote:
-				sprintf(buf,"\"");
-				break;
-			case sf::Keyboard::Slash:
-				sprintf(buf,"/");
-				break;
-			case sf::Keyboard::BackSlash:
-				sprintf(buf,"\\");
-				break;
-			case sf::Keyboard::Tilde:
-				sprintf(buf,"`");
-				break;
-			case sf::Keyboard::Equal:
-				sprintf(buf,"=");
-				break;
-			case sf::Keyboard::Dash:
-				sprintf(buf,"-");
-				break;
-			case sf::Keyboard::Space:
-				sprintf(buf,"Space");
-				break;
-			case sf::Keyboard::Left:
-				sprintf(buf,"Left Arrow");
-				break;
-			case sf::Keyboard::Right:
-				sprintf(buf,"Right Arrow");
-				break;
-			case sf::Keyboard::Up:
-				sprintf(buf,"Up Arrow");
-				break;
-			case sf::Keyboard::Down:
-				sprintf(buf,"Down Arrow");
-				break;
-			case sf::Keyboard::Numpad0:
-				sprintf(buf,"np-0");
-				break;
-			case sf::Keyboard::Numpad1:
-				sprintf(buf,"np-1");
-				break;
-			case sf::Keyboard::Numpad2:
-				sprintf(buf,"np-2");
-				break;
-			case sf::Keyboard::Numpad3:
-				sprintf(buf,"np-3");
-				break;
-			case sf::Keyboard::Numpad4:
-				sprintf(buf,"np-4");
-				break;
-			case sf::Keyboard::Numpad5:
-				sprintf(buf,"np-5");
-				break;
-			case sf::Keyboard::Numpad6:
-				sprintf(buf,"np-6");
-				break;
-			case sf::Keyboard::Numpad7:
-				sprintf(buf,"np-7");
-				break;
-			case sf::Keyboard::Numpad8:
-				sprintf(buf,"np-8");
-				break;
-			case sf::Keyboard::Numpad9:
-				sprintf(buf,"np-9");
-				break;
-			default:
-				sprintf(buf,"???");
-			}
-		}
-		ui_controls[ui_setter]->setText(buf);
+		ui_controls[ui_setter]->setText(sfKeyToString(Event.Key));
 		for (int i=0; i<5; i++) {
 			if (i != ui_setter && inputs[i].key == Event.Key.Code) {
 				ui_controls[i]->setText("???");
@@ -282,6 +195,8 @@ void ui_init()
 {
 	if (!Widget::fontUI.LoadFromFile("fonts/orbitron-bold.otf"))
 		printf("failed to load font\n");
+
+	initSfKeyToString();
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);

@@ -21,6 +21,7 @@
 #include "Input.h"
 #include "SFML/System.hpp"
 #include "Player.h"
+#include "SfKeyToString.h"
 #include <stdio.h>
 
 extern sf::Font fontUI;
