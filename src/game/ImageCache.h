@@ -20,7 +20,7 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 
-typedef std::map<std::string, sf::Texture *> imagePtrMap;
+typedef std::map<std::string, sf::Texture*> imagePtrMap;
 
 class ImageCache {
 public:
@@ -28,9 +28,12 @@ public:
 	~ImageCache();
 	
 	imagePtrMap images;
-	sf::Texture * getImage(std::string name);
+	sf::Texture* getImage(std::string name);
 	void unload(std::string name);
-	sf::Texture * operator[](std::string name);
+	sf::Texture* operator[](std::string name);
+	sf::Texture* getFailsafeTexture();
 private:
-	sf::Texture * loadImage(std::string filename);
+	sf::Texture* loadImage(std::string filename);
+
+	sf::Texture* failsafeTexture;
 };

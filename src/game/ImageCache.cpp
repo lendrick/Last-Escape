@@ -23,6 +23,9 @@
 
 ImageCache::ImageCache()
 {
+	failsafeTexture = getImage("failsafe.png");
+	if(!failsafeTexture)
+		failsafeTexture = new Texture();
 }
 
 ImageCache::~ImageCache()
@@ -36,12 +39,12 @@ ImageCache::~ImageCache()
 	}
 }
 
-sf::Texture * ImageCache::operator[](std::string name)
+sf::Texture* ImageCache::operator[](std::string name)
 {
 	return getImage(name);
 }
 
-sf::Texture * ImageCache::getImage(std::string name)
+sf::Texture* ImageCache::getImage(std::string name)
 {
 	if(images.find(name) == images.end()) {
 		sf::Texture * img = loadImage(name);
@@ -58,7 +61,7 @@ void ImageCache::unload(std::string name)
 	delete img;
 }
 
-sf::Texture * ImageCache::loadImage(std::string filename)
+sf::Texture* ImageCache::loadImage(std::string filename)
 {
 	sf::Texture * img = new sf::Texture;
 	if(!img->LoadFromFile("images/" + filename)) {
@@ -69,4 +72,9 @@ sf::Texture * ImageCache::loadImage(std::string filename)
 	}
 
 	return img;
+}
+
+sf::Texture* ImageCache::getFailsafeTexture()
+{
+	return failsafeTexture;
 }
