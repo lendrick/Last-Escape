@@ -83,6 +83,12 @@ void AnimatedActor::setFrameSize(int fw, int fh) {
 
 void AnimatedActor::draw()
 {
+	updateAnimation();
+	Actor::draw();
+}
+
+void AnimatedActor::updateAnimation()
+{
 	if(currentAnimation != NULL)
 	{
 		if(currentAnimation->getIsFinished())
@@ -109,7 +115,6 @@ void AnimatedActor::draw()
 	else
 		sprite.SetColor(sf::Color(255, 255, 255, 255));
 
-	Actor::draw();
 }
 
 void AnimatedActor::doUpdate(sf::Uint32 dt) {

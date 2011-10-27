@@ -71,4 +71,5 @@ protected:
 	int damageTimer;
 private:
 	void init();
+	inline void updateAnimation();
 };
