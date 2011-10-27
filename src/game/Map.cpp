@@ -126,7 +126,6 @@ void Map::loadMap(string filename) {
 			printf("failed to open map\n");
 			return;
 		}
-		printf("found the second time");
 	}
 
 	TiXmlElement* root = doc.RootElement();
@@ -217,6 +216,8 @@ void Map::loadMap(string filename) {
 				cpVect pos = sfml2cp(sf::Vector2f(temp_x, temp_y));
 				x = pos.x;
 				y = pos.y;
+				y = y - h/2;
+				x = x + w/2;
 
 				Actor* actor;
 				if (type == "pill") {
