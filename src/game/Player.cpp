@@ -57,7 +57,7 @@ Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
-	lives = 1;
+	lives = start_lives;
 	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
 	shoot_duration = 200;
