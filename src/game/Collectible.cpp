@@ -146,12 +146,12 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 }
 
 CollectibleKeycard::CollectibleKeycard(double x, double y, std::string name)
-: Collectible(x, y, 32.0f, 32.0f) {
+: Collectible(x, y, 32.0f, 41.0f) {
 	actorName = "Keycard";
 	this->name = name;
 	this->setImage("keycard.png");
-	setDrawOffset(16, 16);
-	setFrameSize(32, 32);
+	setDrawOffset(16, 20);
+	setFrameSize(32, 41);
 
 	Animation * tmp;
 	tmp = addAnimation("be a keycard");
