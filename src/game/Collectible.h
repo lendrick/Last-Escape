@@ -64,4 +64,14 @@ public:
 	virtual void collide(Actor& otherActor);
 };
 
+class CollectibleKeycard : public Collectible
+{
+public:
+	CollectibleKeycard(double x, double y, std::string name);
+	virtual void collide(Actor& otherActor);
+private:
+	/// opens a door with the same name
+	std::string name;
+};
+
 #endif

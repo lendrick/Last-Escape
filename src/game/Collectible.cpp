@@ -144,3 +144,32 @@ void CollectibleEnergyBall::collide(Actor& otherActor) {
 		}
 	}
 }
+
+CollectibleKeycard::CollectibleKeycard(double x, double y, std::string name)
+: Collectible(x, y, 32.0f, 32.0f) {
+	actorName = "Keycard";
+	this->name = name;
+	this->setImage("keycard.png");
+	setDrawOffset(16, 16);
+	setFrameSize(32, 32);
+
+	Animation * tmp;
+	tmp = addAnimation("be a keycard");
+	tmp->addFrame(0, 9001);
+	setCurrentAnimation("be a keycard");
+	shape->collision_type = PhysicsType::Item;
+	setShapeLayers(PhysicsLayer::Player);
+}
+
+void CollectibleKeycard::collide(Actor& otherActor) {
+	if (otherActor.isPlayer())
+	{
+		Player& player = (Player&)otherActor;
+		if(!player.dying)
+		{
+			destroy();
+			soundCache["gmae.ogg"]->playSound();
+			player.addKeycard(name);
+		}
+	}
+}

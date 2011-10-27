@@ -7,12 +7,13 @@
 
 #include "Door.h"
 
-Door::Door(double x, double y)
-: AnimatedActor(x, y, 32.0, 64.0, "door.png", true)
+Door::Door(double x, double y, double w, double h, std::string name)
+: AnimatedActor(x, y, w, h, "door.png", true)
 {
 	actorName = "Door";
-	setFrameSize(32, 64);
-	setDrawOffset(17, 17);
+	setFrameSize(w, h);
+	setDrawOffset(w/2, h/2);
+	this->name = name;
 
 	Animation * tmp;
 	tmp = addAnimation("be a door");
@@ -23,24 +24,27 @@ Door::Door(double x, double y)
 
 	// Give it some friction
 	shape->u = 1.f;
-	// Change the rotational mass to a finite number so the crate
-	// can rotate.
-//	cpBodySetMass(body, 1.f);
-	//cout << "crate mass: " << body->m << "\n";
-//	cpBodySetMoment(body, 7000.0);
-	shape->collision_type = PhysicsType::Ground;
+	shape->collision_type = PhysicsType::Enemy;
 	shape->e = 0.0;
-
-	opening = true;
 }
 
 void Door::doUpdate(sf::Uint32 dt)
 {
-//	if(opening) {
-//		double tx, ty;
-//		getPos(tx, ty);
-//		cpBodySetPos(body, cpv(tx-1, ty-1));
-//	}
+	//TODO add an opening animation that shifts the door upwards
+}
+
+void Door::collide(Actor& otherActor)
+{
+	if(otherActor.isPlayer())
+	{
+		Player& player = (Player&)otherActor;
+		if(!player.dying && player.hasKeycard(name))
+		{
+			destroy();
+			soundCache["door_open.oga"]->playSound();
+			player.removeKeycard(name);
+		}
+	}
 }
 
 Door::~Door()

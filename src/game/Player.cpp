@@ -493,3 +493,28 @@ void Player::onLevelUp(int newLevel) {
 int Player::getCurrentExperience() {
 	return currentExperience;
 }
+
+bool Player::hasKeycard(std::string name)
+{
+	for (list<std::string>::iterator it = keycards.begin();  it != keycards.end(); ++it)
+	{
+		if(*it == name)
+			return true;
+	}
+	return false;
+}
+void Player::removeKeycard(std::string name)
+{
+	for (list<std::string>::iterator it = keycards.begin();  it != keycards.end(); ++it)
+	{
+		if(*it == name)
+		{
+			keycards.erase(it);
+			return;
+		}
+	}
+}
+void Player::addKeycard(std::string name)
+{
+	keycards.push_back(name);
+}

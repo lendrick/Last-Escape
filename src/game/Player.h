@@ -48,6 +48,10 @@ public:
 	void addExperience(int exp);
 	int getCurrentExperience();
 	
+	bool hasKeycard(std::string name);
+	void removeKeycard(std::string name);
+	void addKeycard(std::string name);
+
 	StartPoint * findStart();
 	
 	StartPoint * currentStart;
@@ -90,6 +94,9 @@ public:
 	Sound * dieSound;
 	
 	int currentExperience;
+
+private:
+	list<std::string> keycards;
 
 };
 

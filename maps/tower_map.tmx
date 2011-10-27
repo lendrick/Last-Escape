@@ -318,6 +318,12 @@
   <object name="roof" type="teleportexit" x="1180" y="387" width="39" height="21"/>
   <object name="Put a boss here" x="455" y="675" width="705" height="223"/>
   <object name="spawn" type="spawn" x="194" y="1029" width="25" height="56"/>
+  <object name="red" type="door" x="1312" y="2080" width="62" height="94">
+   <properties>
+    <property name="keycard" value="red"/>
+   </properties>
+  </object>
+  <object name="red" type="keycard" x="1188" y="2001"/>
  </objectgroup>
  <objectgroup name="walkers" width="50" height="70">
   <properties>
@@ -396,5 +402,10 @@
   <object x="84" y="1037" width="26" height="22"/>
   <object x="127" y="1040" width="23" height="21"/>
   <object x="108" y="1008" width="20" height="21"/>
+ </objectgroup>
+ <objectgroup name="doors" width="50" height="70">
+  <properties>
+   <property name="type" value="door"/>
+  </properties>
  </objectgroup>
 </map>

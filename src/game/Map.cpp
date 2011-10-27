@@ -39,6 +39,7 @@
 #include "ExitPoint.h"
 #include "Player.h"
 #include "Actor.h"
+#include "Door.h"
 #include <cstdlib>
 
 typedef std::list<MapSegment *> MapSegmentList;
@@ -205,7 +206,9 @@ void Map::loadMap(string filename) {
 				int w = 0, h = 0;
 				((TiXmlElement*)object)->QueryIntAttribute("width", &w);
 				((TiXmlElement*)object)->QueryIntAttribute("height", &h);
-				const char* name = ((TiXmlElement*)object)->Attribute("name");
+				const char* temp_name = ((TiXmlElement*)object)->Attribute("name");
+				std::string name = "";
+				if(temp_name) name = temp_name;
 
 				double x = 0, y = 0;
 				int temp_x, temp_y;
@@ -240,6 +243,10 @@ void Map::loadMap(string filename) {
 					actor = new EnemyCentipede((double)x, (double)y);
 				} else if (type == "spider") {
 					actor = new BossSpider((double)x, (double)y);
+				} else if (type == "door") {
+					actor = new Door((double)x, (double)y, (double)w, (double)h, name);
+				} else if (type == "keycard") {
+					actor = new CollectibleKeycard((double)x, (double)y, name);
 				} else if (type == "teleportenter") {
 					actor = new TeleportEnter((double)x, (double)y, w, h, name);
 				} else if (type == "teleportexit") {
