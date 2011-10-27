@@ -57,8 +57,12 @@ Bumper::Bumper(Actor * actor, int facing_direction, double thickness) {
 }
 
 Bumper::~Bumper() {
-	cpSpaceRemoveShape(game_map->physSpace, shape);
-	cpShapeFree(shape);		
+	if (shape)
+	{
+		cpSpaceRemoveShape(game_map->physSpace, shape);
+		cpShapeFree(shape);
+	}
+	shape = NULL;
 }
 
 int Bumper::isGrounded() {
