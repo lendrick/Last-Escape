@@ -144,7 +144,7 @@ void Actor::draw() {
 				bbx2 = bbx1 + width;
 				bby2 = bby1 + height;
 				
-				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width/2, height/2,
+				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width, height,
 																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
 				rect.SetPosition(px, py);
 				if(body && body->a) {
