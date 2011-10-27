@@ -48,7 +48,7 @@ void ui_start()
 	ui_base->toggleBg();
 	//const char* mapName = "subwaymap-new.tmx";
 //	game_map->loadMap(mapName);
-	game_map->loadMap(startMap);
+	game_map->setNextMap(startMap);
 	ui_menu->hide();
 	ui_hud->show();
 	gamestatus = Gamestatus::ingame;

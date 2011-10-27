@@ -302,6 +302,11 @@ void Map::setNextMap(string filename) {
 
 void Map::loadNextMap() {
 	if(nextMap != "") {
+		// We never destroy the player itself on mapchange,
+		// to take stuff like wapeons into the next level.
+		// We must still destroy the physics when we load a new map
+		if(g_player) g_player->destroyPhysics();
+
 		loadMap(nextMap);
 		nextMap = "";
 	}

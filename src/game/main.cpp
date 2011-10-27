@@ -230,7 +230,8 @@ int main(int argc, char** argv)
 		if(gamestatus == Gamestatus::gameOver)
 			gameOver();
 
-		if(game_map != NULL && game_map->isLoaded()) {
+		if(game_map)
+		{
 			// This function loads a new map if one has been set with SetNextMap.
 			// Due to physics functions, we can't switch maps mid-loop.
 			startTimer();
@@ -238,6 +239,9 @@ int main(int argc, char** argv)
 			cleanup_time += getTimer();
 			
 			game_map->loadNextMap();
+		}
+
+		if(game_map != NULL && game_map->isLoaded()) {
 
 			if(frameCount >= targetFrame || framesSkipped >= maxFramesSkipped) {
 				//cout << "Skipped " << framesSkipped << " frames\n";

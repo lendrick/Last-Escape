@@ -67,6 +67,7 @@ private:
 	int danger[MAP_TILES_X][MAP_TILES_Y];
 	
 	Actor * cameraFollow;
+	inline void loadMap(string filename);
 
 protected:
 	void initPhysics();
@@ -76,7 +77,6 @@ public:
 	Map(string mapName);
 	~Map();
 
-	void loadMap(string filename);
 	void loadTileset(string filename);
 	void setNextMap(string filename);
 	void loadNextMap();
