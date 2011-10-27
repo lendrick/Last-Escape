@@ -57,7 +57,7 @@ Player::Player(double x, double y)
 : AnimatedActor(x, y, 24, 48) {
 	setImage("xeon.png");
 
-	lives = start_lives;
+	lives = 1;
 	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
 	shoot_duration = 200;
@@ -124,7 +124,7 @@ void Player::resetPhysicsCustom(double start_x, double start_y) {
 
 StartPoint * Player::findStart() {
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		if((*it)->isStartPoint() && !(*it)->isDestroyed()) {
+		if((*it) && !(*it)->isDestroyed() && (*it)->isStartPoint()) {
 			//if (debugMode)
 				double px, py;
 				(*it)->getPos(px, py);
@@ -384,12 +384,6 @@ void Player::onColliding(Actor & otherActor)
 	}
 }
 
-void respawn()
-{
-	ui_showMenu();
-	game_map->setNextMap(game_map->currentFilename);
-}
-
 void Player::die() {
 	if (godMode || dying)
 		return;
@@ -427,7 +421,7 @@ void Player::onAnimationComplete(std::string anim) {
 		} else {
 			lives = start_lives;
 			energyBalls = 0;
-			ui_popupImage("images/game_over.png", respawn);
+			gamestatus = Gamestatus::gameOver;
 		}
 	}
 }

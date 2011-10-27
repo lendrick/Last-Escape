@@ -105,6 +105,14 @@ namespace Collision {
 	};
 };
 
+namespace Gamestatus {
+	enum Enum {
+		ingame = 1,
+		mainMenu = 2,
+		gameOver = 3
+	};
+}
+
 extern bool paused;
 
 extern ImageCache imageCache;
@@ -114,6 +122,7 @@ double frand(double lower, double upper);
 
 double deg2rad(double deg);
 double rad2deg(double rad);
+extern Gamestatus::Enum gamestatus;
 
 extern sf::View uiView;
 extern sf::View gameView;

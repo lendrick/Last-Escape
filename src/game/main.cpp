@@ -52,6 +52,7 @@ bool debugMode = false;
 sf::Clock Clock;
 sf::Clock frameTimer;
 sf::Uint32 clockTimer = 0;
+Gamestatus::Enum gamestatus = Gamestatus::mainMenu;
 	
 sf::View uiView(sf::FloatRect(0, 0, 640, 480));
 sf::View gameView(sf::FloatRect(0, 0, 640, -480));
@@ -71,7 +72,8 @@ void update(sf::Uint32 dt) {
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
-		(*it)->doUpdate(dt);
+		if (!(*it)->isDestroyed())
+			(*it)->doUpdate(dt);
 	}
 }
 
@@ -94,10 +96,29 @@ void cleanup() {
 		if((*tmp)->isDestroyed()) {
 			delete *tmp;
 			actors.erase(tmp);
+			if(*tmp == g_player)
+				g_player = NULL;
 		} else if((*tmp)->toTeleport) {
 			(*tmp)->doTeleport();
 		}
 	}
+}
+
+void gameOver()
+{
+
+	for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
+	{
+		if(*it)
+		{
+			(*it)->destroy();
+		}
+	}
+	cleanup();
+	delete game_map;
+	game_map = new Map("");
+	ui_popupImage("images/game_over.png", ui_showMenu);
+	gamestatus = Gamestatus::mainMenu;
 }
 
 double frand(double lower, double upper) {
@@ -205,6 +226,9 @@ int main(int argc, char** argv)
 		// Clamp frame update time if worse than 20fps, so it'll slow down instead
 		// of just getting very jerky (which breaks jump heights)
 		double frameTime = std::min(ElapsedTime, (sf::Uint32)50);
+
+		if(gamestatus == Gamestatus::gameOver)
+			gameOver();
 
 		if(game_map != NULL && game_map->isLoaded()) {
 			// This function loads a new map if one has been set with SetNextMap.
