@@ -121,8 +121,12 @@ void Map::loadMap(string filename) {
 	}
 	else if (!doc.LoadFile(("maps/" + filename).c_str()))
 	{
-		printf("failed to open map\n");
-		return;
+		if(!doc.LoadFile(filename.c_str()))
+		{
+			printf("failed to open map\n");
+			return;
+		}
+		printf("found the second time");
 	}
 
 	TiXmlElement* root = doc.RootElement();
