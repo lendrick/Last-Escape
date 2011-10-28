@@ -68,10 +68,10 @@ void SoundCache::unload(std::string name)
 
 Sound * SoundCache::load(std::string filename) 
 {
-	Sound * snd = new Sound;
+	Sound * snd = new Sound();
 	if(!snd->loadSound(filename)) {
 		std::cout << "Failed to load sound " << filename << "\n";
-		return NULL;
+		return snd;
 	}
 	//std::cout << "Loaded sound " << filename << "\n";
 	return snd;
