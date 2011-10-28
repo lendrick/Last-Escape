@@ -63,11 +63,11 @@ BossBeetle::BossBeetle(double x, double y) : EnemyPatroller(x, y, 64, 44)
 }
 
 
-bool BossBeetle::doDamage(double damage)
+bool BossBeetle::doDamage(double damage, bool knockback)
 {
 	if(getCurrentAnimation()->getName() != "rolledUp")
 	{
-		return EnemyPatroller::doDamage(damage);
+		return EnemyPatroller::doDamage(damage, knockback);
 	}
 	return false;
 }

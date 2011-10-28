@@ -17,7 +17,7 @@ public:
 	virtual ~BossBeetle();
 
 	void doUpdate(sf::Uint32);
-	bool doDamage(double damage);
+	bool doDamage(double damage, bool knockback);
 	void onDamage();
 	void onBumperCollide(int facing);
 	void collideGround();
