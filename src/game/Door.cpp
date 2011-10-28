@@ -11,8 +11,10 @@ Door::Door(double x, double y, double w, double h, std::string name)
 : AnimatedActor(x, y, w, h, "door.png", true)
 {
 	actorName = "Door";
-	setFrameSize(w, h);
-	setDrawOffset(w/2, h/2);
+	setFrameSize(149, 236);
+	setDrawOffset(149/2, 236/2);
+//	sprite.SetScale(0.5,0.5);
+	sprite.SetScale(1.0/(149.0/w), 1.0/(236.0/h));
 	this->name = name;
 
 	Animation * tmp;
