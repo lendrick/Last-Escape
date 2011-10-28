@@ -149,7 +149,9 @@ CollectibleKeycard::CollectibleKeycard(double x, double y, std::string name)
 : Collectible(x, y, 32.0f, 41.0f) {
 	actorName = "Keycard";
 	this->name = name;
-	this->setImage("keycard.png");
+	if(!setImage("keycard-" + name + ".png"))
+		setImage("keycard.png");
+
 	setDrawOffset(16, 20);
 	setFrameSize(32, 41);
 
