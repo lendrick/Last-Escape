@@ -25,6 +25,7 @@ public:
 	EnemyPatroller(double x, double y, double w, double h);
 	virtual ~EnemyPatroller();
 	virtual void update(sf::Uint32 dt);
+	virtual void doUpdate(sf::Uint32 dt);
 	virtual void draw();
 	virtual void die();
 	virtual void onAnimationComplete(std::string anim);

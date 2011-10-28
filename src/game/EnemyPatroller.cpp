@@ -48,30 +48,59 @@ EnemyPatroller::~EnemyPatroller() {
 
 void EnemyPatroller::update(sf::Uint32 dt) {
 	if(!dying) {
-
 		//setCurrentAnimation("walk");
 		const int speed_gravity = 960;
 		const double vision_range = 320;
 		const double vision_min_range = 32;
-
 		if(isGrounded()) {
 			if (facing_direction == Facing::Left) {
 				if(body->v.x > -walk_speed)
 					cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
-				
+
 				if(!leftBumper->isGrounded())
 					facing_direction = Facing::Right;
 			} else if (facing_direction  == Facing::Right) {
 				if(body->v.x < walk_speed)
 					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
-				
+
 				if(!rightBumper->isGrounded())
 					facing_direction = Facing::Left;
 			}
 		}
-		
+
 		updateSpriteFacing();
 	}
+}
+
+void EnemyPatroller::doUpdate(sf::Uint32 dt)
+{
+	if(!body)
+		return;
+
+	if(!dying) {
+		//setCurrentAnimation("walk");
+		const int speed_gravity = 960;
+		const double vision_range = 320;
+		const double vision_min_range = 32;
+		if(isGrounded()) {
+			if (facing_direction == Facing::Left) {
+				if(body->v.x > -walk_speed)
+					cpBodyApplyImpulse(body, cpv(-500, 0), cpv(0, 0));
+
+				if(!leftBumper->isGrounded())
+					facing_direction = Facing::Right;
+			} else if (facing_direction  == Facing::Right) {
+				if(body->v.x < walk_speed)
+					cpBodyApplyImpulse(body, cpv(500, 0), cpv(0, 0));
+
+				if(!rightBumper->isGrounded())
+					facing_direction = Facing::Left;
+			}
+		}
+
+		updateSpriteFacing();
+	}
+	Enemy::doUpdate(dt);
 }
 
 void EnemyPatroller::draw() {

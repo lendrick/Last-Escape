@@ -31,6 +31,7 @@
 #include "EnemyCentipede.h"
 #include "PhysicsCrate.h"
 #include "BossSpider.h"
+#include "BossBeetle.h"
 #include "Particles.h"
 #include "Player.h"
 #include "Teleport.h"
@@ -243,6 +244,8 @@ void Map::loadMap(string filename) {
 					actor = new EnemyCentipede((double)x, (double)y);
 				} else if (type == "spider") {
 					actor = new BossSpider((double)x, (double)y);
+				} else if (type == "bossbeetle") {
+					actor = new BossBeetle((double)x, (double)y);
 				} else if (type == "door") {
 					actor = new Door((double)x, (double)y, (double)w, (double)h, name);
 				} else if (type == "keycard") {
