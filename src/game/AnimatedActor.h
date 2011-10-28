@@ -31,7 +31,7 @@ class AnimatedActor : public Actor
 public:
 	AnimatedActor(double x, double y, double w, double h, std::string filename, bool staticBody = false);
 	AnimatedActor(double x, double y, double w, double h, bool staticBody = false);
-	void setImage(std::string filename);
+	bool setImage(std::string filename);
 	
 	virtual ~AnimatedActor();
 	void collide(Actor*); 	///< implemented empty for testing;

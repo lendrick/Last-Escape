@@ -46,12 +46,17 @@ void AnimatedActor::init() {
 	damageTimer = 0;
 }
 
-void AnimatedActor::setImage(std::string filename) 
+bool AnimatedActor::setImage(std::string filename)
 {
 	hasImage = true;
 	setFrameSize(0, 0);
-	this->sprite.SetTexture(*(imageCache[filename]));
+	sf::Texture* texture = imageCache[filename];
+	this->sprite.SetTexture(*texture);
 	this->currentAnimation = NULL;
+
+	if(texture == imageCache.getFailsafeTexture())
+		return false;
+	return true;
 }
 
 void AnimatedActor::updateSpriteFacing() {
