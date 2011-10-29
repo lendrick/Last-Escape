@@ -125,8 +125,6 @@ void Actor::draw() {
 				sprite.SetRotation(-rad2deg(body->a));
 				//if(body->a > 0)
 					//cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
-			} else {
-				sprite.SetRotation(0);
 			}
 					
 			sprite.FlipY(true);
