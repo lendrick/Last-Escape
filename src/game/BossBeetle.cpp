@@ -15,6 +15,7 @@ BossBeetle::BossBeetle(double x, double y) : EnemyPatroller(x, y, 64, 44)
 
 	dying = false;
 	life = 5;
+	immunityTime = 1000;
 //	status = BeetleBossStatus::patrolling;
 
 	setDrawOffset(32, 22);
@@ -80,7 +81,15 @@ void BossBeetle::onDamage()
 
 void BossBeetle::doUpdate(sf::Uint32 dt)
 {
-	if(getCurrentAnimation()->getName() != "rolledUp")
+	time += dt;
+	if(getCurrentAnimation()->getName() == "rolledUp")
+	{
+		if(facing_direction == Facing::Right)
+			sprite.Rotate(-7);
+		else
+			sprite.Rotate(7);
+	}
+	else
 	{
 		if(dizzynessTimer > 0)
 		{
@@ -105,6 +114,7 @@ void BossBeetle::collideGround()
 	if(dizzynessTimer > 0 && getCurrentAnimation()->getName() == "rolledUp")
 	{
 		setCurrentAnimation("walk", true);
+		sprite.SetRotation(0);
 		walk_speed = 100;
 	}
 	Actor::collideGround();
