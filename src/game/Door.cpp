@@ -26,7 +26,7 @@ Door::Door(double x, double y, double w, double h, std::string name)
 
 	// Give it some friction
 	shape->u = 1.f;
-	shape->collision_type = PhysicsType::Enemy;
+	shape->collision_type = PhysicsType::Door;
 	shape->e = 0.0;
 }
 

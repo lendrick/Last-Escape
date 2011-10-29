@@ -83,7 +83,8 @@ namespace PhysicsType {
 		PlayerBullet,
 		CentipedeBullet,
 		Bumper,
-		Crate
+		Crate,
+		Door
 	};
 };
 
