@@ -282,7 +282,7 @@ void ui_init()
 
 	b = new Widget(UI_LABEL,ui_options);
 	char buf[255];
-	double svol = sf::Listener::GetGlobalVolume()*100.f;
+	double svol = sf::Listener::GetGlobalVolume();
 	sprintf(buf,"Volume: %.0f%%",svol);
 	b->setText(buf);
 	b->setPos(62,50);
