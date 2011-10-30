@@ -32,6 +32,7 @@ Widget *ui_controls[5];
 Widget *ui_snd = NULL;
 Widget *ui_popup = NULL;
 void (*ui_popup_close)() = NULL;
+Sound* exampleSound = NULL;
 
 bool ui_menuOpen()
 {
@@ -190,6 +191,9 @@ void ui_setVol(double v)
 	char buf[255];
 	sprintf(buf,"Volume: %.0f%%",v);
 	ui_snd->setText(buf);
+
+	if(exampleSound && exampleSound->getStatus() != sf::Sound::Playing)
+		exampleSound->playSound();
 }
 
 void ui_init()
@@ -198,6 +202,7 @@ void ui_init()
 		printf("failed to load font\n");
 
 	initSfKeyToString();
+	exampleSound = soundCache["shoot.ogg"];
 
 	// create the actual ui items
 	ui_base = new Widget(UI_CONTAINER,ui_base);
