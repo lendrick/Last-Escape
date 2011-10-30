@@ -127,6 +127,7 @@ void gameOver()
 void showCredits()
 {
 	cleanUpGame();
+	ui_showMenu();
 	ui_showCredits();
 }
 
