@@ -41,5 +41,6 @@ void ui_start();
 void ui_togglePause();
 void ui_showMenu();
 void ui_showOptions();
+void ui_showCredits();
 void ui_quit();
 extern bool ui_menuOpen();

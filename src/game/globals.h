@@ -110,7 +110,8 @@ namespace Gamestatus {
 	enum Enum {
 		ingame = 1,
 		mainMenu = 2,
-		gameOver = 3
+		gameOver = 3,
+		win = 4
 	};
 }
 

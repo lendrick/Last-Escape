@@ -126,7 +126,7 @@
  <objectgroup name="specials" width="150" height="25">
   <object name="exit" type="exit" x="4730" y="699" width="28" height="60">
    <properties>
-    <property name="map" value="credits_map.tmx"/>
+    <property name="map" value="credits"/>
    </properties>
   </object>
  </objectgroup>

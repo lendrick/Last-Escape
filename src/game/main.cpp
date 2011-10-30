@@ -104,7 +104,7 @@ void cleanup() {
 	}
 }
 
-void gameOver()
+void cleanUpGame()
 {
 
 	for(list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it)
@@ -117,8 +117,17 @@ void gameOver()
 	cleanup();
 	delete game_map;
 	game_map = new Map("");
-	ui_popupImage("images/game_over.png", ui_showMenu);
 	gamestatus = Gamestatus::mainMenu;
+}
+void gameOver()
+{
+	cleanUpGame();
+	ui_popupImage("images/game_over.png", ui_showMenu);
+}
+void showCredits()
+{
+	cleanUpGame();
+	ui_showCredits();
 }
 
 double frand(double lower, double upper) {
@@ -229,6 +238,8 @@ int main(int argc, char** argv)
 
 		if(gamestatus == Gamestatus::gameOver)
 			gameOver();
+		else if(gamestatus == Gamestatus::win)
+			showCredits();
 
 		if(game_map)
 		{
