@@ -201,7 +201,7 @@
   <object type="weaponupgrade" x="1408" y="90"/>
   <object type="exit" x="6316" y="337">
    <properties>
-    <property name="map" value="subwaymap-new.tmx"/>
+    <property name="map" value="subwaymap.tmx"/>
    </properties>
   </object>
   <object name="spawn" type="spawn" x="2883" y="359" width="23" height="53"/>
