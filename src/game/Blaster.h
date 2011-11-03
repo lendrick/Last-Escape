@@ -29,7 +29,9 @@ class Blaster : public Weapon
 
 	void reset();
 	void upgradeWeapon();
-	void shoot(Player & player);
+	void shooting(Player & player);
+	void startShooting(Player & player) {};
+	void stopShooting(Player & player) {};
 
 	protected:
 

@@ -93,7 +93,9 @@ void Player::init() {
 	time = 0;
 	last_shoot_time = -100;
 	last_jump_time = 0;
+	wasShooting = false;
 	dying = false;
+
 
 	energy = energy_max;
 
@@ -185,44 +187,6 @@ void Player::jump(double dt) {
 	}
 }
 
-void Player::shoot() {
-	/*const double shoot_reload_timer = 0.5f;
-
-	if (energy < weapons[currentWeapon].energy_cost)
-		return;
-
-	if (time - last_shoot_time > weapons[currentWeapon].reload_time) {
-		last_shoot_time = time;
-		fireSound->playSound();
-		energy -= weapons[currentWeapon].energy_cost;
-		
-		//sf::Vector2f pos = body->p;
-
-		double bulletX = body->p.x + 30.0f, bulletY = 0.0f;
-		if(facing_direction == Facing::Left)
-			bulletX = body->p.x - 30.0f;
-
-		if(crouched) {
-			bulletY = body->p.y - 9.0f;
-		}
-		else {
-			bulletY = body->p.y + 6.0f;
-		}
-
-		Actor* bullet = new PlayerBullet(bulletX, bulletY, facing_direction, weapons[currentWeapon].angle_variation);
-
-		if(walking) {
-			setCurrentAnimation("walkshoot");
-		}
-		else {
-			setCurrentAnimation("shoot");
-		}
-
-		//resetCurrentAnimation();
-	}*/
-
-	currentWeapon->shoot(*this);
-}
 
 void Player::crouch() {
 	crouched = true;
@@ -288,7 +252,17 @@ void Player::update(sf::Uint32 dt) {
 	}
 
 	if (!dying && recoveryTimer <= 0 && input.shooting())
-		shoot();
+	{
+		if(!wasShooting)
+			currentWeapon->startShooting(*this);
+		currentWeapon->shooting(*this);
+		wasShooting = true;
+	}
+	else if(!dying && recoveryTimer <= 0 && wasShooting)
+	{
+		currentWeapon->stopShooting(*this);
+		wasShooting = false;
+	}
 
 	if(!dying && recoveryTimer <= 0 && isGrounded() && input.crouching() && input.direction() != Facing::Left && input.direction() != Facing::Right)
     {

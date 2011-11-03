@@ -58,7 +58,6 @@ public:
 	void init();
 
 	void jump(double dt);
-	void shoot();
 	void crouch();
 
 	void upgradeWeapon();
@@ -96,6 +95,8 @@ public:
 	int currentExperience;
 
 private:
+	bool wasShooting;
+
 	list<std::string> keycards;
 
 };

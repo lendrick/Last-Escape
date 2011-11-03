@@ -66,7 +66,7 @@ void Blaster::reset()
 		//<< "\nAngle Variation: " << angle_variation[upgrade] << "\nSprite Speed: " << sprite_speed[upgrade];
 }
 
-void Blaster::shoot(Player & player)
+void Blaster::shooting(Player & player)
 {
 	if ( player.energy < energy_cost[upgrade] )
 	{

@@ -30,7 +30,9 @@ class Weapon
 
 	virtual void reset() = 0;
 	virtual void upgradeWeapon() = 0;
-	virtual void shoot(Player & player) = 0;
+	virtual void startShooting(Player& player) = 0;
+	virtual void shooting(Player & player) = 0;
+	virtual void stopShooting(Player& player) = 0;
 	virtual ~Weapon() {}
 
 	int getUpgrade() const { return upgrade; }
