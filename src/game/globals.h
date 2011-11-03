@@ -101,8 +101,10 @@ namespace Collision {
 		None = 0,
 		Tile = 1,
 		Danger = 2,
-		SlantUp = 3,
-		SlantDown = 4
+		SlantBottomRight = 3,
+		SlantBottomLeft = 4,
+		SlantTopLeft = 5,
+		SlantTopRight = 6
 	};
 };
 

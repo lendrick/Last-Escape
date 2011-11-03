@@ -363,11 +363,11 @@ int Map::vBetween(int t1, int t2) {
 		return 1;
 	} else if(t1 == Collision::Tile && t2 == Collision::None) {
 		return 2;
-	} else if(t1 == Collision::SlantDown && t2 == Collision::Tile) {
+	} else if(t1 == Collision::SlantBottomLeft && t2 == Collision::Tile) {
 		return 1;
-	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
+	} else if(t1 == Collision::SlantBottomRight && t2 == Collision::SlantBottomRight) {
 		return 1;
-	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
+	} else if(t1 == Collision::SlantBottomLeft && t2 == Collision::SlantBottomLeft) {
 		return 2;
 	} else if(t1 == Collision::Danger && t2 == Collision::None) {
 		return 2;
@@ -383,11 +383,11 @@ int Map::hBetween(int t1, int t2) {
 		return 1;
 	} else if(t1 == Collision::Tile && t2 == Collision::None) {
 		return 2;
-	} else if(t1 == Collision::Tile && t2 == Collision::SlantUp) {
+	} else if(t1 == Collision::Tile && t2 == Collision::SlantBottomRight) {
 		return 2;
-	} else if(t1 == Collision::SlantUp && t2 == Collision::SlantUp) {
+	} else if(t1 == Collision::SlantBottomRight && t2 == Collision::SlantBottomRight) {
 		return 2;
-	} else if(t1 == Collision::SlantDown && t2 == Collision::SlantDown) {
+	} else if(t1 == Collision::SlantBottomLeft && t2 == Collision::SlantBottomLeft) {
 		return 2;
 	} else if(t1 == Collision::Danger && t2 == Collision::None) {
 		return 2;
@@ -503,7 +503,7 @@ bool Map::setupPhysics()
 		}
 	}
 	
-	// SlantUp pass
+	// SlantBottomRight pass
 	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
 		cpVect p1, p2;
 		int prev_tile = 0;
@@ -513,12 +513,12 @@ bool Map::setupPhysics()
 			int y = i-j;
 
 			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
-				if(collision[x][y] == Collision::SlantUp && prev_tile != Collision::SlantUp) {
-					if(debugMode) cout << "Slant Up " << x << " " << y << "\n";
+				if(collision[x][y] == Collision::SlantBottomRight && prev_tile != Collision::SlantBottomRight) {
+					if(debugMode) cout << "Slant Bottom Right " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y - 1) - 1);
-				} else if(collision[x][y] != Collision::SlantUp && prev_tile == Collision::SlantUp) {
+				} else if(collision[x][y] != Collision::SlantBottomRight && prev_tile == Collision::SlantBottomRight) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y - 1));
-					if(debugMode) cout << "End Slant Up " << x << " " << y << 
+					if(debugMode) cout << "End Slant Bottom Right " << x << " " << y <<
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
 					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
@@ -527,7 +527,7 @@ bool Map::setupPhysics()
 		}
 	}
 	
-  // SlantDown pass
+  // SlantBottomLeft pass
 	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
 		cpVect p1, p2;
 		int prev_tile = 0;
@@ -537,12 +537,12 @@ bool Map::setupPhysics()
 			int y = MAP_TILES_Y - (i-j) - 1;
 
 			if(x < MAP_TILES_X && y > 0) {
-				if(collision[x][y] == Collision::SlantDown && prev_tile != Collision::SlantDown) {
-					if(debugMode) cout << "Slant Down " << x << " " << y << "\n";
+				if(collision[x][y] == Collision::SlantBottomLeft && prev_tile != Collision::SlantBottomLeft) {
+					if(debugMode) cout << "Slant Bottom Left " << x << " " << y << "\n";
 					p1 = cpv(TILE_SIZE * x, TILE_SIZE * (MAP_TILES_Y - y) - 1);
-				} else if(collision[x][y] != Collision::SlantDown && prev_tile == Collision::SlantDown) {
+				} else if(collision[x][y] != Collision::SlantBottomLeft && prev_tile == Collision::SlantBottomLeft) {
 					p2 = cpv(TILE_SIZE * (x) - 1, TILE_SIZE * (MAP_TILES_Y - y));
-					if(debugMode) cout << "End Slant Down " << x << " " << y << 
+					if(debugMode) cout << "End Slant Bottom Left " << x << " " << y <<
 						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
 					new MapSegment(p1, p2, PhysicsType::Ground);
 				}
@@ -551,6 +551,55 @@ bool Map::setupPhysics()
 		}
 	}
 	
+	// SlantTopRight pass
+	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
+		cpVect p1, p2;
+		int prev_tile = 0;
+
+		for(int j = 0; j <= i; j++) {
+			int x = j;
+			int y = i-j;
+
+			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
+				if(collision[x][y] == Collision::SlantTopRight && prev_tile != Collision::SlantTopRight) {
+					if(debugMode) cout << "Slant Top Right " << x << " " << y << "\n";
+					p1 = cpv(TILE_SIZE * (x), TILE_SIZE * (MAP_TILES_Y - y));
+				} else if(collision[x][y] != Collision::SlantTopRight && prev_tile == Collision::SlantTopRight) {
+					p2 = cpv(TILE_SIZE * (x) , TILE_SIZE * (MAP_TILES_Y - y-2));
+					if(debugMode) cout << "End Slant Top Right " << x << " " << y <<
+						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
+					new MapSegment(p1, p2, PhysicsType::Ground);
+				}
+				prev_tile = collision[x][y];
+			}
+		}
+	}
+
+	// SlantTopLeft pass
+	for(int i = 0; i < max(MAP_TILES_X, MAP_TILES_Y); i++) {
+		cpVect p1, p2;
+		int prev_tile = 0;
+
+		for(int j = 0; j <= i; j++) {
+			int x = j;
+			int y = i-j;
+
+			if(x < MAP_TILES_X && y < MAP_TILES_Y) {
+				if(collision[x][y] == Collision::SlantTopLeft && prev_tile != Collision::SlantTopLeft) {
+					if(debugMode) cout << "Slant Top Left " << x << " " << y << "\n";
+					p1 = cpv(TILE_SIZE * (x), TILE_SIZE * (MAP_TILES_Y - y-1));
+				} else if(collision[x][y] != Collision::SlantTopLeft && prev_tile == Collision::SlantTopLeft) {
+					p2 = cpv(TILE_SIZE * (x) , TILE_SIZE * (MAP_TILES_Y - y-1));
+					if(debugMode) cout << "End Slant Top Left " << x << " " << y <<
+						" (" << p1.x << ", " << p1.y << ") (" << p2.x << ", " << p2.y << ")\n";
+					new MapSegment(p1, p2, PhysicsType::Ground);
+				}
+				prev_tile = collision[x][y];
+			}
+		}
+	}
+
+
 	
 	// Danger tiles
 	for (int i=0; i<MAP_TILES_X - 1; i++) {
