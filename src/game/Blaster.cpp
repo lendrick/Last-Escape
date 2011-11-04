@@ -16,6 +16,7 @@
  */
 
 #include "Blaster.h"
+#include "Player.h"
 
 Blaster::Blaster()
 {

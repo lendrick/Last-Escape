@@ -18,11 +18,12 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "Player.h"
 #include "PlayerBullet.h"
 #include <string>
 #include <list>
 #include <vector>
+
+class Player;
 
 class Weapon
 {
