@@ -100,7 +100,7 @@ void Blaster::shooting(Player & player)
 			bulletY = player.body->p.y + 6.0f;
 		}
 
-		Actor * bullet = new PlayerBullet( bulletX, bulletY, player.getFacing(), angle_variation[upgrade] );
+		Actor * bullet = new BlasterBullet( bulletX, bulletY, player.getFacing(), angle_variation[upgrade] );
 
 		if ( player.walking )
 		{

@@ -74,7 +74,7 @@ Player::Player(double x, double y)
 	currentExperience = 0;
 	actorName = "Player";
 
-	currentWeapon = new Blaster();
+	currentWeapon = new ChargerWeapon();
 
 	loadAnimationsFromFile("xeon.xml");
 	armor = 0;
@@ -333,6 +333,7 @@ void Player::update(sf::Uint32 dt) {
 void Player::draw() {
 
 	AnimatedActor::draw();
+	currentWeapon->draw(*this);
 }
 
 void Player::onColliding(Actor & otherActor)

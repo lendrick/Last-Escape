@@ -14,38 +14,39 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Last Escape.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #pragma once
-/*
- *  Sound.h
- *  Energy
- *
- *  Created by Chris Hardee on 3/25/11.
- *
- */
 
+#include "Weapon.h"
+#include "ChargerBullet.h"
+#include "ImageCache.h"
+#include "SoundCache.h"
 
-#include <SFML/Audio.hpp>
-#include <string>
-using namespace std;
-
-class Sound
+class ChargerWeapon : public Weapon
 {
-private:
-	sf::Music song;
-	string file;
-	
 public:
-	Sound();
-	Sound(string filename);
-	~Sound();
+	ChargerWeapon();
+	virtual ~ChargerWeapon();
 
-	bool loadSound(string filename);
-	void playSound();
-	void setLoop(bool);
-	void setVolume(float volume);
-	sf::Sound::Status getStatus();
-	void stop();
+	virtual void reset();
+	virtual void upgradeWeapon();
+	virtual void startShooting(Player& player);
+	virtual void shooting(Player & player);
+	virtual void stopShooting(Player& player);
+	virtual void draw(Player& player);
+
+protected:
+	float charginShotRotation;
+	float chargePercentage;
+	float minChargePercentage;
+	sf::Uint32 startChargeTime;
+	sf::Uint32 maxChargeTime;
+	sf::Sprite chargingShot;
+
+	std::vector<int> sprite_row;
+	std::vector<int> sprite_count;
+	std::vector<int> maxDamage;
+	std::vector<sf::Uint32> sprite_speed;
+	Sound* chargingSound;
 
 };
 

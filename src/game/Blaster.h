@@ -19,6 +19,7 @@
 #define BLASTER_H
 
 #include "Weapon.h"
+#include "BlasterBullet.h"
 
 class Blaster : public Weapon
 {
@@ -32,6 +33,7 @@ class Blaster : public Weapon
 	void shooting(Player & player);
 	void startShooting(Player & player) {};
 	void stopShooting(Player & player) {};
+	void draw(Player& player) {};
 
 	protected:
 

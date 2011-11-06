@@ -34,6 +34,7 @@ class Weapon
 	virtual void startShooting(Player& player) = 0;
 	virtual void shooting(Player & player) = 0;
 	virtual void stopShooting(Player& player) = 0;
+	virtual void draw(Player& player) = 0;
 	virtual ~Weapon() {}
 
 	int getUpgrade() const { return upgrade; }

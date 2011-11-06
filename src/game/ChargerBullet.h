@@ -14,27 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Last Escape.  If not, see <http://www.gnu.org/licenses/>.
  */
+#pragma once
 
-#ifndef PLAYERBULLET_H
-#define PLAYERBULLET_H
+#include "PlayerBullet.h"
 
-#include "AnimatedActor.h"
-#include "PhysicsCrate.h"
-
-class PlayerBullet  : public AnimatedActor
+class ChargerBullet : public PlayerBullet
 {
 public:
-	PlayerBullet(double x, double y, double w, double h, int facing, double lifetime = 1500);
-	virtual void collide(Actor& otherActor);
-	virtual void update(sf::Uint32 dt);
-	virtual void collideGround() = 0;
-	virtual void collideWall() = 0;
-protected:
-	double lifetime;
-	double bulletTime;
-	double speed_x;
-	double speed_y;
-	double damage;
+	ChargerBullet(double x, double y, int facing, double size = 32, int damage = 1, double angleVariation = 0, double lifetime = 1500);
+	virtual ~ChargerBullet();
+	virtual void collideGround() { destroy(); };
+	virtual void collideWall() { destroy(); };
 };
 
-#endif
