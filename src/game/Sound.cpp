@@ -61,6 +61,11 @@ void Sound::stop()
 	song.Stop();
 }
 
+void Sound::setVolume(float volume)
+{
+	song.SetVolume(volume);
+}
+
 sf::Sound::Status Sound::getStatus()
 {
 	return song.GetStatus();

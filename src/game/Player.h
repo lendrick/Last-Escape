@@ -25,6 +25,7 @@
 #include "globals.h"
 #include "StartPoint.h"
 #include "Blaster.h"
+#include "ChargerWeapon.h"
 
 
 class Player : public AnimatedActor {

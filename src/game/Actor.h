@@ -38,6 +38,8 @@ public:
 	void setSize(int w, int h);
 	void getSize(int &w, int &h);
 	
+	void setColor(sf::Color color);
+
 	//void setOrigin(int ox, int oy);
 	//void getOrigin(int &ox, int &oy);
 	
@@ -146,6 +148,7 @@ protected:
 	double static_x, static_y;
 	double teleport_x, teleport_y, teleport_vx, teleport_vy;
 	int grounded;
+	sf::Color originalColor;
 	
 private:
 	bool staticBody;

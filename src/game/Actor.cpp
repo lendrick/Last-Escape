@@ -47,6 +47,7 @@ Actor::Actor(double x, double y, double w, double h, bool staticBody) {
 	awake = true;
 	canSleep = true;
 	destroyedCount = 0;
+	sprite.SetColor(sf::Color(255,255,255,255));
 	resetPhysics(x, y);
 }
 
@@ -96,6 +97,12 @@ void Actor::setSize(int w, int h) {
 void Actor::getSize(int &w, int &h) {
 	h = height;
 	w = width;
+}
+
+void Actor::setColor(sf::Color color)
+{
+	originalColor = color;
+	sprite.SetColor(color);
 }
 
 bool Actor::isOnCamera() {

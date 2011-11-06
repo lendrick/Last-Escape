@@ -26,12 +26,14 @@ AnimatedActor::AnimatedActor(double x, double y, double w, double h, std::string
 {
 	init();
 	setImage(filename);
+	originalColor = sf::Color(255,255,255,255);
 }
 
 AnimatedActor::AnimatedActor(double x, double y, double w, double h, bool staticBody)
 :Actor(x, y, w, h, staticBody)
 {
 	init();
+	originalColor = sf::Color(255,255,255,255);
 }
 
 AnimatedActor::~AnimatedActor()
@@ -116,17 +118,25 @@ void AnimatedActor::updateAnimation()
 	int colorLevel = (int) (255.f * (100.f - redness));
 
 	if(damageTimer > 0)
+	{
 		sprite.SetColor(sf::Color(255, colorLevel, colorLevel, 128));
+	}
 	else
-		sprite.SetColor(sf::Color(255, 255, 255, 255));
+	{
+		sprite.SetColor(originalColor);
+	}
 
 }
 
 void AnimatedActor::doUpdate(sf::Uint32 dt) {
 	if(damageTimer > 0)
+	{
 		damageTimer -= dt;
+	}
 	else
+	{
 		damageTimer = 0;
+	}
 
 	Actor::doUpdate(dt);
 }

@@ -107,3 +107,12 @@ sf::FloatRect getRectFromView(sf::View& view)
 	rect.Height = max(Height, -Height);
 	return rect;
 }
+
+sf::Vector2f rotateVector(float radiusX, float radiusY, float rotation, sf::Vector2f position) {
+	sf::Vector2f v;
+	v.x = radiusX * cos(rotation);
+	v.y = radiusY * sin(rotation);
+	v.x += position.x;
+	v.y += position.y;
+	return v;
+}
