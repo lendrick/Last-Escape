@@ -23,8 +23,8 @@ ParticleEmitter::ParticleEmitter(double x, double y)
 :Actor(x, y, 32.0f, 32.0f)
 {
 
-	emissionRate = 5.f;
-	maxAge = 3.f;
+	emissionRate = 5000;
+	maxAge = 3000;
 
 	if (!image.LoadFromFile("images/smoke.png"))
 		printf("failed to load images/smoke.png\n");
@@ -43,9 +43,9 @@ void ParticleEmitter::update(sf::Uint32 dt) {
 
 	timeLeft += dt;
 
-	while (timeLeft > 0.f)
+	while (timeLeft > 0)
 	{
-		timeLeft -= 1.f/emissionRate;
+		timeLeft -= emissionRate;
 		addParticle();
 	}
 
@@ -62,11 +62,12 @@ void ParticleEmitter::draw() {
 
 	for (size_t i = 0; i < particles.size(); ++i)
 	{
-		sf::Vector2f pos = game_map->cp2sfml(cpv(particles[i].x, particles[i].y));
-		sprite.SetPosition(pos.x - game_map->cam_x, pos.y - game_map->cam_y);
+//		sf::Vector2f pos = game_map->cp2sfml(cpv(particles[i].x, particles[i].y));
+//		sprite.SetPosition(pos.x, pos.y);
+		sprite.SetPosition(particles[i].x, particles[i].y);
 		sprite.SetRotation(particles[i].angle);
-		double a = std::min(1.0f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
-		sprite.SetColor(sf::Color(255, 255, 255, std::min(255, std::max(0, (int)(a*255)))));
+		double a = std::min(1.f-particles[i].age/particles[i].maxAge, particles[i].age/particles[i].maxAge*5.f);
+//		sprite.SetColor(sf::Color(255, 255, 255, std::min(255, std::max(0, (int)(255)))));
 		App->Draw(sprite);
 	}
 }
