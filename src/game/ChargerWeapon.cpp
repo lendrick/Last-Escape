@@ -46,7 +46,7 @@ ChargerWeapon::ChargerWeapon()
 	double tempReloadTime[] = {500, 100, 10};
 	reload_time.assign( tempReloadTime, tempReloadTime + 3 );
 
-	double tempMaxDamage[] = {1, 2, 3};
+	double tempMaxDamage[] = {2, 2, 3};
 	maxDamage.assign(tempMaxDamage, tempMaxDamage + 3);
 
 	sprite_row.assign( 3, 2 );
