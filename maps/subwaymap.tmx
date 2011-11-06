@@ -383,14 +383,6 @@
   <object x="4008" y="2352"/>
   <object x="3984" y="2347"/>
  </objectgroup>
- <objectgroup name="smoke" width="200" height="75">
-  <properties>
-   <property name="type" value="smoke"/>
-  </properties>
-  <object x="1170" y="445"/>
-  <object x="172" y="446"/>
-  <object x="76" y="444"/>
- </objectgroup>
  <objectgroup name="walkers" width="200" height="75">
   <properties>
    <property name="type" value="walker"/>
@@ -515,6 +507,8 @@
    </properties>
   </object>
   <object name="spawn" type="spawn" x="3364" y="1284" width="23" height="59"/>
+  <object type="smoke" x="177" y="431"/>
+  <object type="smoke" x="78" y="431"/>
  </objectgroup>
  <objectgroup name="centipedes" width="200" height="75">
   <properties>
