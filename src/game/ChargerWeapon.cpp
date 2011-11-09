@@ -72,7 +72,7 @@ void ChargerWeapon::reset()
 }
 void ChargerWeapon::upgradeWeapon()
 {
-
+	upgrade++;
 }
 void ChargerWeapon::startShooting(Player& player)
 {
