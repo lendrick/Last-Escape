@@ -24,7 +24,7 @@ ChargerWeapon::ChargerWeapon()
 	maxUpgrade = 2;
 
 	chargePercentage = 0;
-	minChargePercentage = 0.1f;
+	minChargePercentage = 0.2f;
 	startChargeTime = 0;
 	maxChargeTime = 1500;
 
@@ -68,6 +68,7 @@ ChargerWeapon::~ChargerWeapon()
 void ChargerWeapon::reset()
 {
 	upgrade = 0;
+	chargePercentage = 0;
 }
 void ChargerWeapon::upgradeWeapon()
 {
@@ -83,13 +84,14 @@ void ChargerWeapon::shooting(Player & player)
 	sf::Uint32 chargeTime = player.time - startChargeTime;
 	chargeTime = min(chargeTime,maxChargeTime);
 	float chargeAdded = ((float)chargeTime/(float)maxChargeTime) - chargePercentage;
-	chargePercentage += chargeAdded;
 
 	if ( player.energy < energy_cost[upgrade]*chargeAdded)
 	{
 		stopShooting(player);
+//		startChargeTime = player.time;
 		return;
 	}
+	chargePercentage += chargeAdded;
 	player.energy -= energy_cost[upgrade]*chargeAdded;
 
 	chargingSound->setVolume(50.f*chargePercentage);
