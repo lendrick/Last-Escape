@@ -60,7 +60,7 @@ void Actor::setPlaceholder(sf::Color c, double w, double h, double xoff, double 
 	width = (int)w;
 	height = (int)h;
 	sprite.SetColor(c);
-	sprite.SetScale((double)width, (double)height);
+//	sprite.SetScale((double)width, (double)height);
 	sprite.SetOrigin(xoff, yoff);
 }
 
@@ -134,7 +134,10 @@ void Actor::draw() {
 					//cout << actorName << " rotation " << rad2deg(body->a) <<"\n";
 			}
 					
-			sprite.FlipY(true);
+//			sprite.FlipY(true);
+			auto scale = sprite.GetScale();
+			scale.y = -1;
+			sprite.SetScale(scale);
 			sprite.SetPosition(px, py);
 			App->Draw(sprite);
 		
@@ -149,20 +152,35 @@ void Actor::draw() {
 				bbx2 = bbx1 + width;
 				bby2 = bby1 + height;
 				
-				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width, height,
-																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
-				rect.SetPosition(px, py);
+				sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(width, height));
+				rect.SetFillColor(sf::Color(0,0,0,0));
+				rect.SetOutlineColor(sf::Color(0,255,0));
+				rect.SetOutlineThickness(1);
+//				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width, height,
+//																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
+				rect.SetPosition(px - width / 2, py - height/2);
 				if(body && body->a) {
 					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
-				
+
 				// Draw a crosshair at the actor's position
-				App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f, 
-																				sf::Color(0, 0, 255)));
-				App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
-																				sf::Color(0, 0, 255)));
-      }
+				sf::Vertex vertices[4];
+				vertices[0].Position.x = px;
+				vertices[0].Position.y = py + 4;
+				vertices[1].Position.x = px;
+				vertices[1].Position.y = py - 4;
+				vertices[2].Position.x = px - 4;
+				vertices[2].Position.y = py;
+				vertices[3].Position.x = px + 4;
+				vertices[3].Position.y = py;
+				App->Draw(vertices, 4, sf::PrimitiveType::Lines, sf::RenderStates::Default);
+
+//				App->Draw(sf::Shape::Line(px-4, py, px+4, py, 1.0f,
+//																				sf::Color(0, 0, 255)));
+//				App->Draw(sf::Shape::Line(px, py-4, px, py+4, 1.0f,
+//																				sf::Color(0, 0, 255)));
+			}
 		}
 	}
 }
