@@ -219,7 +219,7 @@ int main(int argc, char** argv)
 	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
 	
 	// Start game loop
-	while (App->IsOpened())
+	while (App->IsOpen())
 	{
 		sf::Uint32 targetFrame = frameTimer.GetElapsedTime() * fps;
 		bool renderUi = false;
