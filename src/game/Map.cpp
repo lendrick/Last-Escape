@@ -55,7 +55,10 @@ Map::Map(string mapName) {
 	loaded = false;
 	
 	tile_sprite.SetTexture(tileset);
-	tile_sprite.FlipY(true);
+//	tile_sprite.FlipY(true);
+	auto scale = tile_sprite.GetScale();
+	scale.y = -1;
+	tile_sprite.SetScale(scale);
 	
 	/*
 	for (int i=0; i<VIEW_TILES_X; i++) {
@@ -1080,15 +1083,15 @@ void Map::renderBackground() {
 	
 	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
 		for(int j = max(cam_tile_y, 0); j < min(-cam_tile_y + tile_h, MAP_TILES_Y); j++) {
-			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
+			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j) * TILE_SIZE);
 			
 			if(background[i][j] > 0) {
-				tile_sprite.SetSubRect(tile_rects[background[i][j]]);
+				tile_sprite.SetTextureRect(tile_rects[background[i][j]]);
 				App->Draw(tile_sprite);
 			}
 			
 			if(fringe[i][j] > 0) {
-				tile_sprite.SetSubRect(tile_rects[fringe[i][j]]);
+				tile_sprite.SetTextureRect(tile_rects[fringe[i][j]]);
 				App->Draw(tile_sprite);
 			}
 		}
@@ -1108,10 +1111,10 @@ void Map::renderForeground() {
 	
 	for(int i = max(cam_tile_x, 0); i < min(cam_tile_x + tile_w, MAP_TILES_X); i++) {
 		for(int j = max(cam_tile_y, 0); j < min(-cam_tile_y + tile_h, MAP_TILES_Y); j++) {
-			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j - 1) * TILE_SIZE);
+			tile_sprite.SetPosition(i * TILE_SIZE, (MAP_TILES_Y - j) * TILE_SIZE);
 			
 			if(foreground[i][j] > 0) {
-				tile_sprite.SetSubRect(tile_rects[foreground[i][j]]);
+				tile_sprite.SetTextureRect(tile_rects[foreground[i][j]]);
 				App->Draw(tile_sprite);
 			}
 		}
@@ -1191,16 +1194,26 @@ MapSegment::~MapSegment() {
 }
 
 void MapSegment::draw() {
-	App->Draw(sf::Shape::Line(x1, y1, x2, y2, 1.0f, color));
-	
-					// Draw a crosshair at the segment's start position
-	App->Draw(sf::Shape::Line(x1-2, y1, x1+2, y1, 1.0f, 
-																				sf::Color(0, 0, 255)));
-	App->Draw(sf::Shape::Line(x1, y1-2, x1, y1+2, 1.0f,
-																				sf::Color(0, 0, 255)));
-	
-	App->Draw(sf::Shape::Line(x2-2, y2, x2+2, y2, 1.0f, 
-																				sf::Color(0, 0, 255)));
-	App->Draw(sf::Shape::Line(x2, y2-2, x2, y2+2, 1.0f,
-																				sf::Color(0, 0, 255)));
+
+	sf::Vertex vertices[2];
+	vertices[0].Color = sf::Color::Blue;
+	vertices[0].Position.x = x1;
+	vertices[0].Position.y = y1;
+	vertices[1].Color = sf::Color::Blue;
+	vertices[1].Position.x = x2;
+	vertices[1].Position.y = y2;
+	App->Draw(vertices, 2, sf::PrimitiveType::Lines, sf::RenderStates::Default);
+
+//	App->Draw(sf::Shape::Line(x1, y1, x2, y2, 1.0f, color));
+//
+//					// Draw a crosshair at the segment's start position
+//	App->Draw(sf::Shape::Line(x1-2, y1, x1+2, y1, 1.0f,
+//																				sf::Color(0, 0, 255)));
+//	App->Draw(sf::Shape::Line(x1, y1-2, x1, y1+2, 1.0f,
+//																				sf::Color(0, 0, 255)));
+//
+//	App->Draw(sf::Shape::Line(x2-2, y2, x2+2, y2, 1.0f,
+//																				sf::Color(0, 0, 255)));
+//	App->Draw(sf::Shape::Line(x2, y2-2, x2, y2+2, 1.0f,
+//																				sf::Color(0, 0, 255)));
 }
