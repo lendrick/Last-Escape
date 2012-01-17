@@ -31,7 +31,7 @@ ChargerWeapon::ChargerWeapon()
 	chargingShot.SetScale(0,0);
 	chargingShot.SetOrigin(16,16);
 	chargingShot.SetTexture(*imageCache["energyball.png"]);
-	chargingShot.SetSubRect(sf::IntRect(0,0,32,32));
+	chargingShot.SetTextureRect(sf::IntRect(0,0,32,32));
 	chargingShot.SetColor(sf::Color(230,200,0,255));
 	charginShotRotation = 0;
 	chargingSound = soundCache["charging.oga"];
@@ -173,7 +173,7 @@ void ChargerWeapon::draw(Player& player)
 		double size = 32.f*chargePercentage;
 		chargingShot.SetScale(size/32.0, size/32.0);
 		chargingShot.Rotate(-3);
-		sf::Vector2f newPos = rotateVector(chargingShot.GetSize().x/2, chargingShot.GetSize().y/2, charginShotRotation, chargingShot.GetPosition());
+		sf::Vector2f newPos = rotateVector(chargingShot.GetLocalBounds().Width/2, chargingShot.GetLocalBounds().Height/2, charginShotRotation, chargingShot.GetPosition());
 		chargingShot.SetPosition(newPos);
 
 		charginShotRotation += 0.1;
