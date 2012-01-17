@@ -134,7 +134,7 @@ void Animation::updateFrame()
 {
 	
 	if(!this->frames.empty())
-		this->sprite.SetSubRect(frames.at(frameIterator).rect);
+		this->sprite.SetTextureRect(frames.at(frameIterator).rect);
 	else
 		cout << "no frames!" << endl;
 	
