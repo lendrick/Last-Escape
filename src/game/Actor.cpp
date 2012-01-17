@@ -136,8 +136,11 @@ void Actor::draw() {
 					
 //			sprite.FlipY(true);
 			auto scale = sprite.GetScale();
-			scale.y = -1;
-			sprite.SetScale(scale);
+			if(scale.y > 0)
+			{
+				scale.y *= -1;
+				sprite.SetScale(scale);
+			}
 			sprite.SetPosition(px, py);
 			App->Draw(sprite);
 		

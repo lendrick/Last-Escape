@@ -64,11 +64,25 @@ bool AnimatedActor::setImage(std::string filename)
 void AnimatedActor::updateSpriteFacing() {
 	if (facing_direction == Facing::Right)
 	{
-		sprite.FlipX(false);
+//		sprite.FlipX(false);
+//		sprite.SetScale(1);
+		auto scale = sprite.GetScale();
+		if(scale.x < 0)
+		{
+			scale.x *= -1;
+			sprite.SetScale(scale);
+		}
 	}
 	else if (facing_direction == Facing::Left)
 	{
-		sprite.FlipX(true);
+//		sprite.FlipX(true);
+//		sprite.SetScaleX(-1);
+		auto scale = sprite.GetScale();
+		if(scale.x > 0)
+		{
+			scale.x *= -1;
+			sprite.SetScale(scale);
+		}
 	}
 }
 
