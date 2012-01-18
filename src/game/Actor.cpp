@@ -150,14 +150,16 @@ void Actor::draw() {
 				getPos(px, py);
 				
 				sf::RectangleShape drawrect = sf::RectangleShape(sf::Vector2f(sprite.GetLocalBounds().Width, sprite.GetLocalBounds().Height));
-				drawrect.SetPosition(sprite.GetPosition().x - sprite.GetLocalBounds().Width / 2, sprite.GetPosition().y - sprite.GetLocalBounds().Height/2);
+				drawrect.SetPosition(sprite.GetPosition().x, sprite.GetPosition().y);
+				drawrect.SetOrigin(sprite.GetOrigin());
+				drawrect.SetRotation(sprite.GetRotation());
 				drawrect.SetFillColor(sf::Color(0,0,0,0));
 				drawrect.SetOutlineColor(sf::Color::Red);
 				drawrect.SetOutlineThickness(2);
-//				std::cout << "hi" <<  sprite.GetLocalBounds().Width  << " " << sprite.GetLocalBounds().Height << std::endl;
 
 				sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(width, height));
-				rect.SetPosition(px - width / 2, py - height/2);
+				rect.SetPosition(px, py);
+				rect.SetOrigin(sf::Vector2f(width/2, height/2));
 				rect.SetFillColor(sf::Color(0,0,0,0));
 				rect.SetOutlineColor(sf::Color::Green);
 				rect.SetOutlineThickness(1);
@@ -166,6 +168,7 @@ void Actor::draw() {
 //																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
 
 				if(body && body->a) {
+
 					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
