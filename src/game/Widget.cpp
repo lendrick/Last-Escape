@@ -57,21 +57,21 @@ Widget::Widget(int tp, Widget *par) {
 			background.SetTexture(*ui_background);
 			if (tp == UI_CONTAINER) {
 				setSize(203,203);
-				background.SetSubRect(sf::IntRect(0,0,202,203));
+				background.SetTextureRect(sf::IntRect(0,0,202,203));
 			}else if (tp == UI_BUTTON) {
 				setSize(75,20);
-				background.SetSubRect(sf::IntRect(203,0,75,20));
+				background.SetTextureRect(sf::IntRect(203,0,75,20));
 			}else if (tp == UI_CHECK) {
 				setSize(20,20);
-				background.SetSubRect(sf::IntRect(203,40,20,20));
+				background.SetTextureRect(sf::IntRect(203,40,20,20));
 			}else if (tp == UI_PBAR) {
 				setSize(150,32);
-				background.SetSubRect(sf::IntRect(0,207,150,32));
+				background.SetTextureRect(sf::IntRect(0,207,150,32));
 			}else if (tp == UI_HSLIDE) {
 				setSize(150,3);
-				background.SetSubRect(sf::IntRect(0,203,150,3));
+				background.SetTextureRect(sf::IntRect(0,203,150,3));
 				slider.SetTexture(*ui_background);
-				slider.SetSubRect(sf::IntRect(203,40,20,20));
+				slider.SetTextureRect(sf::IntRect(203,40,20,20));
 			}
 		}
 		if (parent->child) {
@@ -207,7 +207,7 @@ void Widget::setBg(const sf::String &Text)
 	background.SetTexture(bgi);
 	int w = (int)bgi.GetWidth();
 	int h = (int)bgi.GetHeight();
-	background.SetSubRect(sf::IntRect(0,0,w,h));
+	background.SetTextureRect(sf::IntRect(0,0,w,h));
 	setSize(w,h);
 	setPos(320.0f - (w / 2.0f), 240.0f - (h / 2.0f));
 }
@@ -244,7 +244,8 @@ void Widget::draw() {
 	}else{
 		double x = 0;
 		double y = 0;
-		sf::FloatRect p = text.GetRect();
+//		sf::FloatRect p = text.GetRect();
+		sf::FloatRect p = text.GetGlobalBounds();
 		parent->getPos(x,y);
 		if (type == UI_BUTTON || type == UI_PBAR) {
 			x += (pos_x+(width/2))-(p.Width/2);
@@ -259,13 +260,22 @@ void Widget::draw() {
 		x += pos_x;
 		y += pos_y;
 		if (type == UI_PBAR) {
-			sf::Shape Line;
-			if (sval > 60.f) {
-				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xef, 0x29, 0x29));
-			}else{
-				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xff, 165, 0x0));
-			}
-			App->Draw(Line);
+			sf::RectangleShape percentageBarShape(sf::Vector2f(x+(130.f*(sval/100.f)), 13.f));
+			percentageBarShape.SetPosition(sf::Vector2f(x+10, y+7));
+
+			if(sval > 60.f)
+				percentageBarShape.SetFillColor(sf::Color(0xef, 0x29, 0x29));
+			else
+				percentageBarShape.SetFillColor(sf::Color(0xff, 165, 0x0));
+
+			App->Draw(percentageBarShape);
+//			sf::Shape Line;
+//			if (sval > 60.f) {
+//				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xef, 0x29, 0x29));
+//			}else{
+//				Line = sf::Shape::Line(x+10.f, y+13.f, (x+(132.f*(sval/100.f)))+10, y+13.f, 12, sf::Color(0xff, 165, 0x0));
+//			}
+//			App->Draw(Line);
 		}
 		App->Draw(text);
 		if (type == UI_HSLIDE) {
@@ -330,10 +340,10 @@ int Widget::event(sf::Event &Event)
 			if (type == UI_CHECK) {
 				if (checked) {
 					checked = false;
-					background.SetSubRect(sf::IntRect(203,40,223,60));
+					background.SetTextureRect(sf::IntRect(203,40,223,60));
 				}else{
 					checked = true;
-					background.SetSubRect(sf::IntRect(223,40,243,60));
+					background.SetTextureRect(sf::IntRect(223,40,243,60));
 				}
 			}
 			return 1;
