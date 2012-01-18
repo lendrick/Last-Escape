@@ -159,7 +159,7 @@ double getTimer() {
 ////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
-  srand((unsigned)time(0));
+	srand((unsigned)time(0));
 	startMap = "desert_map.tmx";
 	bool fullScreen = false;
 	sf::Uint32 frameCount = 0;
@@ -224,7 +224,7 @@ int main(int argc, char** argv)
 		sf::Uint32 targetFrame = frameTimer.GetElapsedTime() * fps;
 		bool renderUi = false;
 		
-	  startTimer();
+		startTimer();
 		input.poll();
 		if(input.quit())
 			App->Close();
