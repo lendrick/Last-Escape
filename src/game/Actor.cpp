@@ -149,23 +149,27 @@ void Actor::draw() {
 				double px, py;
 				getPos(px, py);
 				
-				double bbx1, bby1, bbx2, bby2;
-				bbx1 = px - width/2;
-				bby1 = py - height/2;
-				bbx2 = bbx1 + width;
-				bby2 = bby1 + height;
-				
+				sf::RectangleShape drawrect = sf::RectangleShape(sf::Vector2f(sprite.GetLocalBounds().Width, sprite.GetLocalBounds().Height));
+				drawrect.SetPosition(sprite.GetPosition().x - sprite.GetLocalBounds().Width / 2, sprite.GetPosition().y - sprite.GetLocalBounds().Height/2);
+				drawrect.SetFillColor(sf::Color(0,0,0,0));
+				drawrect.SetOutlineColor(sf::Color::Red);
+				drawrect.SetOutlineThickness(2);
+//				std::cout << "hi" <<  sprite.GetLocalBounds().Width  << " " << sprite.GetLocalBounds().Height << std::endl;
+
 				sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(width, height));
+				rect.SetPosition(px - width / 2, py - height/2);
 				rect.SetFillColor(sf::Color(0,0,0,0));
-				rect.SetOutlineColor(sf::Color(0,255,0));
+				rect.SetOutlineColor(sf::Color::Green);
 				rect.SetOutlineThickness(1);
+
 //				sf::Shape rect = sf::Shape::Rectangle(-width/2, -height/2, width, height,
 //																				sf::Color(0, 0, 0, 0), 1.0f, sf::Color(0, 255, 255));
-				rect.SetPosition(px - width / 2, py - height/2);
+
 				if(body && body->a) {
 					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
+				App->Draw(drawrect);
 
 				// Draw a crosshair at the actor's position
 				sf::Vertex vertices[4];
