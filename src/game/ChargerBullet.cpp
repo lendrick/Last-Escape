@@ -44,15 +44,15 @@ ChargerBullet::ChargerBullet(double x, double y, int facing, double size, int da
 	Animation * tmp;
 
 	tmp = addAnimation("bullet");
-	tmp->addFrame(0, 100);
-	tmp->addFrame(1, 100);
-	tmp->addFrame(2, 100);
-	tmp->addFrame(3, 100);
-	tmp->addFrame(4, 100);
-	tmp->addFrame(5, 100);
-	tmp->addFrame(6, 100);
-	tmp->addFrame(7, 100);
-	tmp->addFrame(8, 100);
+	tmp->addFrame(0, sf::Milliseconds(100));
+	tmp->addFrame(1, sf::Milliseconds(100));
+	tmp->addFrame(2, sf::Milliseconds(100));
+	tmp->addFrame(3, sf::Milliseconds(100));
+	tmp->addFrame(4, sf::Milliseconds(100));
+	tmp->addFrame(5, sf::Milliseconds(100));
+	tmp->addFrame(6, sf::Milliseconds(100));
+	tmp->addFrame(7, sf::Milliseconds(100));
+	tmp->addFrame(8, sf::Milliseconds(100));
 	tmp->setDoLoop(true);
 
 	setCurrentAnimation("bullet");

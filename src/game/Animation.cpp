@@ -22,7 +22,7 @@ Animation::Animation(sf::Sprite& sprite, std::string name)
 : sprite(sprite)
 {
 	this->name = name;
-	this->animationTimer.Reset();
+	this->animationTimer.Restart();
 	this->frameIterator = 0;
 	this->isFinished = false;
 	this->doLoop = false;
@@ -37,7 +37,7 @@ void Animation::setFrameSize(int fw, int fh) {
 	frame_h = fh;
 }
 
-void Animation::addFrame(int num, sf::Uint32 duration) {
+void Animation::addFrame(int num, sf::Time duration) {
 	const sf::Texture * tex = sprite.GetTexture();
 	int w = tex->GetWidth();
 	int h = tex->GetHeight();
@@ -70,7 +70,7 @@ void Animation::addFrame(int num, sf::Uint32 duration) {
 void Animation::reset() {
 	frameIterator = 0;
 	updateFrame();
-	this->animationTimer.Reset();
+	this->animationTimer.Restart();
 }
 
 int Animation::getFrame() {
@@ -126,7 +126,7 @@ void Animation::update()
 			this->updateFrame();
 			//cout << " > " << frameIterator << "\n";
 		}
-		this->animationTimer.Reset();
+		this->animationTimer.Restart();
 	}
 }
 

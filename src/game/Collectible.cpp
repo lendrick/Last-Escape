@@ -36,7 +36,7 @@ void Collectible::init()
 
 	Animation * tmp;
 	tmp = addAnimation("image");
-	tmp->addFrame(0, 100);
+	tmp->addFrame(0, sf::Milliseconds(100));
 	setCurrentAnimation("image");
 	shape->collision_type = PhysicsType::Item;
 	setShapeLayers(PhysicsLayer::Player);
@@ -117,10 +117,10 @@ CollectibleEnergyBall::CollectibleEnergyBall(double x, double y, int expValue)
 
 	Animation * tmp;
 	tmp = addAnimation("anim");
-	tmp->addFrame(0, 200);
-	tmp->addFrame(1, 200);
-	tmp->addFrame(2, 200);
-	tmp->addFrame(3, 200);
+	tmp->addFrame(0, sf::Milliseconds(200));
+	tmp->addFrame(1, sf::Milliseconds(200));
+	tmp->addFrame(2, sf::Milliseconds(200));
+	tmp->addFrame(3, sf::Milliseconds(200));
 	tmp->setDoLoop(true);
 	setCurrentAnimation("anim");
 	shape->collision_type = PhysicsType::Item;
@@ -157,7 +157,7 @@ CollectibleKeycard::CollectibleKeycard(double x, double y, std::string name)
 
 	Animation * tmp;
 	tmp = addAnimation("be a keycard");
-	tmp->addFrame(0, 9001);
+	tmp->addFrame(0, sf::Milliseconds(9001));
 	setCurrentAnimation("be a keycard");
 	shape->collision_type = PhysicsType::Item;
 	setShapeLayers(PhysicsLayer::Player);

@@ -50,17 +50,17 @@ EnemyWalker::EnemyWalker(double x, double y)
 	fireSound = soundCache[sound_file];
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(3, .2f);
-	tmp->addFrame(2, .2f);
-	tmp->addFrame(1, .2f);
-	tmp->addFrame(2, .2f);
+	tmp->addFrame(3, sf::Seconds(.2f));
+	tmp->addFrame(2, sf::Seconds(.2f));
+	tmp->addFrame(1, sf::Seconds(.2f));
+	tmp->addFrame(2, sf::Seconds(.2f));
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(7, .07f);
-	tmp->addFrame(6, .07f);
-	tmp->addFrame(5, .07f);
-	tmp->addFrame(4, .07f);
+	tmp->addFrame(7, sf::Seconds(.07f));
+	tmp->addFrame(6, sf::Seconds(.07f));
+	tmp->addFrame(5, sf::Seconds(.07f));
+	tmp->addFrame(4, sf::Seconds(.07f));
 
 	setCurrentAnimation("walk");
 }

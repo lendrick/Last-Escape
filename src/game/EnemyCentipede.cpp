@@ -53,22 +53,22 @@ EnemyCentipede::EnemyCentipede(double x, double y)
 	Animation * tmp;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(2, 200);
-	tmp->addFrame(3, 200);
-	tmp->addFrame(6, 200);
-	tmp->addFrame(7, 200);
+	tmp->addFrame(2, sf::Milliseconds(200));
+	tmp->addFrame(3, sf::Milliseconds(200));
+	tmp->addFrame(6, sf::Milliseconds(200));
+	tmp->addFrame(7, sf::Milliseconds(200));
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(0, 70);
-	tmp->addFrame(4, 70);
-	tmp->addFrame(8, 70);
-	tmp->addFrame(12, 70);
+	tmp->addFrame(0,  sf::Milliseconds(70));
+	tmp->addFrame(4,  sf::Milliseconds(70));
+	tmp->addFrame(8,  sf::Milliseconds(70));
+	tmp->addFrame(12, sf::Milliseconds(70));
 
 	tmp = addAnimation("shoot");
-	tmp->addFrame(11, 400);
-	tmp->addFrame(10, 200);
-	tmp->addFrame(9, 100);
+	tmp->addFrame(11, sf::Milliseconds(400));
+	tmp->addFrame(10, sf::Milliseconds(200));
+	tmp->addFrame(9,  sf::Milliseconds(100));
 
 	setCurrentAnimation("walk");
 }
@@ -124,15 +124,15 @@ EnemyCentipedeProjectile::EnemyCentipedeProjectile(int direction, int start_x, i
 	Animation * tmp;
 
 	tmp = addAnimation("fly");
-	tmp->addFrame(8, .1f);
-	tmp->addFrame(9, .1f);
-	tmp->addFrame(8, .1f);
-	tmp->addFrame(10, .1f);
+	tmp->addFrame(8, sf::Seconds(.1f));
+	tmp->addFrame(9, sf::Seconds(.1f));
+	tmp->addFrame(8, sf::Seconds(.1f));
+	tmp->addFrame(10, sf::Seconds(.1f));
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("splat");
-	tmp->addFrame(12, .2f);
-	tmp->addFrame(13, .5f);
+	tmp->addFrame(12, sf::Seconds(.2f));
+	tmp->addFrame(13, sf::Seconds(.5f));
 
 	setCurrentAnimation("fly");
 	

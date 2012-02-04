@@ -51,7 +51,7 @@ std::string startMap;
 bool debugMode = false;
 sf::Clock Clock;
 sf::Clock frameTimer;
-sf::Uint32 clockTimer = 0;
+sf::Time clockTimer = sf::Time::Zero;
 Gamestatus::Enum gamestatus = Gamestatus::mainMenu;
 	
 sf::View uiView(sf::FloatRect(0, 0, 640, 480));
@@ -61,19 +61,19 @@ ImageCache imageCache;
 SoundCache soundCache;
 
 bool paused = false;
-sf::Uint32 time_step;
+sf::Time time_step;
 sf::Uint32 fps = 60.0f;
 
-void update(sf::Uint32 dt) {
+void update(sf::Time dt) {
 	// Update the physics
 	static const int steps = 3;
 	for(int i=0; i<steps; i++){
-		cpSpaceStep(game_map->physSpace, ((cpFloat)dt/1000.0)/(cpFloat)steps);
+		cpSpaceStep(game_map->physSpace, ((cpFloat)dt.AsSeconds())/(cpFloat)steps);
 	}
 
 	for (list<Actor*>::iterator it = actors.begin(); it != actors.end(); ++it) {
 		if (!(*it)->isDestroyed())
-			(*it)->doUpdate(dt);
+			(*it)->doUpdate(dt.AsMilliseconds());
 	}
 }
 
@@ -147,7 +147,7 @@ void startTimer() {
 	clockTimer = Clock.GetElapsedTime();
 }
 
-double getTimer() {
+sf::Time getTimer() {
 	return Clock.GetElapsedTime() - clockTimer;
 }
 
@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 	sf::Uint32 frameCount = 0;
 	sf::Uint32 framesSkipped = 0;
 	unsigned short maxFramesSkipped = 10;
-	time_step = 1000/fps;
+	time_step = sf::Milliseconds(1000/fps);
 
 	// Parse a few command-line arguments
 	for (int i = 1; i < argc; ++i) {
@@ -211,17 +211,17 @@ int main(int argc, char** argv)
 
 
 
-	Clock.Reset();
-	frameTimer.Reset();
+	Clock.Restart();
+	frameTimer.Restart();
 
-	sf::Uint32 input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
+	sf::Time input_time, clear_time, cleanup_time, bg_time, image_time, sprite_time, fg_time, ui_time, update_time, display_time;
 	
-	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+	input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = sf::Time::Zero;
 	
 	// Start game loop
 	while (App->IsOpen())
 	{
-		sf::Uint32 targetFrame = frameTimer.GetElapsedTime() * fps;
+		sf::Uint32 targetFrame = frameTimer.GetElapsedTime().AsMilliseconds() * fps;
 		bool renderUi = false;
 		
 		startTimer();
@@ -230,12 +230,12 @@ int main(int argc, char** argv)
 			App->Close();
 		input_time += getTimer();
 
-		sf::Uint32 ElapsedTime = Clock.GetElapsedTime();
-		Clock.Reset();
+		sf::Time ElapsedTime = Clock.GetElapsedTime();
+		Clock.Restart();
 
 		// Clamp frame update time if worse than 20fps, so it'll slow down instead
 		// of just getting very jerky (which breaks jump heights)
-		double frameTime = std::min(ElapsedTime, (sf::Uint32)50);
+		double frameTime = std::min(ElapsedTime.AsMilliseconds(), (sf::Int32)50);
 
 		if(gamestatus == Gamestatus::gameOver)
 			gameOver();
@@ -276,9 +276,9 @@ int main(int argc, char** argv)
 					cleanup_time + bg_time + image_time + sprite_time + fg_time + ui_time + update_time + display_time << "s\n";
 					*/
 					
-					input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = 0.0;
+					input_time = clear_time = cleanup_time = bg_time = image_time = sprite_time = fg_time = ui_time = update_time = display_time = sf::Time::Zero;
 					frameCount = 0;
-					frameTimer.Reset();
+					frameTimer.Restart();
 				}
 
 				if(!paused) {

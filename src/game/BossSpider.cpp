@@ -59,21 +59,21 @@ BossSpider::BossSpider(double x, double y)
 	shape->u = 0.1f;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(0, 200);
-	tmp->addFrame(1, 200);
-	tmp->addFrame(2, 200);
-	tmp->addFrame(4, 200);
-	tmp->addFrame(5, 200);
+	tmp->addFrame(0, sf::Milliseconds(200));
+	tmp->addFrame(1, sf::Milliseconds(200));
+	tmp->addFrame(2, sf::Milliseconds(200));
+	tmp->addFrame(4, sf::Milliseconds(200));
+	tmp->addFrame(5, sf::Milliseconds(200));
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("die");
-	tmp->addFrame(8, 200);
-	tmp->addFrame(9, 200);
-	tmp->addFrame(10, 200);
-	tmp->addFrame(11, 200);
+	tmp->addFrame(8,  sf::Milliseconds(200));
+	tmp->addFrame(9,  sf::Milliseconds(200));
+	tmp->addFrame(10, sf::Milliseconds(200));
+	tmp->addFrame(11, sf::Milliseconds(200));
 
 	tmp = addAnimation("hurt");
-	tmp->addFrame(0, 70);
+	tmp->addFrame(0, sf::Milliseconds(70));
 
 	setCurrentAnimation("walk");
 }
