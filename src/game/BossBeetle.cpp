@@ -18,7 +18,7 @@ BossBeetle::BossBeetle(double x, double y) : EnemyPatroller(x, y, 64, 44)
 	immunityTime = 1000;
 //	status = BeetleBossStatus::patrolling;
 
-	setDrawOffset(32, 22);
+	setDrawOffset(32, 22+16);
 	setFrameSize(64, 64);
 	dizzynessTime = 2000;
 	time = 0;
