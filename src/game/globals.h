@@ -48,7 +48,7 @@ extern sf::Music backgroundMusic;
 extern bool enableMusic;
 extern std::string startMap;
 extern bool debugMode;
-extern sf::Uint32 time_step;
+extern sf::Time time_step;
 
 namespace Facing {
 	enum Enum {

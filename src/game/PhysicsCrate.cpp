@@ -10,16 +10,16 @@ PhysicsCrate::PhysicsCrate(double x, double y)
 	
 	Animation * tmp;
 	tmp = addAnimation("be a crate");
-	tmp->addFrame(0, .2f);
+	tmp->addFrame(0, sf::Seconds(.2f));
 	
 	tmp = addAnimation("DamagedLeft");
-	tmp->addFrame(1, .2f);
+	tmp->addFrame(1, sf::Seconds(.2f));
 
 	tmp = addAnimation("DamagedRight");
-	tmp->addFrame(1, .2f);
+	tmp->addFrame(1, sf::Seconds(.2f));
 
 	tmp = addAnimation("DamagedTop");
-	tmp->addFrame(1, .2f);
+	tmp->addFrame(1, sf::Seconds(.2f));
 
 	setCurrentAnimation("be a crate");
 	

@@ -270,7 +270,7 @@ void AnimatedActor::loadAnimationsFromFile(std::string filename)
 							int timeToNextFrame = 0;
 							((TiXmlElement*)fChild)->QueryIntAttribute("number", &number);
 							((TiXmlElement*)fChild)->QueryIntAttribute("time", &timeToNextFrame);
-							newAnimation->addFrame(number, timeToNextFrame);
+							newAnimation->addFrame(number, sf::Milliseconds(timeToNextFrame));
 						} 
 						else
 						{

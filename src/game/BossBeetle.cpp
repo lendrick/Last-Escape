@@ -42,23 +42,23 @@ BossBeetle::BossBeetle(double x, double y) : EnemyPatroller(x, y, 64, 44)
 	shape->u = 0.1f;
 
 	tmp = addAnimation("walk");
-	tmp->addFrame(4, 200);
-	tmp->addFrame(0, 200);
-	tmp->addFrame(5, 200);
+	tmp->addFrame(4, sf::Milliseconds(200));
+	tmp->addFrame(0, sf::Milliseconds(200));
+	tmp->addFrame(5, sf::Milliseconds(200));
 	tmp->setDoLoop(true);
 
 	tmp = addAnimation("rolledUp");
-	tmp->addFrame(8, 200);
+	tmp->addFrame(8, sf::Milliseconds(200));
 
 	tmp = addAnimation("die");
-	tmp->addFrame(8, 200);
-	tmp->addFrame(9, 200);
-	tmp->addFrame(10, 200);
-	tmp->addFrame(11, 200);
+	tmp->addFrame(8, sf::Milliseconds(200));
+	tmp->addFrame(9, sf::Milliseconds(200));
+	tmp->addFrame(10, sf::Milliseconds(200));
+	tmp->addFrame(11, sf::Milliseconds(200));
 
 	tmp = addAnimation("hurt");
-	tmp->addFrame(9, 45);
-	tmp->addFrame(11, 45);
+	tmp->addFrame(9, sf::Milliseconds(45));
+	tmp->addFrame(11, sf::Milliseconds(45));
 
 	setCurrentAnimation("walk");
 }

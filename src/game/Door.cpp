@@ -19,7 +19,7 @@ Door::Door(double x, double y, double w, double h, std::string name)
 
 	Animation * tmp;
 	tmp = addAnimation("be a door");
-	tmp->addFrame(0, .2f);
+	tmp->addFrame(0, sf::Seconds(.2f));
 
 	setCurrentAnimation("be a door");
 
