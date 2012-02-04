@@ -44,7 +44,7 @@ EnemyFlyer::EnemyFlyer(double x, double y)
 	fireSound = soundCache[sound_file];
 
 	facing_direction = Facing::Left;
-	setDrawOffset(15, 21);
+	setDrawOffset(15, 21+30);
 	setFrameSize(32, 64);
 
 	Animation * tmp;

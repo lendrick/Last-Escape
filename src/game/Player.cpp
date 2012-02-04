@@ -54,12 +54,11 @@ WeaponDesc weapons[num_weapon_types] = {
 Weapon * currentWeapon;
 
 Player::Player(double x, double y)
-: AnimatedActor(x, y, 24, 48) {
-	setImage("xeon.png");
+: AnimatedActor(x, y, 24, 48, "xeon.png", false) {
 
 	lives = start_lives;
-	setDrawOffset(64, 48);
 	setFrameSize(128, 128);
+	setDrawOffset(64, 80);
 	shoot_duration = 200;
 	last_shoot_time = 0;
 	last_jump_time = 0;
