@@ -149,13 +149,13 @@ void Actor::draw() {
 				double px, py;
 				getPos(px, py);
 				
-				sf::RectangleShape drawrect = sf::RectangleShape(sf::Vector2f(sprite.GetLocalBounds().Width, sprite.GetLocalBounds().Height));
-				drawrect.SetPosition(sprite.GetPosition().x, sprite.GetPosition().y);
-				drawrect.SetOrigin(sprite.GetOrigin());
-				drawrect.SetRotation(sprite.GetRotation());
-				drawrect.SetFillColor(sf::Color(0,0,0,0));
-				drawrect.SetOutlineColor(sf::Color::Red);
-				drawrect.SetOutlineThickness(2);
+//				sf::RectangleShape drawrect = sf::RectangleShape(sf::Vector2f(sprite.GetLocalBounds().Width, sprite.GetLocalBounds().Height));
+//				drawrect.SetPosition(sprite.GetPosition().x, sprite.GetPosition().y);
+//				drawrect.SetOrigin(sprite.GetOrigin());
+//				drawrect.SetRotation(sprite.GetRotation());
+//				drawrect.SetFillColor(sf::Color(0,0,0,0));
+//				drawrect.SetOutlineColor(sf::Color::Red);
+//				drawrect.SetOutlineThickness(2);
 
 				sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(width, height));
 				rect.SetPosition(px, py);
@@ -172,7 +172,7 @@ void Actor::draw() {
 					rect.SetRotation(-rad2deg(body->a));
 				}
 				App->Draw(rect);
-				App->Draw(drawrect);
+//				App->Draw(drawrect);
 
 				// Draw a crosshair at the actor's position
 				sf::Vertex vertices[4];
